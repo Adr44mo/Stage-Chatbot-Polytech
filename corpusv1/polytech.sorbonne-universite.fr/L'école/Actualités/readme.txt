@@ -1,0 +1,1 @@
+Beaucoup d'articles, certains pas vraiment à jour, et intérêt assez limité pour notre chatbot : on ne met donc que quelques actualités.

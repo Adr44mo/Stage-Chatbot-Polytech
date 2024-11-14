@@ -1,0 +1,17 @@
+Voici une liste se voulant exhaustive des problèmes à surmonter pour faire un scrapping efficace. Ils sont classés par ordre d'importance :
+
+- Structure du site : Même s'il a été fait avec un CMS (Drupal) le site est mal agencé. L'imbrication n'est pas toujours bien pensée, certains paragraphes sont redondants et inutiles, certaines pages ne sont pas nécessaires et auraient pu être incluses dans d'autres, etc.
+Il faut donc attribuer les metadata "category" intelligemment pour que le corpus soit le plus cohérent possible avec une arborescence claire, ce qui améliorera les performances de notre tchatbot. 
+
+- PDF : Certaines pages du site sont en réalité des fichiers PDF, le scrap par balisage HTML ne semble donc pas la technique appropriée. Dans le cas ou un lien mène vers un PDF, il faudra peut etre que le script passe le relais de beautifulsoup à une autre librairie (pouvant scrap les pdf) pour générer les JSON appropriés. Attention, la plaquette de présentation PDF a des redondances avec la page "le mot du directeur" et peut-être quelques autres. Dans ce cas, il faudra peut-être mettre en place un moyen d'éviter la redondance des textes... à voir.
+Si le mécanisme de scrap des PDF est réussi, ce qui peut être compliqué étant donné la structure très changeante des PDF, il sera alors assez facile de scrapper les PDF du dossier "intranet" (priorité secondaire, cela peut attendre un peu).
+
+- Blabla inutile : Certains paragraphes de certaines pages sont négligeables puisqu'ils n'apportent pas d'information significatives. Très difficile de déterminer ça dans un script, alors on devra probablement faire avec.
+
+- Double indexation : une même page peut être atteinte à partir de plusieurs endroits différents dans le site. Par exemple, il y a un bouton "taxe d'apprentissage" mais aussi une catégorie "taxe d'apprentissage" dans la catégorie "entreprises". Si on scrap bêtement, on se retrouvera donc avec du contenu en double, ce qui n'est pas souhaitable. Une manière de remédier à ça serait de créer une liste des URL déjà scrap qui se mette à jour au fil de l'exécution du script, et de ne pas scrap l'URL courante si elle figure déjà dans les URL ayant été scrap.
+
+- Images : Premièrement, il faut éviter d'incorporer les liens vers les images dans nos json, c'est inutile. Ca, c'est facile. Mais un autre problème est que parfois les images contiennent des informations que le texte ne contient pas (par exemple, graphiques etc, ou parfois simples écritures visuelles). On perd donc de l'information en les ignorant, mais on va être obligés de faire avec car il serait trop compliqué d'utiliser une autre IA pour extraire les informations des images.
+
+- Vidéos : Même problème que précédemment, certaines vidéos contiennent de l'information (par exemple la vidéo de présentation des projets industriels). J'ai rédigé manuellement leur contenu dans le corpus idéal, mais celui généré automatiquement par le script ne pourra probablement pas faire ça.
+
+- Profondeur du scrap : le site redirige parfois sur le site global du réseau Polytech ou sur d'autres sites. Il serait utile de définir une profondeur de scrap à 1, c'est-à-dire que le script ne tolérerait qu'une seule redirection en dehors du domaine Polytech-sorbonne. Cela lui éviterait de scrap l'intégralité d'un autre site, ce qui serait problématique.

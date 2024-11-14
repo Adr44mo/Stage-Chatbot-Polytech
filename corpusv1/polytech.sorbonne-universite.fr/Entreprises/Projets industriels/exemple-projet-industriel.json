@@ -1,0 +1,11 @@
+{
+    "title": "Exemple de projet industriel",
+    "url": "https://www.polytech.sorbonne-universite.fr/projets-industriels",
+    "content": "Un bon exemple de projet industriel réalisé à polytech-sorbonne est l'optimisation de tournées de véhicules, pour les entreprises Capgemini et Cèdre. \n Une vidéo à propos de ce projet est disponible sur youtube à cette adresse : https://youtu.be/WD1TEX1sayc . Nous vous invitons à la regarder si cela vous intéresse. \n Cèdre est une entreprise de recyclage à but sociétal et environnemental dont l’effectif est composé à 80 % de personnes en situation de handicap. Capgemini est une entreprise de services numériques à la pointe de la technologie. Cèdre et Capgemini ont soumis un projet aux élèves de la filière Mathématiques Appliquées et Informatique (MAIN). Ce projet consistait en l’optimisation de tournées de véhicules dans le but de gagner en efficacité en économisant du temps et d’élargir sa base de clients. Les cinq élèves de l’équipe ont eu pour mission de proposer un logiciel d’aide à la décision à destination des différents chefs de service de Cèdre en prenant en compte toutes les contraintes liées à cette activité de transport : limite de capacité des camions, accès restreints aux sites de chargements, temps de parcours, distance, etc. L’équipe de l’école a donc développé une solution innovante, hybride et souple, en utilisant à la fois des librairies open source et du code développé spécialement par nos élèves ingénieurs.",
+    "category1": "polytech.sorbonne-universite.fr",
+    "category2": "entreprises",
+    "category3": "projets industriels",
+    "category4": "NA",
+    "filierespecifique": "NA",
+    "datespecifique": "NA"
+}
