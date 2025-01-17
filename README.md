@@ -1,6 +1,7 @@
-# Projet-Chatbot# 
+# Projet-Chatbot
 
 Dernière mise à jour : 17 janvier 2025
+Développement toujours en cours
 
 ## Introduction
 
@@ -22,7 +23,7 @@ Voici les qualités actuelles du ChatBot :
 - Ses prompts lui évitent de divaguer et de parler de sujets hors-Polytech
 - Son historique à base de cookies est fonctionnel
 - Son interface est visuellement plutôt plaisante
-- Son intégration web est réalisable avec une simple injection HTML et un JavaScript, indépendamment du CMS
+- Son déploiement web est faisable via injection HTML + JavaScript sur tout CMS
 
 Et voici ses défauts :
 
