@@ -1,0 +1,7 @@
+streamlit
+langchain-openai
+langchain-community
+faiss-cpu
+openai
+pypdf
+streamlit-cookies-manager

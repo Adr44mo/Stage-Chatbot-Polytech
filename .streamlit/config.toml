@@ -1,0 +1,10 @@
+[theme]
+primaryColor="#429DDA"
+backgroundColor="#FFFFFF"
+secondaryBackgroundColor="#f1faff"
+
+[client]
+toolbarMode="minimal"
+
+[ui]
+hideTopBar=true
