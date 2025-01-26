@@ -8,6 +8,8 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_community.chat_models import ChatOpenAI
 from langchain_community.vectorstores import FAISS
 from langchain_core.messages import HumanMessage, AIMessage
+from langchain_community.llms import Ollama
+from langchain_community.embeddings import OllamaEmbeddings
 
 from src.llm import query
 from src.utils import create_embeddings
@@ -17,7 +19,7 @@ with open("config.yaml", "r") as file:
     config = yaml.safe_load(file)
 
 # 🔹 CHOISIS LE MODÈLE ICI 🔥 (MODIFIER CETTE VARIABLE)
-MODEL_CHOICE = "gpt-4o-mini"  # Peut être "gpt-4o", "gpt-4o-mini" ou "llama3"
+MODEL_CHOICE = "llama2"  # Peut être "gpt-4o", "gpt-4o-mini" ou "llama2"
 
 # 🔹 Récupérer la configuration du modèle choisi
 llm_config = config["llm"].get(MODEL_CHOICE)
@@ -28,8 +30,7 @@ if not llm_config:
 if llm_config["embeddings"] == "OpenAIEmbeddings":
     embeddings = OpenAIEmbeddings(openai_api_key=configs.OPENAI_API_KEY)
 elif llm_config["embeddings"] == "OllamaEmbeddings":
-    from langchain_community.embeddings import OllamaEmbeddings
-    embeddings = OllamaEmbeddings(model_name="llama3")
+    embeddings = OllamaEmbeddings(model="llama2")
 
 # 🔹 Charger FAISS avec les embeddings sélectionnés
 vector = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
@@ -42,10 +43,10 @@ if MODEL_CHOICE in ["gpt-4o", "gpt-4o-mini"]:
         temperature=llm_config["temperature"],
         openai_api_key=configs.OPENAI_API_KEY
     )
-elif MODEL_CHOICE == "llama3":
-    from langchain_community.chat_models import Ollama
+elif MODEL_CHOICE == "llama2":
+    
     llm = Ollama(
-        model="llama3",
+        model="llama2",
         temperature=llm_config["temperature"]
     )
 

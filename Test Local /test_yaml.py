@@ -1,8 +1,8 @@
-import yaml
+# Import Ollama module from Langchain
+from langchain_community.llms import Ollama
 
-# Ouvrir le fichier YAML en mode lecture
-with open("config.yaml", "r") as file:
-    # Charger le contenu du fichier en tant que dictionnaire Python
-    config = yaml.safe_load(file)
-
-print(config)
+# Initialize an instance of the Ollama model
+llm = Ollama(model="llama3")
+# Invoke the model to generate responses
+response = llm.invoke("What is the capital of Florida?")
+print(response)

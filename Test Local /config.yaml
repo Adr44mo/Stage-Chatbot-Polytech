@@ -11,8 +11,8 @@ llm:
     temperature: 0.5
     embeddings: "OpenAIEmbeddings"
 
-  llama3:
-    model_name: "llama3"
+  llama2:
+    model_name: "llama2"
     temperature: 0.5
     embeddings: "OllamaEmbeddings"
     
