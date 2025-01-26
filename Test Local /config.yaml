@@ -1,0 +1,18 @@
+llm:
+  default_model: "gpt-4o"  
+
+  gpt-4o:
+    model_name: "gpt-4o"
+    temperature: 0.5
+    embeddings: "OpenAIEmbeddings"
+
+  gpt-4o-mini:
+    model_name: "gpt-4o-mini"
+    temperature: 0.5
+    embeddings: "OpenAIEmbeddings"
+
+  llama3:
+    model_name: "llama3"
+    temperature: 0.5
+    embeddings: "OllamaEmbeddings"
+    

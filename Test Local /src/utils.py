@@ -35,5 +35,4 @@ def create_embeddings():
     vector.save_local("faiss_index")
     print("Index FAISS créé et sauvegardé dans 'faiss_index'.")
 
-# Appeler la fonction principale
-create_embeddings()
+
