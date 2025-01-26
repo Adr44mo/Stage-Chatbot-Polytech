@@ -18,7 +18,7 @@ def load_all_pdfs_from_directory(directory_path):
 
 def create_embeddings():
     # Chemin absolu du dossier 'corpusv1/intranet' basé sur le répertoire courant
-    directory_path = os.path.abspath("corpusv1/pdf")
+    directory_path = os.path.abspath("corpus_v1.3/pdf")
     
     # Charger tous les fichiers PDF dans le dossier spécifié
     docs = load_all_pdfs_from_directory(directory_path)

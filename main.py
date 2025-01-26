@@ -9,10 +9,14 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_community.chat_models import ChatOpenAI
 from langchain_community.vectorstores import FAISS
 
+
+
 embeddings = OpenAIEmbeddings(openai_api_key=configs.OPENAI_API_KEY)
 vector = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
 retriever = vector.as_retriever()
 llm = ChatOpenAI(model_name="gpt-4o-mini", temperature=0.5, openai_api_key=configs.OPENAI_API_KEY)
+
+
 
 BASE_HISTORY_DIR = "/var/data"
 
@@ -87,8 +91,8 @@ def show_ui():
     if "chat_history" not in st.session_state:
         st.session_state["chat_history"] = load_history(user_id)
     if len(st.session_state["chat_history"]) == 0:
-        init_user_msg = "Présente toi et présente les articles qui pourraient intéresser le client"
-        response = query(llm, retriever, "Présente toi, dis quel est l'objet de ton appel et présente les articles qui pourraient intéresser le client", [])
+        init_user_msg = "Introduce yourself"
+        response = query(llm, retriever, init_user_msg, [])
         st.session_state["chat_history"].extend([
             {"role": "user", "content": init_user_msg},
             {"role": "assistant", "content": response["answer"]},
