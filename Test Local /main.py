@@ -14,26 +14,34 @@ from langchain_community.embeddings import OllamaEmbeddings
 from src.llm import query
 from src.utils import create_embeddings
 
-# 🔹 Charger la configuration YAML
-with open("config.yaml", "r") as file:
-    config = yaml.safe_load(file)
+# 🔹 Fonction pour charger la configuration YAML
+def load_config(yaml_path="config.yaml"):
+    with open(yaml_path, "r") as file:
+        return yaml.safe_load(file)
 
-# 🔹 CHOISIS LE MODÈLE ICI 🔥 (MODIFIER CETTE VARIABLE)
-MODEL_CHOICE = "llama2"  # Peut être "gpt-4o", "gpt-4o-mini" ou "llama2"
+# 🔹 Charger automatiquement la configuration
+config = load_config()
+
+# 🔹 Sélection du modèle par défaut
+MODEL_CHOICE = config["llm"]["default_model"]
 
 # 🔹 Récupérer la configuration du modèle choisi
 llm_config = config["llm"].get(MODEL_CHOICE)
 if not llm_config:
     raise ValueError(f"🚨 Modèle '{MODEL_CHOICE}' non reconnu ! Vérifiez `config.yaml`.")
 
+# 🔹 Sélection des embeddings et du chemin FAISS
+embedding_type = llm_config["embeddings"]
+faiss_index_path = llm_config["faisspath"]
+
 # 🔹 Sélection des embeddings en fonction du modèle
-if llm_config["embeddings"] == "OpenAIEmbeddings":
+if embedding_type == "OpenAIEmbeddings":
     embeddings = OpenAIEmbeddings(openai_api_key=configs.OPENAI_API_KEY)
-elif llm_config["embeddings"] == "OllamaEmbeddings":
+elif embedding_type == "OllamaEmbeddings":
     embeddings = OllamaEmbeddings(model="llama2")
 
 # 🔹 Charger FAISS avec les embeddings sélectionnés
-vector = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
+vector = FAISS.load_local(faiss_index_path, embeddings, allow_dangerous_deserialization=True)
 retriever = vector.as_retriever()
 
 # 🔹 Initialisation du LLM

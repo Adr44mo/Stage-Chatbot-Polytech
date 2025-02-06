@@ -1,18 +1,21 @@
 llm:
-  default_model: "gpt-4o"  
+  default_model: "llama2"  
 
   gpt-4o:
     model_name: "gpt-4o"
     temperature: 0.5
     embeddings: "OpenAIEmbeddings"
+    faisspath: faiss_index
 
   gpt-4o-mini:
     model_name: "gpt-4o-mini"
     temperature: 0.5
     embeddings: "OpenAIEmbeddings"
+    faisspath: faiss_index
 
   llama2:
     model_name: "llama2"
     temperature: 0.5
     embeddings: "OllamaEmbeddings"
+    faisspath: llama_faiss_index
     
