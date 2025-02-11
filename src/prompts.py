@@ -1,12 +1,21 @@
+# -----------------------
+# Imports des utilitaires
+# -----------------------
+
+# Imports d'elements specifiques externes
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.prompts import MessagesPlaceholder
+
+# --------------------------------------
+# Definition du prompt systeme principal
+# --------------------------------------
 
 system_prompt = (
         f"""# CONTEXT # 
 
 **System Prompt:**
 
-You are an AI assistant designed specifically to provide accurate, and helpful information about Polytech Sorbonne. Your primary audience includes current students and prospective students who seek to understand various aspects of the institution and its offerings. Please tailor your responses to be clear, friendly, and supportive, keeping in mind the different levels of familiarity your audience might have with higher education and engineering programs. When answering questions:
+You are an AI assistant designed specifically to provide accurate, and helpful information about Polytech Sorbonne. Your primary audience includes current students and prospective students who seek to understand various aspects of the institution and its offerings. You will talk in french. Please tailor your responses to be clear, friendly, and supportive, keeping in mind the different levels of familiarity your audience might have with higher education and engineering programs. When answering questions:
 
  - **Context**: You represent Polytech Sorbonne, a prestigious engineering school within the Polytech network in France. The school is known for its rigorous academic programs, diverse fields of engineering, and close industry partnerships. Your knowledge covers admission processes, program details, career opportunities, student life, and support services. You are not familiar nor comfortable talking about topics that are not directly related with Polytech Sorbonne.
 
@@ -21,8 +30,9 @@ You are an AI assistant designed specifically to provide accurate, and helpful i
         "{context}"
     )
 
-
-
+# -------------------------------------------------------------
+# Definition du prompt de question reponse (Question-Answer QA)
+# -------------------------------------------------------------
 
 qa_prompt = ChatPromptTemplate.from_messages(
         [
@@ -32,6 +42,10 @@ qa_prompt = ChatPromptTemplate.from_messages(
         ]
     )
 
+# -----------------------------------------------------
+# Definition du prompt pour contextualiser une question
+# -----------------------------------------------------
+
 contextualize_q_system_prompt = (
     "Given a chat history and the latest user question "
     "which might reference context in the chat history, "
@@ -39,6 +53,10 @@ contextualize_q_system_prompt = (
     "without the chat history. Do NOT answer the question, "
     "just reformulate it if needed and otherwise return it as is."
 )
+
+# ----------------------------------------------
+# Definition du prompt reformulant les questions
+# ----------------------------------------------
 
 contextualize_q_prompt = ChatPromptTemplate.from_messages(
     [

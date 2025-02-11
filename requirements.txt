@@ -1,7 +1,11 @@
 streamlit
 langchain-openai
 langchain-community
+langchain-ollama
 faiss-cpu
 openai
 pypdf
 streamlit-cookies-manager
+pyyaml
+requests
+llama-index-embeddings-huggingface
