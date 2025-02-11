@@ -16,7 +16,7 @@
 # La cle ci-dessous est celle utilisee pour le developpement du RAG
 # Elle est alimentee par le portefeuille de polytech sorbonne 
 
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = "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"
 
 # TOKEN API HUGGINGFACE
 # Le token ci-dessous fait actuellement des requetes au serveur huggingface de la maquette
