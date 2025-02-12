@@ -15,15 +15,14 @@ from langchain_ollama import OllamaEmbeddings
 from langchain_community.chat_models import ChatOpenAI
 from langchain_community.vectorstores import FAISS
 from openai import OpenAI
+from dotenv import load_dotenv
 
 # Imports de fonctions depuis llm.py
 from src.llm import query_rag
-from src.llm import query_norag
+from src.utils import HuggingFaceEmbeddings
 
 # Import de variables (url, cle api, token)
-from src.keys_file import OPENAI_API_KEY
-from src.keys_file import HF_API_TOKEN
-from src.keys_file import HF_API_URL
+from src.keys_file import OPENAI_API_KEY, HF_API_TOKEN, HF_API_URL, HF_API_URL_EMBEDDING
 
 # -------------------------------------------------------
 # Classe OpenAIEndpointLLM pour interroger un endpoint HF
@@ -139,10 +138,10 @@ def init_llm_and_retriever(model_choice):
     faiss_index_path = llm_config["faisspath"]
 
     # Definition des embeddings
-    if embedding_type == "OpenAIEmbeddings":
+    if embedding_type == "OpenAIEmbeddings": # pour gpt
         embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
-    elif embedding_type == "OllamaEmbeddings":
-        embeddings = OllamaEmbeddings(model="nomic-embed-text")
+    elif embedding_type == "HuggingFaceEmbeddings": # pour llama
+        embeddings = HuggingFaceEmbeddings(hf_api_url=HF_API_URL_EMBEDDING, hf_api_token=HF_API_TOKEN)
     else:
         raise ValueError("Type d'embeddings inconnu ou non géré.")
     
@@ -163,7 +162,7 @@ def init_llm_and_retriever(model_choice):
         hf_endpoint_url = HF_API_URL
         hf_api_token = HF_API_TOKEN
         llm = OpenAIEndpointLLM(
-            model="tgi",
+            model="hermes-3-1-8b-gguf-abu",
             temperature=llm_config["temperature"],
             base_url=hf_endpoint_url,
             api_key=hf_api_token,

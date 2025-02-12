@@ -5,6 +5,8 @@
 # Imports de librairies
 import os
 import yaml
+import requests
+import sys
 
 # Imports d'elements specifiques externes
 from langchain_openai import OpenAIEmbeddings
@@ -12,9 +14,53 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import FAISS
+from langchain_core.embeddings import Embeddings    
 
 # Import de variables (cle api)
-from keys_file import OPENAI_API_KEY
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from src.keys_file import OPENAI_API_KEY, HF_API_TOKEN, HF_API_URL_EMBEDDING
+
+# Vérification des valeurs
+print("OPENAI_API_KEY:", OPENAI_API_KEY)
+print("HF_API_TOKEN:", HF_API_TOKEN)
+print("HF_API_URL_EMBEDDING:", HF_API_URL_EMBEDDING)
+
+
+
+# -------------------------------------------------------------------------------------
+# Classe HuggingFaceEmbeddings pour récupérer les embeddings via l'API de Hugging Face
+# -------------------------------------------------------------------------------------
+
+class HuggingFaceEmbeddings(Embeddings):
+    """Classe pour récupérer les embeddings via l'API de Hugging Face."""
+
+    def __init__(self, hf_api_url, hf_api_token, batch_size=32):
+        self.hf_api_url = hf_api_url
+        self.hf_api_token = hf_api_token
+        self.batch_size = batch_size
+
+    def _query_huggingface(self, texts):
+        """Envoie un batch de textes à l'API Hugging Face et récupère les embeddings."""
+        headers = {"Authorization": f"Bearer {self.hf_api_token}"}
+        response = requests.post(self.hf_api_url, headers=headers, json={"inputs": texts})
+        return response.json() if response.status_code == 200 else None
+
+    def embed_documents(self, texts):
+        """Embed une liste de documents en batch."""
+        all_embeddings = []
+        for i in range(0, len(texts), self.batch_size):
+            batch = texts[i:i + self.batch_size]
+            embeddings = self._query_huggingface(batch)
+            if embeddings:
+                all_embeddings.extend(embeddings)
+        return all_embeddings
+
+    def embed_query(self, text):
+        """Embed une seule requête."""
+        embedding = self._query_huggingface([text])
+        return embedding[0] if embedding else None
+
 
 # ------------------------------------------------------------------
 # Fonction pour charger une configuration yaml avec un chemin absolu
@@ -62,25 +108,29 @@ def create_embeddings(model_name, embeddings_type, faiss_index_path):
     # On cree des documents a partir du contenu des PDF
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     documents = text_splitter.split_documents(docs)
+    texts = [doc.page_content for doc in documents]
 
     # On selectionne le type d'embeddings voulu
     if embeddings_type == "OpenAIEmbeddings":
         embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
-    elif embeddings_type == "OllamaEmbeddings":
-        embeddings = OllamaEmbeddings(model="nomic-embed-text")
+        vector = FAISS.from_documents(documents, embeddings)
+    elif embeddings_type == "HuggingFaceEmbeddings":
+        embedding_model = HuggingFaceEmbeddings(hf_api_url=HF_API_URL_EMBEDDING, hf_api_token=HF_API_TOKEN)
+        document_embeddings = embedding_model.embed_documents(texts)
+        text_embedding_pairs = list(zip(texts, document_embeddings))
+        vector = FAISS.from_embeddings(text_embedding_pairs, embedding=embedding_model)
+
     else:
-        raise ValueError(f"🚨 Type d'embedding inconnu : {embeddings_type}")
+        raise ValueError(f"Type d'embedding inconnu : {embeddings_type}")
 
     # On cree et sauvegarde l'index FAISS
     # Cela peut prendre pas mal de temps
     # Pour accelerer, utiliser la librairie faiss-gpu pour une parallelisation GPU
     # Par exemple, on peut faire 'pip install faiss-gpu-cu12' pour faissgpu.cuda12
     # Les derniers drivers NVIDIA-proprietaire stables doivent etre installes.
-    vector = FAISS.from_documents(documents, embeddings)
     faiss_index_path = os.path.abspath(faiss_index_path)
     vector.save_local(faiss_index_path)
 
-    # Message de confirmation en cas de succes
     print(f"✅ Index FAISS créé et sauvegardé dans : {faiss_index_path}")
 
 # --------------------------------------------------------------------------------
@@ -99,7 +149,7 @@ if __name__ == "__main__":
     # Chargement de la configuration YAML
     config = load_config()
     # On selectionne le modele par defaut
-    selected_model = config["default_model"]
+    selected_model = config["default_model_faiss"]
     # On charge la config specifique du modele par defaut
     model_config = config["llm"].get(selected_model)
     embeddings_type = model_config["embeddings"]

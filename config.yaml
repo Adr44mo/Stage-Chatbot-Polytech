@@ -1,4 +1,4 @@
-default_model: "llama3"
+default_model_faiss: "gpt-4o-mini"
 
 llm:
 
@@ -17,6 +17,6 @@ llm:
   llama3:
     model_name: "llama3"
     temperature: 0.5
-    embeddings: "OllamaEmbeddings"
+    embeddings: "HuggingFaceEmbeddings"
     faisspath: llama_faiss_index
     
