@@ -142,7 +142,7 @@ def init_llm_and_retriever(model_choice):
     if embedding_type == "OpenAIEmbeddings":
         embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
     elif embedding_type == "OllamaEmbeddings":
-        embeddings = OllamaEmbeddings(model="hermes-3-llama-3-1-8b-gguf-abu")
+        embeddings = OllamaEmbeddings(model="nomic-embed-text")
     else:
         raise ValueError("Type d'embeddings inconnu ou non géré.")
     
@@ -236,10 +236,10 @@ def show_ui():
             "Présente-toi en tant que chatbot représentant Polytech-Sorbonne. "
             "Présente l'école en quelques mots et explique l'objet de ton appel."
         )
-        if model_choice == "llama3" :
-            response = query_norag(llm, retriever, init_user_msg, [])
-        else :
-            response = query_rag(llm, retriever, init_user_msg, [])
+        # if model_choice == "llama3" :
+        #     response = query_norag(llm, retriever, init_user_msg, [])
+        # else :
+        response = query_rag(llm, retriever, init_user_msg, [])
         st.session_state["chat_history"].extend([
             {"role": "user", "content": init_user_msg},
             {"role": "assistant", "content": response if isinstance(response, str) else response["answer"]},
@@ -264,14 +264,14 @@ def show_ui():
             with st.chat_message("user"):
                 st.markdown(user_input)
             try:
-                # Si l'utilisateur a choisi llama, on n'utilise pas de retriever
-                # Cela doit etre mis a jour dans la prochaine version sans bug
-                if model_choice == "llama3" :
-                    response = query_norag(llm, retriever, user_input, st.session_state["chat_history"])
-                # Si l'utilisateur a choisi gpt, on utilise bel et bien un retriever
-                # Ce retriever est deja pleinement fonctionnel
-                else : 
-                    response = query_rag(llm, retriever, user_input, st.session_state["chat_history"])
+                # # Si l'utilisateur a choisi llama, on n'utilise pas de retriever
+                # # Cela doit etre mis a jour dans la prochaine version sans bug
+                # if model_choice == "llama3" :
+                #     response = query_norag(llm, retriever, user_input, st.session_state["chat_history"])
+                # # Si l'utilisateur a choisi gpt, on utilise bel et bien un retriever
+                # # Ce retriever est deja pleinement fonctionnel
+                # else : 
+                response = query_rag(llm, retriever, user_input, st.session_state["chat_history"])
             except requests.exceptions.ConnectionError:
                 st.error(
                     "Impossible de se connecter au serveur d'inference. "

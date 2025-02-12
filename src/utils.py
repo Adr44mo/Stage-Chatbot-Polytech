@@ -56,7 +56,7 @@ def load_all_pdfs_from_directory(directory_path):
 def create_embeddings(model_name, embeddings_type, faiss_index_path):
 
     # On trouve le path du corpus et on charge les PDF
-    directory_path = os.path.abspath("../corpus_v1.3/pdf")
+    directory_path = os.path.abspath("../corpus_v1.4/pdf")
     docs = load_all_pdfs_from_directory(directory_path)
 
     # On cree des documents a partir du contenu des PDF
@@ -67,7 +67,7 @@ def create_embeddings(model_name, embeddings_type, faiss_index_path):
     if embeddings_type == "OpenAIEmbeddings":
         embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
     elif embeddings_type == "OllamaEmbeddings":
-        embeddings = OllamaEmbeddings(model=model_name)
+        embeddings = OllamaEmbeddings(model="nomic-embed-text")
     else:
         raise ValueError(f"🚨 Type d'embedding inconnu : {embeddings_type}")
 
@@ -99,7 +99,7 @@ if __name__ == "__main__":
     # Chargement de la configuration YAML
     config = load_config()
     # On selectionne le modele par defaut
-    selected_model = config["llm"]["default_model"]
+    selected_model = config["default_model"]
     # On charge la config specifique du modele par defaut
     model_config = config["llm"].get(selected_model)
     embeddings_type = model_config["embeddings"]

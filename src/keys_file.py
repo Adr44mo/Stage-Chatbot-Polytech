@@ -28,3 +28,5 @@ HF_API_TOKEN = "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"
 # Cette URL correspond au serveur huggingface de la maquette
 
 HF_API_URL = "https://aa5fwfof4d7tb5sy.us-east-1.aws.endpoints.huggingface.cloud"
+
+HF_API_URL_EMBEDDING="https://ykttuo05wisn6n71.us-east-1.aws.endpoints.huggingface.cloud"

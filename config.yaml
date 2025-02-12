@@ -1,3 +1,5 @@
+default_model: "llama3"
+
 llm:
 
   gpt-4o:
