@@ -20,7 +20,7 @@ from langchain_core.embeddings import Embeddings
 
 # Import de variables (cle api)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from keys_file import OPENAI_API_KEY, HF_API_TOKEN, HF_API_URL_EMBEDDING
+from src.keys_file import OPENAI_API_KEY, HF_API_TOKEN, HF_API_URL_EMBEDDING
 
 # -------------------------------------------------------------------------------------
 # Classe HuggingFaceEmbeddings pour récupérer les embeddings via l'API de Hugging Face
