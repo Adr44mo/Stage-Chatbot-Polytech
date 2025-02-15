@@ -1,6 +1,6 @@
 ===================================================
 
-Cet index FAISS a été généré le 15/02/2025 à 06:43
+Cet index FAISS a été généré le 15/02/2025 à 12:36
 Documents PDF utilisés :
 
 - admissions_etudiants_etrangers.pdf
