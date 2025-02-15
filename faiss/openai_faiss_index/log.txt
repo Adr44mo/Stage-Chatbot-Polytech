@@ -1,7 +1,7 @@
 ===================================================
 
 Cet index FAISS a été généré le 15/02/2025 à 07:05
-Documents PDF utilisés pour test :
+Documents PDF utilisés :
 
 - admissions_etudiants_etrangers.pdf
 - charte_developpement_durable_responsabilite_societale.pdf
