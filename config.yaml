@@ -6,17 +6,17 @@ llm:
     model_name: "gpt-4o"
     temperature: 0.5
     embeddings: "OpenAIEmbeddings"
-    faisspath: faiss_index/openai_faiss_index
+    faisspath: faiss/openai_faiss_index
 
   gpt-4o-mini:
     model_name: "gpt-4o-mini"
     temperature: 0.5
     embeddings: "OpenAIEmbeddings"
-    faisspath: faiss_index/openai_faiss_index
+    faisspath: faiss/openai_faiss_index
 
   llama3:
     model_name: "llama3"
     temperature: 0.5
     embeddings: "HuggingFaceEmbeddings"
-    faisspath: faiss_index/llama_faiss_index
+    faisspath: faiss/llama_faiss_index
     
