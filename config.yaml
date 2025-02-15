@@ -1,4 +1,4 @@
-default_model_faiss: "gpt-4o-mini"
+default_model_faiss: "llama3"
 
 llm:
 

@@ -106,7 +106,8 @@ def assign_basic_metadata_categories(url):
     for i, part in enumerate(path_parts, start=2):
         categories[f"category{i}"] = part or "NA"
 
-    # TODO: Additional fields
+    # Additional fields
+    # Set to NA because it has to be defined manually
     categories["filierespecifique"] = "NA"
     categories["datespecifique"] = "NA"
 

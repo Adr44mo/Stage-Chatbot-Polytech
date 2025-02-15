@@ -20,7 +20,7 @@ from langchain_core.embeddings import Embeddings
 
 # Import de variables (cle api)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from src.keys_file import OPENAI_API_KEY, HF_API_TOKEN, HF_API_URL_EMBEDDING
+from keys_file import OPENAI_API_KEY, HF_API_TOKEN, HF_API_URL_EMBEDDING
 
 # -------------------------------------------------------------------------------------
 # Classe HuggingFaceEmbeddings pour récupérer les embeddings via l'API de Hugging Face
@@ -138,7 +138,7 @@ def create_embeddings(embeddings_type, faiss_index_path, directories):
     # Création ou mise à jour du log dans le dossier contenant l'index FAISS
     formatted_date = datetime.now().strftime("%d/%m/%Y à %H:%M")
     log_filename = os.path.join(faiss_index_path, "log.txt")
-    with open(log_filename, "a", encoding="utf-8") as log_file:
+    with open(log_filename, "w", encoding="utf-8") as log_file:
         log_file.write("===================================================\n")
         log_file.write(f"\nCet index FAISS a été généré le {formatted_date}\n")
         log_file.write("Documents PDF utilisés :\n\n")
@@ -171,7 +171,7 @@ if __name__ == "__main__":
     faiss_index_path = f"../{faiss_index_path}"
     # On définit les chemins d'accès aux dossiers contenant les PDF
     directories = [
-        "../corpus/pdf_scrappes",
+        "../corpus/pdf_scrapes",
         "../corpus/pdf_ajoutes_manuellement"
     ]
 
