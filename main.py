@@ -2,6 +2,8 @@
 # Imports des utilitaires
 # -----------------------
 
+print("\n================= LANCEMENT DE POLYCHAT =================\n")
+
 # Imports de librairies
 import yaml
 import os
@@ -11,18 +13,20 @@ import requests
 
 # Imports d'elements specifiques externes
 from langchain_openai import OpenAIEmbeddings
-from langchain_ollama import OllamaEmbeddings
 from langchain_community.chat_models import ChatOpenAI
 from langchain_community.vectorstores import FAISS
 from openai import OpenAI
-from dotenv import load_dotenv
+
+# Affichage d'un message de succès d'import des librairies
+print("\n✅ Librairies externes correctement chargées !")
 
 # Imports de fonctions depuis llm.py
 from src.llm import query_rag
-from src.utils import HuggingFaceEmbeddings
+from src.faiss_generation import HuggingFaceEmbeddings
 
 # Import de variables (url, cle api, token)
 from src.keys_file import OPENAI_API_KEY, HF_API_TOKEN, HF_API_URL, HF_API_URL_EMBEDDING
+print("✅ Fonctions et variables internes correctement chargées !")
 
 # -------------------------------------------------------
 # Classe OpenAIEndpointLLM pour interroger un endpoint HF
@@ -81,6 +85,7 @@ def load_config(yaml_path="config.yaml"):
 
 # On charge activement cette config
 config = load_config()
+print("✅ Configuration YAML correctement chargée !")
 ALL_MODELS = ["gpt-4o-mini", "gpt-4o", "llama3"]
 
 # ------------------------------------------------------------
@@ -299,6 +304,10 @@ def show_ui():
 # Fonction principale : on fait tourner show_ui() 
 # Cela ne pose pas probleme car show_ui() se met a jour dynamiquement
 #--------------------------------------------------------------------
+
+print("✅ Fonction principale et interface streamlit correctement définies !")
+print("⚡ Polychat est désormais actif ! \n")
+print("\n=========================================================")
 
 if __name__ == "__main__":
     show_ui()
