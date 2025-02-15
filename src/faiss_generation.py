@@ -148,38 +148,43 @@ def create_embeddings(embeddings_type, faiss_index_path, directories):
 
 # --------------------------------------------------------------------------------
 # Fonction principale de type 'if __name__ == "__main__":'
-# ATTENTION 1 : CETTE FONCTION N'EST PAS EXECUTEE AUTOMATIQUEMENT EN CAS D'IMPORT
+# ATTENTION : CETTE FONCTION N'EST PAS EXECUTEE AUTOMATIQUEMENT EN CAS D'IMPORT
 # Cela est du au fait que la generation FAISS est longue et intensive en calcul
 # Il ne faut donc executer ce script utils.py que si on a change le corpus
 # Si on a change le corpus, il mettra a jour les index FAISS pour le retriever
-# ATTENTION 2 : CETTE FONCTION NE GENERE QUE LE FAISS DU MODELE PAR DEFAUT DU YAML
-# Si le modele par defaut est llama3, ce script ne generera que le FAISS de llama3
-# Il faut changer le modele par defaut dans le config.yaml pour switcher
 # --------------------------------------------------------------------------------
 
 if __name__ == "__main__":
 
+    # Message de début
+    print("\n================= FAISS GENERATION SCRIPT =================\n")
+
+    # Sélection du type de modèle
+    i = 0
+    while i not in (1, 2):
+        i = int(input("Pour quel type de modèle voulez-vous générer l'index FAISS ? \nTapez 1 pour un modèle OpenAI.\nTapez 2 pour un modèle Llama.\n\nTapez votre choix : "))
     # Chargement de la configuration YAML
     config = load_config()
-    # On selectionne le modele par defaut
-    selected_model = config["default_model_faiss"]
-    # On charge la config specifique du modele par defaut
+
+    # Message intermédiaire
+    print("\n✅ Choix enregistré et config.yaml chargé avec succès.")
+
+    # On charge la config specifique du modele choisi
+    if i == 1 :
+        selected_model = "gpt-4o"
+    elif i == 2 : 
+        selected_model = "llama3"
     model_config = config["llm"].get(selected_model)
     embeddings_type = model_config["embeddings"]
     faiss_index_path = model_config["faisspath"]
+
     # On remonte d'un cran dans l'arborescence pour le path de l'index faiss
     faiss_index_path = f"../{faiss_index_path}"
     # On définit les chemins d'accès aux dossiers contenant les PDF
-    directories = [
-        "../corpus/pdf_scrapes",
-        "../corpus/pdf_ajoutes_manuellement"
-    ]
-
-    # Message de confirmation du chargement du config.yaml
-    print(f"\n================= FAISS GENERATION SCRIPT =================\n\n✅ Fichier config.yaml chargé avec succès. Modèle sélectionné : {selected_model}")
+    directories = ["../corpus/pdf_scrapes", "../corpus/pdf_ajoutes_manuellement"]
 
     # On genere les embeddings
-    print(f"🔍 Utilisation des embeddings {embeddings_type} pour {selected_model}... Veuillez patienter\n")
+    print(f"🔍 Utilisation des embeddings {embeddings_type} ... Veuillez patienter\n")
     create_embeddings(embeddings_type, faiss_index_path, directories)
     print(f"\n===========================================================\n")
 

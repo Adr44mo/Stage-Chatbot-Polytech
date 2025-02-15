@@ -1,5 +1,3 @@
-default_model_faiss: "llama3"
-
 llm:
 
   gpt-4o:
