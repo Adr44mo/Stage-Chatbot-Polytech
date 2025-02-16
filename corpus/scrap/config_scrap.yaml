@@ -1,0 +1,42 @@
+# URL DE BASE DU SITE WEB
+BASE_URL: "https://www.polytech.sorbonne-universite.fr/"
+
+# PATH DE TELECHARGEMENT DES PDF 
+PDF_DOWNLOAD_DIR: "../pdf_scrapes"
+
+# PATH DE TELECHARGEMENT DES JSON
+JSON_DOWNLOAD_DIR: "../json_scrapes"
+
+# URLs A EXCLURE POUR LE SCRAP DES PDF
+EXCLUDE_PREFIXES:
+  - "https://www.polytech.sorbonne-universite.fr/actualites" # Beaucoup de choses inutiles troublant le retriever
+  - "https://www.polytech.sorbonne-universite.fr/entreprise" # Ne contient que des liens corrompus
+  - "https://www.polytech.sorbonne-universite.fr/node" # Ne contient que des liens corrompus
+  - "https://www.polytech.sorbonne-universite.fr/sites/default/files/2023-06" # Contient des fichiers non-sourcés
+  - "https://www.polytech.sorbonne-universite.fr/sites/default/files/2024-09/a" # Contient des fichiers non-sourcés
+
+# DOMAINES A EXCLURE POUR LES URLs DU SCRAP DES PDF
+EXCLUDE_STRINGS:
+  - "/www"
+  - ".io"
+  - ".nl"
+  - ".com"
+  - ".ie"
+  - ".tr"
+  - ".ch"
+  - ".kr"
+  - ".es"
+  - ".ca"
+  - ".be"
+  - ".de"
+  - ".net"
+
+# REMPLACEMENTS A FAIRE DANS LES NOMS DES PDF
+REPLACEMENTS_IN_FILE_NAMES:
+  "%20": "_"
+  "%C3%AA": "e"
+  "%C3%A9": "e"
+  "EE": "Enquete_emploi_"
+  "Poster": "Poster_du_projet_"
+  "poster": "Poster_du_projet_"
+  "-_Support_webinaire_AMUE_VF": "plateforme_pour_taxe_apprentissage"
