@@ -58,6 +58,21 @@ JSON_EXCLUDE_STRINGS:
   - ".de"
   - ".net"
 
+# URLS PRECISES A EVITER POUR LE SCRAP JSON
+JSON_EXACT_URLS_TO_EXCLUDE:
+  - "https://www.polytech.sorbonne-universite.fr"
+  - "https://www.polytech.sorbonne-universite.fr/"
+  - "https://www.polytech.sorbonne-universite.fr/formations?ne=1&di=All&tf=All"
+  - "https://www.polytech.sorbonne-universite.fr/formations?ne=3&di=All&tf=All"
+  - "https://www.polytech.sorbonne-universite.fr/formations?ne=4&di=All&tf=All"
+  - "https://www.polytech.sorbonne-universite.fr/formations?ne=45&di=All&tf=All"
+  - "https://www.polytech.sorbonne-universite.fr/formations?ne=1&di=All&tf=All"
+  - "https://www.polytech.sorbonne-universite.fr/formations?ne=3&di=All&tf=All"
+  - "https://www.polytech.sorbonne-universite.fr/formations?ne=4&di=All&tf=All"
+  - "https://www.polytech.sorbonne-universite.fr/formations?ne=45&di=All&tf=All"
+
+
+
 # REMPLACEMENTS A FAIRE DANS LES NOMS DES PDF
 PDF_REPLACEMENTS_IN_FILE_NAMES:
   "%20": "_"
@@ -88,4 +103,15 @@ DICO_URL_SPECIALITES:
     - "https://www.polytech.sorbonne-universite.fr/formations/cycle-preparatoire-peip-a"
   "PeiP B (Parcours des écoles d'ingénieurs Polytech : cycle préparatoire spécialisé en biologie)":
     - "https://www.polytech.sorbonne-universite.fr/formations/cycle-preparatoire-peip-b"
+
+# Footer actuel présent sur toutes les pages du site
+# Il est exclu lors du scrap en JSON
+WEBSITE_FOOTER_TEXT: |
+  Bât. Esclangon, 4 place Jussieu
+  Case courrier 135,
+  75252 Paris Cedex 05
+  Tél +33 (0) 1 44 27 73 13
+  Réalisé par l'
+  Agence UX Paris
+  - Feel & Clic
   

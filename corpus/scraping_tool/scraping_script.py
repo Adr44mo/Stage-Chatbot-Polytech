@@ -1,8 +1,20 @@
-import src.module_scrap_pdf
-import src.module_scrap_json
+# -----------------------
+# Imports des utilitaires
+# -----------------------
+
+# Imports de librairies
 import time
 import os
 from datetime import datetime
+
+# Imports des modules de scrap
+import src.module_scrap_pdf
+import src.module_scrap_json
+
+#-------------------------------------------------------------------
+# Définition de la fonction principale main() : on effectue le scrap
+# en appelant les modules et on enregistre ensuite un log en .txt
+#-------------------------------------------------------------------
 
 def main():
 
@@ -24,8 +36,9 @@ def main():
     print("\n✅ Scraping des JSON terminé ! \n")
     print(f"Nombre de pages web visitées : {len(src.module_scrap_json.visited_urls)}")
     print(f"Nombre de JSON téléchargés ou mis à jour : {src.module_scrap_json.new_json_count}")
+    time.sleep(2)
 
-    #Enregistrement du Log.txt
+    #Enregistrement du log
     formatted_date = datetime.now().strftime("%d/%m/%Y à %H:%M")
     log_filename = "../log_scraping.txt"
     with open(log_filename, "w", encoding="utf-8") as log_file:
@@ -38,6 +51,14 @@ def main():
     print("\n✅ log_scraping.txt enregistré dans le dossier parent ! \n")
 
     print("\n============== SCRAPING DU SITE WEB TERMINÉ ==============\n")
+
+# -----------------------------------------------------------------------------
+# Fonction principale de type 'if __name__ == "__main__":'
+# ATTENTION : CETTE FONCTION N'EST PAS EXECUTEE AUTOMATIQUEMENT EN CAS D'IMPORT
+# Cela ne pose pas de problème puisque ce scraping_script.py n'est pas importé
+# dans d'autres fichiers. Il doit être éxécuté seul pour régénérer le corpus
+# si besoin (si le site a évolué, s'il contient de nouveaux pdf, etc...)
+# -----------------------------------------------------------------------------
 
 if __name__ == "__main__":
     main()

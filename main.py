@@ -75,9 +75,9 @@ class OpenAIEndpointLLM:
             return self.invoke({"input": prompt})
         return self.invoke({"input": str(prompt)})
 
-# ---------------------------------------------------
+# -------------------------------------------------
 # Chargement de la configuration depuis config.yaml
-# ---------------------------------------------------
+# -------------------------------------------------
 
 # Fonction de chargement de la config
 def load_config(yaml_path="config.yaml"):
@@ -130,9 +130,9 @@ def save_history(user_id, history):
     except Exception as e:
         print("Erreur lors de la sauvegarde de l'historique :", e)
 
-# ---------------------------------------------------
+# -------------------------------------
 # Initialisation du LLM et du Retriever
-# ---------------------------------------------------
+# -------------------------------------
 
 def init_llm_and_retriever(model_choice):
 
@@ -151,7 +151,7 @@ def init_llm_and_retriever(model_choice):
     else:
         raise ValueError("Type d'embeddings inconnu ou non géré.")
     
-    # Chargement de l'index FAISS / Chroma
+    # Chargement de l'index FAISS / Chroma pour gpt-4o
     if model_choice == "gpt-4o":
         vector = vectordb
         retriever = vector.as_retriever()
@@ -186,6 +186,7 @@ def init_llm_and_retriever(model_choice):
 # Interface Streamlit
 # Cette fonction est mise a jour dynamiquement a chaque fois que model_choice change
 # ----------------------------------------------------------------------------------
+
 def show_ui():
 
     # On force la customisation de l'interface graphique de streamlit

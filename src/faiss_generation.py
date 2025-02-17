@@ -146,13 +146,13 @@ def create_embeddings(embeddings_type, faiss_index_path, directories):
             log_file.write(f"- {file}\n")
         log_file.write("\n===================================================\n\n")
 
-# --------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Fonction principale de type 'if __name__ == "__main__":'
 # ATTENTION : CETTE FONCTION N'EST PAS EXECUTEE AUTOMATIQUEMENT EN CAS D'IMPORT
 # Cela est du au fait que la generation FAISS est longue et intensive en calcul
 # Il ne faut donc executer ce script utils.py que si on a change le corpus
 # Si on a change le corpus, il mettra a jour les index FAISS pour le retriever
-# --------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 if __name__ == "__main__":
 
