@@ -14,9 +14,9 @@ with open(config_path, "r") as f:
 # Récupération des paramètres depuis le YAML
 BASE_URL = config["BASE_URL"]
 DOWNLOAD_DIR = config["PDF_DOWNLOAD_DIR"]
-EXCLUDE_PREFIXES = config["EXCLUDE_PREFIXES"]
-EXCLUDE_STRINGS = config["EXCLUDE_STRINGS"]
-REPLACEMENTS = config["REPLACEMENTS_IN_FILE_NAMES"]
+EXCLUDE_PREFIXES = config["PDF_EXCLUDE_PREFIXES"]
+EXCLUDE_STRINGS = config["PDF_EXCLUDE_STRINGS"]
+REPLACEMENTS = config["PDF_REPLACEMENTS_IN_FILE_NAMES"]
 
 DOMAIN = urlparse(BASE_URL).netloc
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
