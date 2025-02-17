@@ -9,3 +9,4 @@ streamlit-cookies-manager
 pyyaml
 requests
 llama-index-embeddings-huggingface
+chromadb
