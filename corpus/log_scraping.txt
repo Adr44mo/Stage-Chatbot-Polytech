@@ -1,0 +1,11 @@
+===================================================
+
+Le dernier scraping en date a été effectué le 17/02/2025 à 13:43
+
+Nombre de PDF téléchargés ou mis à jour : 42
+Nombre de JSON téléchargés ou mis à jour : 52
+
+Attention : parfois, les fichiers téléchargés/mis à jour le sont par précaution et non pas parce qu'ils sont nouveaux. 
+
+===================================================
+
