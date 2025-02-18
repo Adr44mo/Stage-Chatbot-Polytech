@@ -22,7 +22,7 @@ print("\n✅ Librairies externes correctement chargées !")
 
 # Imports de fonctions depuis llm.py
 from src.llm import query_rag
-from src.faiss_generation import HuggingFaceEmbeddings
+from src.vectorisation_generation import HuggingFaceEmbeddings
 from src.openai_chroma_search import Search, vectordb, get_document_by_id, filter_detection, retrieval
 
 # Import de variables (url, cle api, token)
@@ -141,7 +141,7 @@ def init_llm_and_retriever(model_choice):
     if not llm_config:
         raise ValueError(f"Modèle '{model_choice}' non reconnu dans config.yaml.")
     embedding_type = llm_config["embeddings"]
-    faiss_index_path = llm_config["faisspath"]
+    vectorisation_path = llm_config["vectorisation_path"]
 
     # Definition des embeddings
     if embedding_type == "OpenAIEmbeddings": # pour gpt
@@ -156,7 +156,7 @@ def init_llm_and_retriever(model_choice):
         vector = vectordb
         retriever = vector.as_retriever()
     else:
-        vector = FAISS.load_local(faiss_index_path, embeddings, allow_dangerous_deserialization=True)
+        vector = FAISS.load_local(vectorisation_path, embeddings, allow_dangerous_deserialization=True)
         retriever = vector.as_retriever()
 
     # GPT : on definit la variable llm
