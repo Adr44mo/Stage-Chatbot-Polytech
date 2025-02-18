@@ -43,9 +43,13 @@ Et voici ses défauts en février 2025 :
 - Le système est conçu pour un web-déploiement et nécessite quelques adaptations pour tourner en local (essentiellement au niveau de la logique d'historique par URL)
 - Le front-end ne gère pas bien le responsive (affichage sur téléphone portable etc)
 
-## Auteurs
+## Auteurs (étudiants de la MAIN5 2024-2025)
 
-Samuel (MAIN5)
-Tristan (MAIN5)
-Amalia (MAIN5)
-Yannick (MAIN5)
+Samuel,
+Tristan,
+Amalia,
+Yannick
+
+## Encadrant (responsable de la MAIN5 2024-2025)
+
+M. TANNIER
