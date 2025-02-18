@@ -1,6 +1,6 @@
 ===================================================
 
-Cette vectorisation a été générée le 18/02/2025 à 21:17
+Cette vectorisation a été générée le 18/02/2025 à 21:34
 
 Fichiers JSON utilisés :
 
@@ -52,6 +52,7 @@ Fichiers JSON utilisés :
 - vie_pratique_polytech_sorbonne.json
 
 Fichiers PDF utilisés :
+
 - 2022_Enquete_emploi.pdf
 - 2024-12-02__Organigramme_strucure_EPU.pdf
 - Book_numerique_-_VF.pdf

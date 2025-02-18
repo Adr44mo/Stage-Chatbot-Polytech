@@ -10,13 +10,13 @@ import requests
 import sys
 import PyPDF2
 import re
+import shutil
 from datetime import datetime
 
 # Imports d'elements specifiques externes
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import PyPDFLoader
-from langchain_community.embeddings import OllamaEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_core.embeddings import Embeddings    
@@ -297,9 +297,10 @@ def create_embeddings(model_name, vectorisation_path, pdf_directories):
             
             # Création des embeddings et du vector store
             embeddings = OpenAIEmbeddings(model="text-embedding-3-small", openai_api_key=OPENAI_API_KEY)
-            # Vous pouvez définir le nom de la collection et du répertoire de persistance selon vos besoins
-            db_name = "openai_chroma_db"
-            db = Chroma.from_documents(documents=documents, embedding=embeddings, collection_name=db_name, persist_directory=vectorisation_path)
+            # On nettoie la DB pour régénerer la nouvelle
+            if os.path.exists(vectorisation_path):
+                shutil.rmtree(vectorisation_path)
+            db = Chroma.from_documents(documents=documents, embedding=embeddings, collection_name="openai_chroma_db", persist_directory=vectorisation_path)
             
             print(f"✅ Vectorisation ChromaDB créée et sauvegardée (avec log) dans : {vectorisation_path}")
         
@@ -315,7 +316,7 @@ def create_embeddings(model_name, vectorisation_path, pdf_directories):
             log_file.write("\nFichiers JSON utilisés :\n\n")
             for file in json_files_log:
                 log_file.write(f"- {file}\n")
-            log_file.write("\nFichiers PDF utilisés :\n")
+            log_file.write("\nFichiers PDF utilisés :\n\n")
             for file in pdf_files_log:
                 log_file.write(f"- {file}\n")
             log_file.write("\n===================================================\n\n")
