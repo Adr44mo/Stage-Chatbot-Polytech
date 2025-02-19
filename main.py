@@ -14,7 +14,7 @@ import requests
 # Imports d'elements specifiques externes
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.chat_models import ChatOpenAI
-from langchain_community.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS, Chroma
 from openai import OpenAI
 
 # Affichage d'un message de succès d'import des librairies
@@ -23,7 +23,7 @@ print("\n✅ Librairies externes correctement chargées !")
 # Imports de fonctions depuis llm.py
 from src.llm import query_rag
 from src.vectorisation_generation import HuggingFaceEmbeddings
-from src.openai_chroma_search import Search, vectordb, get_document_by_id, filter_detection, retrieval
+from src.openai_chroma_search import get_document_by_id, filter_detection, retrieval
 
 # Import de variables (url, cle api, token)
 from src.keys_file import OPENAI_API_KEY, HF_API_TOKEN, HF_API_URL, HF_API_URL_EMBEDDING
@@ -146,6 +146,8 @@ def init_llm_and_retriever(model_choice):
     # Definition des embeddings
     if embedding_type == "OpenAIEmbeddings": # pour gpt
         embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
+    elif embedding_type == "OpenAIEmbeddingsMetadata":
+        embeddings = OpenAIEmbeddings(model="text-embedding-3-small", openai_api_key =OPENAI_API_KEY)
     elif embedding_type == "HuggingFaceEmbeddings": # pour llama
         embeddings = HuggingFaceEmbeddings(hf_api_url=HF_API_URL_EMBEDDING, hf_api_token=HF_API_TOKEN)
     else:
@@ -153,11 +155,11 @@ def init_llm_and_retriever(model_choice):
     
     # Chargement de l'index FAISS / Chroma pour gpt-4o
     if model_choice == "gpt-4o":
-        vector = vectordb
-        retriever = vector.as_retriever()
+        vector = Chroma(persist_directory=vectorisation_path, embedding_function=embeddings, collection_name="openai_chroma_db")
     else:
         vector = FAISS.load_local(vectorisation_path, embeddings, allow_dangerous_deserialization=True)
-        retriever = vector.as_retriever()
+    
+    retriever = vector.as_retriever()
 
     # GPT : on definit la variable llm
     if model_choice in ["gpt-4o", "gpt-4o-mini"]:
@@ -180,7 +182,7 @@ def init_llm_and_retriever(model_choice):
         )
 
     # On retourne les variables bien initialisees
-    return llm, retriever
+    return vector, llm, retriever
 
 # ----------------------------------------------------------------------------------
 # Interface Streamlit
@@ -225,7 +227,7 @@ def show_ui():
 
     # On initialise llm et retriever
     try:
-        llm, retriever = init_llm_and_retriever(model_choice)
+        vector, llm, retriever = init_llm_and_retriever(model_choice)
     except ValueError as e:
         st.error(str(e))
         st.stop()
@@ -296,15 +298,17 @@ def show_ui():
             if model_choice == "gpt-4o":
                 dict_answer = filter_detection(user_input)
                 spec = dict_answer.get('specialty', [])
-                search_input = Search(query=user_input, specialty=", ".join(spec), status="publique")
-                retrieved_documents = retrieval(search_input)
+                if spec == "None":
+                    spec = []
+                retrieved_documents = retrieval(query=user_input, filters=spec, vectordb=vector)
 
                 document_urls = set()  # Utilisation d'un set pour éviter les doublons
                 for doc_id in retrieved_documents:
-                    doc = get_document_by_id(vectordb, doc_id)
-                    url = doc['metadatas'][0].get('URL', None)
-                    if url and url:
-                        document_urls.add(url)
+                    doc = get_document_by_id(vector, doc_id)
+                    if doc:  # Si le document existe
+                        url = doc.get('metadatas', [{}])[0].get('URL', None)
+                        if url:
+                            document_urls.add(url)
 
                 if document_urls:
                     urls_str = ", ".join([f"{url}" for url in document_urls])

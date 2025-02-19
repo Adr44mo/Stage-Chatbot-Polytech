@@ -2,32 +2,13 @@
 # Imports des utilitaires
 # -----------------------
 
-from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain.schema import Document
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.chat_models import ChatOpenAI
 from langchain_core.runnables import RunnablePassthrough
-from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List
 import json
-
-# ---------------------------------------------------------------------
-# Chargement de la base de données Chroma avec les embeddings d'OpenAI
-# ---------------------------------------------------------------------
-vectordb = Chroma(
-    persist_directory="./Json1",    # Répertoire pour stocker les vecteurs et les métadonnées
-    embedding_function=OpenAIEmbeddings(model="text-embedding-3-small"), 
-    collection_name="Json1"  
-)
-
-# --------------------------------------------------------------------------------------
-# Définition du modèle de recherche avec Pydantic pour valider la structure des requêtes
-# --------------------------------------------------------------------------------------
-class Search(BaseModel):
-    query: str = Field(..., description="Recherche par similarité appliquée à des documents d'informations sur l'école")
-    specialty: Optional[str] = Field(None, description="Spécialité à rechercher (exemple: MAIN, INFO, MATH)")
-    status: Optional[str] = Field(None, description="Statut du document, peut être 'publique' ou 'privé'")
 
 # -------------------------------------------------------------------------------
 # Fonction pour récupérer un document par son ID depuis la base de données Chroma
@@ -42,26 +23,22 @@ def get_document_by_id(collection, vector_id):
 # --------------------------------------------------------------------------------------------
 # Fonction de recherche dans Chroma en fonction d'un critère spécifique (spécialité, statut)
 # --------------------------------------------------------------------------------------------
-def retrieval_single_field(search: Search, field: str, value) -> List[str]:
-    _filter = {}
-    if field == "Specialty":
-        _filter["Specialty"] = search.specialty
-    if field == "Status":
-        _filter["Status"] = search.status
-    
-    results = vectordb.similarity_search(search.query, filter=_filter)
-    return [doc.metadata.get("ID", 'None') for doc in results]
+def retrieval_single_field(query: str, filters: dict, vectordb: Chroma):    
+    docs = vectordb.similarity_search(query, k=5, filter=filters)
+    return [doc.metadata.get("ID", 'None') for doc in docs]
 
 # --------------------------------------------------------------------------------------------
 # Recherche des documents dans Chroma en appliquant des filtres sur la spécialité et le statut
 # --------------------------------------------------------------------------------------------
-def retrieval(search: Search) -> List[Document]:
-    all_ids_set = set() 
+def retrieval(query: str, filters: list, vectordb: Chroma) -> List[Document]:
+    all_ids_set = set()
 
-    if search.specialty:
-        all_ids_set.update(retrieval_single_field(search, "Specialty", search.specialty))
-    if search.status:
-        all_ids_set.update(retrieval_single_field(search, "Status", search.status))
+    # Si des filtres de spécialité sont fournis
+    if filters and filters != ['None']:
+        for _filter in filters:
+            all_ids_set.update(retrieval_single_field(query, {"Speciality": _filter}, vectordb))
+    else:
+        all_ids_set.update(retrieval_single_field(query, {"Status": "privé"}, vectordb))
 
     return list(all_ids_set)
 

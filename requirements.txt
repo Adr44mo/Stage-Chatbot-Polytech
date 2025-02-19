@@ -10,3 +10,4 @@ pyyaml
 requests
 llama-index-embeddings-huggingface
 chromadb
+PyPDF2
