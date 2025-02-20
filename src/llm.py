@@ -24,9 +24,7 @@ def query_rag(llm,retriever,question,chat_history):
 
 # -------------------------------------------------------------------------------------------
 # Fonction definissant une query query sans retriever actif (pour systeme simpliste sans RAG)
-# Elle est actuellement utilisee uniquement pour llama pour de mauvaises raisons
-# En effet, je n'arrive pas encore a faire fonctionner le retriever pour un ollama distant
-# La prochaine mise a jour majeure du code devra regler cela
+# Elle n'est pas utilisée mais peut servir à des fins de test quand le retriever buggue.
 # -------------------------------------------------------------------------------------------
 
 def query_norag(llm, retriever, question, chat_history):

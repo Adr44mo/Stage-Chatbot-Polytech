@@ -1,7 +1,8 @@
 # Projet PolyChat
 
-Dernière mise à jour : 18 février 2025 \
+Dernière mise à jour : 20 février 2025 \
 Développement terminé
+Soutenance effectuée
 
 ## Introduction
 
