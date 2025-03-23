@@ -16,11 +16,13 @@ L'index est ensuite utilisé pour créer un _retriever_, un outil permettant de 
 Les _LLM (Large Language Model)_ utilisés sont _gpt-4o_ et _gpt-4o-mini_ car ils présentent un bon compromis efficacité/rapidité. _LLaMA3-8B_ est également disponible car il explore la possibilité d'un LLM tournant en local.
 Enfin, le tout est mis sous forme de ChatBot avec une interface _Streamlit_ customisée. L'hébergement est fait sur un VPS, et l'interface est streamée sous forme d'iframe sur [ce site web maquette](https://www.maquettepolytechrag.ovh/). Vous pouvez y sélectionner vous-même le LLM avec lequel vous souhaitez parler.
 
-## Comment accéder aux VPS de déploiement web 
+## Comment accéder aux VPS de déploiement web [OUTDATED]
+
+La logique suivante était utilisée jusqu'en février 2025, date de fin du projet de développement. Les nouveaux VPS utilisés par les personnes ayant repris le projet sont probablement différents :
 
 - Le VPS distant faisant tourner le code python est accessible sur [ce site web d'hébergement](https://www.render.com/). Il utilise peu de ressources et d'argent.
 - Les VPS distant faisant tourner llama3-8b et son serveur d'embeddings sont accessibles sur [ce site web d'endpoint](https://endpoints.huggingface.co/). Il utilise beaucoup de ressources et 3$/h lorsqu'il n'est pas en veille.
-- Pour se connecter à ces VPS, demandez les identifiants à Tristan (tristan75015@gmail.com) en privé.
+- Les identifiants sont privés et réservés à l'équipe de maintenance PolyTech.
 
 ## Résultats
 
