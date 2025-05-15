@@ -1,3 +1,5 @@
 .env
 .DS_Store
 faiss_index/
+.venv/
+infio
