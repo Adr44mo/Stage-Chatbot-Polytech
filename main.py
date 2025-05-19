@@ -272,9 +272,10 @@ def show_ui():
     # A chaque nouveau message envoye par l'utilisateur 
     user_input = st.chat_input("Posez votre question ici...")
     if user_input:
+        with st.chat_message("user"):
+            st.markdown(user_input)
+        
         with st.spinner("Patience..."):
-            with st.chat_message("user"):
-                st.markdown(user_input)
             try:
                 response = query_rag(llm, retriever, user_input, st.session_state["chat_history"])
             except requests.exceptions.ConnectionError:
