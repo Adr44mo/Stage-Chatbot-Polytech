@@ -102,7 +102,7 @@ ALL_MODELS = ["gpt-4o-mini", "gpt-4o", "llama3"]
 # ------------------------------------------------------------
 
 # Repertoire de stockage des fichiers d'historique
-BASE_HISTORY_DIR = "/var/data"
+BASE_HISTORY_DIR = "var/data"
 
 # Fonction pour recuperer le user_id
 def get_user_id_from_url() -> str:
