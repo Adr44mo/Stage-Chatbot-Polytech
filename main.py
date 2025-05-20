@@ -4,6 +4,12 @@
 
 print("\n================= LANCEMENT DE POLYCHAT =================\n")
 
+import os
+
+# Ensure correct port binding for Render
+os.environ["STREAMLIT_SERVER_PORT"] = os.environ.get("PORT", "8501")
+os.environ["STREAMLIT_SERVER_ADDRESS"] = "0.0.0.0"
+
 # Imports de librairies
 import yaml
 import os
