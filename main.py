@@ -31,6 +31,9 @@ from src.llm import query_rag
 from src.vectorisation_generation import HuggingFaceEmbeddings
 from src.openai_chroma_search import get_document_by_id, filter_detection, retrieval
 
+# Imports de fonctions depuis filters.py
+from src.filters import handle_if_uninformative
+
 # Import de variables (url, cle api, token)
 from src.keys_file import OPENAI_API_KEY, HF_API_TOKEN, HF_API_URL, HF_API_URL_EMBEDDING
 print("✅ Fonctions et variables internes correctement chargées !")
@@ -248,21 +251,30 @@ def show_ui():
     if "chat_history" not in st.session_state:
         st.session_state["chat_history"] = load_history(user_id)
 
-    # Si cet historique et vierge, on envoie le premier message par défaut
+    # --------------ANCIENNE METHODE 
+    # # Si cet historique et vierge, on envoie le premier message par défaut
+    # if len(st.session_state["chat_history"]) == 0:
+    #     init_user_msg = (
+    #         "Présente-toi en tant que chatbot représentant Polytech-Sorbonne. "
+    #         "Présente l'école en quelques mots et explique l'objet de ton appel."
+    #     )
+    #     # if model_choice == "llama3" :
+    #     #     response = query_norag(llm, retriever, init_user_msg, [])
+    #     # else :
+    #     response = query_rag(llm, retriever, init_user_msg, [])
+    #     st.session_state["chat_history"].extend([
+    #         {"role": "user", "content": init_user_msg},
+    #         {"role": "assistant", "content": response if isinstance(response, str) else response["answer"]},
+    #     ])
+    #     save_history(user_id, st.session_state["chat_history"])
+    # --------------
+
+    # Si l'historique est vide, afficher un message d'introduction statique
     if len(st.session_state["chat_history"]) == 0:
-        init_user_msg = (
-            "Présente-toi en tant que chatbot représentant Polytech-Sorbonne. "
-            "Présente l'école en quelques mots et explique l'objet de ton appel."
+        st.info(
+            "👋 Bonjour, je suis le chatbot représentant Polytech-Sorbonne. "
+            "Posez-moi vos questions sur l'école, je vous répondrai avec plaisir !"
         )
-        # if model_choice == "llama3" :
-        #     response = query_norag(llm, retriever, init_user_msg, [])
-        # else :
-        response = query_rag(llm, retriever, init_user_msg, [])
-        st.session_state["chat_history"].extend([
-            {"role": "user", "content": init_user_msg},
-            {"role": "assistant", "content": response if isinstance(response, str) else response["answer"]},
-        ])
-        save_history(user_id, st.session_state["chat_history"])
 
     # On affiche l'historique precedent
     for message in st.session_state["chat_history"]:
@@ -278,12 +290,20 @@ def show_ui():
     # A chaque nouveau message envoye par l'utilisateur 
     user_input = st.chat_input("Posez votre question ici...")
     if user_input:
+
         with st.chat_message("user"):
             st.markdown(user_input)
         
         with st.spinner("Patience..."):
             try:
-                response = query_rag(llm, retriever, user_input, st.session_state["chat_history"])
+                # On filtre le message de l'utilisateur pour éviter les appels à l'API inutiles 
+                filtered_response = handle_if_uninformative(user_input)
+                if filtered_response:
+                    response = filtered_response
+                
+                else:
+                    response = query_rag(llm, retriever, user_input, st.session_state["chat_history"])
+
             except requests.exceptions.ConnectionError:
                 st.error(
                     "Impossible de se connecter au serveur d'inference. "
@@ -301,25 +321,27 @@ def show_ui():
             else:
                 bot_answer = str(response)
 
-            # Vérification des liens pour cette question
-            if model_choice == "gpt-4o":
-                dict_answer = filter_detection(user_input)
-                spec = dict_answer.get('specialty', [])
-                if spec == "None":
-                    spec = []
-                retrieved_documents = retrieval(query=user_input, filters=spec, vectordb=vector)
+            # Vérification des liens pour cette question (si appel à l'API)
+            if not filtered_response:
 
-                document_urls = set()  # Utilisation d'un set pour éviter les doublons
-                for doc_id in retrieved_documents:
-                    doc = get_document_by_id(vector, doc_id)
-                    if doc:  # Si le document existe
-                        url = doc.get('metadatas', [{}])[0].get('URL', None)
-                        if url:
-                            document_urls.add(url)
+                if model_choice == "gpt-4o":
+                    dict_answer = filter_detection(user_input)
+                    spec = dict_answer.get('specialty', [])
+                    if spec == "None":
+                        spec = []
+                    retrieved_documents = retrieval(query=user_input, filters=spec, vectordb=vector)
 
-                if document_urls:
-                    urls_str = ", ".join([f"{url}" for url in document_urls])
-                    bot_answer += "\n\nSource : " + urls_str
+                    document_urls = set()  # Utilisation d'un set pour éviter les doublons
+                    for doc_id in retrieved_documents:
+                        doc = get_document_by_id(vector, doc_id)
+                        if doc:  # Si le document existe
+                            url = doc.get('metadatas', [{}])[0].get('URL', None)
+                            if url:
+                                document_urls.add(url)
+
+                    if document_urls:
+                        urls_str = ", ".join([f"{url}" for url in document_urls])
+                        bot_answer += "\n\nSource : " + urls_str
 
             # On met a jour l'historique pour y ajouter la reponse
             with st.chat_message("assistant", avatar="web/assets/logopolytech.svg"):
