@@ -23,7 +23,7 @@
         localStorage.setItem("visitorId", visitorId);
       }
 
-      const chatbotURL = "https://stage-chatbot-polytech.onrender.com/?user_id=" + visitorId;
+      const chatbotURL = "http://localhost:8501/?user_id=" + visitorId;
       document.getElementById("chatbot-frame").src = chatbotURL;
     })();
 
