@@ -9,14 +9,22 @@ from langchain_openai import OpenAIEmbeddings  # Import the OpenAIEmbeddings cla
 from langchain_openai import ChatOpenAI  # Import the ChatOpenAI class from the langchain_openai module
 from langchain.chains import create_history_aware_retriever  # Import the create_history_aware_retriever function
 
-from prompt import qa_prompt  # Import the qa_prompt from the prompt module
-from prompt import contextualize_q_prompt  # Import the contextualize_q_prompt from the prompt module
+
+# If promptt.py is in a different directory, specify it here:
+# sys.path.append(str(Path(__file__).parent.parent / "path" / "to" / "promptt"))
+
 
 # Chain with chat history
 from langchain.chains import create_retrieval_chain  # Import the create_retrieval_chain function from the langchain.chains module
 from langchain.chains.combine_documents import create_stuff_documents_chain  # Import the create_stuff_documents_chain function from the langchain.chains.combine_documents module
 
 from pathlib import Path
+import sys
+# Add the directory containing promptt.py to the Python path
+# This assumes promptt.py is in the same directory as this file
+sys.path.append(str(Path(__file__).parent))
+from promptt import qa_prompt  # Import the qa_prompt from the prompt module
+from promptt import contextualize_q_prompt  # Import the contextualize_q_prompt from the prompt module
 
 persist_directory = Path(__file__).parent.parent / "vectorisation" / "src" / "db"  # Define the directory where the Chroma vector database will be persisted
 
@@ -59,6 +67,49 @@ history_aware_retriever = create_history_aware_retriever(
 )
 
 
+def initialize_the_rag_chain():
+    """
+    Initialize the Retrieval-Augmented Generation (RAG) chain.
+    
+    Returns:
+        rag_chain: The RAG chain for question-answering tasks.
+    """
+    # Create a chain for question-answering using the language model and the question-answering prompt
+    question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
+
+    # Create a Retrieval-Augmented Generation (RAG) chain
+    rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
+
+    return rag_chain
+
+def initialize_chroma():
+    """Initialize ChromaDB client and collection"""
+    persistent_client = chromadb.PersistentClient(path=str(persist_directory))
+    return Chroma(
+        client=persistent_client,
+        collection_name='langchain',
+        embedding_function=OpenAIEmbeddings()
+    )
+
+def create_rag_chain(db):
+    """Create RAG chain with source handling"""
+    retriever = db.as_retriever(
+        search_type="similarity",
+        search_kwargs={"k": 3}
+    )
+
+    history_aware_retriever = create_history_aware_retriever(
+        ChatOpenAI(model="gpt-4o-mini"),
+        retriever,
+        contextualize_q_prompt
+    )
+
+    question_answer_chain = create_stuff_documents_chain(
+        ChatOpenAI(model="gpt-4o-mini"),
+        qa_prompt
+    )
+
+    return create_retrieval_chain(history_aware_retriever, question_answer_chain)
 #####################################################################################################
 # This script sets up a Retrieval-Augmented Generation (RAG) system using Langchain and ChromaDB.   #
 # It is used uniquely for the test purpose of the SecondSol project.                                #

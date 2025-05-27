@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Test PolyChat</title>
+</head>
+<body>
+  <h1>Bienvenue sur la démo de PolyChat</h1>
+
+  <iframe id="chatbot-frame" 
+          style="display: none; position: fixed; bottom: 0; right: 80px; width: 400px; height: 600px; 
+                 border: 1px solid #ddd; z-index: 1000; background-color: white;"></iframe>
+
+  <button id="chatbot-toggle" 
+          style="position: fixed; bottom: 20px; right: 20px; z-index: 1001; background-color: #007bff; 
+                 color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer;">💬</button>
+
+  <script>
+    (function() {
+      let visitorId = localStorage.getItem("visitorId");
+      if (!visitorId) {
+        visitorId = Math.random().toString(36).substring(2) + Date.now().toString(36);
+        localStorage.setItem("visitorId", visitorId);
+      }
+
+      const chatbotURL = "http://localhost:8501/?user_id=" + visitorId;
+      document.getElementById("chatbot-frame").src = chatbotURL;
+    })();
+
+    const chatbotFrame = document.getElementById("chatbot-frame");
+    const chatbotToggle = document.getElementById("chatbot-toggle");
+    let isOpen = false;
+
+    chatbotToggle.addEventListener("click", function () {
+      chatbotFrame.style.display = isOpen ? "none" : "block";
+      isOpen = !isOpen;
+      chatbotToggle.innerHTML = isOpen ? "<span style='color: white;'>X</span>" : "💬";
+    });
+  </script>
+</body>
+</html>
