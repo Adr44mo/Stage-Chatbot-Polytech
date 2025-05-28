@@ -9,6 +9,7 @@ from chat import format_sources
 from filters import handle_if_uninformative
 
 app = FastAPI()
+print("[INFO] FastAPI app initialized")
 
 # Autorise le frontend à appeler l'API
 app.add_middleware(
@@ -60,8 +61,10 @@ async def chat(request: ChatRequest):
     return ChatResponse(answer=answer, sources=sources)
 
 import os
-import uvicorn
+
+port = int(os.environ.get("PORT", 8000))
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))
-    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
+    print(f"[INFO] Starting FastAPI app on port {port}...")
+    import uvicorn
+    uvicorn.run("backend.main:app", host="0.0.0.0", port=port, reload=False)
