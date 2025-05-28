@@ -3,10 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict, Any
 
-from keys_file import OPENAI_API_KEY
-from llmm import initialize_the_rag_chain
-from chat import format_sources
-from filters import handle_if_uninformative
+from app.keys_file import OPENAI_API_KEY
+from app.llmm import initialize_the_rag_chain
+from app.chat import format_sources
+from app.filters import handle_if_uninformative
 
 app = FastAPI()
 print("[INFO] FastAPI app initialized")
