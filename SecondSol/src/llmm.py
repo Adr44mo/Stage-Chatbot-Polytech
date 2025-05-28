@@ -112,7 +112,7 @@ def create_rag_chain(db):
     return create_retrieval_chain(history_aware_retriever, question_answer_chain)
 #####################################################################################################
 # This script sets up a Retrieval-Augmented Generation (RAG) system using Langchain and ChromaDB.   #
-# It is used uniquely for the test purpose of the SecondSol project.                                #
+# The __name__ == "__main__" is used uniquely for the test purpose of the SecondSol project.        #
 #####################################################################################################
 
 if __name__ == "__main__":

@@ -1,0 +1,23 @@
+polychat-app/
+├── backend/
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── main.py               ← FastAPI entrypoint (définit `/chat`, etc.)
+│   │   ├── rag_chain.py          ← Code d'initialisation du RAG / LLM
+│   │   └── utils.py              ← Fonctions utiles (e.g. format_sources)
+│   ├── requirements.txt          ← dépendances Python
+│   └── .env                      ← clés API (OpenAI, etc.)
+│
+├── frontend/
+│   ├── public/
+│   │   └── index.html
+│   ├── src/
+│   │   ├── components/
+│   │   │   └── ChatBox.jsx       ← Composant React pour l’interface
+│   │   ├── App.jsx               ← Composant principal
+│   │   ├── index.js              ← Point d’entrée React
+│   ├── package.json              ← dépendances JS (React, axios, etc.)
+│   └── vite.config.js            ← config Vite (ou webpack)
+│
+├── README.md
+└── .gitignore

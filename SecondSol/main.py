@@ -10,6 +10,12 @@ from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_chroma import Chroma
 
 # Configuration
+from src.keys_file import (
+    OPENAI_API_KEY,
+    HF_API_TOKEN,
+    HF_API_URL,
+    HF_API_URL_EMBEDDING,
+)
 from src.llmm import initialize_the_rag_chain
 from src.filters import handle_if_uninformative
 

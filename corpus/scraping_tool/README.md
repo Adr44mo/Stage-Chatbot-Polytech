@@ -1,6 +1,0 @@
-# README du sous-dossier /corpus/scraping_tool/
-Le présent dossier contient le tool de scraping, qui trouve et télécharge les PDF présents sur le site web. Il découpe également les pages du site en segments au format JSON et les télécharge.
-
-- **/src/** contient deux modules de code python (un pour les PDF et un pour les JSON) importés dans **scraping_script.py**.
-- **config_scrap.yaml** est un fichier de configuration visant à rendre le script flexible. En effet, le site web sera peut-être amené à changer, et sans cette flexibilité, le code de scraping ne marcherait plus. Modifiez donc cette configuration YAML selon vos besoins afin d'avoir la meilleure logique de scraping possible. Sa logique actuelle est valide en février 2025.
-- **scraping_script.py** est le fichier à lancer avec python pour réaliser le scraping une fois que vous avez paramétré le **config_scrap.yaml** selon vos besoins. Aucune interaction n'est nécessaire, tout se fait automatiquement. Une fois le scraping fini, n'oubliez pas de mettre les index FAISS à jour avec l'outil **/src/faiss_generation.py** et de redéployer le système, sinon le RAG ne pourra pas piocher dans ces nouveaux documents pour fournir des réponses personnalisées.
