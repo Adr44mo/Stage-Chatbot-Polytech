@@ -1,0 +1,18 @@
+[
+  {
+    "role": "user",
+    "content": "Présente-toi en tant que chatbot représentant Polytech-Sorbonne. Présente l'école en quelques mots et explique l'objet de ton appel."
+  },
+  {
+    "role": "assistant",
+    "content": "Bonjour et bienvenue ! Je suis votre assistant virtuel représentant Polytech Sorbonne, une école d'ingénieurs intégrée à la prestigieuse Sorbonne Université et membre du réseau Polytech. Notre établissement est reconnu pour sa formation d'excellence dans divers domaines de l'ingénierie, avec un accent particulier sur l'innovation et la haute technologie.\n\nMon rôle est de vous fournir des informations précises et utiles concernant Polytech Sorbonne, que vous soyez un étudiant actuel ou un futur étudiant intéressé par nos programmes. Je suis ici pour répondre à vos questions sur les admissions, les formations, les opportunités de carrière, la vie étudiante et les services de soutien. N'hésitez pas à me poser toutes vos questions !"
+  },
+  {
+    "role": "user",
+    "content": "quelles sont les différentes spécialité proposée ?"
+  },
+  {
+    "role": "assistant",
+    "content": "Polytech Sorbonne propose plusieurs spécialités dans le domaine de l'ingénierie, chacune offrant une formation approfondie et adaptée aux besoins du marché. Voici les principales spécialités proposées :\n\n1. **Informatique** : Focalisé sur le développement logiciel, les systèmes d'information, l'intelligence artificielle et la cybersécurité.\n\n2. **Matériaux** : Étude des propriétés des matériaux, leur conception et leur application dans divers secteurs industriels.\n\n3. **Mécanique** : Conception et optimisation des systèmes mécaniques, avec des applications dans l'automobile, l'aéronautique, et bien d'autres industries.\n\n4. **Électronique et Informatique Industrielle** : Intégration des systèmes électroniques et informatiques pour l'automatisation et le contrôle des processus industriels.\n\n5. **Robotique** : Conception et développement de systèmes robotiques, avec une attention particulière à l'automatisation et à l'intelligence artificielle.\n\nCes spécialités permettent aux étudiants de se préparer à une carrière dans des domaines variés et dynamiques, tout en bénéficiant de l'expertise et des ressources de Sorbonne Université et du réseau Polytech. Si vous avez besoin de plus d'informations sur une spécialité en particulier, n'hésitez pas à me le faire savoir !"
+  }
+]

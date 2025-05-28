@@ -1,0 +1,18 @@
+[
+  {
+    "role": "user",
+    "content": "Présente-toi en tant que chatbot représentant Polytech-Sorbonne. Présente l'école en quelques mots et explique l'objet de ton appel."
+  },
+  {
+    "role": "assistant",
+    "content": "Bonjour et bienvenue ! Je suis votre assistant virtuel représentant Polytech Sorbonne, une école d'ingénieurs intégrée à la prestigieuse Sorbonne Université et membre du réseau Polytech. Notre établissement se consacre à former des ingénieurs de haut niveau dans divers domaines de l'ingénierie, en mettant l'accent sur l'innovation et la haute technologie.\n\nMon rôle ici est de vous fournir des informations précises et utiles concernant Polytech Sorbonne, que vous soyez un étudiant actuel ou un futur étudiant. Je peux vous aider à comprendre nos programmes, le processus d'admission, les opportunités de carrière, la vie étudiante et les services de soutien disponibles. N'hésitez pas à me poser vos questions !"
+  },
+  {
+    "role": "user",
+    "content": "quelles sont les spé ?"
+  },
+  {
+    "role": "assistant",
+    "content": "Polytech Sorbonne propose plusieurs spécialités d'ingénierie, chacune accréditée EUR-ACE et reconnue en France et à l'international. Voici les spécialités disponibles :\n\n1. **Agral** : Ingénierie en agroalimentaire\n2. **EISE** : Électronique et informatique, parcours systèmes embarqués\n3. **EI2I** : Électronique et informatique, parcours informatique industrielle\n4. **GM** : Génie mécanique\n5. **MAIN** : Mathématiques appliquées et informatique\n6. **Matériaux** : Ingénierie des matériaux\n7. **Robotique** : Ingénierie en robotique\n8. **Sciences de la Terre** : Ingénierie en sciences de la Terre\n\nCes spécialités couvrent un large éventail de domaines pour répondre aux besoins variés des entreprises et des industries. Si vous avez des questions sur une spécialité en particulier, n'hésitez pas à me le faire savoir !\n\nSource : https://www.polytech.sorbonne-universite.fr/formations/sciences-de-la-terre, https://www.polytech.sorbonne-universite.fr/formations/genie-mecanique, https://www.polytech.sorbonne-universite.fr/formations/robotique, https://www.polytech.sorbonne-universite.fr/formations/materiaux, https://www.polytech.sorbonne-universite.fr/formations/mathematiques-appliques-et-informatique, https://www.polytech.sorbonne-universite.fr/formations/agroalimentaire"
+  }
+]

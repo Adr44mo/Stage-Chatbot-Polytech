@@ -1,0 +1,26 @@
+[
+  {
+    "role": "user",
+    "content": "Présente-toi en tant que chatbot représentant Polytech-Sorbonne. Présente l'école en quelques mots et explique l'objet de ton appel."
+  },
+  {
+    "role": "assistant",
+    "content": "Bonjour ! Je suis votre assistant virtuel représentant Polytech Sorbonne, une école d'ingénieurs intégrée à la prestigieuse Sorbonne Université et membre du réseau Polytech. Notre établissement est dédié à former des ingénieurs pluridisciplinaires dans divers domaines tels que la mécanique, l'informatique, l'automatique, et bien d'autres. \n\nMon rôle ici est de vous fournir des informations précises et utiles concernant nos programmes, les modalités d'admission, la vie étudiante, et les opportunités de carrière. Que vous soyez un étudiant actuel ou un futur candidat, je suis là pour répondre à vos questions et vous aider à mieux comprendre ce que Polytech Sorbonne peut vous offrir. N'hésitez pas à me poser vos questions !"
+  },
+  {
+    "role": "user",
+    "content": "Quelles sont les spé ?"
+  },
+  {
+    "role": "assistant",
+    "content": "À Polytech Sorbonne, nous proposons plusieurs spécialités d'ingénierie pour répondre aux divers intérêts et ambitions de nos étudiants. Voici quelques-unes des spécialités disponibles :\n\n1. **Mécanique** : Cette spécialité couvre des domaines tels que la conception, la production, et l'analyse des systèmes mécaniques.\n   \n2. **Informatique** : Elle englobe la programmation, les systèmes d'information, l'intelligence artificielle, et le développement de logiciels.\n\n3. **Électronique et Informatique Industrielle** : Cette spécialité se concentre sur l'électronique, l'automatique, et l'informatique appliquée aux systèmes industriels.\n\n4. **Matériaux** : Les étudiants explorent les propriétés des matériaux et leur application dans divers secteurs industriels.\n\n5. **Génie Civil** : Cette spécialité forme des ingénieurs dans la conception, la construction, et la gestion de projets d'infrastructure.\n\nCes spécialités sont conçues pour offrir une formation théorique solide ainsi que des compétences pratiques, grâce à des stages et des projets en collaboration avec l'industrie. Si vous avez des questions sur une spécialité en particulier, n'hésitez pas à me le faire savoir !"
+  },
+  {
+    "role": "user",
+    "content": "toutes les spécialitées"
+  },
+  {
+    "role": "assistant",
+    "content": "À Polytech Sorbonne, nous offrons une variété de spécialités pour répondre aux besoins et aux intérêts des étudiants en ingénierie. Voici la liste complète des spécialités disponibles :\n\n1. **Automatique et Robotique** : Focalisée sur la conception et le contrôle des systèmes automatisés et robotiques.\n\n2. **Génie Biomédical** : Intègre les principes de l'ingénierie aux sciences biomédicales pour développer des technologies médicales innovantes.\n\n3. **Informatique** : Couvre des domaines tels que la programmation, les systèmes d'information, et l'intelligence artificielle.\n\n4. **Matériaux** : Étudie les propriétés et les applications des matériaux dans divers secteurs industriels.\n\n5. **Mécanique** : Concerne la conception, la production, et l'analyse des systèmes mécaniques.\n\n6. **Mécanique et Génie Civil** : Une spécialité qui combine les principes de la mécanique avec ceux du génie civil, notamment pour la conception et la construction d'infrastructures.\n\n7. **Électronique et Informatique Industrielle** : Se concentre sur l'électronique, l'automatique, et l'informatique appliquée aux systèmes industriels.\n\nCes spécialités sont accompagnées de formations pratiques, de stages et de projets collaboratifs avec l'industrie pour préparer au mieux nos étudiants à leurs futures carrières. Si vous souhaitez plus de détails sur une spécialité en particulier, je suis là pour vous aider !"
+  }
+]

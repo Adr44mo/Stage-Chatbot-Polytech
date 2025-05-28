@@ -1,0 +1,42 @@
+[
+  {
+    "role": "user",
+    "content": "Présente-toi en tant que chatbot représentant Polytech-Sorbonne. Présente l'école en quelques mots et explique l'objet de ton appel."
+  },
+  {
+    "role": "assistant",
+    "content": "Bonjour ! Je suis votre assistant virtuel représentant Polytech Sorbonne. Polytech Sorbonne est une école d'ingénieurs intégrée à la prestigieuse Sorbonne Université et fait partie du réseau Polytech. Nous offrons une formation de haut niveau dans divers domaines de l'ingénierie, avec un accent sur l'innovation et la haute technologie.\n\nMon rôle est de vous fournir des informations précises et utiles concernant nos programmes, le processus d'admission, les opportunités de carrière, la vie étudiante et les services de soutien. Que vous soyez un étudiant actuel ou un futur candidat, je suis ici pour répondre à vos questions et vous aider à mieux comprendre ce que Polytech Sorbonne peut vous offrir. N'hésitez pas à me poser vos questions !"
+  },
+  {
+    "role": "user",
+    "content": "quelles sont les spé ?"
+  },
+  {
+    "role": "assistant",
+    "content": "Polytech Sorbonne propose huit spécialités, également appelées cursus ou filières. Voici la liste de ces spécialités :\n\n1. **AGRAL** : Agroalimentaire\n2. **EISE** : Électronique et Informatique, parcours Systèmes Embarqués\n3. **EI2I** : Électronique et Informatique, parcours Informatique Industrielle\n4. **GM** : Génie Mécanique\n5. **MAIN** : Mathématiques Appliquées et Informatique\n6. **MTX** : Matériaux\n7. **ROB** : Robotique\n8. **ST** : Sciences de la Terre (Aménagement, Environnement, Énergies)\n\nChaque spécialité est accréditée EUR-ACE et vise à offrir une formation adaptée aux besoins du marché et aux défis technologiques actuels. Si vous souhaitez des informations supplémentaires sur une spécialité en particulier, n'hésitez pas à demander !"
+  },
+  {
+    "role": "user",
+    "content": "quelles sont les spécialité ?"
+  },
+  {
+    "role": "assistant",
+    "content": "Polytech Sorbonne propose plusieurs spécialités (cursus) dans le domaine de l'ingénierie. Voici la liste des spécialités disponibles :\n\n1. **Agronomie et Agroalimentaire (AGRAL)** : Focus sur les sciences agronomiques et les technologies alimentaires.\n2. **Électronique et Informatique (EISE)** : Spécialisation en systèmes embarqués et en informatique.\n3. **Informatique Industrielle (EI2I)** : Orientée vers l'informatique appliquée à l'industrie.\n4. **Génie Mécanique (GM)** : Conception et fabrication de systèmes mécaniques.\n5. **Mathématiques Appliquées et Informatique (MAIN)** : Approfondissement en mathématiques et en informatique.\n6. **Matériaux (MTX)** : Étude des matériaux et de leurs applications.\n7. **Robotique (ROB)** : Conception et développement de systèmes robotiques.\n8. **Sciences de la Terre (ST)** : Aménagement, environnement et énergies.\n\nChaque spécialité est conçue pour répondre aux besoins du marché et préparer les étudiants à des carrières dans des domaines variés. Si vous souhaitez plus d'informations sur une spécialité en particulier, n'hésitez pas à me le faire savoir !"
+  },
+  {
+    "role": "user",
+    "content": "quest ce que main ?"
+  },
+  {
+    "role": "assistant",
+    "content": "La spécialité **Mathématiques Appliquées et Informatique (MAIN)** à Polytech Sorbonne est axée sur l'application des mathématiques et de l'informatique dans divers domaines techniques et scientifiques. \n\nVoici quelques points clés concernant cette spécialité :\n\n1. **Formation Interdisciplinaire** : MAIN combine des enseignements en mathématiques avancées, en algorithmique et en informatique, ce qui permet aux étudiants de développer des compétences analytiques et techniques solides.\n\n2. **Applications Diverses** : Les compétences acquises peuvent être appliquées dans de nombreux secteurs tels que la finance, l'ingénierie, la recherche opérationnelle, l'intelligence artificielle, la modélisation et la simulation.\n\n3. **Projets Pratiques** : Les étudiants travaillent souvent sur des projets concrets qui leur permettent de mettre en pratique leurs connaissances théoriques et de développer des solutions à des problèmes réels.\n\n4. **Débouchés Professionnels** : Les diplômés de cette spécialité sont très recherchés par les entreprises pour des postes d'ingénieurs en informatique, analystes de données, chercheurs en mathématiques appliquées, et bien d'autres.\n\nSi vous avez d'autres questions sur cette spécialité ou sur le programme en général, n'hésitez pas à demander !"
+  },
+  {
+    "role": "user",
+    "content": "Quels sont les bon comportement ?"
+  },
+  {
+    "role": "assistant",
+    "content": "Adopter de bons comportements en tant qu'étudiant à Polytech Sorbonne, ou dans toute école, est essentiel pour réussir sur le plan académique et social. Voici quelques conseils pour cultiver de bons comportements :\n\n1. **Assiduité et ponctualité** : Assister régulièrement aux cours et arriver à l'heure montre votre engagement envers votre formation.\n\n2. **Participation active** : Impliquez-vous dans les discussions en classe, posez des questions et partagez vos idées. Cela enrichit l'expérience d'apprentissage pour vous et vos camarades.\n\n3. **Travail en équipe** : Apprenez à collaborer efficacement avec vos pairs. Le travail en groupe est souvent une partie intégrante des projets et des travaux pratiques.\n\n4. **Gestion du temps** : Organisez votre emploi du temps pour équilibrer études, projets, et vie personnelle. Cela vous aidera à respecter les délais et à éviter le stress.\n\n5. **Respect et courtoisie** : Traitez vos enseignants, camarades et le personnel de l'école avec respect. Un environnement positif favorise l'apprentissage.\n\n6. **Ouverture d'esprit** : Soyez prêt à accepter des critiques constructives et à apprendre des autres. Cela vous aidera à grandir sur le plan personnel et académique.\n\n7. **Engagement dans la vie étudiante** : Participez aux activités et événements organisés par l'école, comme des conférences, des ateliers ou des clubs. Cela favorise l'intégration et le développement de compétences sociales.\n\n8. **Éthique académique** : Respectez les règles de l'école en matière de plagiat et d'honnêteté académique. Produisez un travail original et attribuez correctement les sources.\n\n9. **Demande d'aide** : N'hésitez pas à solliciter de l'aide auprès de vos enseignants ou de vos camarades si vous rencontrez des difficultés. Chercher de l'aide est un signe de maturité.\n\n10. **Prise de soin de soi** : N'oubliez pas de prendre soin de votre santé physique et mentale. Un bon équilibre entre études et loisirs est essentiel pour réussir.\n\nEn adoptant ces comportements, vous contribuerez à créer un environnement d'apprentissage positif et enrichissant pour vous-même et vos camarades. Si vous avez d'autres questions ou besoin de conseils spécifiques, n'hésitez pas à demander !"
+  }
+]

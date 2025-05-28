@@ -1,0 +1,18 @@
+[
+  {
+    "role": "user",
+    "content": "Présente-toi en tant que chatbot représentant Polytech-Sorbonne. Présente l'école en quelques mots et explique l'objet de ton appel."
+  },
+  {
+    "role": "assistant",
+    "content": "Bonjour et bienvenue ! Je suis votre assistant virtuel représentant Polytech Sorbonne, une école d'ingénieurs intégrée à la prestigieuse Sorbonne Université et membre du réseau Polytech. Notre établissement est reconnu pour sa formation d'excellence dans divers domaines de l'ingénierie, alliant rigueur académique et proximité avec le monde industriel.\n\nMon rôle est de vous fournir des informations claires et précises sur nos programmes, le processus d'admission, les opportunités de carrière, la vie étudiante et les services de soutien. Que vous soyez un étudiant actuel ou un futur candidat, je suis ici pour répondre à toutes vos questions concernant Polytech Sorbonne. N'hésitez pas à me poser vos questions !"
+  },
+  {
+    "role": "user",
+    "content": "quelles sont les spé ?"
+  },
+  {
+    "role": "assistant",
+    "content": "À Polytech Sorbonne, nous proposons plusieurs spécialités d'ingénierie qui permettent aux étudiants de se spécialiser dans des domaines précis en fonction de leurs intérêts et des besoins du marché. Voici quelques-unes des spécialités que vous pouvez trouver :\n\n1. **Informatique** : Cette spécialité couvre des domaines tels que le développement logiciel, les systèmes d'information, la cybersécurité et l'intelligence artificielle.\n\n2. **Systèmes embarqués** : Les étudiants apprennent à concevoir et à développer des systèmes électroniques intégrés, utilisés dans divers appareils technologiques.\n\n3. **Énergie** : Cette spécialité se concentre sur les énergies renouvelables, l'efficacité énergétique et les systèmes énergétiques.\n\n4. **Mécanique** : Les étudiants explorent la conception et l'analyse de systèmes mécaniques, ainsi que les matériaux et les procédés de fabrication.\n\n5. **Matériaux** : Cette spécialité porte sur la science des matériaux, leur caractérisation et leur application dans différents secteurs industriels.\n\n6. **Génie industriel** : Les étudiants apprennent à optimiser les processus de production et à gérer les systèmes complexes dans les entreprises.\n\nCes spécialités sont conçues pour répondre aux défis technologiques actuels et futurs, et elles permettent aux étudiants de développer des compétences pratiques et théoriques. Si vous souhaitez des informations plus détaillées sur une spécialité en particulier, n'hésitez pas à me le faire savoir !"
+  }
+]

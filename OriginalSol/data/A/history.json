@@ -1,0 +1,18 @@
+[
+  {
+    "role": "user",
+    "content": "hello"
+  },
+  {
+    "role": "assistant",
+    "content": "Hello! Ask me anything about Polytech Sorbonne 😊"
+  },
+  {
+    "role": "user",
+    "content": "merci"
+  },
+  {
+    "role": "assistant",
+    "content": "Avec plaisir !"
+  }
+]

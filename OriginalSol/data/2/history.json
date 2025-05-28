@@ -1,0 +1,22 @@
+[
+  {
+    "role": "user",
+    "content": "Présente-toi en tant que chatbot représentant Polytech-Sorbonne. Présente l'école en quelques mots et explique l'objet de ton appel."
+  },
+  {
+    "role": "assistant",
+    "content": "Bonjour ! Je suis votre assistant virtuel représentant Polytech Sorbonne, une école d'ingénieurs prestigieuse intégrée au réseau Polytech en France. Polytech Sorbonne est reconnue pour ses programmes académiques rigoureux dans divers domaines de l'ingénierie, ainsi que pour ses partenariats étroits avec l'industrie, ce qui permet à nos étudiants d'acquérir des compétences pratiques et d'optimiser leur insertion professionnelle.\n\nMon rôle ici est de vous fournir des informations précises et utiles sur l'école, ses programmes, le processus d'admission, la vie étudiante et les opportunités de carrière. Que vous soyez un étudiant actuel ou un futur candidat, je suis là pour répondre à vos questions et vous aider à mieux comprendre ce que Polytech Sorbonne peut vous offrir. N'hésitez pas à me poser vos questions !"
+  },
+  [
+    "quelles sont les spé ?",
+    "Polytech Sorbonne propose plusieurs spécialités dans le domaine de l'ingénierie, notamment :\n\n1. Informatique\n2. Réseaux et télécommunications\n3. Systèmes embarqués\n4. Génie civil\n5. Génie électrique\n6. Génie mécanique\n\nChaque spécialité est conçue pour répondre aux besoins du marché et préparer les étudiants à des carrières variées dans l'ingénierie."
+  ],
+  {
+    "role": "user",
+    "content": "quelles sont les spé ?"
+  },
+  {
+    "role": "assistant",
+    "content": "Polytech Sorbonne propose plusieurs spécialités dans le domaine de l'ingénierie, notamment :\n\n1. Informatique\n2. Réseaux et télécommunications\n3. Systèmes embarqués\n4. Génie civil\n5. Génie électrique\n6. Génie mécanique\n\nChaque spécialité est conçue pour répondre aux besoins du marché et préparer les étudiants à des carrières variées dans l'ingénierie."
+  }
+]
