@@ -1,0 +1,54 @@
+<iframe id="chatbot-frame" 
+        style="display: none; position: fixed; bottom: 0; right: 80px; width: 400px; height: 600px; 
+               border: 1px solid #ddd; z-index: 1000; background-color: white;"></iframe>
+
+<button id="chatbot-toggle" style="position: fixed; bottom: 20px; right: 20px; z-index: 1001; background-color: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; transition: transform 0.1s ease;">💬</button>
+
+<div id="main-content">
+</div>
+
+<script>
+  (function() {
+    // Récupération de l'ID dans le localStorage
+    let visitorId = localStorage.getItem("visitorId");
+
+    // Génération d'un ID pseudo-aléatoire s'il n'existe pas
+    if (!visitorId) {
+      visitorId = Math.random().toString(36).substring(2) + Date.now().toString(36);
+      localStorage.setItem("visitorId", visitorId);
+    }
+
+    // Construction de l’URL pour l’iframe
+    const chatbotURL = "https://chat-jg2t.onrender.com/?user_id=" + visitorId;
+
+    // Affectation de l’URL à l’iframe
+    document.getElementById("chatbot-frame").src = chatbotURL;
+  })();
+
+  // Gestion de l'affichage du chat
+  const chatbotFrame = document.getElementById("chatbot-frame");
+  const chatbotToggle = document.getElementById("chatbot-toggle");
+  let isOpen = false;
+
+  chatbotToggle.addEventListener("click", function () {
+    // Basculer l'affichage de l'iframe
+    chatbotFrame.style.display = chatbotFrame.style.display === "none" ? "block" : "none";
+
+    // Icône du bouton
+    isOpen = !isOpen;
+    chatbotToggle.innerHTML = isOpen ? "<span style='color: white; font-weight: bold; padding:5px'>X</span>" : "💬";
+  });
+
+  // Animation du bouton
+  chatbotToggle.addEventListener("mousedown", function () {
+    chatbotToggle.style.transform = "scale(0.9)";
+  });
+
+  chatbotToggle.addEventListener("mouseup", function () {
+    chatbotToggle.style.transform = "scale(1)";
+  });
+
+  chatbotToggle.addEventListener("mouseleave", function () {
+    chatbotToggle.style.transform = "scale(1)";
+  });
+</script>
