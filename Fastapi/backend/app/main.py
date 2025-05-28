@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict, Any
 
+from keys_file import OPENAI_API_KEY
 from llmm import initialize_the_rag_chain
 from chat import format_sources
 from filters import handle_if_uninformative
