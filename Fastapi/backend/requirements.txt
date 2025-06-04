@@ -14,6 +14,7 @@ langchain
 langchain-core
 langchain-openai
 langchain-chroma
+langgraph
 
 # OpenAI
 openai
@@ -32,5 +33,11 @@ torch
 
 # Utilities
 tqdm
-# For testing
+
+#Security 
+python-jose
+passlib[bcrypt]
+
+# Database (pip install sqlmodel)
+sqlmodel
 

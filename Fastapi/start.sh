@@ -1,16 +1,15 @@
 #!/bin/bash
 
 # Start the FastAPI backend
-cd backend
-uvicorn app.main:app --host 0.0.0.0 --port 8000 &
+uvicorn backend.main:app --host 0.0.0.0 --port 8000 &
 
 # Save backend PID
 BACKEND_PID=$!
 
 # Start the frontend (assuming it's a React app in 'frontend' folder)
-cd ../frontend
+cd frontend
 npm install
-npm start &
+npm run dev &
 
 # Save frontend PID
 FRONTEND_PID=$!

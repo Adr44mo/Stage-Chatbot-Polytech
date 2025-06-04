@@ -3,10 +3,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict, Any
 
-from app.keys_file import OPENAI_API_KEY
-from app.llmm import initialize_the_rag_chain
-from app.chat import format_sources
-from app.filters import handle_if_uninformative
+from .app.keys_file import OPENAI_API_KEY
+from .app.llmm import initialize_the_rag_chain
+from .app.chat import format_sources
+from .app.filters import handle_if_uninformative
+
+
+from .app.auth.router import router as auth_router
+from .app.auth.database import create_db_and_tables
+
 
 app = FastAPI()
 print("[INFO] FastAPI app initialized")
@@ -19,6 +24,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(auth_router)
+
+@app.on_event("startup")
+def on_startup():
+    create_db_and_tables()
 
 # Initialise la chaîne RAG une seule fois
 rag_chain = initialize_the_rag_chain()
@@ -51,7 +62,7 @@ async def chat(request: ChatRequest):
         "input": request.prompt,
         "chat_history": [
             {"role": msg.role, "content": msg.content}
-            for msg in request.chat_history if msg.role == "assistant"
+            for msg in request.chat_history if msg.role == "assistant" or msg.role == "user"
         ],
     })
 
