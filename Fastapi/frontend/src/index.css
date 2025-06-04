@@ -1,68 +1,199 @@
+/* Import des polices Google */
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap");
+
+/* Variables CSS globales */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  --font-sans: "Open Sans", sans-serif;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --color-primary-blue: rgb(146, 179, 202);
+  --color-main-text: rgb(0, 43, 49);
+  --color-error-red: rgb(208, 69, 82);
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+/* Base - html, body, root */
+html,
+body,
+#root {
+  height: 100%;
+  background-color: #f9fafb; /* équivalent bg-gray-50 */
+  color: var(--color-main-text);
+  font-family: var(--font-sans);
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Appliquer box-sizing: border-box à tout */
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/* Scrollbar personnalisée Webkit */
+::-webkit-scrollbar {
+  width: 8px; /* un peu moins large que 0.5rem (8px) */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(
+    146,
+    179,
+    202,
+    0.5
+  ); /* couleur primaire bleue avec opacité 50% */
+  border-radius: 4px;
+}
+
+/* Conteneur markdown - styles sur balises */
+.markdown-container p {
+  margin-bottom: 1rem; /* mb-4 */
+}
+
+.markdown-container h1 {
+  font-weight: 700; /* font-bold */
+  font-size: 1.125rem; /* text-lg */
+  margin-bottom: 1rem;
+}
+
+.markdown-container h2 {
+  font-weight: 600; /* font-semibold */
+  font-size: 1rem; /* text-base */
+  margin-bottom: 0.75rem; /* mb-3 */
+}
+
+.markdown-container ul {
+  list-style-type: disc;
+  padding-left: 1.5rem; /* pl-6 */
+  margin-bottom: 1rem;
+}
+
+.markdown-container ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.markdown-container li {
+  margin-bottom: 0.5rem; /* mb-2 */
+}
+
+/* Pas de margin bottom sur dernier enfant */
+.markdown-container > :last-child {
+  margin-bottom: 0;
+}
+
+/* Spinner utility */
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+/* Animation spin */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Chat bubble user */
+.chat-bubble-user {
+  align-self: flex-end;
+  background-color: #daf1ff;
+  color: #333;
+  text-align: left;
+  padding: 1rem; /* p-4 */
+  border-radius: 1rem; /* rounded-xl */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 42rem; /* max-w-2xl */
+  box-sizing: border-box;
+}
+
+/* Sources text */
+.sources {
+  font-size: 0.75rem; /* text-xs */
+  color: #6b7280; /* text-gray-500 */
+  margin-top: 0.5rem; /* mt-2 */
+  border-top: 1px solid #d1d5db; /* border-t */
+  padding-top: 0.25rem; /* pt-1 */
+}
+
+/* Error message */
+.error-msg {
+  font-size: 0.875rem; /* text-sm */
+  color: var(--color-error-red);
+  margin-top: 0.5rem;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  align-items: center;
+  gap: 0.25rem;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* 
+ * ======================================================
+ * Styles pour le formulaire d'entrée du chat (ChatInput)
+ * ======================================================
+ */
+
+.chat-input-form {
+  position: relative;
+  width: 100%;
+  border-radius: 24px;
+  background-color: white;
+  display: flex;
+  align-items: stretch;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
+.chat-input-textarea {
+  width: 100%;
+  max-height: 140px;
+  padding: 8px 44px 8px 16px;
+  border-radius: 24px;
+  border: 1px solid #ccc;
+  font-size: 16px;
   font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  line-height: 1.4;
+  outline: none;
+  box-sizing: border-box;
+  resize: none;
+  overflow-y: auto;
+  background-color: white;
+  color: inherit;
+  transition: border 0.2s, box-shadow 0.2s;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.chat-input-textarea:disabled {
+  background-color: #f5f5f5;
+  color: #999;
+}
+
+.chat-input-textarea:focus {
+  border: 2px solid #007bff;
+  box-shadow: 0 0 0 3.5px #cce4ff;
+}
+
+.chat-input-send-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-input-send-btn:disabled {
+  cursor: not-allowed;
 }
