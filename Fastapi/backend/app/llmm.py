@@ -9,11 +9,6 @@ from langchain_openai import OpenAIEmbeddings  # Import the OpenAIEmbeddings cla
 from langchain_openai import ChatOpenAI  # Import the ChatOpenAI class from the langchain_openai module
 from langchain.chains import create_history_aware_retriever  # Import the create_history_aware_retriever function
 
-
-# If promptt.py is in a different directory, specify it here:
-# sys.path.append(str(Path(__file__).parent.parent / "path" / "to" / "promptt"))
-
-
 # Chain with chat history
 from langchain.chains import create_retrieval_chain  # Import the create_retrieval_chain function from the langchain.chains module
 from langchain.chains.combine_documents import create_stuff_documents_chain  # Import the create_stuff_documents_chain function from the langchain.chains.combine_documents module
