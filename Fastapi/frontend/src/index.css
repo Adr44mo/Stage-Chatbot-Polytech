@@ -165,19 +165,20 @@ body,
   box-sizing: border-box;
   resize: none;
   overflow-y: auto;
-  background-color: white;
-  color: inherit;
-  transition: border 0.2s, box-shadow 0.2s;
+  scrollbar-width: auto;
 }
 
-.chat-input-textarea:disabled {
-  background-color: #f5f5f5;
-  color: #999;
-}
-
+/* Focus autour de la zone de texte */
 .chat-input-textarea:focus {
   border: 2px solid #007bff;
   box-shadow: 0 0 0 3.5px #cce4ff;
+  outline: none !important;
+  z-index: 1;
+}
+
+.chat-input-textarea::-webkit-scrollbar,
+.chat-input-textarea::-webkit-scrollbar-thumb {
+  all: unset;
 }
 
 .chat-input-send-btn {
@@ -196,4 +197,53 @@ body,
 
 .chat-input-send-btn:disabled {
   cursor: not-allowed;
+}
+
+/*
+ * ======================================================
+ * Styles pour la liste des messages du chat (ChatMessages)
+ * ======================================================
+ */
+
+.chat-messages-list {
+  flex: 1;
+  min-height: 0;
+  padding: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Ligne de message (utilisateur ou assistant) */
+.chat-message-row {
+  display: flex;
+  width: 100%;
+}
+
+.chat-message-user {
+  justify-content: flex-end;
+}
+
+.chat-message-assistant {
+  justify-content: flex-start;
+}
+
+/* Contenu texte utilisateur */
+.chat-message-user-content {
+  white-space: pre-line;
+}
+
+/* Bloc sources assistant */
+.chat-message-sources {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* Ligne spinner général */
+.chat-messages-spinner-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
