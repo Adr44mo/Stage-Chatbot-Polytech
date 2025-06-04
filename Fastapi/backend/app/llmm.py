@@ -9,11 +9,6 @@ from langchain_openai import OpenAIEmbeddings  # Import the OpenAIEmbeddings cla
 from langchain_openai import ChatOpenAI  # Import the ChatOpenAI class from the langchain_openai module
 from langchain.chains import create_history_aware_retriever  # Import the create_history_aware_retriever function
 
-
-# If promptt.py is in a different directory, specify it here:
-# sys.path.append(str(Path(__file__).parent.parent / "path" / "to" / "promptt"))
-
-
 # Chain with chat history
 from langchain.chains import create_retrieval_chain  # Import the create_retrieval_chain function from the langchain.chains module
 from langchain.chains.combine_documents import create_stuff_documents_chain  # Import the create_stuff_documents_chain function from the langchain.chains.combine_documents module
@@ -23,8 +18,8 @@ import sys
 # Add the directory containing promptt.py to the Python path
 # This assumes promptt.py is in the same directory as this file
 sys.path.append(str(Path(__file__).parent))
-from promptt import qa_prompt  # Import the qa_prompt from the prompt module
-from promptt import contextualize_q_prompt  # Import the contextualize_q_prompt from the prompt module
+from .promptt import qa_prompt  # Import the qa_prompt from the prompt module
+from .promptt import contextualize_q_prompt  # Import the contextualize_q_prompt from the prompt module
 
 persist_directory = Path(__file__).parent.parent.parent / "vectorisation" / "src" / "db"  # Define the directory where the Chroma vector database will be persisted
 
@@ -51,12 +46,13 @@ db = Chroma(
 print(f"[INFO] ChromaDB collection Name: {db._LANGCHAIN_DEFAULT_COLLECTION_NAME}, with collection count {db._collection.count()}")
 
 # intiate the model
-llm = ChatOpenAI(model="gpt-4o-mini")  # Create an instance of the ChatOpenAI class with the specified model name "gpt-4o-mini"
+llm = ChatOpenAI(model="gpt-4o-mini",
+    temperature=0.7)  # Create an instance of the ChatOpenAI class with the specified model name "gpt-4o-mini"
 
 # initiate the db as retriever
 retriever = db.as_retriever(
     search_type="similarity",  # Specify the search type as "similarity" for vector similarity search
-    search_kwargs={"k": 3}  # Set the number of top results to retrieve (k=3)
+    search_kwargs={"k": 5}  # Set the number of top results to retrieve (k=3)
 )
 
 # Create a history-aware retriever

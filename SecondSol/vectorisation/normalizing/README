@@ -1,5 +1,0 @@
-Put all gathered files into Json then into one Jsonl format
-
-*needed to be able to return the sources with constitancy 
-
-*need to be adapted to the organitation of the sources (TODO) we will suppose that the Jsonl will be put in "SecondSol/vectorization/src"

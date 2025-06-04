@@ -1,3 +1,0 @@
-# README du sous-dossier /web/assets/
-
-Ce présent sous-dossier est destiné au front-end : il contient tous les éléments hors-code de l'implémentation web. Pour le moment, il ne s'agit que de l'icône polytech assignée à l'agent conversationnel de l'interface streamlit. Si vous souhaitez développer le front-end encore plus, ce dossier pourrait également contenir d'autres icônes, des images, des gif, etc.

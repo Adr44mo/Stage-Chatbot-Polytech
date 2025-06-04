@@ -1,12 +1,25 @@
 polychat-app/
 ├── backend/
-│   ├── app/
+│   ├── app
+│   │   ├── auth
+│   │   │   ├── create_admin.py
+│   │   │   ├── database.py
+│   │   │   ├── dependencies.py
+│   │   │   ├── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── router.py
+│   │   │   └── security.py
+│   │   ├── chat.py
+│   │   ├── filters.py
 │   │   ├── __init__.py
-│   │   ├── main.py               ← FastAPI entrypoint (définit `/chat`, etc.)
-│   │   ├── rag_chain.py          ← Code d'initialisation du RAG / LLM
-│   │   └── utils.py              ← Fonctions utiles (e.g. format_sources)
-│   ├── requirements.txt          ← dépendances Python
-│   └── .env                      ← clés API (OpenAI, etc.)
+│   │   ├── keys_file.py
+│   │   ├── langraph.py
+│   │   ├── llmm.py
+│   │   └── promptt.py
+│   ├── database.db
+│   ├── __init__.py
+│   ├── main.py
+│   └── requirements.txt
 │
 ├── frontend/
 │   ├── public/
@@ -21,3 +34,6 @@ polychat-app/
 │
 ├── README.md
 └── .gitignore
+
+pour créer un créer un admin 
+python -m  backend.app.auth.create_admin

@@ -1,3 +1,0 @@
-# README du sous-dossier /corpus/scraping_tool/src/
-Le présent dossier contient les deux modules indépendants (PDF et JSON) du tool de scraping, qui n'ont pas besoin d'être exécutés ici puisqu'ils sont importés dans le **scraping_script.py** du dossier parent. Vous pouvez toutefois les exécuter ici indépendamment l'un de l'autre si vous voulez effectuer des tests.
-Leur fonctionnement détaillé n'est pas détaillé dans le présent ReadMe puisque leur code est bien commenté et facilement compréhensible.

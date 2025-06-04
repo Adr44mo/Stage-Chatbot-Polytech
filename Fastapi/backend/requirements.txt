@@ -1,0 +1,43 @@
+# FastAPI and core
+fastapi
+uvicorn
+
+# CORS middleware
+python-multipart
+aiofiles
+requests
+pydantic
+python-dotenv
+
+# LangChain & related
+langchain
+langchain-core
+langchain-openai
+langchain-chroma
+langgraph
+
+# OpenAI
+openai
+
+# Sentence Transformers (embeddings)
+sentence-transformers
+
+# Language detection
+langdetect
+
+# Vector database
+chromadb
+
+# Torch (required by sentence-transformers)
+torch
+
+# Utilities
+tqdm
+
+#Security 
+python-jose
+passlib[bcrypt]
+
+# Database (pip install sqlmodel)
+sqlmodel
+
