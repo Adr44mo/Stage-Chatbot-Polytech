@@ -57,7 +57,7 @@ export default function Chat() {
     <div className="chat-container">
       <h1 className="chat-title">PolyChat</h1>
       <div className="chat-subtitle">
-        Le chatbot de Polytech-Sorbonne qui répond à toutes vos questions !
+        Le chatbot de Polytech Sorbonne qui répond à toutes vos questions !
       </div>
       <div className="chat-messages-container">
         <ChatMessages messages={messages} isLoading={loading} />
