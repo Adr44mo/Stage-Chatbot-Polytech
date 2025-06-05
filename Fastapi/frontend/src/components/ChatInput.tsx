@@ -8,6 +8,7 @@
 /* Import des dépendances nécessaires */
 import { useEffect } from "react";
 import useAutosize from "../hooks/useAutosize";
+import sendIcon from "../assets/send.svg";
 
 /* Paramètres du composant ChatInput */
 interface ChatInputProps {
@@ -47,6 +48,14 @@ export default function ChatInput({
     }
   }
 
+  /* Style de l'icône d'envoi */
+  const sendIconStyle = {
+    display: "block",
+    filter:
+      disabled || input.trim() === "" ? "grayscale(1) brightness(1.7)" : "none",
+    opacity: disabled || input.trim() === "" ? 0.5 : 1,
+  };
+
   return (
     /* Formulaire d'entrée du chat */
     <form className="chat-input-form" onSubmit={onSubmit}>
@@ -68,15 +77,13 @@ export default function ChatInput({
         disabled={disabled || input.trim() === ""}
         aria-label="Envoyer"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill={disabled || input.trim() === "" ? "#aaa" : "#007bff"}
-          viewBox="0 0 24 24"
-          width="24"
-          height="24"
-        >
-          <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" />
-        </svg>
+        <img
+          src={sendIcon}
+          alt="Envoyer"
+          width={24}
+          height={24}
+          style={sendIconStyle}
+        />
       </button>
     </form>
   );

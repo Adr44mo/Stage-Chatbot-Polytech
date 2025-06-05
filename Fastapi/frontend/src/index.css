@@ -244,6 +244,22 @@ body,
   width: 100%;
 }
 
+.user-bubble-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-left: 12px;
+}
+
+.chat-user-icon-inside {
+  height: 26px;
+  width: 26px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #e6f0fa;
+  object-fit: cover;
+}
+
 /*
  * ======================================================
  * Styles pour le conteneur principal du chat (Chat)
@@ -278,20 +294,4 @@ body,
   display: flex;
   flex-direction: column;
   min-height: 0;
-}
-
-.user-bubble-with-icon {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding-left: 12px;
-}
-
-.chat-user-icon-inside {
-  height: 26px;
-  width: 26px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: #e6f0fa;
-  object-fit: cover;
 }
