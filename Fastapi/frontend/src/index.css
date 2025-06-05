@@ -1,21 +1,24 @@
 /* Import des polices Google */
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap");
 
-/* Variables CSS globales */
+/* ======================
+   Variables CSS globales
+   ====================== */
 :root {
   --font-sans: "Open Sans", sans-serif;
-
   --color-primary-blue: rgb(146, 179, 202);
   --color-main-text: rgb(0, 43, 49);
   --color-error-red: rgb(208, 69, 82);
 }
 
-/* Base - html, body, root */
+/* =======================
+   Base - html, body, root
+   ======================= */
 html,
 body,
 #root {
   height: 100%;
-  background-color: #f9fafb; /* équivalent bg-gray-50 */
+  background-color: #f9fafb; 
   color: var(--color-main-text);
   font-family: var(--font-sans);
   margin: 0;
@@ -30,60 +33,53 @@ body,
   box-sizing: inherit;
 }
 
-/* Scrollbar personnalisée Webkit */
+/* =======================
+   Scrollbar personnalisée
+   ======================= */
 ::-webkit-scrollbar {
-  width: 8px; /* un peu moins large que 0.5rem (8px) */
+  width: 8px;
 }
-
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(
-    146,
-    179,
-    202,
-    0.5
-  ); /* couleur primaire bleue avec opacité 50% */
+  background-color: rgba(146, 179, 202, 0.5);
   border-radius: 4px;
 }
 
-/* Conteneur markdown - styles sur balises */
+/* =========================
+   Styles markdown-container
+   ========================= */
 .markdown-container p {
-  margin-bottom: 1rem; /* mb-4 */
-}
-
-.markdown-container h1 {
-  font-weight: 700; /* font-bold */
-  font-size: 1.125rem; /* text-lg */
   margin-bottom: 1rem;
 }
-
-.markdown-container h2 {
-  font-weight: 600; /* font-semibold */
-  font-size: 1rem; /* text-base */
-  margin-bottom: 0.75rem; /* mb-3 */
+.markdown-container h1 {
+  font-weight: 700;
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
 }
-
+.markdown-container h2 {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
 .markdown-container ul {
   list-style-type: disc;
-  padding-left: 1.5rem; /* pl-6 */
+  padding-left: 1.5rem;
   margin-bottom: 1rem;
 }
-
 .markdown-container ol {
   list-style-type: decimal;
   padding-left: 1.5rem;
   margin-bottom: 1rem;
 }
-
 .markdown-container li {
-  margin-bottom: 0.5rem; /* mb-2 */
+  margin-bottom: 0.5rem;
 }
-
-/* Pas de margin bottom sur dernier enfant */
 .markdown-container > :last-child {
   margin-bottom: 0;
 }
 
-/* Spinner utility */
+/* ===============
+   Spinner utility
+   =============== */
 .spinner {
   width: 24px;
   height: 24px;
@@ -93,8 +89,6 @@ body,
   animation: spin 1s linear infinite;
   margin: auto;
 }
-
-/* Animation spin */
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -104,32 +98,20 @@ body,
   }
 }
 
-/* Chat bubble user */
-.chat-bubble-user {
-  align-self: flex-end;
-  background-color: #daf1ff;
-  color: #333;
-  text-align: left;
-  padding: 1rem; /* p-4 */
-  border-radius: 1rem; /* rounded-xl */
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 42rem; /* max-w-2xl */
-  box-sizing: border-box;
-}
 
-/* Sources text */
+
+/* =============================
+   Sources, erreurs, utilitaires
+   ============================= */
 .sources {
-  font-size: 0.75rem; /* text-xs */
-  color: #6b7280; /* text-gray-500 */
-  margin-top: 0.5rem; /* mt-2 */
-  border-top: 1px solid #d1d5db; /* border-t */
-  padding-top: 0.25rem; /* pt-1 */
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+  border-top: 1px solid #d1d5db;
+  padding-top: 0.25rem;
 }
-
-/* Error message */
 .error-msg {
-  font-size: 0.875rem; /* text-sm */
+  font-size: 0.875rem;
   color: var(--color-error-red);
   margin-top: 0.5rem;
   display: flex;
@@ -137,12 +119,9 @@ body,
   gap: 0.25rem;
 }
 
-/*
- * ======================================================
- * Styles pour le formulaire d'entrée du chat (ChatInput)
- * ======================================================
- */
-
+/* ======================================================
+   Styles pour le formulaire d'entrée du chat (ChatInput)
+   ====================================================== */
 .chat-input-form {
   position: relative;
   width: 100%;
@@ -152,7 +131,6 @@ body,
   align-items: stretch;
   margin-bottom: 16px;
 }
-
 .chat-input-textarea {
   width: 100%;
   max-height: 140px;
@@ -168,14 +146,12 @@ body,
   overflow-y: auto;
   scrollbar-width: auto;
 }
-
 .chat-input-textarea:focus {
   border: 2px solid #007bff;
   box-shadow: 0 0 0 3.5px #cce4ff;
   outline: none !important;
   z-index: 1;
 }
-
 .chat-input-send-btn {
   position: absolute;
   right: 12px;
@@ -190,17 +166,13 @@ body,
   justify-content: center;
   z-index: 2;
 }
-
 .chat-input-send-btn:disabled {
   cursor: not-allowed;
 }
 
-/*
- * ========================================================
- * Styles pour la liste des messages du chat (ChatMessages)
- * ========================================================
- */
-
+/* ========================================================
+   Styles pour la liste des messages du chat (ChatMessages)
+   ======================================================== */
 .chat-messages-list {
   flex: 1;
   min-height: 0;
@@ -210,47 +182,55 @@ body,
   flex-direction: column;
   gap: 10px;
 }
-
-/* Ligne de message (utilisateur ou assistant) */
 .chat-message-row {
   display: flex;
   width: 100%;
 }
-
 .chat-message-user {
   justify-content: flex-end;
 }
-
 .chat-message-assistant {
   justify-content: flex-start;
 }
-
-/* Contenu texte utilisateur */
 .chat-message-user-content {
   white-space: pre-line;
 }
-
-/* Bloc sources assistant */
 .chat-message-sources {
   margin-top: 8px;
+  margin-bottom: 12px;
   font-size: 12px;
   color: #666;
 }
-
-/* Ligne spinner général */
 .chat-messages-spinner-row {
   display: flex;
   justify-content: center;
   width: 100%;
 }
+/* ============
+   Chat bubbles
+   ============ */
+.chat-bubble-user {
+  align-self: flex-end;
+  background-color: #daf1ff;
+  color: #333;
+  text-align: left;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 42rem;
+  box-sizing: border-box;
+}
 
+/* ================
+   Icon utilisateur
+   ================ */
 .user-bubble-with-icon {
   display: flex;
   align-items: center;
   gap: 12px;
   padding-left: 12px;
 }
-
 .chat-user-icon-inside {
   height: 26px;
   width: 26px;
@@ -260,12 +240,9 @@ body,
   object-fit: cover;
 }
 
-/*
- * ======================================================
- * Styles pour le conteneur principal du chat (Chat)
- * ======================================================
- */
-
+/* =================================================
+   Styles pour le conteneur principal du chat (Chat)
+   ================================================= */
 .chat-container {
   max-width: 600px;
   margin: auto;
@@ -274,21 +251,18 @@ body,
   height: 100vh;
   background: transparent;
 }
-
 .chat-title {
   text-align: center;
   font-size: 2rem;
   font-weight: 700;
   margin: 1.5rem 0 0.25rem 0;
 }
-
 .chat-subtitle {
   text-align: center;
   color: #666;
   margin-bottom: 1rem;
   font-size: 1rem;
 }
-
 .chat-messages-container {
   flex: 1;
   display: flex;

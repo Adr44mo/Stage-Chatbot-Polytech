@@ -40,14 +40,9 @@ export default function ChatMessages({
                 ? "chat-message-row chat-message-user"
                 : "chat-message-row chat-message-assistant"
             }
-            style={isUser ? { justifyContent: "flex-end" } : {}}
           >
             <div
-              className={
-                isUser
-                  ? "chat-bubble-user user-bubble-with-icon"
-                  : "chat-bubble-assistant"
-              }
+              className={isUser ? "chat-bubble-user user-bubble-with-icon" : ""}
             >
               {isUser && (
                 <img
