@@ -5,15 +5,29 @@
  * =============================================================================================
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Message, ChatRequest, ChatResponse } from "../types";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
+
+// Message d'introduction
+const INTRO_MESSAGE: Message = {
+  role: "assistant",
+  content:
+    "👋 Bonjour, je suis le chatbot représentant Polytech Sorbonne. Posez-moi vos questions sur l'école, je vous répondrai avec plaisir !",
+};
 
 export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Ajoute le message d'intro si l'historique est vide
+  useEffect(() => {
+    if (messages.length === 0) {
+      setMessages([INTRO_MESSAGE]);
+    }
+  }, []);
 
   /* Gère l'envoi d'un message utilisateur et la réponse du bot */
   const handleSubmit = async (e: React.FormEvent) => {
