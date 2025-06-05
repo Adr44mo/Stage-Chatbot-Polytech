@@ -176,6 +176,7 @@ body,
 .chat-messages-list {
   flex: 1;
   min-height: 0;
+  max-height: 100%;
   padding: 10px;
   overflow-y: auto;
   display: flex;
