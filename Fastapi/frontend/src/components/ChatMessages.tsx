@@ -1,5 +1,5 @@
 /*
- * Composant ChatMessages 
+ * Composant ChatMessages
  * Affiche la liste des messages du chat
  */
 
@@ -7,10 +7,11 @@ import Markdown from "react-markdown";
 import useAutoScroll from "../hooks/useAutoScroll";
 import Spinner from "./Spinner";
 import type { Message } from "../types";
+import userIcon from "../assets/user.svg";
 
 interface ChatMessagesProps {
-  messages: Message[]; /* Liste des messages à afficher */
-  isLoading: boolean; /* Indique si le chat est en cours de chargement */
+  messages: Message[] /* Liste des messages à afficher */;
+  isLoading: boolean /* Indique si le chat est en cours de chargement */;
 }
 
 export default function ChatMessages({
@@ -39,10 +40,22 @@ export default function ChatMessages({
                 ? "chat-message-row chat-message-user"
                 : "chat-message-row chat-message-assistant"
             }
+            style={isUser ? { justifyContent: "flex-end" } : {}}
           >
             <div
-              className={isUser ? "chat-bubble-user" : "chat-bubble-assistant"}
+              className={
+                isUser
+                  ? "chat-bubble-user user-bubble-with-icon"
+                  : "chat-bubble-assistant"
+              }
             >
+              {isUser && (
+                <img
+                  className="chat-user-icon-inside"
+                  src={userIcon}
+                  alt="user"
+                />
+              )}
               {isLastAssistantMsg ? (
                 <Spinner />
               ) : msg.role === "assistant" ? (
