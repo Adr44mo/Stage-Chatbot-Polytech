@@ -1,7 +1,7 @@
 @echo off
 
 REM Démarrer le backend FastAPI
-start "FastAPI" cmd /k uvicorn backend.main:app --host 0.0.0.0 --port 8000
+start "FastAPI" cmd /k ".\backend\.venv\Scripts\activate && uvicorn backend.main:app --host 0.0.0.0 --port 8000"
 
 REM Démarrer le frontend React
 cd frontend

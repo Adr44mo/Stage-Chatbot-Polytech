@@ -21,10 +21,28 @@ function useAutosize(value: string): RefObject<HTMLTextAreaElement | null> {
 
   useLayoutEffect(() => {
     if (ref.current) {
-      ref.current.style.height = "inherit";
-      ref.current.style.height = `${ref.current.scrollHeight + borderWidth}px`;
+      const el = ref.current;
+      el.style.height = ""; // reset
+      // Si le contenu déborde, applique scrollHeight, sinon laisse vide
+      if (el.scrollHeight > el.clientHeight + 1) {
+        el.style.height = `${el.scrollHeight + borderWidth}px`;
+      }
     }
   }, [value, borderWidth]);
+
+  // Recalcule la hauteur sur resize de la fenêtre
+  useLayoutEffect(() => {
+    const handleResize = () => {
+      if (ref.current) {
+        ref.current.style.height = "auto";
+        ref.current.style.height = `${
+          ref.current.scrollHeight + borderWidth
+        }px`;
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [borderWidth]);
 
   return ref;
 }

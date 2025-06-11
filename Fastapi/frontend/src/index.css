@@ -18,7 +18,7 @@ html,
 body,
 #root {
   height: 100%;
-  background-color: #f9fafb; 
+  background-color: #f9fafb;
   color: var(--color-main-text);
   font-family: var(--font-sans);
   margin: 0;
@@ -97,8 +97,6 @@ body,
     transform: rotate(360deg);
   }
 }
-
-
 
 /* =============================
    Sources, erreurs, utilitaires
@@ -207,9 +205,6 @@ body,
   justify-content: center;
   width: 100%;
 }
-/* ============
-   Chat bubbles
-   ============ */
 .chat-bubble-user {
   align-self: flex-end;
   background-color: #daf1ff;
@@ -224,7 +219,7 @@ body,
 }
 
 /* ================
-   Icon utilisateur
+   Icône utilisateur
    ================ */
 .user-bubble-with-icon {
   display: flex;
