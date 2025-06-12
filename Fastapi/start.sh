@@ -9,7 +9,7 @@ BACKEND_PID=$!
 # Start the frontend (assuming it's a React app in 'frontend' folder)
 cd frontend
 npm install
-npm run dev &
+npm run dev -- --host &
 
 # Save frontend PID
 FRONTEND_PID=$!
