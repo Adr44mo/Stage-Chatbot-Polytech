@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Kill any existing uvicorn or vite processes
+pkill -f uvicorn
+pkill -f vite
+
 # Path to the project root and virtual environment
 PROJECT_ROOT="/srv/partage/Stage-Chatbot-Polytech"
 VENV_PATH="$PROJECT_ROOT/.venv/bin/activate"
@@ -13,7 +17,7 @@ else
 fi
 
 # Start the FastAPI backend
-uvicorn backend.main:app --host 0.0.0.0 --port 8000 &
+uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload &
 
 # Save backend PID
 BACKEND_PID=$!

@@ -6,27 +6,35 @@
  */
 
 import { useState, useEffect } from "react";
-import type { Message, ChatRequest, ChatResponse } from "../types";
+import type { Message } from "../types";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
+import { fetchHistory, sendMessage } from "../chatApi";
 
-// Message d'introduction
+/* Message d'introduction */
 const INTRO_MESSAGE: Message = {
   role: "assistant",
   content:
     "👋 Bonjour, je suis le chatbot représentant Polytech Sorbonne. Posez-moi vos questions sur l'école, je vous répondrai avec plaisir !",
 };
 
+/* Composant principal du chat */
 export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Ajoute le message d'intro si l'historique est vide
+  /* Récupère l'historique d'un utilisateur depuis le backend au chargement */
   useEffect(() => {
-    if (messages.length === 0) {
-      setMessages([INTRO_MESSAGE]);
-    }
+    fetchHistory()
+      .then((history) => {
+        if (Array.isArray(history) && history.length > 0) {
+          setMessages(history);
+        } else {
+          setMessages([INTRO_MESSAGE]);
+        }
+      })
+      .catch(() => setMessages([INTRO_MESSAGE]));
   }, []);
 
   /* Gère l'envoi d'un message utilisateur et la réponse du bot */
@@ -40,30 +48,20 @@ export default function Chat() {
     setInput("");
     setLoading(true);
 
-    /* Prépare la requête pour l'API du backend */
-    const payload: ChatRequest = {
-      prompt: input,
-      chat_history: messages,
-    };
-
-    /* Envoie la requête au backend pour obtenir la réponse du bot */
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    const data: ChatResponse = await response.json();
-
-    const botMessage: Message = {
-      role: "assistant",
-      content: data.answer,
-      sources: data.sources,
-    };
-
-    /* Ajoute la réponse du bot à la liste des messages */
-    setMessages((prev) => [...prev, botMessage]);
-    setLoading(false);
+    try {
+      const data = await sendMessage(input, [...messages, newUserMessage]);
+      const botMessage: Message = {
+        role: "assistant",
+        content: data.answer,
+        sources: data.sources,
+      };
+      /* Ajoute la réponse du bot à la liste des messages */
+      setMessages((prev) => [...prev, botMessage]);
+    } catch (err) {
+      /* Optionnel : gestion d'erreur utilisateur */
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

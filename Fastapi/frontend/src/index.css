@@ -8,7 +8,7 @@
   --font-sans: "Open Sans", sans-serif;
   --color-primary-blue: rgb(146, 179, 202);
   --color-main-text: rgb(0, 43, 49);
-  --color-error-red: rgb(208, 69, 82);
+  --color-error-red: rgb(200, 102, 112);
 }
 
 /* =======================
@@ -108,13 +108,21 @@ body,
   border-top: 1px solid #d1d5db;
   padding-top: 0.25rem;
 }
-.error-msg {
-  font-size: 0.875rem;
+.error-message {
   color: var(--color-error-red);
-  margin-top: 0.5rem;
+  background: #fff0f1;
+  border: 1px solid var(--color-error-red);
+  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  margin: 12px auto 24px auto;
+  text-align: center;
+  font-size: 1rem;
+  max-width: 80%;
+  box-shadow: 0 2px 8px rgba(200, 102, 112, 0.08);
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 /* ======================================================
@@ -265,3 +273,4 @@ body,
   flex-direction: column;
   min-height: 0;
 }
+
