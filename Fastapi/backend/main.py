@@ -54,9 +54,11 @@ async def chat(request: ChatRequest, x_session_id: str = Header(...), session: S
     """
     Endpoint principal pour le chatbot RAG : gestion des messages et historique de conversation.
     """
-    filtered = handle_if_uninformative(request.prompt)
-    if filtered:
-        return ChatResponse(answer=filtered, sources="Aucune source identifiée")
+    
+    # # Filtrage des requêtes non informatives (pas d'appels à l'API OpenAI)
+    # filtered = handle_if_uninformative(request.prompt)
+    # if filtered:
+    #     return ChatResponse(answer=filtered, sources="Aucune source identifiée")
 
     conversation = get_or_create_conversation(session, x_session_id)
     add_message(session, conversation.id, "user", request.prompt)
