@@ -1,0 +1,17 @@
+# NOM DU SITE WEB
+NAME: "Polytech Réseau"
+
+# URL DE BASE DU SITE WEB
+BASE_URL: "https://www.polytech-reseau.org/"
+
+# URL DU PLAN DU SITE WEB
+SITEMAP_URL: "https://www.polytech-reseau.org/sitemap.xml"
+
+# PRÉFIXES DES URL À EXCLURE
+EXCLUDE_URL_KEYWORDS:
+  - "/actualites/"
+  - "test"
+
+# DATE DE MODIFICATION DU SCRAPING
+# Cette date est mise à jour à chaque fois que le scraping est effectué
+LAST_MODIFIED_DATE: '2025-06-18'
