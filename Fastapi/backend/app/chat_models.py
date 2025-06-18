@@ -39,24 +39,16 @@ class Message(SQLModel, table=True):
 # Schémas Pydantic (API)
 # ======================
 
-# Structure des données envoyées au frontend pour ne pas exposer d'infos internes (id, conversation_id). Permet de séparer la logique de persistance (DB) de la logique d'API (échange de données), on peut donc changer la structure de la base de données sans casser l'API :)
-
-class MessageIn(BaseModel):
+class ChatMessage(BaseModel):
     role: str
     content: str
     timestamp: Optional[str] = None
-    sources: Optional[str] = None
-
-class MessageOut(BaseModel):
-    role: str
-    content: str
-    timestamp: str
-    sources: Optional[str] = None
+    sources: Optional[List[str]] = None
 
 class ChatRequest(BaseModel):
     prompt: str
-    chat_history: List[MessageIn]
+    chat_history: List[ChatMessage]
 
 class ChatResponse(BaseModel):
     answer: str
-    sources: str
+    sources: List[str]

@@ -1,13 +1,14 @@
-/*
- * Composant ChatMessages
- * Affiche la liste des messages du chat
- */
+// =====================================
+// Composant ChatMessages
+// Affiche la liste des messages du chat
+// =====================================
 
 import Markdown from "react-markdown";
 import useAutoScroll from "../hooks/useAutoScroll";
 import Spinner from "./Spinner";
 import type { Message } from "../types";
 import userIcon from "../assets/user.svg";
+import { renderSources } from "../utils";
 
 interface ChatMessagesProps {
   messages: Message[] /* Liste des messages à afficher */;
@@ -64,11 +65,11 @@ export default function ChatMessages({
               )}
 
               {/* Affichage des sources pour les messages de l'assistant */}
-              {msg.role === "assistant" && msg.sources && !isLoading && (
+              {msg.role === "assistant" && msg.sources && (
                 <div className="chat-message-sources">
                   <strong>Sources :</strong>
                   <br />
-                  {msg.sources}
+                  {renderSources(msg.sources)}
                 </div>
               )}
             </div>

@@ -2,6 +2,10 @@
 fastapi
 uvicorn
 
+# Rate limiting
+slowapi
+redis
+
 # CORS middleware
 python-multipart
 aiofiles
