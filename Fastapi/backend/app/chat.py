@@ -6,15 +6,14 @@
 from fastapi import APIRouter, Depends, Header
 from sqlmodel import Session, select
 from typing import List
+import json
 # from langchain_core.messages import HumanMessage, AIMessage  
 
 # Imports des modèles et outils
-from .chat_models import Conversation, Message as DBMessage, MessageOut
+from .chat_models import Conversation, Message as DBMessage, ChatMessage
 from .auth.database import get_session
 
-# =============================
 # Initialisation du routeur API
-# =============================
 router = APIRouter()
 
 # # function to handle chat messages with retrieval-augmented generation (RAG) when using Langchain and ChromaDB.
@@ -52,11 +51,38 @@ router = APIRouter()
 #         "context": ai_response.get("context", [])
 #     }
 
-# ??? A faire côté frontend ???
-def format_sources(context):
+# ===================================================================================
+# Endpoint : récupération de l'historique de conversation pour un utilisateur anonyme
+# ===================================================================================
+
+@router.get("/history", response_model=List[ChatMessage])
+def get_history(x_session_id: str = Header(...), session: Session = Depends(get_session)):
+    """
+    Récupère l'historique des messages (user/assistant) liés à un session_id anonyme.
+    Retourne la liste des messages formatés pour le frontend.
+    """
+    conversation = session.exec(select(Conversation).where(Conversation.session_id == x_session_id)).first()
+    if not conversation:
+        return []
+    messages = session.exec(select(DBMessage).where(DBMessage.conversation_id == conversation.id).order_by(DBMessage.timestamp)).all()
+    return [
+        ChatMessage(
+            role=m.role,
+            content=m.content,
+            sources=json.loads(m.sources) if m.sources else [],
+            timestamp=m.timestamp.isoformat() if m.timestamp else None
+        )
+        for m in messages
+    ]
+
+# =====================
+# Fonctions utilitaires 
+# =====================
+
+def get_sources(context):
     """
     Extrait et formate les sources (URL ou références) à partir du contexte retourné par la chaîne RAG.
-    Retourne une liste formatée ou un message par défaut si aucune source n'est trouvée.
+    Retourne une liste de chaînes. Si aucune source, retourne [].
     """
     sources = set()
     for doc in context:
@@ -67,27 +93,7 @@ def format_sources(context):
             sources.add(url)
         elif source:
             sources.add(source)
-    return "\n".join(f"• {src}" for src in sources) if sources else "Aucune source identifiée"
-
-# ===================================================================================
-# Endpoint : récupération de l'historique de conversation pour un utilisateur anonyme
-# ===================================================================================
-
-@router.get("/history", response_model=List[MessageOut])
-def get_history(x_session_id: str = Header(...), session: Session = Depends(get_session)):
-    """
-    Récupère l'historique des messages (user/assistant) liés à un session_id anonyme.
-    Retourne la liste des messages formatés pour le frontend.
-    """
-    conversation = session.exec(select(Conversation).where(Conversation.session_id == x_session_id)).first()
-    if not conversation:
-        return []
-    messages = session.exec(select(DBMessage).where(DBMessage.conversation_id == conversation.id).order_by(DBMessage.timestamp)).all()
-    return [MessageOut(role=m.role, content=m.content, sources=m.sources, timestamp=m.timestamp.isoformat()) for m in messages]
-
-# =====================
-# Fonctions utilitaires 
-# =====================
+    return list(sources)
 
 def get_or_create_conversation(session, session_id):
     """
@@ -105,6 +111,8 @@ def add_message(session, conversation_id, role, content, sources=None):
     """
     Ajoute un message (user ou assistant) à la conversation spécifiée.
     """
+    if isinstance(sources, list):
+        sources = json.dumps(sources)
     msg = DBMessage(conversation_id=conversation_id, role=role, content=content, sources=sources)
     session.add(msg)
     session.commit()

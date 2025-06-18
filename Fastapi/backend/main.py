@@ -10,11 +10,11 @@ from sqlmodel import Session
 # Imports internes 
 from .app.keys_file import OPENAI_API_KEY
 from .app.llmm import initialize_the_rag_chain
-from .app.chat import format_sources, router as chat_router, get_or_create_conversation, add_message
-from .app.filters import handle_if_uninformative
+from .app.chat import router as chat_router, get_sources, get_or_create_conversation, add_message
+# from .app.filters import handle_if_uninformative
 from .app.auth.router import router as auth_router
 from .app.auth.database import create_db_and_tables, get_session
-from .app.chat_models import Conversation, Message as DBMessage, ChatRequest, ChatResponse
+from .app.chat_models import ChatRequest, ChatResponse
 
 # ==============
 # Initialisation
@@ -72,7 +72,7 @@ async def chat(request: ChatRequest, x_session_id: str = Header(...), session: S
     })
 
     answer = response.get("answer", "")
-    sources = format_sources(response.get("context", []))
+    sources = get_sources(response.get("context", []))
 
     add_message(session, conversation.id, "assistant", answer, sources)
 
