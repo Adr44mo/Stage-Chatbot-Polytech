@@ -1,0 +1,19 @@
+==========================================================
+
+             Scraping du site : Geipi Polytech             
+
+Le dernier scraping en date a été effectué le 18/06/2025 à 11:02
+
+  - Pages visitées (PDF)  : 275
+  - PDF téléchargés       : 73
+
+  - Pages visitées (JSON) : 275
+  - JSON téléchargés      : 0
+
+
+✅ Scraping terminé pour ce site.
+
+
+Attention : parfois, les fichiers téléchargés/mis à jour le sont par précaution et non pas parce qu'ils sont nouveaux. 
+
+==========================================================

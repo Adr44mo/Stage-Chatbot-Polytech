@@ -1,0 +1,18 @@
+Tu vas recevoir un document structuré en JSON. 
+Voici le document source : 
+
+{{data}}
+
+Ta tâche est d'extraire les informations suivantes, si elles sont disponibles dans le contenu :
+
+- associations : un tableau de chaînes de caractères correspondant aux noms des associations mentionnées
+- evenements : un tableau de chaînes de caractères correspondant aux événements décrits
+
+Si une information est absente ou non identifiable, utilise une liste vide [].
+
+Réponds strictement avec un JSON au format suivant :
+
+{
+  "associations": ["..."],
+  "evenements": ["..."]
+}

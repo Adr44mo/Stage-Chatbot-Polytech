@@ -1,0 +1,23 @@
+Tu vas recevoir un document administratif structuré en JSON.
+
+Voici le document source :
+
+{{data}}
+
+Ta tâche est d'extraire les informations suivantes, si elles sont disponibles dans le contenu :
+- service (le nom ou type du service administratif concerné)
+- contact : un objet contenant :
+  - email
+  - telephone
+
+Si une information est absente ou non identifiable, mets la valeur à `""`.
+
+Réponds strictement avec un JSON au format suivant :
+
+{
+  "service": "...",
+  "contact": {
+    "email": "...",
+    "telephone": "..."
+  }
+}

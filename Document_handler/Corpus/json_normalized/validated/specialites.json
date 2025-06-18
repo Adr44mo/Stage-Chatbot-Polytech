@@ -1,0 +1,47 @@
+{
+  "document_type": "specialite",
+  "content": "l’école Polytech Sorbonne propose 8 spécialités, aussi appelées cursus ou filières. Ces 7 spécialités sont “AGRAL (Agroalimentaire)”, “EISE (Electronique et Informatique parcours Systèmes Embarqués)”, “EI2I (Electronique et Informatique parcours Informatique Industrielle)”, “GM (Génie Mécanique)”, “MAIN (Mathématiques Appliquées et Informatique)”, “MTX (Matériaux)”, “ROB (Robotique)”, “ST (Sciences de la Terre)”.",
+  "metadata": {
+    "title": "l’école Polytech Sorbonne propose 8 spécialités, aussi appelées cursus ou filières.",
+    "secteur": "",
+    "date": "",
+    "auteurs": [],
+    "specialite": "."
+  },
+  "source": {
+    "chemin_local": "chemin inconnu",
+    "site": "",
+    "url": ""
+  },
+  "tags": [
+    "Polytech Sorbonne",
+    "spécialités",
+    "cursus",
+    "filières",
+    "AGRAL",
+    "Agroalimentaire",
+    "EISE",
+    "Electronique",
+    "Informatique",
+    "Systèmes Embarqués",
+    "EI2I",
+    "Informatique Industrielle",
+    "GM",
+    "Génie Mécanique",
+    "MAIN",
+    "Mathématiques Appliquées",
+    "MTX",
+    "Matériaux",
+    "ROB",
+    "Robotique",
+    "ST",
+    "Sciences de la Terre"
+  ],
+  "type_specific": {
+    "specialite": {
+      "departement": "",
+      "responsable": "",
+      "description": "l’école Polytech Sorbonne propose 8 spécialités, aussi appelées cursus ou filières. Ces 7 spécialités sont “AGRAL (Agroalimentaire)”, “EISE (Electronique et Informatique parcours Systèmes Embarqués)”, “EI2I (Electronique et Informatique parcours Informatique Industrielle)”, “GM (Génie Mécanique)”, “MAIN (Mathématiques Appliquées et Informatique)”, “MTX (Matériaux)”, “ROB (Robotique)”, “ST (Sciences de la Terre)”."
+    }
+  }
+}
