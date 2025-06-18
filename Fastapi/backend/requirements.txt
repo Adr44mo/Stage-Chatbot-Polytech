@@ -41,3 +41,6 @@ passlib[bcrypt]
 # Database (pip install sqlmodel)
 sqlmodel
 
+# Gestion des pdf
+pymupdf
+
