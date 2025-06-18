@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Spécialités :Automatique et instrumentation"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/specialites_automatique_et_instrumentation.json",
+    "url": "https://www.geipi-polytech.org/specialites/automatique-et-instrumentation/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Spécialités :Automatique et instrumentation\n## Sup Galilée Paris\nPrésentation Sup Galilée est une école d’ingénieurs composante de l’Université Sorbonne Paris Nord. Elle forme, en 5 ans, des ingénieurs de haut niveau directement opérationnels sur le marché du travail. L’enseignement personnalisé s’oriente autour d’une synergie active entre les entreprises et la recherche. L’école s’appuie sur des laboratoires de recherche reconnus internationalement. L’école possède 7 laboratoires […]",
+  "tags": [],
+  "type_specific": {}
+}

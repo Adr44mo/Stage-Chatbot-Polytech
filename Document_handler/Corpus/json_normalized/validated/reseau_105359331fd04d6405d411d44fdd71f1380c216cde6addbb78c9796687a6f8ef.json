@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Avenirs"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/avenirs.json",
+    "url": "https://www.polytech-reseau.org/category/avenirs/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Avenirs\n## Retours sur le webinaire AVENIR(s) Polytech sur l’APC en école d’ingénieurs\nLes témoignages issus des écoles d’Orléans, Grenoble et Annecy-Chambéry ont ainsi pu illustrer les avancées sur la mise en œuvre de l’APC, notamment pour l’évaluation des compétences et pour l’utilisation d’un e-portfolio. Plusieurs points de vue ont été abordés : directeur des formations, chargé de mission, enseignant-chercheur ou ingénieur pédagogique.Lire la suite…",
+  "tags": [],
+  "type_specific": {}
+}

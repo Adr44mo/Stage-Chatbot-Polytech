@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Alumni"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/alumni.json",
+    "url": "https://www.polytech-reseau.org/category/alumni/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Alumni\n## Soutenez le lancement du Polystore du réseau Polytech !\nLe réseau Polytech lance son Polystore pour renforcer le sentiment d’appartenance à la communauté Polytech. Mené par Polytech Alumni en partenariat avec la Fondation Polytech, ce projet vise à créer la boutique en ligne de goodies du réseau Polytech. Elle proposera des articles aux couleurs de la communauté pour ainsiLire la suite…",
+  "tags": [],
+  "type_specific": {}
+}

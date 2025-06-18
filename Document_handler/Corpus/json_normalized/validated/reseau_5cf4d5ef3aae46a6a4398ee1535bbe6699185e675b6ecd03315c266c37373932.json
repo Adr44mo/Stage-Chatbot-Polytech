@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Existe-t-il un niveau d’anglais requis à l’entrée ?"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/existe_t_il_un_niveau_danglais_requis_a_lentree.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/existe-t-il-un-niveau-danglais-requis-a-lentree/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Existe-t-il un niveau d’anglais requis à l’entrée ?\n*Publié parService Commle3 avril 20243 avril 2024*\nIl n’y a pas de niveau d’anglais requis à l’entrée néanmoins, il est nécessaire d’avoir de bonnes bases pour atteindre le niveau demandé pour obtenir le diplôme d’ingénieur.\nAucun élève n’est diplômé s’il n’a pas le niveau B2 (TOEIC 785).\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

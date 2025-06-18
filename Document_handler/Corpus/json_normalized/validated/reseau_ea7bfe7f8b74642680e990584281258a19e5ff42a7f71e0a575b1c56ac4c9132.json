@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Comment se passent les épreuves écrites ?"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/comment_se_passent_les_epreuves_ecrites.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/comment-se-passent-les-epreuves-ecrites/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Comment se passent les épreuves écrites ?\n*Publié parService Commle8 avril 20248 avril 2024*\nLes épreuves de mathématiques et de Physique-Chimie sont spécifiques à la banque e3a-Polytech dont dépend le Concours Polytech.\nLes autres épreuves sont mutualisées avec celles de CCINP.\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

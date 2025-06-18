@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Bâtiment : Exploitation Maintenance Sécurité"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_batiment_exploitation_maintenance_securite.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-batiment-exploitation-maintenance-securite/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Bâtiment : Exploitation Maintenance Sécurité\n## Polytech Angers\nPrésentation Créée en 1991 et habilitée par la CTI depuis 2006, Polytech Angers, école polytechnique de l’Université d’Angers, a à cœur de rendre possible la réussite et l’épanouissement de chacun de ses étudiants et de former des professionnels directement opérationnels pour les industries, les services, la santé et le bâtiment.  L’école diplôme chaque année 130 […]",
+  "tags": [],
+  "type_specific": {}
+}

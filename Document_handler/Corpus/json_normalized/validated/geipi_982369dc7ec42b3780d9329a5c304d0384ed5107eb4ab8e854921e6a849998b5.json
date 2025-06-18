@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Matériaux Développement durable"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_materiaux_developpement_durable.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-materiaux-developpement-durable/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Matériaux Développement durable\n## Polytech Dijon\nPrésentation Polytech Dijon forme depuis plus de 30 ans, les ingénieurs de demain dans des secteurs en plein essor. École publique internationale en 5 ans, Polytech Dijon est habilitée par la Commission des Titres d’Ingénieur et offre une formation de qualité et adaptée aux besoins industriels. Un campus très agréable et tout équipé Située au […]",
+  "tags": [],
+  "type_specific": {}
+}

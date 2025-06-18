@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Uncategorized FAQ"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/uncategorized_faq.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq_category/uncategorized-faq/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Uncategorized FAQ\n## ATS Biologie – Chimie Génie des Procédés – Génie Civil et TPC – Quels sont les frais de concours ?\nPour 2023-2024, les frais sont :",
+  "tags": [],
+  "type_specific": {}
+}

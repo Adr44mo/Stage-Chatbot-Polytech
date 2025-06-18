@@ -1,0 +1,35 @@
+{
+  "document_type": "administratif",
+  "content": "1 2 3 4 4 55 6 6 7 7 8 8 99 10 10 1111 12 12 1313 1414 15 Frais de scolarité 618€ / an 0€ pour les boursiers 0€ en apprentissage 15 1616 17 17 1818 1919 2020 2121 22 22 2323 24 24 2525 26 26 2727 28",
+  "metadata": {
+    "title": "Plaquette",
+    "secteur": "",
+    "date": "2025-01-16T14:03:38",
+    "auteurs": []
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/pdf_scrapes/Plaquette-80120253-web.pdf",
+    "site": "scraped_sorbonne",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/"
+  },
+  "tags": [
+    "frais de scolarité",
+    "boursiers",
+    "apprentissage",
+    "formation",
+    "université",
+    "Sorbonne",
+    "études",
+    "document",
+    "plaquette"
+  ],
+  "type_specific": {
+    "administratif": {
+      "service": "",
+      "contact": {
+        "email": "",
+        "telephone": ""
+      }
+    }
+  }
+}

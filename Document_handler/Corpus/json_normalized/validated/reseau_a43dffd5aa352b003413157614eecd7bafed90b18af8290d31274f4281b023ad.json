@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Nos partenaires"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/nos_partenaires.json",
+    "url": "https://www.polytech-reseau.org/nos-partenaires/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Nos partenaires\nDevenir partenaires du réseau Polytech\nLes différents partenariats proposés permettent aux entreprises de bénéficier de l’excellence et de l’expertise des formations et des laboratoires du réseau Polytech. Dans ce cadre, les écoles du réseau font valoir leurs compétences, les atouts de leurs formations et profitent de ces rapprochements pour adapter les contenus des enseignements aux besoins des entreprises.\nAinsi les écoles du réseau Polytech sont toutes présidées par des industriels ; les entreprises sont fortement présentes, individuellement ou regroupées en association, dans les différentes instances de gouvernance des écoles : conseil de gouvernance, comités pédagogiques, instances de réflexion stratégique, clubs des partenaires, jurys de diplômes, etc. Ceci se traduit aussi par des travaux pratiques, des études de cas, des projets techniques, des stages et des projets de fin d’études directement issus des entreprises.\nLe réseau Polytech, grâce à l’appui de la Commission nationale des relations entreprises, fait vivre et évoluer les échanges avec ses partenaires. La Commission est attentive aux besoins des entreprises, notamment en recrutement de stagiaires, d’apprentis et de diplômés. Elle assure un suivi relatif à l’insertion de ces derniers et entretient des échanges réguliers avec les membres de Polytech Alumni, le réseau des diplômés.\nNos partenaires",
+  "tags": [],
+  "type_specific": {}
+}

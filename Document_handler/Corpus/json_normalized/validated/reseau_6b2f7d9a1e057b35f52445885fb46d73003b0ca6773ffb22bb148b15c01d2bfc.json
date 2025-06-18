@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Le réseau Polytech, partenaire or des Olympiades de Sciences de l’ingénieur"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/le_reseau_polytech_partenaire_or_des_olympiades_de_sciences_de_lingenieur.json",
+    "url": "https://www.polytech-reseau.org/le-reseau-polytech-partenaire-or-des-olympiades-de-sciences-de-lingenieur/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Le réseau Polytech, partenaire or des Olympiades de Sciences de l’ingénieur\n*Publié parService Commle17 mai 202317 mai 2023*\nLa finale nationale des Olympiades, dont le réseau Polytech est partenaire or, se déroulera le 1erjuin 2023 sur le campus d’innovation GIANT MINATEC de Grenoble.\nPremier concours national de sciences et technologie, les Olympiades de Sciences de l’ingénieur s’adresse aux lycéens des classes de première et terminale scientifique (S et STI2D) Par groupe de deux à cinq, les lycéens finalistes de chaque académie présenteront leurs travaux expérimentaux pluri-technologiques en expliquant leur démarche, leurs calculs et l’intérêt de leur projet. Cette année, le thème pour les élèves de Terminale est« L’ingénierie au service de la mobilité »et pour les élèves de Première« L’ingénierie au service du sport ».\nL’engagement du réseau Polytech pour ce concours a pour objectif de faire connaître et devaloriser ses formations et sa passerelle BUTauprès des bacheliers technologiques. Cet événement est également l’occasion d’échanger avec les autres partenaires de l’évènement et peut-être de développer de futures collaborations.",
+  "tags": [],
+  "type_specific": {}
+}

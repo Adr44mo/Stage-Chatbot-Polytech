@@ -1,0 +1,40 @@
+{
+  "document_type": "administratif",
+  "content": "1 Les mobilités exclues de cet appel sont éligibles pour une bourse Polytech Green APPEL À CANDIDATURES 2024 BOURSES DE MOBILITÉ INTERNATIONALE ECO-RESPONSABLE (HORS STAGES ET ETUDES EUROPE ET HORS DOUBLE DIPLOME EN AMERIQUE DU NORD)1 La fondation Singular Planet s’associe au programme Polytech Green pour encourager et accompagner les mobilités internationales éco-responsables des élèves du réseau Polytech, en finançant 3 bourses pour valoriser des projets de mobilités éco-responsables hors Europe, associant moyens de transport éco-responsables et thématiques de stage ou d’études liées à la transition écologique. Montant forfaitaire des bourses 2500€ pour chacune des trois bourses. La bourse Singular Planet n’est pas cumulable avec une bourse Polytech Green (mais peut l’être avec d’autres bourses de mobilité). Qui peut candidater ? Tout élève, étudiant ou apprenti d’une des écoles du réseau Polytech, effectuant ou démarrant en 2024 une mobilité internationale (stage ou études) hors Europe, et hors double diplôme en Amérique du Nord1, avec un fort engagement éco-responsable dans le choix du moyen de transport et dans le thème du stage ou des études. Comment candidater ? – Si vous pensez que votre projet est éligible, rapprochez-vous dans un premier temps du service des relations internationales de votre école – Si votre sujet est présélectionné par votre école, le dossier final (exemple de modèle ci- dessous) devra être déposé avant le 31/05/2024 à l’adresse suivante : ProjetSingularPlanet@polytech-reseau.org, au format PDF et nommé « Singular Planet - NOM Prénom ». Pour toute question : ProjetSingularPlanet@polytech-reseau.org DOSSIER DE CANDIDATURE BOURSES DE MOBILITÉ INTERNATIONALE ECO-RESPONSABLE Identité du candidat Nom : Prénom : Adresse mail institutionnelle : Numéro de téléphone : École Polytech : Spécialité : Année d’études : Description du projet (joindre toute pièce utile à l’examen du dossier) Origine du projet, thématique, lieu et durée, caractère innovant, ouverture sur l’international, lien avec le développement durable... Motivations Pourquoi participez-vous à ce concours ? En quoi votre projet mérite-t-il d’être sélectionné ?",
+  "metadata": {
+    "title": "AAP 2024 Singular Planet",
+    "secteur": "",
+    "date": "2024-01-18T16:02:00",
+    "auteurs": []
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/pdf_scrapes/AAP-2024-Singular-Planet.pdf",
+    "site": "scraped_reseau",
+    "url": "https://www.polytech-reseau.org/bourse-singular-planet-a-vos-dossiers-de-candidature/"
+  },
+  "tags": [
+    "mobilité internationale",
+    "bourse",
+    "éco-responsable",
+    "transition écologique",
+    "Polytech",
+    "candidature",
+    "développement durable",
+    "transport éco-responsable",
+    "projet innovant",
+    "études à l'étranger",
+    "stage",
+    "financement",
+    "réseau Polytech",
+    "bourse Singular Planet"
+  ],
+  "type_specific": {
+    "administratif": {
+      "service": "service des relations internationales",
+      "contact": {
+        "email": "ProjetSingularPlanet@polytech-reseau.org",
+        "telephone": ""
+      }
+    }
+  }
+}

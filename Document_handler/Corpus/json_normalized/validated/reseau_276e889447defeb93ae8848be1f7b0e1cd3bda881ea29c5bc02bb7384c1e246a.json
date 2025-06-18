@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Polytech Grenoble"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/polytech_grenoble.json",
+    "url": "https://www.polytech-reseau.org/polytech-grenoble/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Polytech Grenoble\nContactshttps://polytech.grenoble-inp.fr/admission@polytech-grenoble.fr+33 (0)4 76 82 79 02\n### Des formations ancrées dans le milieu professionnel\nLes liens forts entre le milieu professionnel et l’école se traduisent par l’organisation de différentes manifestations, par la participation de nombreux professionnels dans la formation et par un club partenaires représentant plus de 45 entreprises. Territoire riche en entreprises évoluant dans de nombreux secteurs d’activités, la région Auvergne-Rhône-Alpes offre un vivier d’experts sollicités pour intervenir dans la formation et accompagner les étudiants dans la construction de leur projet professionnel.\n### Une ouverture à l’international\nL’école propose de nombreux programmes d’échanges et de soutien (bourses de mobilité) pour les étudiants. L’école offre également la possibilité d’obtenir undouble diplômed’ingénieur en Allemagne, Royaume-Uni, Italie, Brésil, Argentine, Canada…\n### Un lien fort avec la recherche\nLes enseignants de l’école travaillent dans les laboratoires reconnus internationalement. Leurs enseignements sont donc riches des innovations scientifiques et techniques de pointe. Une poursuite enthèse de doctoratest possible après l’obtention du diplôme.\n### Une vie étudiante dynamique\nLe Bureau des Élèves ainsi que plusieurs associations et clubs animent et coordonnent des activités sportives, festives et culturelle tout au long de l’année. Au choix selon les passions de chaque élève : Bureau des Activités, Bureau des Sports, les Pompoms, la Cellule Humani’Terre, Polybot, Poly’Raid, Journée Polytech Pro…\nChiffres clés\n1 075élèves-ingénieurs300ingénieurs diplômés par an300intervenants extérieurs, cadres en entreprises69enseignants-chercheurs104doctorants21laboratoires ou équipes de recherche associés100partenaires internationaux dans32pays\n## UN CYCLE PRÉPARATOIRE\nPeiPouvert aux bacheliers généraux et technologiques.\n## UN CYCLE INGÉNIEUR DANS 7 SPÉCIALITÉS",
+  "tags": [],
+  "type_specific": {}
+}

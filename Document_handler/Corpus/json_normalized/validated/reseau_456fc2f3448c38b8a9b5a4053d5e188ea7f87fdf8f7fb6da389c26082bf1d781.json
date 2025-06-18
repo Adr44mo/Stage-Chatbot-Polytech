@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Les écoles associées"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/les_ecoles_associees.json",
+    "url": "https://www.polytech-reseau.org/les-ecoles-associees/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Les écoles associées\nLes écoles associées au réseau Polytech sont des écoles qui partagent des valeurs communes avec le réseau Polytech et dont le mode de fonctionnement est proche de celui des écoles membres.\nLes écoles associées ont plusieurs spécialités habilitées par la commission des titres d’ingénieur et ont diplômé au moins deux promotions d’ingénieurs. Elles ont vocation à partager le même mode d’admission que les écoles membres du réseau Polytech pour les bacheliers (concours Geipi Polytech) et pour les élèves des classes préparatoires aux grandes écoles (concours Polytech).\nLes écoles associées s’engagent à respecter les valeurs du réseau Polytech et à contribuer au développement de la notoriété, de l’image et du rayonnement du réseau Polytech, en particulier en utilisant le logo prévu à cet effet dans tous les documents de communication auprès de leurs parties prenantes.\nLes écoles associées au réseau Polytech sont :\n- L’ENSIM\n- L’ESGT Le Mans\n- L’ISEL\n- L’ESIROI\n- L’ESIREM",
+  "tags": [],
+  "type_specific": {}
+}

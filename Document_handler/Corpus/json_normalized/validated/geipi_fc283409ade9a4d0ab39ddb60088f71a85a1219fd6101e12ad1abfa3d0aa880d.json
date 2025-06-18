@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Presse"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/presse.json",
+    "url": "https://www.geipi-polytech.org/presse/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "Accueil/Presse\n# Presse\nRetrouvez sur cette page les derniers communiqués de presse du Concours Geipi Polytech.\n2024-2025\n- Octobre 2024 :Modalités des concours 2025\n- Octobre 2024 :Renouvellement du Bureau du concours\n2023-2024\n- Janvier 2024 :S’inscrire au concours\n- Octobre 2023 :Modalités des concours 2024\n2022-2023\n- Octobre 2022 :Les modalités des concours 2023\n- Octobre 2022 :Une nouvelle école rejoint le concours\n2021-2022\n- Octobre 2021 :Assemblée Générale 2021\n2020-2021\n- Avril 2021 :Nombre d’inscrits et modalités\n- Janvier 2021 :Forum virtuel du concours\n- Octobre 2020 :Assemblée Générale 2020\n2019-2020\n- Avril 2020 :Nombre d’inscrits au concours 2020\n- Octobre 2019 :Assemblée Générale 2019\n- Espace candidat\n- Contact",
+  "tags": [],
+  "type_specific": {}
+}

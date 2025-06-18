@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Télécommunications"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_telecommunications.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-telecommunications/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Télécommunications\n## Télécom Saint-Etienne\nPrésentation Vous rêvez de devenir un véritable expert dans le monde du numérique ? Vous êtes à la recherche d’une école d’excellence qui vous guidera depuis le lycée jusqu’à une carrière prometteuse et diversifié en tant qu’ingénieur du numérique ? Vous hésitez entre un BUT ou une école d’ingé à Bac+2 ? Télécom Saint-Étienne vous propose […]",
+  "tags": [],
+  "type_specific": {}
+}

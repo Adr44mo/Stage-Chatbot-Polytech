@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Consultez vos notes"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/consultez_vos_notes.json",
+    "url": "https://www.geipi-polytech.org/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "### Résultats du concours\nLa phase d’admission aux écoles du Geipi Polytech débute le 2 juin 2025 sur Parcoursup",
+  "tags": [],
+  "type_specific": {}
+}

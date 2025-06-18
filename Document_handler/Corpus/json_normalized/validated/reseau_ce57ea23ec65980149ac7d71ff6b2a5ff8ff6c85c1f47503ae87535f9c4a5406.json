@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Quels sont les frais de scolarité ?"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/quels_sont_les_frais_de_scolarite.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/quels-sont-les-frais-de-scolarite/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Quels sont les frais de scolarité ?\n*Publié parService Commle28 mars 202428 mars 2024*\nCycle ingénieur : L’école Polytech de votre choix est une école publique, donc les frais de scolarité sont les droits universitaires qui sont de 618 € par an et dont les frais d’inscription sont exonérés pour les étudiants boursiers auxquels s’ajoute la CVEC 103€ (obligatoire) pour toutes les études supérieures.\nPeiP : les frais d’inscription varient en fonction des écoles Polytech.\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

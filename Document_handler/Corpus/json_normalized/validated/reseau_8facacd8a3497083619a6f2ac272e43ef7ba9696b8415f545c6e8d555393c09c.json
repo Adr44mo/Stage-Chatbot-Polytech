@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Comment se passe l’épreuve orale ?"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/comment_se_passe_lepreuve_orale.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/comment-se-passe-lepreuve-orale/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Comment se passe l’épreuve orale ?\n*Publié parService Commle8 avril 20248 avril 2024*\nL’épreuve orale est l’épreuve nationale de TIPE.\nLes candidats admissibles ne reçoivent pas de convocation individuelle. Les dates de passage seront disponibles sur internet :https://www.concours-commun-inp.fr\nTout candidat absent à l’épreuve du TIPE sera exclu du classement final.\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Spécialités :Topographie"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/specialites_topographie.json",
+    "url": "https://www.geipi-polytech.org/specialites/topographie/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Spécialités :Topographie\n## ESGT Le Mans\nPrésentation L’ESGT forme des ingénieurs géomètres et topographes dont le diplôme est reconnu par la Commission des titres d’ingénieurs. L’ESGT est une école associée Polytech. L’ingénieur de l’ESGT est un spécialiste : Formations Cycle préparatoire Le cycle préparatoire est commun avec la Licence physique-chimie de l’université du Mans. Des enseignements se déroulent également à l’ESGT. […]",
+  "tags": [],
+  "type_specific": {}
+}

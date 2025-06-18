@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Portraits"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/portraits.json",
+    "url": "https://www.polytech-reseau.org/portraits/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Portraits",
+  "tags": [],
+  "type_specific": {}
+}

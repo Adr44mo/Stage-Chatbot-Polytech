@@ -1,0 +1,45 @@
+{
+  "document_type": "specialite",
+  "content": "Chimie GEII GMP Info MP MT2E Bâtiment : Exploitation, Maintenance, Sécurité X X Génie biologique et santé Qualité, Innovation, Fiabilité X X X X Systèmes automatisés et génie informatique X X X Bâtiment Écoconstruction Énergie X X X Écologie Industrielle et Territoriale X X X Informatique Données Usages X X Mécanique Mécatronique Matériaux Composites X X X X Systèmes Numériques – Instrumentation X X X Génie biologique X Génie civil X Génie électrique X X X X X Génie physique X X Ingénierie Mathématique et Data Science Électronique et systèmes numériques X X X Informatique et réseaux X X X Matériaux X X X Robotique X X X X Géotechnique et Génie civil X X X Gestion des risques X X Informatique X X X Informatique et électronique des systèmes embarqués X X X Matériaux X X Technologies de l'information pour la santé X X X Génie biologique et alimentaire X Génie civil X X X Informatique et statistique X Instrumentation et ingénierie d’affaires X X X Matériaux X X Mécanique X X Systèmes embarqués X X X X Génie biomédical X X X Informatique X X Matériaux X X X X Mathématiques appliquées et Modélisation Mécanique X X X Systèmes industriels, Robotique X X X X Concours Geipi Polytech Bac Technologique Spécialités des écoles Polytech accessibles aux BUT ANGERS ANNECY-CHAMBERY CLERMONT DIJON GRENOBLE LILLE LYON Chimie GEII GMP Info MP MT2E Génie biologique, Biotechnologie Génie biomédical X X X Génie civil X X X Génie industriel et informatique X X X X Informatique X X Matériaux X X X Mécanique et Énergétique X X X Microélectronique et Télécommunications X X X Génie biologique et agroalimentaire X Informatique et Gestion X Matériaux X X Mécanique et Interactions X Microélectronique et Automatique X X X Sciences et technologies de l'Eau X X X Energie, Mécanique, Matériaux et Environnement X X X Informatique, Automatique, Robotique et Réseaux X X X Management opérationnel, Maintenance et Maîtrise des risques X X X X Électronique et Technologies numériques X X X Énergie électrique X X X X Génie civil X X X Génie des Procédés et Bioprocédés X X X Informatique X X X Matériaux X X X Thermique, Énergétique, Mécanique X X X Bâtiments X X X Électronique et systèmes embarqués X X X Génie biologique Génie de l'eau X X X X Informatique X X X Mathématiques appliquées et Modélisation Robotique – Systèmes Autonomes X X Génie civil et géo-environnement X X X Génie Industriel appliqué à la cosmétique, la pharmacie et l'agro-alimentaire X X X X X Génie physique et systèmes embarqués X X X X Innovations en conception et matériaux X X X X Technologies pour l'énergie, l'aérospatial et la motorisation X X X Électronique et Informatique pour l'Embarqué X X X Informatique et Ingénierie Mathématique X Matériaux : Mécanique et Energie X X X X Photonique et systèmes optroniques X X Agroalimentaire X Électronique et Informatique X X X Matériaux X X Mathématiques Appliquées et Informatique Robotique X X X Sciences de la Terre : Aménagement, Risques, géo-Énergies X NICE SOPHIA ORLEANS SACLAY SORBONNE NANTES MARSEILLE MONTPELLIER NANCY Chimie GEII GMP Info MP MT2E Électronique et Génie Électrique X X X Génie de l'Aménagement et de l'Environnement X X Informatique X X X Mécanique et Conception des Systèmes X X X Chimie GEII : Génie Electrique et Informatique Industrielle GMP : Génie Mécanique et Productique Info. : Informatique MP : Mesures Physiques MT2E : Métiers de la Transition et De l'Efficacité Energétiques TOURS",
+  "metadata": {
+    "title": "Specialites accessibles bac techno BUT reseau Polytech",
+    "secteur": "",
+    "date": "2025-02-28T10:29:57",
+    "auteurs": []
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/pdf_scrapes/Specialites-accessibles-bac-techno-BUT-reseau-Polytech.pdf",
+    "site": "scraped_geipi",
+    "url": "https://www.geipi-polytech.org/telechargement/"
+  },
+  "tags": [
+    "Chimie",
+    "Génie électrique",
+    "Informatique",
+    "Génie civil",
+    "Mécanique",
+    "Matériaux",
+    "Robotique",
+    "Génie biologique",
+    "Biotechnologie",
+    "Énergie",
+    "Systèmes embarqués",
+    "Électronique",
+    "Data Science",
+    "Agroalimentaire",
+    "Écoconstruction",
+    "Maintenance",
+    "Sécurité",
+    "Gestion des risques",
+    "Mathématiques appliquées",
+    "Technologies numériques",
+    "Génie des procédés"
+  ],
+  "type_specific": {
+    "specialite": {
+      "departement": "",
+      "responsable": "",
+      "description": "Chimie GEII GMP Info MP MT2E Bâtiment : Exploitation, Maintenance, Sécurité X X Génie biologique et santé Qualité, Innovation, Fiabilité X X X X Systèmes automatisés et génie informatique X X X Bâtiment Écoconstruction Énergie X X X Écologie Industrielle et Territoriale X X X Informatique Données Usages X X Mécanique Mécatronique Matériaux Composites X X X X Systèmes Numériques – Instrumentation X X X Génie biologique X Génie civil X Génie électrique X X X X X Génie physique X X Ingénierie Mathématique et Data Science Électronique et systèmes numériques X X X Informatique et réseaux X X X Matériaux X X X Robotique X X X X Géotechnique et Génie civil X X X Gestion des risques X X Informatique X X X Informatique et électronique des systèmes embarqués X X X Matériaux X X Technologies de l'information pour la santé X X X Génie biologique et alimentaire X Génie civil X X X Informatique et statistique X Instrumentation et ingénierie d’affaires X X X Matériaux X X Mécanique X X Systèmes embarqués X X X X Génie biomédical X X X Informatique X X Matériaux X X X X Mathématiques appliquées et Modélisation Mécanique X X X Systèmes industriels, Robotique X X X X Concours Geipi Polytech Bac Technologique Spécialités des écoles Polytech accessibles aux BUT ANGERS ANNECY-CHAMBERY CLERMONT DIJON GRENOBLE LILLE LYON Chimie GEII GMP Info MP MT2E Génie biologique, Biotechnologie Génie biomédical X X X Génie civil X X X Génie industriel et informatique X X X X Informatique X X Matériaux X X X Mécanique et Énergétique X X X Microélectronique et Télécommunications X X X Génie biologique et agroalimentaire X Informatique et Gestion X Matériaux X X Mécanique et Interactions X Microélectronique et Automatique X X X Sciences et technologies de l'Eau X X X Energie, Mécanique, Matériaux et Environnement X X X Informatique, Automatique, Robotique et Réseaux X X X Management opérationnel, Maintenance et Maîtrise des risques X X X X Électronique et Technologies numériques X X X Énergie électrique X X X X Génie civil X X X Génie des Procédés et Bioprocédés X X X Informatique X X X Matériaux X X X Thermique, Énergétique, Mécanique X X X Bâtiments X X X Électronique et systèmes embarqués X X X Génie biologique Génie de l'eau X X X X Informatique X X X Mathématiques appliquées et Modélisation Robotique – Systèmes Autonomes X X Génie civil et géo-environnement X X X Génie Industriel appliqué à la cosmétique, la pharmacie et l'agro-alimentaire X X X X X Génie physique et systèmes embarqués X X X X Innovations en conception et matériaux X X X X Technologies pour l'énergie, l'aérospatial et la motorisation X X X Électronique et Informatique pour l'Embarqué X X X Informatique et Ingénierie Mathématique X Matériaux : Mécanique et Energie X X X X Photonique et systèmes optroniques X X Agroalimentaire X Électronique et Informatique X X X Matériaux X X Mathématiques Appliquées et Informatique Robotique X X X Sciences de la Terre : Aménagement, Risques, géo-Énergies X NICE SOPHIA ORLEANS SACLAY SORBONNE NANTES MARSEILLE MONTPELLIER NANCY Chimie GEII GMP Info MP MT2E Électronique et Génie Électrique X X X Génie de l'Aménagement et de l'Environnement X X Informatique X X X Mécanique et Conception des Systèmes X X X Chimie GEII : Génie Electrique et Informatique Industrielle GMP : Génie Mécanique et Productique Info. : Informatique MP : Mesures Physiques MT2E : Métiers de la Transition et De l'Efficacité Energétiques TOURS"
+    }
+  }
+}

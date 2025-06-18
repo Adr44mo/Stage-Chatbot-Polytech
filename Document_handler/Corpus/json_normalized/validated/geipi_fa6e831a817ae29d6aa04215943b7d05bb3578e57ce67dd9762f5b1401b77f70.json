@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Electronique et Génie Electrique"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_electronique_et_genie_electrique.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-electronique-et-genie-electrique/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Electronique et Génie Electrique\n## Polytech Tours\nPrésentation Créée en 2002, Polytech Tours, composante de l’université de Tours, forme des ingénieurs opérationnels dans les secteurs de l’industrie, de l’énergie, de l’automobile, des sociétés de conseil, etc.Membre du réseau Polytech, l’école accueille près de 1 200 étudiants, en cycle préparatoire (PeiP) et en cycle ingénieur, environ 100 étudiants en Master et Doctorat. Polytech […]",
+  "tags": [],
+  "type_specific": {}
+}

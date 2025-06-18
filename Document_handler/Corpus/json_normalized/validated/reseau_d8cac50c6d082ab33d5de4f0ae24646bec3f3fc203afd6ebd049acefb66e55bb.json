@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Sport"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/sport.json",
+    "url": "https://www.polytech-reseau.org/category/sport/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Sport\n## Doucelin Pedicone, l’élève ingénieur qui roule\n« Je pratique le roller de vitesse à haut niveau et je suis élève en informatique à Polytech Nantes. Effectuant un double projet sport et études depuis le lycée, je me suis installé à Nantes en 2015 pour intégrer le pôle France de roller et le CENS (Centre Éducatif NantaisLire la suite…",
+  "tags": [],
+  "type_specific": {}
+}

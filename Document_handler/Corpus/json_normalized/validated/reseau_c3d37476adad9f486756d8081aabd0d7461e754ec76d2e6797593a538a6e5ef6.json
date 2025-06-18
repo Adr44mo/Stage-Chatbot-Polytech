@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Entreprises"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/entreprises.json",
+    "url": "https://www.polytech-reseau.org/entreprises/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Entreprises\nUn réseau tourné vers les entreprises\nLe réseau Polytech, grâce à l’appui de la Commission nationale des relations entreprises, fait vivre et évoluer les échanges avec ses partenaires. De nouveaux partenariats peuvent être initiés. Une charte est alors signée avec le réseau Polytech, celle-ci pouvant se décliner en partenariats spécifiques avec des écoles du réseau. La Commission est attentive aux besoins des entreprises, notamment en recrutement de stagiaires, d’apprentis et de diplômés. Elle assure un suivi relatif à l’insertion de ces derniers et entretient des échanges réguliers avec les membres de Polytech Alumni, le réseau des diplômés. De ce travail d’échanges et d’analyse, la Commission est en mesure de proposer des actions stratégiques pour développer les relations avec les entreprises.",
+  "tags": [],
+  "type_specific": {}
+}

@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "ENQUETES EMPLOI | Polytech Sorbonne"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/json_scrapes/enquetes_emploi_polytech_sorbonne_index.php_enquetes-emploi-0.json",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/enquetes-emploi-0",
+    "site": "polytech.sorbonne-universite.fr"
+  },
+  "content": "## ENQUETES EMPLOI\n## Enquêtes emploi\nChaque année nous réalisons une enquête auprès des diplômés (6 mois après obtention du diplôme, 18 mois après obtention du diplôme et à 42 mois après obtention du diplôme).\nVous pouvez consulter les différentes enquêtes emploi ci-dessous.\nL'objectif de cette enquête est d'obtenir des indicateurs nationaux sur la durée d'obtention du premier emploi, l’évolution des salaires depuis le 1er emploi, le secteur d'activité etc.\nElle est nécessaire à la communication de nos chiffres auprès des anciens et des nouveaux élèves, des institutionnels, des médias...\nAinsi nous avons une vision précise de l'insertion de nos diplômés.\n### Enquête emploi 2024, promotion 2023\n### Enquête emploi 2023, promotion 2022\n### Enquête emploi 2022, promotion 2021\n### Enquête emploi 2021, promotion 2020\n### Enquête emploi 2020, promotion 2019\n### Enquête emploi 2019, promotion 2018\n### Enquête emploi 2018, promotion 2017\n### Enquête emploi 2017, promotion 2016\n### Enquête emploi 2016, promotion 2015",
+  "tags": [],
+  "type_specific": {}
+}

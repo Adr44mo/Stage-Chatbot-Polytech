@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Génie des systèmes et de l'innovation"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_genie_des_systemes_et_de_l_innovation.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-genie-des-systemes-et-de-linnovation/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Génie des systèmes et de l'innovation\n## ENSGSI Nancy – Groupe INP\nPrésentation La formation pluridisciplinaire de l’ENSGSI vous permettra de choisir le métier que vous aimez et l’exercer dans le secteur d’activité que vous aurez choisi. C’est vous, ingénieur ENSGSI, qui serez acteur de la vie et parfois même de la survie de l’entreprise : Mise en place de nouveaux processus de production, développement de nouveaux […]",
+  "tags": [],
+  "type_specific": {}
+}

@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Mathématiques appliquées et modélisation"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/mathematiques_appliquees_et_modelisation.json",
+    "url": "https://www.polytech-reseau.org/ingenieur-mathematiques-appliquees-et-modelisation/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Mathématiques appliquées et modélisation\nCe domaine forme des cadres spécialisés dans l’ingénierie des systèmes d’information. Les diplômés maîtrisent la conception et le développement d’applications informatiques pour mettre en œuvre les méthodes de conception de projets, les outils orientés objets, les technologies XML, les applications Web, les nouvelles technologies.\nLes compétences et savoir-faire que vous souhaitez acquérir :\n- Modélisation mathématique et simulation des processus physiques et organisationnels liés aux activités industrielles ;\n- résolution en ayant recours à des outils numériques existants ou en les adaptant.\n## Débouchés\nLes domaines d’application concernent aussi bien les industries de pointe (aéronautique,automobile…) que les institutions financières (banques, assurances…), ainsi que toutes les activités économiques auxquelles se posent des problèmes de conception et d’organisation.\nLes écoles concernées\nFormation initiale sous statut étudiantFormation initiale sous statut apprentiFormation continue",
+  "tags": [],
+  "type_specific": {}
+}

@@ -1,0 +1,46 @@
+{
+  "document_type": "administratif",
+  "content": "1 Description de la formation Stage obligatoire entre 1ère et 2ème année Chimie 1 Mathématiques pour les Sciences 1 Mécanique/Physique 1 Anglais 6 ECTS 9 ECTS 6 ECTS 3 ECTS Chimie 2 Mathématiques pour les Sciences 2 Biologie 2 Anglais IEE ARE 8 ECTS 5 ECTS 8 ECTS 3 ECTS 3 ECTS 3 ECTS Génétique/Biologie Moléculaire Ecologie Evolution Biologie des microorganismes et des organismes pluricellualaires Bioinformatique : les outils indispensables Anglais 3 ECTS 6 ECTS 6 ECTS 6 ECTS 3 ECTS Physiologie des grandes fonctions animales Biologie cellulaire La physiologie végétale dans son environnement Maths, statis, info pour la biologie Enjeux environnementaux pour les sciences de la vie 6 ECTS 3 ECTS 6 ECTS 6 ECTS 3 ECTS S1 S2 S3 Biologie 1 6 ECTS S4 Anglais 3 ECTS Stage \"Découverte de l'entreprise\" => 4 semaines Biochimie 3 ECTS Module à choisir parmi les UE complémentaires 6 ECTS Module à choisir parmi les UE complémentaires 6 ECTS",
+  "metadata": {
+    "title": "Programme",
+    "secteur": "",
+    "date": "2025-05-06T15:25:39",
+    "auteurs": []
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/pdf_scrapes/programme.pdf",
+    "site": "scraped_sorbonne",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/formations/cycle-preparatoire-peip-b"
+  },
+  "tags": [
+    "Chimie",
+    "Mathématiques",
+    "Mécanique",
+    "Physique",
+    "Anglais",
+    "Biologie",
+    "Génétique",
+    "Bioinformatique",
+    "Ecologie",
+    "Physiologie",
+    "Biologie cellulaire",
+    "Environnement",
+    "Stage",
+    "Biochimie",
+    "Sciences de la vie",
+    "Microorganismes",
+    "Organismes pluricellulaires",
+    "Mathématiques appliquées",
+    "Statistiques",
+    "Informatique"
+  ],
+  "type_specific": {
+    "administratif": {
+      "service": "",
+      "contact": {
+        "email": "",
+        "telephone": ""
+      }
+    }
+  }
+}

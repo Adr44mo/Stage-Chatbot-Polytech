@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Actualités Polytech Green"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/actualites_polytech_green.json",
+    "url": "https://www.polytech-reseau.org/actualites-polytech-green/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Actualités Polytech Green\nDécouvrez toutes les articles et les vidéos concernant labourse Polytech Green.\nReplay séminaire « SMILE »\nArticles sur Polytech Green\nRemise des prix de la Bourse Singular Planet",
+  "tags": [],
+  "type_specific": {}
+}

@@ -1,0 +1,41 @@
+{
+  "document_type": "administratif",
+  "content": "Vandœuvre les Nancy, le 16 octobre 2024 Communiqué de presse Renouvellement du Bureau du concours Geipi Polytech Les directeurs des écoles d’ingénieurs publiques du groupement Geipi Polytech se sont réunis en Assemblée Générale. Ils ont élu le nouveau Bureau, instance de pilotage, du concours Geipi Polytech. Le Bureau Geipi Polytech est constitué de 8 représentants parmi les 35 écoles du concours. Les membres sont élus par l'Assemblée Générale pour un mandat d'une durée de 2 ans. Le Bureau Geipi Polytech a été renouvelé lors de la dernière Assemblée Générale (de gauche à droite sur la photo ci- jointe) : - Jean-Yves FOURQUET (directeur - ENIT Tarbes) - Emmanuel SEIGNEZ (directeur - Polytech Paris-Saclay) - Andréa DUHAMEL (directrice - ISEL Le Havre) - Sylvie GUITTONNEAU (enseignante - Polytech Annecy-Chambéry) - Sébastien GUERIF (enseignant - Sup Galilée Paris) - Guy DEHAY (enseignant - Grenoble INP Esisar Valence) - Éric GNAEDINGER (directeur - Polytech Nancy) - Albert DIPANDA (directeur - Polytech Dijon) Le Bureau a élu Albert DIPANDA président du Bureau et Andréa DUHAMEL vice-présidente. Albert DIPANDA succède ainsi à Romain LAFFONT qui a été membre du Bureau durant 6 ans, dont 2 ans en tant que président. LE MOT DU PRÉSIDENT « C’est pour moi un honneur et une grande responsabilité d’être élu président du Bureau du concours Geipi Polytech par les collègues directeurs des 35 écoles de ce concours. Je l’accepte avec enthousiasme et je remercie tous les membres du Bureau pour leur confiance. Je sais compter sur leur implication et leur investissement pour maintenir ce concours au premier rang des concours post Bac. Ces dernières années les lycéens ont montré moins d'intérêt pour les écoles d’ingénieurs. Nous devrons donc collectivement trouver les voies pour rendre plus attractives nos écoles d’ingénieurs en cinq ans auprès des lycéennes et lycéens. Les défis à relever sont nombreux tant au niveau des évolutions du secteur de l’enseignement supérieur qu’au niveau des aspects sociologiques. Ceci nécessitera d’être créatif tout en restant vigilant sur nos valeurs communes. » Albert DIPANDA, Président du Bureau Geipi Polytech Contact presse : Caroline SCHWARTZ, Responsable communication - Port : 06 07 46 51 40, Tél : 03 72 74 68 39 - communication@geipi-polytech.org",
+  "metadata": {
+    "title": "CP renouvellement Bureau Geipi Polytech",
+    "secteur": "",
+    "date": "2024-10-16T13:44:13",
+    "auteurs": []
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/pdf_scrapes/CP-renouvellement-Bureau-Geipi-Polytech.pdf",
+    "site": "scraped_geipi",
+    "url": "https://www.geipi-polytech.org/presse/"
+  },
+  "tags": [
+    "Geipi Polytech",
+    "Bureau",
+    "concours",
+    "écoles d'ingénieurs",
+    "Assemblée Générale",
+    "élection",
+    "présidence",
+    "Albert DIPANDA",
+    "Andréa DUHAMEL",
+    "enseignement supérieur",
+    "attractivité",
+    "lycéens",
+    "responsabilité",
+    "communication",
+    "sociologie"
+  ],
+  "type_specific": {
+    "administratif": {
+      "service": "Bureau du concours Geipi Polytech",
+      "contact": {
+        "email": "communication@geipi-polytech.org",
+        "telephone": "06 07 46 51 40"
+      }
+    }
+  }
+}

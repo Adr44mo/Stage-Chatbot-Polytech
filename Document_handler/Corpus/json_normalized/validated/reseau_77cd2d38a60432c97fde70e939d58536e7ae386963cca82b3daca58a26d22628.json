@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Artiste"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/artiste.json",
+    "url": "https://www.polytech-reseau.org/category/artiste/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Artiste\n## Artiste ou ingénieure ? Margot Guitton a choisi les deux !\nDernier partenaire à avoir intégré le Club des partenaires de Polytech Montpellier tout récemment en mars 2023, La Cité des Arts de Montpellier permet aux Artistes de Haut Niveau de concilier les études artistiques et une formation d’ingénieur. Nous avons rencontré Patrick Pouget, son directeur, et Margot Guitton, brillante percussionnisteLire la suite…",
+  "tags": [],
+  "type_specific": {}
+}

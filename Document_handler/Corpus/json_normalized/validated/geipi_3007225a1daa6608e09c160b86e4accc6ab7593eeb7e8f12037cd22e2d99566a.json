@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Régions :Bourgogne-Franche-Comté"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/regions_bourgogne_franche_comte.json",
+    "url": "https://www.geipi-polytech.org/regions/bourgogne-franche-comte/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Régions :Bourgogne-Franche-Comté\n## ISAT Nevers\nPrésentation Créé en 1991 et rattaché à l’Université de Bourgogne, l’ISAT est en France la seule école publique d’ingénieurs spécialisée dans les métiers de l’automobile et des transports : L’école comporte une plateforme d’équipements de haute technicité unique en France : Formations Cycle préparatoire Les deux premières années se déroulent dans l’école d’ingénieurs. Consultez le […]",
+  "tags": [],
+  "type_specific": {}
+}

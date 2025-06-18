@@ -1,0 +1,47 @@
+{
+  "document_type": "administratif",
+  "content": "LA TAXE D’APPRENTISSAGE 2024 Investissez dans les ingénieurs qui vont résoudre les défis de demain. Polytech Sorbonne, Ecole d’Ingénieurs intégrée à la prestigieuse Sorbonne Université et membre du réseau Polytech, a pour objectif d’offrir à ses élèves une formation de haut niveau leur permettant d’envisager les meilleures perspectives de carrière et de postes attractifs. Polytech Sorbonne a la chance de faire partie d’un puissant réseau d’Ecoles, le réseau Polytech, qui lui apporte ses bonnes pratiques, sa force représentative à la CTI (Commission des Titres d’Ingénieurs) et à la CDEFI (Conférence des Directeurs des Ecoles Françaises d’Ingénieurs). François Pêcheux Directeur de Polytech Sorbonne Nos spécialités : Ingénieur AGROALIMENTAIRE Ingénieur MATÉRIAUX Ingénieur MATHÉMATIQUES APPLIQUÉES ET INFORMATIQUE Ingénieur ROBOTIQUE Ingénieur GÉNIE MÉCANIQUE Ingénieur SCIENCES DE LA TERRE Ingénieur ELECTRONIQUE ET INFORMATIQUE POLYTECH SORBONNE Établissement public d’enseignement supérieur et de recherche intégré à Sorbonne Université. 1 250 élèves-ingénieurs 36% de boursiers 30% d’apprentis 38% de filles 71% des élèves ont un emploi avant le diplôme 5600 ingénieurs diplômés par Polytech Sorbonne La taxe d’apprentissage La taxe d’apprentissage, un impôt obligatoire pour les entreprises en France, est destinée à soutenir le développement des formations professionnelles et technologiques. Les fonds collectés sont ensuite redistribués aux établissements de formation, ce qui favorise la formation des jeunes. Contrairement à d’autres impôts, les entreprises ont la liberté de décider de l’affectation de cette taxe. Son montant correspond à 0,9% de la masse salariale annuelle de l’entreprise. Polytech Sorbonne est autorisé à recevoir le solde de cette taxe d’apprentissage. Pourquoi nous confier votre taxe d’apprentissage ? Le FabLab Un espace de création et d’innovation pour nos élèves et enseignants. Bibliothèques Polytech Sorbonne se trouve sur le campus Pierre et Marie, qui dispose de nombreux espaces de travail. Laboratoires Tous nos enseignants-chercheurs sont affiliés à un laboratoire, ce qui permet aux élèves de découvrir les dernières recherches. En choisissant Polytech Sorbonne, vous contribuez à la qualité de nos formations et à l’innovation. Votre soutien nous permet d’offrir à nos étudiants les ressources nécessaires pour exceller. Comment attribuer le solde de ma taxe d’apprentissage à Polytech Sorbonne ? A partir du 27 mai, je me connecte à la plateforme Soltéa de la Caisse des dépôts et consignation : www.soltea.gouv.fr 1 MUNISSEZ-VOUS DE VOS IDENTIFIANTS Si vous avez déjà créé un compte en 2023, vous pouvez réutiliser vos codes d’accès. Sinon, créez votre compte via Net-Entreprises : net-entreprises.fr 2 CHOISISSEZ Polytech SORBONNE OU SES FORMATIONS HABILITÉES Je recherche Polytech Sorbonne en tapant le code RNCP (ci-contre) de la formation. Nous vous invitons à privilégier un versement sur l’une ou l’autre de nos formations. C’est le seul moyen pour désigner Polytech Sorbonne comme bénéficiaire de votre don. Vous pouvez adresser la totalité de votre versement sur une spécialité ou le répartir entre plusieurs d’entre elles. Dénomination : Polytech Sorbonne N° Siret : 13002338500011 (Sorbonne Université) 3 SUIVEZ L’ÉTAT DE VOS VERSEMENTS SUR VOTRE ESPACE SÉCURISÉ SOLTéA CONTACT Code RNCP des formations : RNCP37373 - EPU Polytech Sorbonne Agroalimentaire RNCP37544 - EPU Polytech Sorbonne Electronique et Informatique RNCP37371 - EPU Polytech Sorbonne Génie mécanique RNCP37483 - EPU Polytech Sorbonne Matériaux RNCP37372 - EPU Polytech Sorbonne Mathématiques appliquées et informatique numérique RNCP37401 - EPU Polytech Sorbonne Robotique RNCP37541 - EPU Polytech Sorbonne Sciences de la Terre Polytech Sorbonne – Direction de la communication – Mai 2024 – crédits photos : Laurent Ardhuin ; Pierre Kitmacher CONTACT Pôle Entreprises 01 44 27 70 20 sciences-polytech-entreprises@sorbonne-universite.fr",
+  "metadata": {
+    "title": "Plaquette TAP",
+    "secteur": "",
+    "date": "2024-06-14T11:54:30",
+    "auteurs": []
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/pdf_scrapes/Plaquette_TAP_V4.pdf",
+    "site": "scraped_sorbonne",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/verser-la-taxe-dapprentissage-0"
+  },
+  "tags": [
+    "taxe d'apprentissage",
+    "Polytech Sorbonne",
+    "formation",
+    "ingénieurs",
+    "réseau Polytech",
+    "CTI",
+    "CDEFI",
+    "agroalimentaire",
+    "matériaux",
+    "mathématiques appliquées",
+    "informatique",
+    "robotique",
+    "génie mécanique",
+    "sciences de la terre",
+    "électronique",
+    "FabLab",
+    "laboratoires",
+    "innovation",
+    "entreprises",
+    "versement",
+    "RNCP"
+  ],
+  "type_specific": {
+    "administratif": {
+      "service": "Pôle Entreprises",
+      "contact": {
+        "email": "sciences-polytech-entreprises@sorbonne-universite.fr",
+        "telephone": "01 44 27 70 20"
+      }
+    }
+  }
+}

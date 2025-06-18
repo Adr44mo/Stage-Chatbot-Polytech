@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Informatique Données Usages"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_informatique_donnees_usages.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-informatique-donnees-usages/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Informatique Données Usages\n## Polytech Annecy-Chambéry\nPrésentation L’école propose des formations qui répondent aux grands enjeux sociétaux soulevés par les transitions numérique, énergétique et socio-écologique. Dans une démarche d’amélioration continue, elle répond aux besoins de la société et des entreprises, afin de relever les défis de demain. La force de l’école est la qualité des relations entreprises et des relations internationales. […]",
+  "tags": [],
+  "type_specific": {}
+}

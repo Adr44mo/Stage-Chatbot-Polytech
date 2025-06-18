@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Le réseau Polytech sera présent au Salon du Bourget en juin"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/le_reseau_polytech_sera_present_au_salon_du_bourget_en_juin.json",
+    "url": "https://www.polytech-reseau.org/le-reseau-polytech-sera-present-au-salon-du-bourget-en-juin/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Le réseau Polytech sera présent au Salon du Bourget en juin\n*Publié parService Commle17 mai 202317 mai 2023*\nLe réseau Polytech sera présent au Salon International de l’Aéronautique et de l’Espace qui a eu lieu du 19 au 23 juin 2023 au Parc des Expositions Paris-Le Bourget. Un événement incontournable qui réunit l’ensemble des acteurs de l’industrie mondiale autour des dernières innovations technologiques.\nPour cette 54eédition, élèves ingénieurs, enseignants et personnels seront présents pour présenter au public les différentes formations du réseau Polytech menant aux métiers de l’industrie aéronautique et spatiale.\nUne délégation, composée des directeur.rice.s, des responsables relations entreprises des écoles et des personnels de la Fondation Polytech, ira à la rencontre des partenaires pour découvrir leurs nouvelles innovations technologiques et échanger sur de futures collaborations.",
+  "tags": [],
+  "type_specific": {}
+}

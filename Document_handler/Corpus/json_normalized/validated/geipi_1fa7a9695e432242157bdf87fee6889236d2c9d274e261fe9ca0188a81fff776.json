@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Les débouchés des diplômés de Polytech Marseille Promotion 2018"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/les_debouches_des_diplomes_de_polytech_marseille_promotion_2018.json",
+    "url": "https://www.geipi-polytech.org/temoignage/les-debouches-des-diplomes-de-polytech-marseille-promotion-2018/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Les débouchés des diplômés de Polytech Marseille Promotion 2018\n# Les débouchés des diplômés de Polytech Marseille Promotion 2018\n- Espace candidat\n- Contact",
+  "tags": [],
+  "type_specific": {}
+}

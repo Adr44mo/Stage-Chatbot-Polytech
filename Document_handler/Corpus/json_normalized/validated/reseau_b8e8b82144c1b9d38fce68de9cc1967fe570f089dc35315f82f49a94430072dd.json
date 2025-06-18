@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Home"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/home.json",
+    "url": "https://www.polytech-reseau.org/home/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Home\n## What we stand for\n##### Responsive\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n##### Quality\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n##### Support\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n## About Hestia\nNeed more details? Please check our full documentation for detailed information on how to use Hestia.",
+  "tags": [],
+  "type_specific": {}
+}

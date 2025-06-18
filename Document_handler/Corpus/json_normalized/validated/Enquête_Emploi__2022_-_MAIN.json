@@ -1,0 +1,45 @@
+{
+  "document_type": "administratif",
+  "content": "www.polytech.sorbonne-universite.fr 60 % ENQUÊTE EMPLOI 2022 Mathématiques Appliquées et Informatique - promo 2021 65 % sont en activité professionnelle. 18 % sont en poursuite d'études en master. Situation des diplômés de salaire brut annuel moyen (hors prime). 39 483 € Durée de recherche du 1er emploi Lieu de travail 100 % travaillent en France. 100 % en île-de-France. Taille des entreprises Secteurs d'activités 69% ont trouvé un emploi en moins de 3 mois. 100 % ont trouvé un emploi en 6 mois. 46% ont obtenu un contrat avant l'obtention du diplôme. 56 % 92 % sont cadres. Cheminement vers l'empoi Enquête de situation à 6 mois 85 % des répondants sur une base de 20 élèves Caractéristiques de l'emploi 100 % sont en CDI. travaillent dans des TPE - PME - ETI. 40 % travaillent dans des GE. 12 % sont en poursuite d'études en thèse. ont été recrutés dans l’entreprise de leur stage de fin d'études.",
+  "metadata": {
+    "title": "Enquête Emploi 2022 MAIN",
+    "secteur": "",
+    "date": "2023-03-07T14:09:21",
+    "auteurs": []
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/pdf_scrapes/Enquête_Emploi__2022_-_MAIN.pdf",
+    "site": "scraped_sorbonne",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/formations/mathematiques-appliques-et-informatique"
+  },
+  "tags": [
+    "Enquête Emploi",
+    "2022",
+    "Mathématiques Appliquées",
+    "Informatique",
+    "diplômés",
+    "activité professionnelle",
+    "poursuite d'études",
+    "salaire",
+    "recherche emploi",
+    "Île-de-France",
+    "secteurs d'activités",
+    "contrat",
+    "CDI",
+    "TPE",
+    "PME",
+    "ETI",
+    "GE",
+    "stage",
+    "thèse"
+  ],
+  "type_specific": {
+    "administratif": {
+      "service": "",
+      "contact": {
+        "email": "",
+        "telephone": ""
+      }
+    }
+  }
+}

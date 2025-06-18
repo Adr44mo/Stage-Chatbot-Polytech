@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "L’équipe pédagogique | Polytech Sorbonne"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/json_scrapes/lequipe_pedagogique_polytech_sorbonne.json",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/lequipe-pedagogique",
+    "site": "polytech.sorbonne-universite.fr"
+  },
+  "content": "## L’équipe pédagogique\n### Nicolas BELLAHSEN\nResponsable de spécialité\n### Damien BREGIROUX\nResponsable cycle préparatoire\n### Dimitri GALAYKO\nResponsable de spécialité\n### Jean-Pierre GRILL\nResponsable de spécialité\n### Laurent Guitou\nResponsable de spécialité\n### Thibault HILAIRE\nResponsable de spécialité\n### Nina Marin\nResponsable du pôle pédagogique\n### Guillaume MERIGUET\nResponsable de spécialité\n### Frédéric PLUMET\nResponsable de spécialité\n### Xavier TANNIER\nResponsable de spécialité",
+  "tags": [],
+  "type_specific": {}
+}

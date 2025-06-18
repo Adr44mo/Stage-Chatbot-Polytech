@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Polytech Sorbonne | Ecole d'ingénieurs de Sorbonne Université"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/json_scrapes/polytech_sorbonne_ecole_d_ingenieurs_de_sorbonne_universite.json",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/",
+    "site": "polytech.sorbonne-universite.fr"
+  },
+  "content": "Polytech Sorbonne, l'école d'ingénieurs de Sorbonne Université.\nÉtablissement public d’enseignement supérieur et de recherche.\n## Nos formations\n## Actualités\n### Médiation scientifique auprès des collégiens\n### Taxe d'apprentissage : à partir du 26 mai !\n### Inauguration de la serre géodésique sur le campus de Saint-Cyr-L'Ecole\n### La serre géodésique Polytech Sorbonne : le documentaire\n- Candidature\n- Brochure\nRéalisé par l'Agence UX Paris- Feel & Clic",
+  "tags": [],
+  "type_specific": {}
+}

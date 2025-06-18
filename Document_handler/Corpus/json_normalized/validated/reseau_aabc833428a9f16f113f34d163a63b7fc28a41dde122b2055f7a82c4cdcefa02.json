@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Comment candidater en Parcours des écoles d’ingénieurs Polytech (PeiP) avec un bac général ?"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/comment_candidater_en_parcours_des_ecoles_dingenieurs_polytech_peip_avec_un_bac_general.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/comment-candidater-en-parcours-des-ecoles-dingenieurs-polytech-peip-avec-un-bac-general/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Comment candidater en Parcours des écoles d’ingénieurs Polytech (PeiP) avec un bac général ?\n*Publié parService Commle28 mars 2024*\nLes élèves de terminale générale inscrits dans un lycée français ou un lycée homologué par l’Agence pour l’Enseignement Français à l’Etranger – AEFE (ou titulaires du Bac depuis un an), présentent leur candidatureen s’inscrivant au concours Geipi Polytech, viaParcoursup.\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Handicap"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/handicap.json",
+    "url": "https://www.polytech-reseau.org/category/handicap/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Handicap\n## Témoignage de Gaëlle Thibaudat, étudiante atteinte de surdité en Informatique et électronique des systèmes embarqués à Polytech Grenoble\nGaëlle est une étudiante bilingue en français écrit ainsi qu’en langue des signes française avec une option langue française complétée parlée (LFPC). La LFPC utilise un code manuel visuel qui permet de différencier les divers sons de la langue française ainsi que les confusions liées à la lecture sur lesLire la suite…",
+  "tags": [],
+  "type_specific": {}
+}

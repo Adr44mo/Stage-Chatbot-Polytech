@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Puis je changer d’établissement au sein du réseau Polytech en cours de cursus ?"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/puis_je_changer_detablissement_au_sein_du_reseau_polytech_en_cours_de_cursus.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/puis-je-changer-detablissement-au-sein-du-reseau-polytec-en-cours-de-cursus/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Puis je changer d’établissement au sein du réseau Polytech en cours de cursus ?\n*Publié parService Commle3 avril 20243 avril 2024*\nSi vous souhaitez changer de spécialité au sein du réseau, le règlement des études du réseau Polytech offre sous certaines conditions la possibilité d’effectuer :\n- un transfert vers une autre école en fin de 3eannée\n- une mobilité pédagogique dans une autre école durant la 5eannée.\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

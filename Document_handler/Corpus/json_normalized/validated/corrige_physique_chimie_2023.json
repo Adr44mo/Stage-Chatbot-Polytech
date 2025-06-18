@@ -1,0 +1,37 @@
+{
+  "document_type": "specialite",
+  "content": "1 / 2 Document réponses Physique-Chimie EXERCICE I I-1- Schéma de Lewis : C H O O O - I-2- L’ion hydrogénocarbonate est une espèce : Amphotère I-3- Diagramme de prédominance : (remplir les 5 cases) I-4- pH = 0,7 I-5- [NaHCO3]théorique = 0,19 mol. L-1 I-6- Volume à l’équivalence : VHCl aq = 45 mL [NaHCO3]mesurée = 0,18 mol. L-1 I-7- Volume de gaz : Vgaz = 1,2 L I-8- Masse solide : msol = 2.65 g EXERCICE II II-1- Interférences constructives : (cocher la ou les réponses exactes)  Décalées l’une de l’autre de /4  Décalées l’une de l’autre de /2  Décalées l’une de l’autre de 3/4  Décalées l’une de l’autre de  En phase  En opposition de phase II-2- Interférences constructives : (cocher la réponse exacte)  Figure A  Figure B  Figure C  Figure D II-3- Différence : δ = EB + BF II-4- (cocher la réponse exacte)  = ()  = ()  = () )  = ()  = ()  = () 2 / 2 II-5- Relation : = avec n entier II-6- Distance : d = () = , ∗ (,) = , II-7- Démonstration : = = , . EXERCICE III III-1- Coordonnées du vecteur vitesse : (cocher la réponse exacte pour chaque coordonnées)  () = 2 + +  () = −2 + +  () = +  () = −+  () = 0  () = 2 + +  () = −2 + +  () = +  () = −+  () = 0  () = 2 + +  () = −2 + +  () = +  () = −+  () = 0 III-2- Vecteur accélération : = 0 = -B = 0 III-3- Relation : ⊥ ሬሬሬሬሬ⃗ + // ሬሬሬሬሬሬሬ⃗+ ሬሬ⃗= ሬሬ⃗ III-4- Tracé des forces : III-5- Expression littérale : // =m Application numérique : // = 2100 N Expression littérale : ⊥= m g Application numérique : ⊥= 6900 N III-6- Mouvement : Circulaire uniforme III-7- Direction et sens de // ሬሬሬሬሬሬ⃗ selon ∶  ⃗  − ሬ⃗  ሬ⃗ − ሬ⃗ (cocher la réponse exacte) Expression littérale : // = III-8- Trajectoire possible (cocher la ou les réponses exactes)  Aucune  Toutes les trajectoires de rayons supérieurs à 16,0 m  Toutes les trajectoires de rayons inférieurs à 16,0 m  Toutes les trajectoires de rayons supérieurs à 8,0 m  Toutes les trajectoires de rayons inférieurs à 8,0 m",
+  "metadata": {
+    "title": "Corrige physique chimie 2023",
+    "secteur": "",
+    "date": "2023-05-04T13:44:07",
+    "auteurs": []
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/pdf_scrapes/corrige_physique_chimie_2023.pdf",
+    "site": "scraped_geipi",
+    "url": "https://www.geipi-polytech.org/annales-du-concours-geipi-polytech/"
+  },
+  "tags": [
+    "Physique",
+    "Chimie",
+    "Schéma de Lewis",
+    "Ion hydrogénocarbonate",
+    "pH",
+    "Volume à l'équivalence",
+    "Interférences constructives",
+    "Vecteur vitesse",
+    "Mouvement circulaire uniforme",
+    "Forces",
+    "Trajectoire",
+    "Diagramme de prédominance",
+    "Application numérique"
+  ],
+  "type_specific": {
+    "specialite": {
+      "departement": "",
+      "responsable": "",
+      "description": "Document réponses Physique-Chimie contenant des exercices et des réponses."
+    }
+  }
+}

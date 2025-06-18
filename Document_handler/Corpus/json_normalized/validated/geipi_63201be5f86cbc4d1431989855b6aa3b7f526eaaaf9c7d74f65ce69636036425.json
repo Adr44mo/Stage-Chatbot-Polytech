@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Régions :Pays de la Loire"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/regions_pays_de_la_loire.json",
+    "url": "https://www.geipi-polytech.org/regions/pays-de-la-loire/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Régions :Pays de la Loire\n## Polytech Angers\nPrésentation Créée en 1991 et habilitée par la CTI depuis 2006, Polytech Angers, école polytechnique de l’Université d’Angers, a à cœur de rendre possible la réussite et l’épanouissement de chacun de ses étudiants et de former des professionnels directement opérationnels pour les industries, les services, la santé et le bâtiment.  L’école diplôme chaque année 130 […]",
+  "tags": [],
+  "type_specific": {}
+}

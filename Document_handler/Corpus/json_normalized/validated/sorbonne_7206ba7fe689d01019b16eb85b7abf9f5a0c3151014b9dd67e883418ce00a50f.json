@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Cellule d’accompagnement individualisé des élèves | Polytech Sorbonne"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/json_scrapes/cellule_daccompagnement_individualise_des_eleves_polytech_sorbonne.json",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/cellule-daccompagnement-individualise-des-eleves",
+    "site": "polytech.sorbonne-universite.fr"
+  },
+  "content": "## Cellule d’accompagnement individualisé des élèves\nPolytech Sorbonne veut promouvoir la réussite de chacun de ses élèves dans le respect de la diversité. La cellule d’accompagnement individualisé des élèves, dirigée par Sylvie Kipen-Rivenc, est un lieu d’écoute etd’orientation aidant les élèves à trouver des solutions pour ne pas se laisser envahir par des problèmes financiers, de santé, familiaux, psychologiques, relationnels …\nDe multiples aides existent au niveau de Sorbonne Université, la cellule vous propose de vous aider à identifier celles que vous pourrez mobiliser et à vous accompagner dans ces démarches si besoin.\nN’hésitez pas à contacter la cellule d’accompagnement (sylvie.kipen@gmail.com) pour obtenir un rendez-vous confidentiel et bienveillant.\nD'autre part, leservice handicap santé étudiant (SHSE)s'adresse à toutes les étudiantes et étudiants rencontrant un problème de santé qui impacte le bon déroulement de leurs études, et qui désirent être accompagnés pour leur scolarité. Vous pouvez consulter lesite web du SHSEpour découvrir ses missions et les accompagnements qu'il propose, avoir ses coordonnées et prendre rendez-vous.",
+  "tags": [],
+  "type_specific": {}
+}

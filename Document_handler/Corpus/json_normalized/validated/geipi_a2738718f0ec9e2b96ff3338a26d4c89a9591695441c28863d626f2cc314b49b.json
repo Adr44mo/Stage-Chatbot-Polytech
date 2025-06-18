@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Mécanique et Energétique"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_mecanique_et_energetique.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-mecanique-et-energetique/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Mécanique et Energétique\n## Polytech Marseille\nPrésentation Polytech Marseille est l’école d’ingénieurs d’Aix-Marseille Université, elle est implantée sur 3 grands sites scientifiques et technologiques marseillais: Les cours du cycle préparatoire, PeiP, sont localisés sur le site de St Jérôme. Les étudiants participent à la vie de l’école aux côtés des élèves-ingénieurs. L’école accueille plus de 1 500 élèves dans des locaux récents, […]",
+  "tags": [],
+  "type_specific": {}
+}

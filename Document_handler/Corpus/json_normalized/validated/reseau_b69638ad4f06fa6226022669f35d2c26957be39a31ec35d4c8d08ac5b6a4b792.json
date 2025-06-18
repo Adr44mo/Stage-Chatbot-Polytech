@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Rechercher une formation d’ingénieur"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/rechercher_une_formation_dingenieur.json",
+    "url": "https://www.polytech-reseau.org/rechercher-une-formation-ingenieur-polytech/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Rechercher une formation d’ingénieur\nLes écoles du réseau Polytech proposent plus de 100 formations réparties dans 12 grands domaines de formation.\nLes écoles du réseau Polytech proposent un panel de formations qui couvrent tous les domaines de l’ingénierie. Toutes les spécialités sont habilitées parla Commission des Titres d’Ingénieur (CTI)\nPour découvrir les spécialités, cliquez sur les liens dans le tableau.\nFormation initiale sous statut étudiantFormation initiale sous statut apprentiFormation continue",
+  "tags": [],
+  "type_specific": {}
+}

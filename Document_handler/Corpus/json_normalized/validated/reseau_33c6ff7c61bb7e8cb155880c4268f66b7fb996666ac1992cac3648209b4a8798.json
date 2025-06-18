@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Polytech Alumni"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/polytech_alumni.json",
+    "url": "https://www.polytech-reseau.org/polytech-alumni/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Polytech Alumni\nAvec plus de 100 000 ingénieurs en activité, en France et à l’étranger, Polytech possède un vaste réseau de diplômés.  En 2012, les associations de diplômés des écoles Polytech ont créé une entité globale, Polytech Alumni.\nStructurée sur le plan national et international, l’association œuvre pour renforcer l’animation de sa communauté ainsi que sa présence au sein des entreprises.\nAnnuaire en ligne\nLe réseau Polytech représente presque 10% des ingénieurs en France, vous en avez probablement déjà rencontrés !\nAfin de mieux faire connaître ses diplômés, leur métier et leurs engagements, mais aussi pour faciliter les échanges, Polytech Alumni propose aux entreprises de collaborer pour organiser des événements de networking interne ou externe tels que des afterworks, des animations ou des conférences.\n## MyPolytechNetWork, la plateforme des alumnis Polytech !\nPolytech Alumni s’est doté en 2018 d’une plateforme de networking interne ouverte,My Polytech Network. Destinée à l’ensemble des Alumni des écoles Polytech, elle compte déjà 35 000 membres actifs.\nLes service proposés permettent à tout visiteur de :\n- connaître les actualités et événements public ;\n- vérifier qu’une personne a bien été diplômé ;\n- utiliser les nombreuses ressources de l’éco-système Polytech\nLes services proposés aux alumni sont plus poussés :\n- accès complet à l’annuaire des alumni, avec les détails pour chaque profil, notamment expériences professionnelles, localisation géographique, téléphone (et tous les attributs selon les choix de permission de chacun) ;\n- offres d’emploi: les alumni peuvent poster des offres gratuitement, et des packs payants sont disponibles pour les entreprises souhaitant cibler Polytech.",
+  "tags": [],
+  "type_specific": {}
+}

@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Génie civil et systèmes ferroviaires"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_genie_civil_et_systemes_ferroviaires.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-genie-civil-et-systemes-ferroviaires/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Génie civil et systèmes ferroviaires\n## IMT Nord Europe\nPrésentation IMT Nord Europe, La Grande École d’ingénieurs au cœur des transitions écologiques, énergétiques, numériques et industrielles. Née de la fusion en 2017 de Télécom Lille et de l’Ecole des Mines de Douai, notre école compte parmi les plus grandes écoles d’ingénieurs au Nord de Paris avec plus de 2 200 élèves, plus de 600 […]",
+  "tags": [],
+  "type_specific": {}
+}

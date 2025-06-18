@@ -1,0 +1,17 @@
+{
+  "source": "scraped_sorbonne",
+  "file_name": "Maquette_ROB5.pdf",
+  "pdf_path": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/pdf_scrapes/Maquette_ROB5.pdf",
+  "specialty": "NA",
+  "content": "Semestre UE ECTS Modules Cours TD TP-Projet Présentiel non encadré Total Automatique (3) 30 12 12 54 Robotique mobile 20 10 22 22 74 Total 1- Electronique et Automatique (5) 50 10 34 34 128 Informatique Temps Réel 20 12 12 44 Projet implémentation 15 15 30 Intelligence Artificielle 12 20 32 Reconnaissance des formes - deep learning 20 16 36 Total 2- Informatique 52 0 63 27 142 Anglais (5) 30 30 Entrepeunariat 15 15 Quinzaine \"Monter sa boite\" 70 70 Total 3 - Compétences transversales de l'ingénieur (5) 0 30 85 0 115 30 Total S9 102 40 182 61 385 2- Informatique 1- Electronique et Automatique (5) 12 S9 12 3 - Compétences transversales de l'ingénieur (5) 6",
+  "metadata": {
+    "title": "Maquette ROB 2018-2019.xlsx",
+    "auteurs": [],
+    "date": null,
+    "title_2": "Maquette ROB5",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/formations/robotique",
+    "last_modified": "2018-12-18T19:17:46",
+    "hash": "abf98d5e081f23606c83e2b330e82be4384cbf904b52e89183000bd418a69e9c",
+    "scraped_at": "2025-06-18T10:47:44.863909"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Programme AVENIR(S) : Réunions et ateliers de travail à Polytech Annecy-Chambéry"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/programme_avenir_s_reunions_et_ateliers_de_travail_a_polytech_annecy_chambery.json",
+    "url": "https://www.polytech-reseau.org/programme-avenirs-reunions-et-ateliers-de-travail-a-polytech-annecy-chambery/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Programme AVENIR(S) : Réunions et ateliers de travail à Polytech Annecy-Chambéry\n*Publié parService Commle19 mars 202419 mars 2024*\nL’innovation pédagogique au cœur des écoles Polytech !Dans le cadre du programme AVENIR(s),Polytech Annecy-Chambérya amorcé une réingéniérie par compétences de deux de ses spécialités : Systèmes Numériques et Instrumentation (SNI) et Ecologie Industrielle et Territoriale (EIT). Ce travail poursuit la dynamique d’innovation pédagogique de l’école, qui a fait le choix d’inscrire l’approche par compétences et l’apprentissage par projet au cœur du parcours des étudiants.Une première série de réunions et d’ateliers a porté sur le cadrage et les blocs de compétences.",
+  "tags": [],
+  "type_specific": {}
+}

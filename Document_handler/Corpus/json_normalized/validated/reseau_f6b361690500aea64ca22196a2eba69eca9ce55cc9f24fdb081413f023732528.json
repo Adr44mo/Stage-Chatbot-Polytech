@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Réunion des TA à Polytech Tours"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/reunion_des_ta_a_polytech_tours.json",
+    "url": "https://www.polytech-reseau.org/reunion-des-ta-a-polytech-tours/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Réunion des TA à Polytech Tours\n*Publié parService Commle17 avril 202417 avril 2024*\nLa semaine dernière, dans le cadre du Programme AVENIR(S), la réunion des terrains d’avenir Polytech était hébergée à Polytech Tours.Un atelier a permis d’échanger sur les dispositifs d’évaluation et sur l’amélioration des outils pour l’évaluation des compétences des étudiants.🙌 Merci au dynamisme de toutes les équipes engagées sur le projet !",
+  "tags": [],
+  "type_specific": {}
+}

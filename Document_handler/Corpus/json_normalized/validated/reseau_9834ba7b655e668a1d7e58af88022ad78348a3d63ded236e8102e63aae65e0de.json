@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Retours sur le webinaire AVENIR(s) Polytech sur l’APC en école d’ingénieurs"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/retours_sur_le_webinaire_avenir_s_polytech_sur_lapc_en_ecole_dingenieurs.json",
+    "url": "https://www.polytech-reseau.org/retours-sur-le-webinaire-avenirs-polytech-sur-lapc-en-ecole-dingenieurs/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Retours sur le webinaire AVENIR(s) Polytech sur l’APC en école d’ingénieurs\n*Publié parService Commle2 juin 20252 juin 2025*\nLes témoignages issus des écoles d’Orléans, Grenoble et Annecy-Chambéry ont ainsi pu illustrer les avancées sur la mise en œuvre de l’APC, notamment pour l’évaluation des compétences et pour l’utilisation d’un e-portfolio. Plusieurs points de vue ont été abordés : directeur des formations, chargé de mission, enseignant-chercheur ou ingénieur pédagogique.\nCe webinaire a été l’occasion de partager des ressources qui nous l’espérons pourront être utiles à d’autres écoles d’ingénieurs du réseau Polytech et hors réseau, ainsi qu’à d’autres types de formation de l’enseignement supérieur.\nLe programme AVENIR(s) remercie chaleureusement le coordinateur pédagogique national AVENIR(s) des écoles Polytech, les 6 intervenant.es pour la qualité et la richesse de leur témoignage, ainsi que les participants très actifs en termes de questions et retours pendant et après le webinaire.\nNous vous donnons rendez-vous l’année prochaine afin de suivre l’évolution du réseau des écoles Polytech sur la mise en œuvre de l’APC et du portfolio.\nCe partage d’expérience illustre une manière de s’approprier les repères sur l’APC co-construits avec de nombreux établissements et écoles du supérieur et le programme AVENIR(s). Pour rappel, les outils du programme AVENIR(s) pour le volet ESR ne sont pas prescriptifs, ils sont co-construits avec une communauté d’acteurs de la pédagogie dans le supérieur et proposés à tous ceux qui souhaitent en bénéficier.",
+  "tags": [],
+  "type_specific": {}
+}

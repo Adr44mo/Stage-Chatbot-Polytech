@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Nos engagements"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/nos_engagements.json",
+    "url": "https://www.polytech-reseau.org/nos-engagements/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Nos engagements\nPour l’horizon 2030, le réseau Polytech a pour objectifs stratégiques :\n1.de renforcerla visibilité de la marque Polytechcomme la marque de référence pour l’ensemble des parties prenantes et en développant des partenariats forts au niveau national et international ;\n2. d’améliorer la réussite étudianteet l’adéquation des diplômes aux besoins et aux enjeux sociétaux, en développant des approches innovantes et de nouvelles méthodes pédagogiques ;\n3.d’inclure une capacité de l’ingénieur Polytech à intégrer dans ses missions et ses valeurs lesenjeux sociétaux, environnementauxen lien avec les grandes transitions ;\n4.de mener unrecrutement inclusifpour élargir la variété de publics formés en développant un accompagnement à la réussite qui leur soit particulier, en reflet de la société, pour des publics spécifiques y compris ceux en grande fragilité ;\n5.de participer en cohérence avec nos universités audéveloppement sociétal et économique de nos territoires;\n6.de proposer, en complément des actions de nos universités, uneréponse aux problématiques fortes de la sociétéau bénéfice de nos personnels, de nos usagers et de nos partenaires",
+  "tags": [],
+  "type_specific": {}
+}

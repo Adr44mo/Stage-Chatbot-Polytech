@@ -1,0 +1,43 @@
+{
+  "document_type": "specialite",
+  "content": "1 / 2 Epreuve Sciences de la Vie et de la Terre Document réponses EXERCICE I (24 points) A - Métabolisme de la levure Saccharomyces cerevisieae I-A-1- Cocher les affirmations fausses (2 pts):  Les levures sont des microorganismes eucaryotes. X Les levures sont des organismes procaryotes. X Les levures sont des microorganismes photosynthétiques.  Les levures sont des microorganismes qui utilisent de la matière organique pour assurer leur métabolisme I-A-2- La fermentation alcoolique réalisée par Saccharomyces cerevisieae (2 pts) X est localisée dans le hyaloplasme.  est mitochondriale. X fait suite à la glycolyse.  génère des composés réduits (NADH, H+). I-A-3- L’effet Pasteur peut s’expliquer par (3 pts) : X une activation de la respiration et une inhibition de la fermentation par l’oxygène.  une inhibition de la respiration et une activation de la fermentation par l’oxygène.  une activation de la respiration et une inhibition de la fermentation par le glucose (> 2g/L).  une inhibition de la respiration et une activation de la fermentation par le glucose (> 2g/L). I-A-4- L’effet Crabtree peut s’expliquer par (3 pts) :  une activation de la respiration et une inhibition de la fermentation par l’oxygène.  une inhibition de la respiration et une activation de la fermentation par l’oxygène.  une activation de la respiration et une inhibition de la fermentation par le glucose (> 2g/L). X une inhibition de la respiration et une activation de la fermentation par le glucose (> 2g/L). I-A-5- Lors de la fabrication du pain (3 pts) :  Saccharomyces cerevisieae est à l’origine de l’alcool présent dans le pain après cuisson.  L’O2 produit par Saccharomyces cerevisieae est à l’origine de l’aération de la pâte à pain.  Saccharomyces cerevisieae est à l’origine de l’acide lactique présent dans le pain après cuisson. X Le CO2 produit par Saccharomyces cerevisieae est à l’origine de l’aération de la pâte à pain. 2 / 2 B - L’évolution des espèces et dynamique des populations I-B-1- L’escargot d’Europe. Cocher la ou les affirmation(s) vraie(s) (6 pts) X Les escargots à coquille sombre et les escargots à coquille claire appartiennent à la même espèce.  Les escargots à coquille claire et à coquille sombre possèdent des gènes distincts mais des allèles identiques.  Les escargots de couleur claire survivent plus dans le milieu forestier que les escargots à coquille sombre. X La prédation par la grive musicienne agit sur la proportion des escargots des deux couleurs X Les observations sur la composition des populations d’escargots dans un milieu donné peuvent s’expliquer par la sélection naturelle.  Les observations sur la composition des populations d’escargots dans un milieu donné peuvent s’expliquer par la dérive génétique. I-B-2- Diversité génétique des populations continentales et insulaires. Cocher la ou les affirmation(s) vraie(s) (5 pts) X La diversité génétique des espèces présentées est inférieure dans les populations insulaires.  La différence de diversité génétique, entre populations d’une même espèce, entre les îles et le continent est plus grande dans le cas des oiseaux.  Les espèces possédant les plus faibles capacités de dispersion depuis le continent vers l’île montrent des différences de diversités génétiques plus faibles entre leurs populations insulaires et leurs populations continentales. X La diversité génétique est souvent inférieure dans les populations insulaires car les mutations génétiques se sont accumulées sur une période plus courte. X Les populations qui se dispersent jusqu’aux îles nouvellement créées sont souvent constituées d’effectifs très faibles.  Du fait de leur isolement géographique, les populations insulaires respectent l’équilibre de Hardy- Weinberg.  La sélection naturelle s’applique théoriquement plus sur les populations insulaires que sur les populations continentales. EXERCICE II (16 points) La création d’un verger II-1- (3 pts) On peut éliminer la Belle de Boskoop car c’est une variété triploïde qui sera ne sera donc pas un bon pollinisateur II-2- (7 pts) On peut éliminer toutes les variétés possédant un allèle commun avec la variété Golden Delicious (S2S3) puisqu’elles ne permettront pas la germination des grains de pollen. On élimine donc la variété Idared (S3S7), la variété Granny Smith (S3S23), la variété Delbard Jubilé (S2S22) et la variété Reine des Reinettes (S1S3). II-3- (2 pts) On peut éliminer la variété Bolero (Tuscan) puisque sa période de floraison est trop éloignée de celle de la Golden Delicious. II-4- (4 pts) La variété la plus adaptée serait donc la Cox Orange Pipin puisqu’il s’agit d’une variété diploïde, possédant les allèles S5 et S9 compatibles pour la germination des grains de pollen et montrant une période de floraison similaire à la Golden Délicious.",
+  "metadata": {
+    "title": "Corrige SVT 2024",
+    "secteur": "",
+    "date": "2024-05-01T10:01:31",
+    "auteurs": []
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/pdf_scrapes/corrige-SVT-2024.pdf",
+    "site": "scraped_geipi",
+    "url": "https://www.geipi-polytech.org/annales-du-concours-geipi-polytech/"
+  },
+  "tags": [
+    "Saccharomyces cerevisiae",
+    "fermentation",
+    "métabolisme",
+    "levures",
+    "effet Pasteur",
+    "effet Crabtree",
+    "génétique",
+    "diversité génétique",
+    "sélection naturelle",
+    "escargots",
+    "pollinisation",
+    "variétés de pommes",
+    "triploïde",
+    "diploïde",
+    "écologie",
+    "biologie",
+    "sciences de la vie",
+    "évolution",
+    "microorganismes"
+  ],
+  "type_specific": {
+    "specialite": {
+      "departement": "",
+      "responsable": "",
+      "description": "Corrige SVT 2024"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Nos projets"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/nos_projets.json",
+    "url": "https://www.polytech-reseau.org/nos-projets/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Nos projets\nSaviez-vous que le réseau Polytech mettait en oeuvre différents projets et de nombreuses actions ? Découvrez les grands projets développés par le réseau Polytech en accord avec ses valeurs.\n## Un fort engagement DDRS\nLe réseau Polytech souhaite marquer son engagement volontaire, au-delà des exigences légales, de déploiement d’une dynamique DDRS au sein de toutes les écoles du réseau, en lien avec les dynamiques portées par leurs universités, impliquant les élèves ingénieurs, les enseignants et enseignants chercheurs et les personnels administratifs et techniques. Cet engagement prend forme sous différents projets :–Le développement durable– L’ouverture de la parole viale Printemps du podcast–L’égalité professionnelle",
+  "tags": [],
+  "type_specific": {}
+}

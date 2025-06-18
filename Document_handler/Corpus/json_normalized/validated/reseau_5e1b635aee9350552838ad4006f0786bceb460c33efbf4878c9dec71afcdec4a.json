@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Etudiants internationaux"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/etudiants_internationaux_international_peip.json",
+    "url": "https://www.polytech-reseau.org/international_peip/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Etudiants internationaux\nVous pouvez intégrer le PeiP (Parcours des écoles d’ingénieurs Polytech) :\n- Par leconcours Geipi Polytechsi vous êtes élève de terminale générale inscrit dans un lycée homologué par l’AEFE, si vous êtes titulaire d’un baccalauréat général obtenu en 2024 dans un lycée homologué par l’AEFE ou si vous êtes un élève préparant un bac européen scientifique ainsi que les bi-bacs (Abibac, Bachibac et Esabac).\n- Par le concours sur titres Polytech – série DE1si vous préparez un équivalent étranger au baccalauréat français ou si vous êtes titulaire d’un tel équivalent obtenu en 2025. Ce concours donne accès à 3 écoles du réseau Polytech (Marseille, Orléans et Paris-Saclay). Les modalités du concours dépendent de votre pays de résidence :\nÉcoles accessibles.\nPour tous les autres cas, se renseigner directement auprès de l’école visée.Quelle que soit la voie d’accès à une formation Polytech, si vous n’êtes pas de nationalité française, vous devez vous renseigner au plus vite sur les modalités d’obtention de VISA auprès de votre Espace Campus France (ECF) et/ou de l’ambassade/consulat de votre pays de résidence. Les ECF ont vocation à vous aider dans vos démarches (orientation, inscription CEF, visa, etc.).",
+  "tags": [],
+  "type_specific": {}
+}

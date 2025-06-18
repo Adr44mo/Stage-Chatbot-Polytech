@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Spécialités :Acoustique"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/specialites_acoustique.json",
+    "url": "https://www.geipi-polytech.org/specialites/acoustique/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Spécialités :Acoustique\n## ENSIM Le Mans\nPrésentation L’ENSIM forme depuis 1995 des futurs ingénieurs en acoustique, instrumentation, micro technologies, informatique, systèmes temps réel et embarqués, interaction personnes-systèmes… Située au cœur d’un campus de 12 500 étudiants, l’école propose une des formations phares de l’Université du Mans. La taille de l’ENSIM (400 élèves) et ses liens avec les entreprises lui permettent de […]",
+  "tags": [],
+  "type_specific": {}
+}

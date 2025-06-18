@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Documents à télécharger"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/documents_a_telecharger.json",
+    "url": "https://www.geipi-polytech.org/telechargement/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "Accueil/Téléchargement\n# Documents à télécharger\n### Concours Bac Général\nSujets et corrigés des épreuves écrites :\nDepuis 2024, la calculatrice n’est plus autorisée.\n- Programmes des révisions des épreuves écrites 2025(hors parties barrées)\n- Annales 2021-2025\nAutres documents :\n- Règlement du concours bac général 2025\n- Liste des centres d’écrit en France métropolitaine\n- Liste des centres d’écrit HORS France métropolitaine\n### Concours Bac Technologique\n- Règlement du concours bac technologique 2025\n- Tableau des adéquations spécialités en BUT / spécialités en cycle ingénieurdans le réseau Polytech\n### Plaquette\n- Plaquette des concours 2025\n### Recrutement Bac+1 et mobilité Bac+1\n- Formations acceptéesdans le recrutement à Bac+1\n- Modalités de recrutementdes écoles à Bac+1\n- Pour les étudiants dans les écoles du concours Geipi Polytech :Procédure concernant la mobilité interneen fin de 1èreannée du cycle préparatoire\n### Autres documents\n- Les écoles qui recrutent des bacs étrangers\n- Frais de scolarité dans les écoles pour les candidats extracommunautaires\n- Espace candidat\n- Contact",
+  "tags": [],
+  "type_specific": {}
+}

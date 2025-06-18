@@ -1,0 +1,42 @@
+{
+  "document_type": "administratif",
+  "content": "www.polytech.sorbonne-universite.fr 75 % ENQUÊTE EMPLOI 2022 Génie Mécanique - promo 2021 78 % sont en activité professionnelle. 19 % sont en poursuite d'études en master. Situation des diplômés de salaire brut annuel moyen (hors prime). 37 014 € Durée de recherche du 1er emploi Lieu de travail 100 % travaillent en France. 68 % en île-de-France. Taille des entreprises Secteurs d'activités 51% ont trouvé un emploi en moins de 3 mois. 97 % ont trouvé un emploi en 6 mois. 17% ont obtenu un contrat avant l'obtention du diplôme. 27 % 85 % sont cadres. Cheminement vers l'empoi Enquête de situation à 6 mois 87 % des répondants sur une base de 47 élèves Caractéristiques de l'emploi 93 % sont en CDI. travaillent dans des TPE - PME - ETI. 50 % travaillent dans des GE. 3 % sont en volontariat. ont été recrutés dans l’entreprise de leur apprentissage.",
+  "metadata": {
+    "title": "Enquête Emploi 2022 GM",
+    "secteur": "",
+    "date": "2023-03-07T13:57:58",
+    "auteurs": []
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/pdf_scrapes/Enquête_Emploi__2022_-_GM.pdf",
+    "site": "scraped_sorbonne",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/formations/genie-mecanique"
+  },
+  "tags": [
+    "Enquête emploi",
+    "Génie mécanique",
+    "diplômés",
+    "activité professionnelle",
+    "poursuite d'études",
+    "salaire",
+    "recherche emploi",
+    "Île-de-France",
+    "secteurs d'activités",
+    "TPE",
+    "PME",
+    "CDI",
+    "contrat apprentissage",
+    "cadres",
+    "volontariat",
+    "emploi 2022"
+  ],
+  "type_specific": {
+    "administratif": {
+      "service": "",
+      "contact": {
+        "email": "",
+        "telephone": ""
+      }
+    }
+  }
+}

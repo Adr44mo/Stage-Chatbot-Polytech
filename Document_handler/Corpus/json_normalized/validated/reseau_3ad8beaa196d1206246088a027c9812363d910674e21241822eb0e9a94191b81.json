@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Helpie FAQ – Group Sample"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/helpie_faq_group_sample.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq_page/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Helpie FAQ – Group Sample\n[helpie_notices group_id=’40’/]\n### Getting Started\n- Your relevent FAQ answer.",
+  "tags": [],
+  "type_specific": {}
+}

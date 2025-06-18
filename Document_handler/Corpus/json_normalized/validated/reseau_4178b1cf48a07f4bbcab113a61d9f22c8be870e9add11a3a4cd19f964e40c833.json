@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Quels sont les frais de concours ?"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/quels_sont_les_frais_de_concours_helpie_faq_quels-sont-les-frais-de-concours-3.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/quels-sont-les-frais-de-concours-3/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Quels sont les frais de concours ?\n*Publié parService Commle8 avril 20248 avril 2024*\n- 130€ pour le Concours Polytech (+ frais d’inscription à la banque Agro Veto)\n- Gratuit pour les boursiers\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

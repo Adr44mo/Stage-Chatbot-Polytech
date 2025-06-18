@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Élèves"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/eleves.json",
+    "url": "https://www.polytech-reseau.org/category/eleves/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Élèves\n## Margaux Legendre  : « Il est aussi important de cultiver la curiosité et l’intérêt pour les sciences dès le plus jeune âge »\nEngagée dans une association de promotion des sciences, Margaux Legendre a participé à deux Challenge Innovatech. Ce concours, organisé par l’association Elles bougent, est destiné aux lycéennes et étudiantes. Il permet aux lycéennes d’être plongées dans la peau d’une ingénieure, d’une technicienne et de découvrir toute l’étendue des métiers deLire la suite…",
+  "tags": [],
+  "type_specific": {}
+}

@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Gestion des risques"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_gestion_des_risques.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-gestion-des-risques/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Gestion des risques\n## Polytech Grenoble\nPrésentation Face à la chaîne de montagnes de Belledonne Polytech Grenoble occupe, depuis septembre 1996, un bâtiment construit près de la mairie de Saint-Martin-d’Hères à quelques centaines de mètres du domaine universitaire. L’école affirme son originalité dans la dualité entre l’unité et la diversité : un même lieu mais six spécialités distinctes aux thématiques variées. Très ouverte […]",
+  "tags": [],
+  "type_specific": {}
+}

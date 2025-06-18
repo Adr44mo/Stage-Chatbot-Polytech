@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "HeForShe - Polytech Sorbonne | Polytech Sorbonne"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/json_scrapes/heforshe_polytech_sorbonne_polytech_sorbonne.json",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/vie-associative/heforshe-polytech-sorbonne",
+    "site": "polytech.sorbonne-universite.fr"
+  },
+  "content": "## HeForShe - Polytech Sorbonne\nClub féministe de Polytech Sorbonne\nHeForShe Polytech Sorbonneest le club qui lutte pour l'égalité des sexes au sein de l'école. Il est directement rattaché à la campagne deONU FemmesHeForShequi a été porté par Emma Watson. HeForShe encourage les hommes à s'engager dans la lutte pour l'égalité des sexes et contre les ingégalités rencontrées les femmes et hommes.\n## Organigramme",
+  "tags": [],
+  "type_specific": {}
+}

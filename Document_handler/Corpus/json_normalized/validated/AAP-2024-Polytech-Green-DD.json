@@ -1,0 +1,42 @@
+{
+  "document_type": "administratif",
+  "content": "APPEL À CANDIDATURES 2024 BOURSES DE MOBILITÉ ECO-RESPONSABLE POUR DOUBLE DIPLÔME EN AMERIQUE DU NORD PROGRAMME ERASMUS+ Polytech Green Polytech Green est un programme Erasmus+ de bourses de mobilité internationale qui s’inscrit dans une démarche volontariste de développement durable et de responsabilité sociétale (DDRS). Polytech Green encourage et accompagne les mobilités éco-responsables associant moyens de transport éco- responsables et thématiques d’études ou de stages liées à la transition écologique. Une trentaine de bourses sont réservées aux mobilités de double diplôme en Amérique du Nord. 3 établissements sont d’ores et déjà partenaires du programme au Québec : École de Technologie Supérieur de Montréal (ETS), Université de Sherbrooke (UdeS), Université du Québec à Chicoutimi (UQAC). Pour des projets de mobilités double diplôme vers d’autres établissements en Amérique du Nord, merci de contacter le service des Relations Internationales de votre école ou polytechgreen@polytech-reseau.org. Montant forfaitaire de la bourse : 2800 euros. Critères de sélection : – Effectuer un double diplôme débutant à la session d’automne 2024 (août/septembre 2024) dans l’un des trois établissements cités ci-dessus, ou dans un autre établissement d’Amérique du Nord – Cohérence du projet et du voyage en termes d’engagement DDRS (ex : vol transatlantique unique, thématique du double diplôme...), – Excellence du dossier académique. Pour candidater : – Si vous êtes intéressé et que vous pensez remplir les conditions ci-dessus, contactez le service des relations internationales de votre école. Pour toute question : polytechgreen@polytech-reseau.org Pour plus d’informations sur les mobilités éco-responsables auprès des établissements partenaires au Québec : https://www.youtube.com/watch?v=ZTHNG8Trl44&t=447s",
+  "metadata": {
+    "title": "AAP 2024 Polytech Green DD",
+    "secteur": "",
+    "date": "2024-01-17T08:35:58",
+    "auteurs": [
+      "École de Technologie"
+    ]
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/pdf_scrapes/AAP-2024-Polytech-Green-DD.pdf",
+    "site": "scraped_reseau",
+    "url": "https://www.polytech-reseau.org/polytech-green/"
+  },
+  "tags": [
+    "bourses de mobilité",
+    "éco-responsabilité",
+    "double diplôme",
+    "Erasmus+",
+    "développement durable",
+    "transition écologique",
+    "mobilités internationales",
+    "partenariats",
+    "École de Technologie Supérieure",
+    "Université de Sherbrooke",
+    "Université du Québec",
+    "critères de sélection",
+    "dossier académique",
+    "mobilités éco-responsables"
+  ],
+  "type_specific": {
+    "administratif": {
+      "service": "Bourses de mobilité éco-responsable",
+      "contact": {
+        "email": "polytechgreen@polytech-reseau.org",
+        "telephone": ""
+      }
+    }
+  }
+}

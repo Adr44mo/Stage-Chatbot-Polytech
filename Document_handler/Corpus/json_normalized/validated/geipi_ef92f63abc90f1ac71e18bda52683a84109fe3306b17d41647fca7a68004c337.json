@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Informatique Automatique Robotique Réseaux"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_informatique_automatique_robotique_reseaux.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-informatique-automatique-robotique-reseaux/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Informatique Automatique Robotique Réseaux\n## Polytech Nancy\nPrésentation Polytech Nancy, composante de l’Université de Lorraine, est membre de la Conférence des Grandes Ecoles. C’est une école citoyenne et innovante qui forme en 5 ans, depuis 1960, des ingénieurs responsables pour l’entreprise et la société. Les 6 000 ingénieurs de Polytech Nancy travaillent dans tous les secteurs de l’économie et occupent des fonctions […]",
+  "tags": [],
+  "type_specific": {}
+}

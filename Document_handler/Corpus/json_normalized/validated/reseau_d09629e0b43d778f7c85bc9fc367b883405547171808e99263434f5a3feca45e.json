@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Sportif de haut niveau"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/sportif_de_haut_niveau.json",
+    "url": "https://www.polytech-reseau.org/category/sportif-de-haut-niveau/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Sportif de haut niveau\n## Une médaille d’argent aux Jeux Mondiaux Universitaires d’Hiver pour Margaux Herpin\nMargaux Herpin, étudiante en 2e année de cycle préparatoire à Polytech Grenoble, a décroché la médaille d’argent en snowboardcross lors des Jeux Mondiaux Universitaires d’hiver à Turin, qui se sont déroulés du 13 au 23 janvier 2025. Cette performance vient couronner un parcours déjà riche en réussites. En 2021 etLire la suite…",
+  "tags": [],
+  "type_specific": {}
+}

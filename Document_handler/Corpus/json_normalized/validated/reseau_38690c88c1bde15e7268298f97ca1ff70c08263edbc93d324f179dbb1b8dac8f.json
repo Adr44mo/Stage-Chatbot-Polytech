@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Comment l’interclassement des étudiants est-il réalisé au niveau national pour les affectations dans les spécialités ?"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/comment_linterclassement_des_etudiants_est_il_realise_au_niveau_national_pour_les_affectations_dans_les_specialites.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/comment-linterclassement-des-etudiants-est-il-realise-au-niveau-national-pour-les-affectations-dans-les-specialites/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Comment l’interclassement des étudiants est-il réalisé au niveau national pour les affectations dans les spécialités ?\n*Publié parService Commle28 mars 202428 mars 2024*\nL’interclassement est réalisé en tenant compte de la note du bac, des résultats des 3 premiers semestres PeiP et des notes des modules spécifiques PeiP. Il y a un interclassement pour le parcours PeiP A et un autre pour le parcours PeiP B.\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

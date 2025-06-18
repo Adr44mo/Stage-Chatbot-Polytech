@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Alternance"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/alternance.json",
+    "url": "https://www.polytech-reseau.org/category/alternance/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Alternance\n## Comment l’IA influence le sport\nLilian Bergamaschi est élève ingénieur en 4e année en spécialité informatique et statistique à Polytech Lille. Il effectue son cycle ingénieur en apprentissage au Stade Rochelais. Il nous fait découvrir comment certaines données sont exploitées dans le rugby. « Il y a une cellule scientifique au sein du club pour l’accompagnementLire la suite…",
+  "tags": [],
+  "type_specific": {}
+}

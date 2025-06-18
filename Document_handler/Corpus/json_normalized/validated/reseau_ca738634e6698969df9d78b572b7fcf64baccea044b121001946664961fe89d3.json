@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Quelle doit être la durée de ma mobilité ?"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/quelle_doit_etre_la_duree_de_ma_mobilite.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/quelle-doit-etre-la-duree-de-ma-mobilite/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Quelle doit être la durée de ma mobilité ?\n*Publié parService Commle31 janvier 202431 janvier 2024*\nVotre période de stage à l’étranger doit durer de 2 mois à 12 mois\nVotre période d’études à l’étranger doit durer de 3 mois à 12 mois\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

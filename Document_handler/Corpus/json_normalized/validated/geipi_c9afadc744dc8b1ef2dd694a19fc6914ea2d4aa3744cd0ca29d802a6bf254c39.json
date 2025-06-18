@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Génie des matériaux"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_genie_des_materiaux.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-genie-des-materiaux/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Génie des matériaux\n## EEIGM Nancy – Groupe INP\nPrésentation Créée en 1991, l’École Européenne d’Ingénieurs en Génie des Matériaux (EEIGM) fait partie de Lorraine INP à l’Université de Lorraine. École publique internationale en 5 ans, l’EEIGM est habilitée par la Commission des Titres d’Ingénieur (CTI). L’école s’appuie sur un consortium de 6 universités situées en France, Allemagne, Espagne, Suède et Belgique. Grâce à son […]",
+  "tags": [],
+  "type_specific": {}
+}

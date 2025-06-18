@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Contact - Réseau Polytech"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/contact_reseau_polytech.json",
+    "url": "https://www.polytech-reseau.org/contact/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "## Send us a message\n#### Find us at the office\nStrada Povernei, nr 20BucharestRomania\n#### Give us a ring\nJohn Doe+40 712 345 678Mon – Fri, 8:00-22:00\n#### Legal information\nJohn Doe Co.Fiscal Code: 12345678",
+  "tags": [],
+  "type_specific": {}
+}

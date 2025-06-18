@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Agenda"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/agenda.json",
+    "url": "https://www.geipi-polytech.org/agenda/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "Accueil/Agenda\n# Agenda\n- Téléchargez la liste des journées portes ouvertes des écoles du Concours Geipi Polytech [PDF - 17,5 KO]\n2 juin 2025\n## Résultats du concours\nLa phase d'admission aux écoles du Geipi Polytech débute le 2 juin 2025.\n- Espace candidat\n- Contact",
+  "tags": [],
+  "type_specific": {}
+}

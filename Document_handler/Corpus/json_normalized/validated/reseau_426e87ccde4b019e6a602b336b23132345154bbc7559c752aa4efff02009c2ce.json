@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Archives des Getting Started - Réseau Polytech"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/archives_des_getting_started_reseau_polytech.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq_group/getting-started/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "## Your First FAQ Question\nYour relevent FAQ answer.",
+  "tags": [],
+  "type_specific": {}
+}

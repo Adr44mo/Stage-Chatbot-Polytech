@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "DRRS"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/drrs.json",
+    "url": "https://www.polytech-reseau.org/category/drrs/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# DRRS\n## Chloé Blavier « Grâce à Polytech Green, j’ai pu effectuer mon voyage en utilisant exclusivement le train, ce qui a significativement réduit les émissions de gaz à effet de serre ».\nChloé Blavier, Génie biologie, Polytech Nice Sophia J’ai effectué un stage à l’Institut Médico-Légal de Munich de mai 2024 à fin août 2024, dans le cadre de ma quatrième année en Génie biologique à Polytech Nice Sophia. Le sujet de mon stage portait sur la toxicologie médico-légale, avec un focusLire la suite…",
+  "tags": [],
+  "type_specific": {}
+}

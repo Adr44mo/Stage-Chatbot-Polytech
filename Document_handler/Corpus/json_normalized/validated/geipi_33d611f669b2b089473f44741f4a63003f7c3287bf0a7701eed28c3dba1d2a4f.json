@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Systèmes numériques pour la production industrielle"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_systemes_numeriques_pour_la_production_industrielle.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-systemes-numeriques-pour-la-production-industrielle/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Systèmes numériques pour la production industrielle\n## ISTY UVSQ Paris-Saclay\nPrésentation Au cœur des bassins d’emplois d’exception de l’ouest parisien, l’Institut des Sciences et Techniques des Yvelines forme des ingénieurs en 5 ans dans les domaines de l’informatique, de la mécatronique / robotique, des systèmes électroniques embarqués et des systèmes numériques pour l’industrie. L’ISTY est une école publique d’ingénieurs multi-sites où chacune des formations proposées […]",
+  "tags": [],
+  "type_specific": {}
+}

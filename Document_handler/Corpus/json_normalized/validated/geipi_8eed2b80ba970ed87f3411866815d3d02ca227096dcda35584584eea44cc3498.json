@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Génie Biologique et Alimentaire"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_genie_biologique_et_alimentaire.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-genie-biologique-et-alimentaire/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Génie Biologique et Alimentaire\n## Polytech Lille\nPrésentation Au cœur d’une grande université L’école est au cœur de l’Université de Lille, université pluridisciplinaire d’excellence au cœur de l’Europe du Nord, riche d’un patrimoine culturel et scientifique exceptionnel inscrit dans l’histoire de la région des Hauts-de-France. La recherche et le développement Au service de l’innovation s’illustrent dans cinq domaines de compétences?: Génie biologique […]",
+  "tags": [],
+  "type_specific": {}
+}

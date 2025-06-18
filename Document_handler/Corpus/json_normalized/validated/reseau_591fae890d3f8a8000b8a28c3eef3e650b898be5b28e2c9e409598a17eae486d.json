@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Je suis sportif ou artiste de haut niveau, comment allier passion et études ?"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/je_suis_sportif_ou_artiste_de_haut_niveau_comment_allier_passion_et_etudes.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/je-suis-sportif-ou-artiste-de-haut-niveau-comment-allier-passion-et-etudes/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Je suis sportif ou artiste de haut niveau, comment allier passion et études ?\n*Publié parService Commle3 avril 2024*\nLe réseau Polytech vous propose un dispositif d’accueil et d’accompagnement personnalisé vous permettant de mener votre projet sportif ou artistique tout en poursuivant vos études d’ingénieur.\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Polytech Tours : 1re édition des 24h de l’impression 3D"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/polytech_tours_1re_edition_des_24h_de_limpression_3d.json",
+    "url": "https://www.polytech-reseau.org/polytech-tours-1re-edition-des-24h-de-limpression-3d/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Polytech Tours : 1re édition des 24h de l’impression 3D\n*Publié parService Commle15 mars 202215 mars 2022*\n## 24h de défis autour de l’impression 3D du 29 au 30 avril 2022 dans les locaux de Polytech Tours\nVous êtes étudiant·e, ou lycéen·ne, vous êtes passionné·e d’impression 3D ? Alors venez relever des défis avec votre imprimante 3D !\nLes 24h3D vous donneront l’occasion de vous dépasser seul ou par équipe de trois maximum, à travers des épreuves libres et imposées. Durant 24h, vous allez devoir répondre à deux challenges ! Laissez libre cours à votre imagination pour créer la pièce de votre choix avant de reproduire l’objet mystère pensé par Polytech Tours.Ce n’est pas tout ! Des entreprises spécialisées seront également présentes pour vous démontrer le potentiel de cette technologie au sein des industries.\nInscrivez-vous dès maintenant pour tenter de remporter une imprimante 3D",
+  "tags": [],
+  "type_specific": {}
+}

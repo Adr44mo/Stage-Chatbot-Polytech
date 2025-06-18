@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Technologies pour l'énergie, l'aérospatial et la motorisation"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_technologies_pour_l_energie_l_aerospatial_et_la_motorisation.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-technologies-pour-lenergie-laerospatial-et-la-motorisation/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Technologies pour l'énergie, l'aérospatial et la motorisation\n## Polytech Orléans\nPrésentation Polytech Orléans forme en 5 ans, des ingénieur.e.s avec un haut niveau scientifique. Le Parcours des écoles d’ingénieur.e.s Polytech (PeiP ou cycle préparatoire) se déroule dans les locaux de l’école. L’école encourage ses élèves à s’impliquer en marge de la formation, dans des activités associatives, sportives et culturelles, essentielles dans l’apprentissage du métier d’ingénieur. […]",
+  "tags": [],
+  "type_specific": {}
+}

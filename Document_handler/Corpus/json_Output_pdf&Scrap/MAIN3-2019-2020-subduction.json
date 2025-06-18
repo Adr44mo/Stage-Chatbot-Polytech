@@ -1,0 +1,17 @@
+{
+  "source": "scraped_sorbonne",
+  "file_name": "MAIN3-2019-2020-subduction.pdf",
+  "pdf_path": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/pdf_scrapes/MAIN3-2019-2020-subduction.pdf",
+  "specialty": "NA",
+  "content": "Qu’est-ce qu’une subduction et un prisme d’’accrétion ? Notre modèle à t = 1.66 Ma La Vallée du Bès et son prisme d’accrétion Date à laquelle le pétrole a dépassé 120 ̊C (en secondes) Un prisme d'accrétion est une structure géologique et qui se trouve au niveau d'une zone de subduction. La plaque océanique plongeante fait s'accumuler les sédiments sous forme d’un prisme contre la plaque chevauchante. Pour modéliser tout modèle, il est nécessaire de définir des conditions initiales afin de trouver une solution au système étudié. C’est le même principe que l’on retrouve dans la résolution d’équations différentielles et de problèmes de Cauchy. Nous retrouvons ces conditions initiales ci-dessus. Modélisation de la subduction de la croûte océanique et de la formation d’un prisme d’accrétion Traore Aminata Khlifi Rihab Guisse Amadou-Bely Kissi Mohamed Halouis Thomas - MAIN 3 - 2019/2020 Encadrant : Laetitia Le Pourhiet Notre modèle à l’instant t = 0 Conclusion Notre simulation nous montre où forer afin de trouver un maximum de pétrole. Cela représente une économie substantielle pour l’industrie pétrolière. Nous avons pu observer que le résultat de notre simulation est très réaliste, elle est très semblable aux prismes que l’on retrouve en France. Ainsi, nous pouvons conclure sur l’importance qu’ont les mathématiques appliquées à l’informatique au sein d’une entreprise d’un secteur qui est à priori complètement différent. Nous avons commencé par modéliser sur Matlab la plaque plongeante. L’un des supercalculateurs de l’université et un modèle mathématique fournis par notre encadrante vont nous permettre de simuler la déformation de la plaque océanique. Afin d’étudier cette déformation, nous avons discrétisé la plaque dans le but de nous permettre de comprendre comment la discrétisation de la plaque allait modifier nos résultats. Ci-dessous, nous pouvons observer les modifications du sol après 1.66 Ma. Grâce au modèle et au logiciel de visualisation Paraview nous avons pu modéliser et représenter l’apparition des failles géologiques en rouge-orangé liées à la formation d’un prisme d’accrétion. Nous avons également fait apparaître trois gradients de température représentant de haut en bas 60°, 90°et 120°C. Ces gradients sont très important dans l’univers de la géologie car ils représentent les domaines des fenêtres à gaz et à huile. Ces fenêtres sont les lieux de formation du gaz et du pétrole. Il est indispensable aux entreprises pétrolières de pouvoir déterminer où ces fenêtres se situent. Avec les données thermiques de notre simulation, nous pouvons obtenir des informations sur l’état du pétrole en profondeur sans avoir à forer le sol grâce à Paraview. L’image ci-dessus nous montre en rouge quels sont les endroits où le pétrole a dépassé 120 °C et donc devient inutilisable.",
+  "metadata": {
+    "title": "MAIN3-2019-2020-subduction.pdf",
+    "auteurs": [],
+    "date": null,
+    "title_2": "MAIN3 2019 2020 subduction",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/formations/mathematiques-appliques-et-informatique",
+    "last_modified": "2025-06-18T10:47:41.246926",
+    "hash": "6ab98d23aeb3304fb77e5331ffc3ec5236104a20f3493f8bb833a49c092918b7",
+    "scraped_at": "2025-06-18T10:47:41.254223"
+  }
+}

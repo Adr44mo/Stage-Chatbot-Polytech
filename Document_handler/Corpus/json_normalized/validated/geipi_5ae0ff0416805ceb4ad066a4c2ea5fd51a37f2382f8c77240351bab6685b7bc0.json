@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Energies, hydrogène"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_energies_hydrogene.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-energies-hydrogene/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Energies, hydrogène\n## ENSIBS Lorient-Vannes\nPrésentation Implantée au sein de l’Université de Bretagne-Sud, l’Ecole Nationale Supérieure d’Ingénieurs de Bretagne-Sud (ENSIBS) propose 6 spécialités d’ingénieurs et trois parcours préparatoires (PEI-A et PEI-D). Située sur deux campus, l’ENSIBS accueille au sein de ses propres bâtiments et notamment à Lorient, dans ses locaux neufs et modernes, de l’enseignement, des laboratoires de recherche et […]",
+  "tags": [],
+  "type_specific": {}
+}

@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Mécanique"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/mecanique.json",
+    "url": "https://www.polytech-reseau.org/ingenieur-mecanique/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Mécanique\nCe domaine forme des ingénieurs capables de concevoir et de développer des produits et des systèmes mécaniques incluant les aspects hydrodynamiques, structures, vibrations, contrôle et matériaux. Ils s’appuient sur des méthodes de calcul et d’optimisation d’éléments de machines et de structures mécaniques dans le domaine de l’industrialisation des produits.\nLes compétences et savoir-faire que vous souhaitez acquérir :\n- Conception et développement des produits et des systèmes mécaniques incluant les aspects hydrodynamiques, structures, vibrations, contrôle et matériaux.\n## Débouchés\nCes ingénieurs du domaine mécanique exercent des responsabilités dans des activités de recherche industrielle, de mise en place et d’exploitation de systèmes de production, principalement dans l’automobile, l’aéronautique, l’horlogerie, la construction, les transports, l’énergie.\nLes écoles concernées\nFormation initiale sous statut étudiantFormation initiale sous statut apprentiFormation continue",
+  "tags": [],
+  "type_specific": {}
+}

@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Polytech roule pour le téléthon !"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/polytech_roule_pour_le_telethon.json",
+    "url": "https://www.polytech-reseau.org/polytech-roule-pour-le-telethon/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Polytech roule pour le téléthon !\n*Publié parService Commle30 novembre 202130 novembre 2021*\nDu29 novembre au 4 décembre 2021, les élèves du réseau Polytech organisent une opération de solidarité en collaboration avec l’AFM-Téléthon. Le principe est simple :à chaque kilomètre parcouru en vélo, un euro collecté !\nPolytech roule pour le Téléthon (PRT)est un événement sportif à caractère humanitaire organisé par les BDE des 15 écoles Polytech, coordonné par la FEDERP et en collaboration avec l’AFM-Téléthon.\n1 km parcouru = 1€ reversé\nLes Bureaux Des Elèves des écoles du réseau Polytech mettront à disposition du matériel sportif à destination des personnels et étudiants.En 2019, 6 152 km ont été parcourus et 5 900 € récoltés: un record à battre cette année !\nL’implication des élèves dans cette action nationale marque l’engagement du réseau Polytech à apporter sa contribution pour faire avancer la recherche scientifique et donner les moyens, aux malades et à leurs familles, de s’organiser dans leur vie quotidienne.",
+  "tags": [],
+  "type_specific": {}
+}

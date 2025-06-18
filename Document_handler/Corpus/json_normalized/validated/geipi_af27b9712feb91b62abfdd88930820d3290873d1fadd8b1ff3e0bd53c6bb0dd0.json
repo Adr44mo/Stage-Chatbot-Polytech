@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Génie des Matériaux de structures et Procédés"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_genie_des_materiaux_de_structures_et_procedes.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-genie-des-materiaux-de-structures-et-procedes/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Génie des Matériaux de structures et Procédés\n## ENIT Tarbes\nPrésentation L’ENIT Tarbes, école interne de l’Université de Technologie de Tarbes Occitanie Pyrénées (UTTOP) compte 1 200 élèves et diplôme chaque année 210 ingénieurs. Elle se trouve à Tarbes, ville nature très dynamique, située entre mer, montagne (à quelques kilomètres des stations de ski) et océan (1h15 de route). L’ENIT Tarbes forme des ingénieurs généralistes, […]",
+  "tags": [],
+  "type_specific": {}
+}

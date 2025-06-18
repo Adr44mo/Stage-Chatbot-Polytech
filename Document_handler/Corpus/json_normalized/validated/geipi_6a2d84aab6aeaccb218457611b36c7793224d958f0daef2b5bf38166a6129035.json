@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Gaëlle – Polytech Nantes Promotion 2018"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/gaelle_polytech_nantes_promotion_2018.json",
+    "url": "https://www.geipi-polytech.org/temoignage/gaelle-polytech-nantes-promotion-2018/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Gaëlle – Polytech Nantes Promotion 2018\n# Gaëlle – Polytech Nantes Promotion 2018\n- Espace candidat\n- Contact",
+  "tags": [],
+  "type_specific": {}
+}

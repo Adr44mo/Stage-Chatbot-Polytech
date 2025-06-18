@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Le mag entreprises"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/le_mag_entreprises.json",
+    "url": "https://www.polytech-reseau.org/le-mag-entreprises/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Le mag entreprises\nLe réseau Polytech vous propose ces magazines ayant pour vocation de vous faire découvrir ou redécouvrir le réseau Polytech au travers de différentes réalisations qui y sont présentées.",
+  "tags": [],
+  "type_specific": {}
+}

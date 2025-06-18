@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Electronique informatique"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_electronique_informatique.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-electronique-informatique/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Electronique informatique\n## Polytech Sorbonne\nPrésentation Créée en 2005, Polytech Sorbonne résulte de la volonté de créer un grand pôle de formation d’ingénieurs afin de répondre aux besoins de l’industrie française. Sorbonne Université, à laquelle l’école est rattachée, est une université d’excellence en sciences, lettres et médecine.Les élèves-ingénieurs de l’école bénéficient d’une formation scientifique délivrée par des enseignants-chercheurs de pointe […]",
+  "tags": [],
+  "type_specific": {}
+}

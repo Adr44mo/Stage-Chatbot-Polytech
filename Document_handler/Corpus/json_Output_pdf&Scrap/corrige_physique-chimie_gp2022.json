@@ -1,0 +1,17 @@
+{
+  "source": "scraped_geipi",
+  "file_name": "corrige_physique-chimie_gp2022.pdf",
+  "pdf_path": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/pdf_scrapes/corrige_physique-chimie_gp2022.pdf",
+  "specialty": "NA",
+  "content": "1 / 2 Document réponses Physique-Chimie EXERCICE I I-1- Sens :  ሬ⃗  ሬ⃗ I-2- Polarité :  Positive  Négative I-3- 2e loi de Newton : ሬ⃗= ሬ⃗ I-4- Composantes vecteur accélération : ax = ay =0 I-5- Composantes vecteur vitesse : vx = vy = v0 I-6- Evolution de la norme :  a  b  c  d  e  f I-7- Equations horaires : x = y = I-8- Equation de la trajectoire : y = ට I-9- Expr. Litt. : yC = ට Appl. Num. : yC = 3.5 mm I-10- Choisir la bonne réponse  Si la masse de la particule double, alors la hauteur de C double aussi  Si la masse de la particule double, alors la particule mettra 4 fois plus de temps pour arriver en C  Pour une même particule, si sa vitesse initiale est 4 fois plus grande, alors le point C est 2 fois plus haut.  Si le champ électrique est 4 fois plus petit, la particule met deux fois plus de temps pour arriver en C.  Si le champ électrique est 4 fois plus grand, la hauteur du point C sera deux fois plus grande EXERCICE II II-1- Représentation de Lewis : II-2- pH = 13.7 II-3- Sens de parcours II-4- Electrode Polarité Gaz dégagée Transformation Anode + O2 Oxydation Cathode - H2 Réduction 2 / 2 II-5-a Q= I ∆t II-5-b n(H2) = = II-5-c n(H2) = 3.11⨯ 10-2 mol II-6- (cocher la réponse exacte) II-7- Masse : m(H2O) = 9 tonnes EXERCICE III III-1- Intensité : i(t) = III-2- Relation : q = C uc III-3- (cocher la réponse exacte)  − =  + =  + =  + =  + =  − =  + =  − = III-4- Unité de τ : (cocher la réponse exacte)  V  C  F  A  Ω  s  V-1  C -1  F -1  A -1  Ω-1  s -1 III-5-  Courbe a  Courbe b  Courbe c III-6- valeur maximale : Uc,max = E III-7- Explication du tracé : Méthode 1 : tracé de la tangente à l’origine et intersection avec l’axe des abscisses. Ou Méthode 2 : valeur de t lorsque uc = 0,37×7,4 = 2,7 V, intersection avec la courbe. τexp = 3,9 s III-8- Expr. Litt. : A = Appl. Num. : A = 5,70 10-4 L/nF 0 2 4 6 8 0 2 4 6 8 10 12 14 16 18 20 t (en s) uc (en V)",
+  "metadata": {
+    "title": "corrige_physique-chimie_gp2022.pdf",
+    "auteurs": [],
+    "date": null,
+    "title_2": "Corrige physique chimie gp2022",
+    "url": "https://www.geipi-polytech.org/annales-du-concours-geipi-polytech/",
+    "last_modified": "2022-05-05T16:49:35",
+    "hash": "db3eac5ac82ef27b32192f6c9d72791a1a11aed76d09cb0c0c67b8780d5c6d94",
+    "scraped_at": "2025-06-18T11:03:19.499803"
+  }
+}

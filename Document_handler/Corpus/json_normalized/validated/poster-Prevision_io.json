@@ -1,0 +1,44 @@
+{
+  "document_type": "projet",
+  "content": "Détection d’anomalies dans les séries temporelles Maxime LAFONT-TREVISAN, Michele BONA, Rihab KHLIFI, Héloïse VIOSSAT Polytech Sorbonne Détection d’anomalies dans les séries temporelles Maxime LAFONT-TREVISAN, Michele BONA, Rihab KHLIFI, Héloïse VIOSSAT Polytech Sorbonne Le projet L’entreprise à l’origine du projet est Prévision.io, créée en 2016, qui cherche à démocratiser l’accès à l’Intelligence Artiﬁcielle et l’utilisation de l’apprentissage au- tomatique. Elle propose des plateformes d’analyses de données pour des scientiﬁques des données ainsi que pour des personnes inexpérimentées. Le but de notre projet est de mettre en oeuvre des méthodes pertinentes aﬁn de détecter des anomalies dans des séries temporelles, c’est à dire : “Les observations qui dérivent à un tel point des autres observations que l’on peut suspecter qu’elles ont été générées par un mécanisme diﬀérent” — Hawkins (1980). Il existe de nombreuses méthodes réalisant cette tâche. Notre objectif est de les analyser et de sélectionner les meilleures aﬁn de concevoir une méthode eﬃcace de détection d’anomalies dans les séries temporelles. Méthodologie Aﬁn de réaliser ce projet nous avons commencé par une phase de recherche sur les multiples méthodes de détection d’anomalies dans les séries temporelles existantes qui nous à permis de faire une première Figure1: Etapes de la méthodologie du projet sélection de celles-ci. Nous avons ensuite testé les méthodes sélec- tionnées et retenu les meilleures. Pour ce faire, nous avons suivie la méthodologie suivante de la Figure 1. Suite à la phase de test des méth- odes, nous avons choisi la méthode du test de Grubbs, Isolation Forest et Prophet que nous détaillerons par la suite. Test des méthodes Pour chaque méthode testée nous calculons sa précision, c’est à dire le nombre d’anomalies correctement détectées par rapport aux nombre d’anomalies total; son rappel, c’est à dire le nombre d’anomalies correctement détectées par rapport aux nombre d’anomalies détectées; son F-score, qui combine les deux métriques précé- dentes et son temps d’exécution. Figure2: Détection d’anomalies à l’aide d’Isolation Forest sur le jeu de données artiﬁciel 1 Chaque méthode permet de détecter plus ou moins d’anomalies, plus ou moins correctement. Les performances d’une méthode varient beaucoup selon le jeu de données. Isolation Forest Nous avons utilisé la méthode Isolation Forest de la bibliothèque sklearn. Cette méthode permet de détecter les anomalies dans un jeu de données de manière non supervisée. Elle sépare notre jeu de données en fonction d’une valeur seuil choisie aléatoirement entre le maximum et le minimum de la série. On classe alors toutes les valeurs du jeu de données dans un arbre de décision en fonction de ce seuil, toutes les valeurs inférieures seront à gauche et celles supérieures, à droite. On réitère ensuite l’opération suivant une autre valeur seuil dans chaque sous-arbre créé, jusqu’à avoir isolé chaque donnée. Enﬁn les valeurs qui ont été les plus simples à isoler (les plus petites branches de l’arbre) sont considérées comme des anomalies. Figure3: Fonctionnement d’Isolation Forest Test de Grubbs Le test de Grubbs est une méthode statistique paramétrique qui consiste à tester une par une les valeurs les plus éloignées de la moyenne de la série aﬁn de voir s’il s’agit d’une anomalie. Lorsque l’on trouve une valeur qui n’est pas considérée comme telle, la méthode s’arrête. Pour chaque valeur xi testée, on calcule son z-score : Zscore(xi) = xi −µ σ (1) Où µ et σ sont respectivement la moyenne et l’écart-type de notre variable. Puis on le compare à une valeur critique G, calculée comme suit : G = N −1 √ N v u u u u u u u u u u t (t α 2N,N−2)2 N −2 + (t α 2N,N−2)2 (2) Où N est la taille du jeu de donnée et α la sensibilité du test. Si le z-score est supérieur à G, alors la valeur est considérée comme une anomalie. Prophet Alibi-detect est une librairie de détection d’anomalies utilisée surtout dans le cas des séries temporelles. Cette librairie contient de nombreuses méthodes de détection. Nous utiliserons la méthode de détection Prophet. Prophet est une méthode de prévision des données dans des séries temporelles basée sur un modèle additif de régression linéaire non paramétrique. Dans la méthode Prophet, la variable à expliquer est ajustée à partir des données fournies et non pas, comme pour les autres méthodes de régression, selon une fonction d’estimation déterminée à l’avance. Création de nouvelles variables Pour accentuer les diﬀérences et les similarités entres les valeurs de notre série temporelle, nous avons créé de nouvelles variables qui dépendent de nos valeurs. Celles-ci nous servent à améliorer l’eﬃcacité de nos méth- odes de détections qui, appliquées sur ces variables, sont bien plus précises. Figure4: Fenêtre glissante de taille 2, diﬀérence avec les valeurs d’avant et après Ainsi pour le test de Grubbs nous avons pris pour chaque valeur la mé- diane des diﬀérences des valeurs au- tour (les 4 précédentes et 4 suiv- antes), et pour Isolation Forest la diﬀérence avec la valeur d’avant et la diﬀérence avec la valeur d’après (on applique ensuite la méthode sur les deux variables). Résultats Notre méthode ﬁnale consiste à combiner les trois méthodes précédentes en con- sidérant qu’une valeur détectée comme anormale par les trois méthodes est une anomalie \"sûre\"; par seulement deux méthodes, une anomalie \"simple\"; et par une méthode au plus, n’en est pas une. Figure5: Résultats de nos méthodes Voici les résultats obtenus sur un jeu de données réel provenant de l’entreprise EDF et représentant une consommation d’énergie : Figure6: Aﬃchage des résultats de la méthode ﬁnale sur le jeu de données réel EDF",
+  "metadata": {
+    "title": "Poster Prevision io",
+    "secteur": "",
+    "date": "2021-05-18T22:47:06",
+    "auteurs": []
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/pdf_scrapes/poster-Prevision_io.pdf",
+    "site": "scraped_sorbonne",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/formations/mathematiques-appliques-et-informatique"
+  },
+  "tags": [
+    "détection d'anomalies",
+    "séries temporelles",
+    "apprentissage automatique",
+    "Intelligence Artificielle",
+    "méthodes statistiques",
+    "Isolation Forest",
+    "test de Grubbs",
+    "Prophet",
+    "analyse de données",
+    "précision",
+    "rappel",
+    "F-score",
+    "jeux de données",
+    "méthodologie",
+    "variables",
+    "consommation d'énergie",
+    "EDF"
+  ],
+  "type_specific": {
+    "projet": {
+      "client": "Prévision.io",
+      "techno": [
+        "Python",
+        "sklearn",
+        "Alibi-detect"
+      ]
+    }
+  }
+}

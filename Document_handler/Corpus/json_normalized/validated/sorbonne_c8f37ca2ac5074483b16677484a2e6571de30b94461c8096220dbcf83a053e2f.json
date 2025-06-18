@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "RECRUTER VOS STAGIAIRES - Cloned | Polytech Sorbonne"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/json_scrapes/recruter_vos_stagiaires_cloned_polytech_sorbonne.json",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/recruter-vos-stagiaires-cloned",
+    "site": "polytech.sorbonne-universite.fr"
+  },
+  "content": "## RECRUTER VOS STAGIAIRES - Cloned\n## Diffusion d'offres de stage\nLes offres de stages sont a envoyer au Pôle entreprisesiciElles seront présentées aux responsables de spécialité qui les relaieront à leurs élèves après en avoir apprécié le contenu.",
+  "tags": [],
+  "type_specific": {}
+}

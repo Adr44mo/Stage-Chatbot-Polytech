@@ -4,18 +4,23 @@ import fitz  # PyMuPDF
 import re
 from pathlib import Path
 
+# Setup paths
 DOCUMENT_HANDLER_DIR = Path(__file__).parent.parent
 CORPUS_DIR = DOCUMENT_HANDLER_DIR / "Corpus"
 SCRAPPING_DIR = DOCUMENT_HANDLER_DIR / "scraping"
 
 INPUT_DIRS = {
     "pdf_manual": CORPUS_DIR / "pdf_man",
-    #"pdf_scraped": CORPUS_DIR / "pdf_scrap"
+    
+    "scraped_geipi": SCRAPPING_DIR / "data_sites" / "geipi_polytech" / "pdf_scrapes",
+    "scraped_reseau": SCRAPPING_DIR / "data_sites" / "polytech_réseau" / "pdf_scrapes",
+    "scraped_sorbonne": SCRAPPING_DIR / "data_sites" / "polytech_sorbonne" / "pdf_scrapes"
 }
 
 OUTPUT_DIR = CORPUS_DIR / "json_Output_pdf&Scrap"
-
 os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+# --- Text extraction and cleaning ---
 
 def clean_text(text):
     text = re.sub(r"[^\x09\x0A\x0D\x20-\x7E\u00A0-\uFFFF]", "", text)
@@ -30,6 +35,8 @@ def extract_text_lines(pdf_path):
     except Exception as e:
         print(f"❌ Erreur PDF {pdf_path}: {e}")
         return []
+
+# --- Metadata guessing ---
 
 def guess_title(lines):
     for line in lines[:10]:
@@ -61,16 +68,20 @@ def guess_date(lines):
                 return match.group(1)
     return None
 
-def process_pdf_file(file_path, source_key, specialty="NA"):
+# --- PDF processor ---
+
+def process_pdf_file(file_path, source_key, specialty="NA", extra_metadata=None):
     lines = extract_text_lines(file_path)
     if not lines:
         return None
 
     full_text = "\n".join(lines)
+    file_name = os.path.basename(file_path)
+
     doc_json = {
         "source": source_key,
-        "file_name": os.path.basename(file_path),
-        "pdf_path": os.path.abspath(file_path),
+        "file_name": file_name,
+        "pdf_path": str(file_path),
         "specialty": specialty,
         "content": clean_text(full_text),
         "metadata": {
@@ -79,59 +90,58 @@ def process_pdf_file(file_path, source_key, specialty="NA"):
             "date": guess_date(lines)
         }
     }
+
+    if extra_metadata and file_name in extra_metadata:
+        doc_json["metadata"].update(extra_metadata[file_name])
+
     return doc_json
 
-def augment_with_scraped_metadata(doc, pdf_path):
-    """
-    TODO: Enhance the document JSON with additional metadata from scraping.
-    For example, if a file 'my_doc.pdf' exists, we might look for:
-    - 'my_doc.json' in the same folder (sidecar metadata)
-    - or use a database / pre-parsed metadata file.
-    
-    Example expected metadata fields:
-      - url: original web page
-      - scrape_date: date of collection
-      - tags: list of tags/categories
-
-    For now, this is a placeholder.
-    """
-    # Stub logic — customize this based on how scraped metadata is stored
-    metadata_path = os.path.splitext(pdf_path)[0] + ".meta.json"
-    if os.path.exists(metadata_path):
-        try:
-            with open(metadata_path, "r", encoding="utf-8") as f:
-                scraped_meta = json.load(f)
-            # Merge safely
-            doc["metadata"].update(scraped_meta)
-        except Exception as e:
-            print(f"⚠️ Erreur lecture metadata pour {pdf_path}: {e}")
-    else:
-        print(f"ℹ️ Aucun fichier de metadata pour {pdf_path}")
-
+# --- Main execution logic ---
 
 def run():
     count = 0
+
     for source_key, input_dir in INPUT_DIRS.items():
-        for root, dirs, files in os.walk(input_dir):
-            specialty = os.path.relpath(root, input_dir).split(os.sep)[0]
+        is_scraped = source_key.startswith("scraped_")
+        pdf_metadata_map = {}
+
+    
+        if is_scraped:
+            # 🔍 Load map one level up from pdf_scrapes
+            map_path = input_dir.parent / "pdf_map.json"
+            print(f"🔍 Chargement des métadonnées pour {source_key} depuis {map_path}")
+            if map_path.exists():
+                try:
+                    with open(map_path, "r", encoding="utf-8") as f:
+                        pdf_metadata_map = json.load(f)
+                except Exception as e:
+                    print(f"⚠️ Erreur lecture de {map_path}: {e}")
+            else:
+                print(f"ℹ️ Aucun fichier pdf_map.json trouvé pour {source_key}")
+
+        # Traverse PDFs
+        for root, _, files in os.walk(input_dir):
+            specialty = Path(root).relative_to(input_dir).parts[0] if root != str(input_dir) else "NA"
             for file in files:
                 if file.lower().endswith(".pdf"):
                     full_path = os.path.join(root, file)
                     print(f"⏳ Traitement : {file} ({source_key})")
-                    doc = process_pdf_file(full_path, source_key, specialty)
+                    doc = process_pdf_file(
+                        full_path,
+                        source_key,
+                        specialty=specialty,
+                        extra_metadata=pdf_metadata_map if is_scraped else None
+                    )
                     if doc:
                         output_filename = os.path.splitext(file)[0] + ".json"
-                        output_path = os.path.join(OUTPUT_DIR, output_filename)
+                        output_path = OUTPUT_DIR / output_filename
                         with open(output_path, "w", encoding="utf-8") as f:
                             json.dump(doc, f, ensure_ascii=False, indent=2)
                         count += 1
-    # TODO augment_with_scraped_metadata
-    #if doc:
-    #    if source_key == "pdf_scraped":
-    #        augment_with_scraped_metadata(doc, full_path)
 
     print(f"\n✅ {count} fichiers JSON générés dans : {OUTPUT_DIR}")
 
+# --- Entry point ---
 if __name__ == "__main__":
     print("🔄 Démarrage du traitement des PDF...")
     run()

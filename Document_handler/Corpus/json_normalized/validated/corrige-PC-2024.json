@@ -1,0 +1,39 @@
+{
+  "document_type": "specialite",
+  "content": "1 / 2 Document réponses Physique-Chimie EXERCICE I I-1- Exp. Litt. : f = avec c la célérité de la lumière Appl. Num. : f = 6 x 1014 Hz I-2-  Corpusculaire  Modulaire ☒ Ondulatoire (cocher la réponse exacte)  Particulaire  Réfléchissante  Réfractaire I-3- (cocher la réponse exacte)  ☒      I-4- Largeur : L = 2,0 cm I-5- Exp. Litt. : a = , Appl. Num. : a = 60 µm I-6- (cocher la réponse exacte)      ☒  I-7- Interfrange : i = 0,40 cm I-8-  =  = 2 ☒ =  i = ට λ  2= 2 (cocher la réponse exacte) Appl. Num. : b = 125 µm EXERCICE II II-1- Formule brute : C5H10O3 II-2- Schéma de Lewis et groupes fonctionnels Alcool Ester II-3- m éthanol = 460 g m acide lactique = 900 g 2 / 2 II-4- Composé X : H2O II-5- Rôle : Catalyseur II-6- II-7- t 1/2 = 70 s II-8- Vitesse instantanée (mol.s-1) Quotient réactionnel Qr t = 0s 0,060 0 t = 500s 0 2,25 II-9- Constante d’équilibre : K = 2,25 EXERCICE III III-1- Δ = -m g h III-2- Δ = ½ m VE² III-3- Exp. Litt. : VE = ඥ Appl. Num. : VE = 30 m.s-1 III-4- Exp. Litt. : P = m g Appl. Num. : P = 500 N III-5- Représentation des 2 vecteurs Echelle : 1 carreau pour 100 N III-6- Relation : ሬሬ⃗+ ሬሬ⃗= ሬ⃗ III-7- () = () = ቀ −ቁ III-8- () = + () = ቀ −ቁ III-9- Expressions littérales () = + () = ቀ −ቁ III-10- Appl. Num. : (2) = 36 m (2)=-18 m III-11- ☒ Avant le point K  exactement en K  après le point (cocher la réponse exacte) 0 1 2 3 4 5 6 7 8 9 10 0 100 200 300 400 500 n lactate d'éthyle (en mol) en fonction du temps(en s)",
+  "metadata": {
+    "title": "Corrige PC 2024",
+    "secteur": "",
+    "date": "2024-05-01T18:41:18",
+    "auteurs": []
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/pdf_scrapes/corrige-PC-2024.pdf",
+    "site": "scraped_geipi",
+    "url": "https://www.geipi-polytech.org/annales-du-concours-geipi-polytech/"
+  },
+  "tags": [
+    "Physique",
+    "Chimie",
+    "Célérité",
+    "Ondulatoire",
+    "Interfrange",
+    "Ester",
+    "Alcool",
+    "Catalyseur",
+    "Vitesse",
+    "Constante d'équilibre",
+    "Équations",
+    "Mécanique",
+    "Énergie",
+    "Réaction chimique",
+    "Schéma de Lewis"
+  ],
+  "type_specific": {
+    "specialite": {
+      "departement": "",
+      "responsable": "",
+      "description": "Document réponses Physique-Chimie contenant des exercices et des réponses."
+    }
+  }
+}

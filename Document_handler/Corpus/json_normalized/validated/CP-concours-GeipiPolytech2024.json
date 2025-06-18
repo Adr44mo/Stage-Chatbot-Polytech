@@ -1,0 +1,47 @@
+{
+  "document_type": "administratif",
+  "content": "Vandœuvre les Nancy, le 18 octobre 2023 Communiqué de presse Modalités des concours Geipi Polytech 2024 Les directeurs des écoles d’ingénieurs publiques du groupement Geipi Polytech se sont réunis en Assemblée Générale fin septembre. Ils ont établi un bilan des Concours 2023 et ont voté les modalités des Concours 2024. BILAN DES CONCOURS 2023 Les directeurs ont exprimé leur satisfaction face au bilan positif du concours Geipi Polytech Bac général : 24 247 bacheliers se sont inscrits en 2023, soit une augmentation de plus de 15 % par rapport à 2022. De plus, cette édition a été une nouvelle fois marquée par une hausse de la qualité des dossiers : 70 % des candidats inscrits au concours ont obtenu une mention B ou TB au baccalauréat et 87 % des intégrés ont obtenu une mention B ou TB au baccalauréat. Concernant le concours Bac technologique, le nombre de candidats est resté sensiblement le même que l’année précédente avec 836 bacheliers STI2D et STL inscrits. MODALITÉS DES CONCOURS 2024 Le concours Geipi Polytech 2024 proposera 3 812 places aux élèves de Terminale générale et Titulaires du Baccalauréat général 2023, ainsi que 195 places aux élèves de Terminale technologique et Titulaires du Baccalauréat STI2D ou STL 2023. • Déroulement du concours Bac général 1. Etude de dossier : notes de Première des spécialités mathématiques, physique-chimie et du Bac de français + notes de Terminale des 2 spécialités scientifiques (parmi mathématiques, physique- chimie, SVT, NSI et SI), de l'option maths complémentaires pour les candidats qui n'ont pas suivi la spécialité mathématiques et d'anglais ET 2. Epreuve écrite, d’une durée de 3h, qui aura lieu le mardi 30 avril 2024 dans près de 200 centres d’examen en France et à l’étranger :’un sujet de mathématiques (QCM basé sur le programme commun à la spécialité mathématiques et à l’option maths complémentaires) + deux sujets (exercices basés sur les programmes des spécialités) à choisir parmi : mathématiques, physique-chimie, SVT, NSI et SI. • Déroulement du concours Bac technologique séries STI2D et STL 1. Etude de dossier pour tous les candidats inscrits : notes de Première et de Terminale de mathématiques, de la spécialité « physique-chimie et mathématiques » + notes de Terminale de la 2e spécialité et d’anglais + notes du Bac de français 2. Les meilleurs dossiers seront convoqués à un entretien de motivation qui se déroulera fin avril- début mai. Les dossiers jugés insuffisants par le jury ne seront pas classés. P a g e 1 | 2 Contact presse Agnès MANGEL, Responsable administrative du Concours : Tél. 03.72.74 68 38 - Port. : 06 07 25 17 30 Courriel : communication@geipi-polytech.org NOMBRE DE PLACES OFFERTES EN 2024 (NC = Non concerné) Ecoles Bac Général Bac STI2D Bac STL EEIGM Nancy 82 NC NC ENIB Brest 120 NC NC ENIM Metz 124 12 NC ENISE Saint-Etienne 120 NC NC ENSGSI Nancy 50 NC NC ENIT Tarbes 150 12 ENSIBS Lorient Vannes 80 30 NC ENSIM Le Mans 35 NC NC ESGT Le Mans 35 5 NC ESIR Rennes 65 NC NC ESIROI La Réunion 34 4 2 Grenoble INP Esisar Valence 60 NC NC IMT Nord Europe 160 NC NC L’Institut Agro Dijon 27 + 27 BIO NC NC ISAT Nevers 90 NC NC ISEL Le Havre 35 NC NC ISTY Mantes-Vélizy 35 NC NC SupGalilée Villetaneuse 60 NC NC Télécom Saint-Étienne 64 (parcours GEII) 24 (parcours MP) NC NC Polytech Angers 96 + 32 BIO 8 NC Polytech Annecy-Chambéry 115 NC NC Polytech Clermont 115 + 35 BIO NC NC Polytech Dijon (ex ESIREM) 100 Polytech Grenoble 135 6 6 Polytech Lille 145 + 25 BIO 6 NC Polytech Lyon 120 (site Villeurbanne) 12 (site Roanne) 24 NC Polytech Marseille 180 22 2 Polytech Montpellier 180 + 25 BIO NC NC Polytech Nancy 144 NC NC Polytech Nantes 144 32 NC Polytech Nice Sophia 120 NC NC Polytech Orléans 150 24 NC Polytech Paris-Saclay 135 NC NC Polytech Sorbonne 145 + 32 BIO NC NC Polytech Tours 150 NC NC TOTAL 3 812 195 P a g e 2 | 2",
+  "metadata": {
+    "title": "CP concours GeipiPolytech2024",
+    "secteur": "",
+    "date": "2023-10-23T09:34:14",
+    "auteurs": []
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/pdf_scrapes/CP-concours-GeipiPolytech2024.pdf",
+    "site": "scraped_geipi",
+    "url": "https://www.geipi-polytech.org/presse/"
+  },
+  "tags": [
+    "Geipi Polytech",
+    "concours",
+    "Baccalauréat",
+    "ingénieurs",
+    "modalités",
+    "candidats",
+    "dossier",
+    "épreuve écrite",
+    "mathématiques",
+    "physique-chimie",
+    "SVT",
+    "NSI",
+    "STI2D",
+    "STL",
+    "entretien de motivation",
+    "places offertes",
+    "bilan",
+    "satisfaction",
+    "augmentation",
+    "mention B",
+    "mention TB"
+  ],
+  "type_specific": {
+    "administratif": {
+      "service": "Concours Geipi Polytech",
+      "contact": {
+        "email": "communication@geipi-polytech.org",
+        "telephone": "03.72.74 68 38"
+      }
+    }
+  }
+}

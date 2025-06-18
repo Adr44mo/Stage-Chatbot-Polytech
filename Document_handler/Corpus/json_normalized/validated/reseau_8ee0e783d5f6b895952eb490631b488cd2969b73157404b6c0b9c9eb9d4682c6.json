@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Simple FAQ – 2"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/simple_faq_2.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/simple-faq-2/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Simple FAQ – 2\n*Publié parg.cambarratle31 janvier 2024*\nSimple FAQ Content – 2\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

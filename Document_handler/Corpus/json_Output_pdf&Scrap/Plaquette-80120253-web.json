@@ -1,0 +1,17 @@
+{
+  "source": "scraped_sorbonne",
+  "file_name": "Plaquette-80120253-web.pdf",
+  "pdf_path": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/pdf_scrapes/Plaquette-80120253-web.pdf",
+  "specialty": "NA",
+  "content": "1 2 3 4 4 55 6 6 7 7 8 8 99 10 10 1111 12 12 1313 1414 15 Frais de scolarité 618€ / an 0€ pour les boursiers 0€ en apprentissage 15 1616 17 17 1818 1919 2020 2121 22 22 2323 24 24 2525 26 26 2727 28",
+  "metadata": {
+    "title": "Plaquette-80120253-web.pdf",
+    "auteurs": [],
+    "date": "1111",
+    "title_2": "Plaquette",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/",
+    "last_modified": "2025-01-16T14:03:38",
+    "hash": "192d8c96f76875827409c1beeb78b4b5ab5c2f4b76147652c9d47e952045c159",
+    "scraped_at": "2025-06-18T10:47:28.561510"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Corentin Lefer : sportif de haut niveau en triathlon"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/corentin_lefer_sportif_de_haut_niveau_en_triathlon.json",
+    "url": "https://www.polytech-reseau.org/corentin-lefer-sportif-de-haut-niveau-en-triathlon/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Corentin Lefer : sportif de haut niveau en triathlon\n*Publié parService Commle9 février 20229 février 2022*",
+  "tags": [],
+  "type_specific": {}
+}

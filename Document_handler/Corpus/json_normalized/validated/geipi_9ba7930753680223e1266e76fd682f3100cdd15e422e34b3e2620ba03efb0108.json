@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Résultats du concours"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/resultats_du_concours.json",
+    "url": "https://www.geipi-polytech.org/agenda/phase-admission-ecoles-concours-geipi-polytech/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "Accueil/Agenda/Résultats du concours\n# Résultats du concours\n- 2 juin 2025\n- \n#### La phase d’admission aux écoles du Geipi Polytech débute le lundi 2 juin 2025 sur Parcoursup.\n- Consultez dans votre dossier Parcoursup les réponses des formations que vous avez demandées.\n- Vous recevrez des propositions d’admission au fur et à mesure et en continu.\n- Vous devez répondre obligatoirement à chaque proposition d’admission dans le délai indiqué dans votre dossier.\n- N’hésitez pas à consulter lesite d’entrainement de Parcoursup\nVous pourrez consulter vos notes aux épreuves du concours Geipi Polytech à partir du 4 juin dans votreEspace candidatsur le site du concours.\n- Espace candidat\n- Contact",
+  "tags": [],
+  "type_specific": {}
+}

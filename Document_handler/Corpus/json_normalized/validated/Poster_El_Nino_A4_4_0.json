@@ -1,0 +1,36 @@
+{
+  "document_type": "projet",
+  "content": "El Niño : Qu‘est-ce que c‘est ? El Niño est un phénomène océanographique se passant au niveau du Pacifique équatorial. Une masse d'eau chaude s'accumule dans le Pacifique ouest et, certaines années, traverse l'océan vers les côtes sud- américaines. Les années où cette masse d'eau est anormalement importante, les courants de surface et les vents s'inversent. Cela perturbe alors dramatiquement les schémas climatiques régionaux. Modélisation du phénomène El Niño Majda EL ATIA - Quentin DESCHAMPS - Kenza EL MHAMDI - Ruxue ZENG - Aissam RABHI - Rémy PERRODIN, encadré par M. Francis CODRON Modélisation mathématique ℎ = −(ℎ+ ) = −1(−ℎℎ) = ℎ= ℎ+ • : température de surface à l’est • ℎet ℎ: profondeur de la thermocline [2] à l’est et à l’ouest 1. Deux modèles générés • Un modèle simple : principe de l'oscillateur harmonique (à gauche) • Un modèle complexe : ajout de bruit au système d'équations (à droite) Année El Niño : à l’ouest, les basses pressions sont remplacées par de hautes pressions : c’est l’oscillation australe. Les alizés [1] faiblissent, et se renversent parfois. L'air tend à monter au dessus des régions les plus chaudes en surface, ce qui est dû à une thermocline localement plus profonde. Année ordinaire : les pressions sont basses dans le Pacifique ouest, tandis qu’elles sont hautes à l’est. Les alizés soufflent d’est en ouest, ce qui entraîne les eaux chaudes de surface vers l’ouest. [1] Alizé : vent régulier qui souffle aux basses latitudes [2] Thermocline : limite entre les eaux profondes, froides, et les eaux de surface, plus chaudes [3] La Niña : phénomène inverse d’El Niño, baisse de la température de surface de l’eau 2. Série temporelle Série temporelle de 1870 - 2019 de la température de surface du Pacifique. La série montre une période de quelques années. • Pics positifs phénomènes El Niño • Pics négatifs phénomènes La Niña [3] Conclusion • L'oscillateur sans bruit est amorti mais a une période correcte. • La série avec bruit a des caractéristiques proches des observations. Ce modèle capture de façon simple la physique, mais il peut être perfectionné (prise en compte du cycle saisonnier par exemple). 3. Analyse spectrale • Périodes des El Niño : entre 1,7 et 7,9 ans • Cycle saisonnier : période de 1,09 ans",
+  "metadata": {
+    "title": "Poster El Nino A4",
+    "secteur": "",
+    "date": "2020-01-19T09:29:18",
+    "auteurs": []
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/pdf_scrapes/Poster_El_Nino_A4_4_0.pdf",
+    "site": "scraped_sorbonne",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/formations/mathematiques-appliques-et-informatique"
+  },
+  "tags": [
+    "El Niño",
+    "océanographie",
+    "Pacifique équatorial",
+    "modélisation",
+    "thermocline",
+    "oscillation australe",
+    "alizés",
+    "La Niña",
+    "série temporelle",
+    "analyse spectrale",
+    "température de surface",
+    "modèle mathématique",
+    "phénomènes climatiques"
+  ],
+  "type_specific": {
+    "projet": {
+      "client": "",
+      "techno": []
+    }
+  }
+}

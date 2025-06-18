@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Soirée Polytech Alumni en Amérique du Nord"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/soiree_polytech_alumni_en_amerique_du_nord.json",
+    "url": "https://www.polytech-reseau.org/soiree-polytech-alumni-en-amerique-du-nord/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Soirée Polytech Alumni en Amérique du Nord\n*Publié parService Commle16 mai 202416 mai 2024*\nSyl Billere, coordinateur du projet Polytech America et Céline Khuu, diplômée de Polytech Montpellier, organisent une soirée Polytech en Amérique à Montréal en présence deLionel Torres, Directeur de Polytech Montpellier.\nL’occasion de rencontrer et d’échanger avec des diplômés du réseau Polytech expatriés au Canada !\nLa soirée se déroulera le 17 juin 2024 de 18h à 20h30 au 355 Rue Sainte-Catherine #500, Montréal.\nInscription obligatoire avant le 10 juin ( les places sont limitées !)",
+  "tags": [],
+  "type_specific": {}
+}

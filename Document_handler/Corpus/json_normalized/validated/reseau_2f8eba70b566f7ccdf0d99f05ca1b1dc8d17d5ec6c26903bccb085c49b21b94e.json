@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Quel concours passer et comment s’inscrire ?"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/quel_concours_passer_et_comment_sinscrire_helpie_faq_quel-concours-passer-et-comment-sinscrire-2.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/quel-concours-passer-et-comment-sinscrire-2/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Quel concours passer et comment s’inscrire ?\n*Publié parService Commle8 avril 20248 avril 2024*\nL’inscription pour le concours CPGE BCPST se fait sur la plateforme d’inscription du site SCEI en sélectionnant le concours commun Polytech A Bio.\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

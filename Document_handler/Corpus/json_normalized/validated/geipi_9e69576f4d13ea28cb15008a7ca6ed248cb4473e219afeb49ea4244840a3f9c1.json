@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Mécanique et interactions"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_mecanique_et_interactions.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-mecanique-et-interactions/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Mécanique et interactions\n## Polytech Montpellier\nPrésentation Polytech Montpellier, composante de l’Université de Montpellier, est née en 1969 et occupe une place incontestable dans le paysage local, régional, national et international de la formation des ingénieurs.Le site principal de l’école se situe à Montpellier, au cœur du campus Triolet de l’Université de Montpellier. L’une des 10 spécialités d’ingénieur est délocalisée à […]",
+  "tags": [],
+  "type_specific": {}
+}

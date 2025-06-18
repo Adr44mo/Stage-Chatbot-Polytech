@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Comment est calculé le montant de ma bourse ?"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/comment_est_calcule_le_montant_de_ma_bourse.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/comment-est-calcule-le-montant-de-ma-bourse/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Comment est calculé le montant de ma bourse ?\n*Publié parService Commle31 janvier 202431 janvier 2024*\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

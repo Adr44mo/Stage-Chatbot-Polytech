@@ -44,7 +44,7 @@ def fill_missing_fields(data: dict, fields: list, prompt_file: str):
 
 
 
-def route_document(data, chemin_local=None, site=None, url=None):
+def route_document(data):
     content = data.get("content", "")
 
     output_data = {
@@ -52,9 +52,9 @@ def route_document(data, chemin_local=None, site=None, url=None):
         "content": content,
         "metadata": {},
         "source": {
-            "chemin_local": chemin_local or data.get("url", "") or "chemin inconnu",
-            "site": site or "",
-            "url": url or ""
+            "chemin_local": data.get("pdf_path", "") or "chemin inconnu",
+            "site": data.get("source") or "",
+            "url": data["metadata"].get("url") or ""
         },
         "tags": {},
         "type_specific": {}
@@ -63,10 +63,18 @@ def route_document(data, chemin_local=None, site=None, url=None):
     print(f"[DEBUG] document_type détecté : {output_data['document_type']}")
 
     # Champs globaux
-    output_data["metadata"] = fill_missing_fields(data,
-        ["title", "secteur", "date", "auteurs", "encadrant", "niveau", "annee", "specialite"],
-        "globals/metadata.txt")
-    
+    if str(output_data["source"].get("site", "")).startswith("scraped_"):
+        print("[DEBUG] Source détectée comme provenant d'un scraping.")
+        output_data["metadata"]["title"] = data["metadata"].get("title_2", "")
+        output_data["metadata"]["secteur"] = data["metadata"].get("secteur", "")
+        output_data["metadata"]["date"] = data["metadata"].get("last_modified", "")
+        output_data["metadata"]["auteurs"] = data["metadata"].get("auteurs", [])
+
+    else:
+        output_data["metadata"] = fill_missing_fields(data,
+            ["title", "secteur", "date", "auteurs", "encadrant", "niveau", "annee", "specialite"],
+            "globals/metadata.txt")
+
     tags_dict = fill_missing_fields(data, ["tags"], "globals/tags.txt")
     output_data["tags"] = tags_dict.get("tags", [])
 

@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Ludovic – ESGT promotion 2020"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/ludovic_esgt_promotion_2020.json",
+    "url": "https://www.geipi-polytech.org/temoignage/ludovic-esgt-promotion-2020/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Ludovic – ESGT promotion 2020\n# Ludovic – ESGT promotion 2020\n- Espace candidat\n- Contact",
+  "tags": [],
+  "type_specific": {}
+}

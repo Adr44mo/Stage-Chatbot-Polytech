@@ -1,0 +1,17 @@
+{
+  "source": "scraped_geipi",
+  "file_name": "corrige_pc_2021.pdf",
+  "pdf_path": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/pdf_scrapes/corrige_pc_2021.pdf",
+  "specialty": "NA",
+  "content": "1 / 2 Document réponses Physique-Chimie EXERCICE I I-1- Représentation de Lewis : I-2- Diagramme de prédominance : I-3- Réaction : CH3CH2NH2 + H2O = CH3CH2NH3+ + HO- I-4- Constante d’équilible: Expr. Litt. : K = Ke / Ka Appl. Num. : K = 5,0.10-4 I-5- pH = 1,0 I-6- Véq = 7,5 mL I-7- Concentration molaire : C = 3,0 ⨯ 10-2 mol.L-1 Concentration massique : cm = 1,35 g.L-1 EXERCICE II II-1- Accélération : ሬ⃗= ሬ⃗+ሬሬ⃗ = 0 = − = − II-2- Vitesse : =0 = ቀ − ቁ+ Position : y = ቀ − ቁ + II-3-a Cocher la modélisation exacte :  (1)  (2)  (3)  (4)  (5) II-3-b Force de poussée : F = , . 2 / 2 II-4-a Vitesse = . − II-4-b Accélération = . − II-5- (cocher la ou les réponses exactes)  La masse de la fusée est plus importante au décollage  L’air est moins dense en altitude  La force de gravitation décroit avec l’altitude  La force de poussée diminue EXERCICE III III-1- Unité de K. (cocher la ou les réponses exactes)  (°C)-1  s.(°C)-1  s.°C  °C.s-1  s-1  s  pas d’unité III-2- Constante : A = − B = III-3- Temps t1 Expr. Litt. : t1 = −× ቀ − −ቁ Appl. Num. : t1 =3,6⨯103 s III-4- Relevé expérimental de l’évolution de la température du système S Constante : exp = 4000 s III-5- (cocher la ou les réponse exactes)  Le flux thermique à travers la paroi inférieure de la tasse a été négligé dans le modèle théorique.  Au cours du temps, la température ambiante a légèrement augmenté du fait de la présence du système  Il y a des incertitudes sur la mesure de la température du système.  Le couvercle n’est pas étanche dans la réalité. 10 20 30 40 50 60 70 80 90 0 2000 4000 6000 8000 10000 t (en s) θ (en °C) Tangente : - tracé asymptote à 21,3 °C - tracé tangente à l’origine 63% : - valeur = , ° - intersection avec la courbe expérimentale",
+  "metadata": {
+    "title": "corrige_pc_2021.pdf",
+    "auteurs": [],
+    "date": null,
+    "title_2": "Corrige pc 2021",
+    "url": "https://www.geipi-polytech.org/annales-du-concours-geipi-polytech/",
+    "last_modified": "2021-05-03T07:58:50",
+    "hash": "9905f5731c03123dd8ba24f015d17a25f43f0680da929477cbdd31a35bd95185",
+    "scraped_at": "2025-06-18T11:03:22.046310"
+  }
+}

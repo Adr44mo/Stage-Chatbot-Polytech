@@ -1,0 +1,42 @@
+{
+  "document_type": "administratif",
+  "content": "Semestres UE ECTS Modules Cours TD TP-­‐ Projet Non encadré Total Coef Code Anglais 5 30 30 2 C9-­‐LAN Economie et Entreprise 12 12 24 1,5 S9-­‐SEE Séminaire entreprendre et piloter 30 30 1,5 S9-­‐SEP Droit de l'environnement 15 15 1 S9-­‐GIC Ingénieur et société 15 15 1 S9-­‐SES Introduction à Aménagement, Risques, géo-­‐Energies 9 6 15 1 S9-­‐GIO Total UE Pratiques d’ingénieur 42 42 39 6 129 8 Hydrogéologie quantitative 30 7,5 7,5 45 3 S9-­‐GHQ Hydrologie de surface 15 10 25 2 S9-­‐GHS Système d'information géographique 2 12 12 1 S9-­‐GSI Problèmes inverses 15 15 30 2 S9-­‐GPI Solveurs multiphysiques 22,5 22,5 45 3 S9-­‐GSM Total UE Géosciences et eau 60 10 0 30 157 11 Fondations 39 6 45 3 S9-­‐AFO Ouvrages souterrains 25 25 1,5 S9-­‐GOS Infrastructures 15 15 1,5 S9-­‐GIF Building Information Modelling 10 10 1 S9-­‐GBI Bureau d'étude en aménagement 3 6 21 30 3 S9-­‐GBA Stage de terrain en géotechnique 12 12 1 S9-­‐GAT Total UE Option Aménagement 82 0 34 21 137 11 Aléas naturels 15 20 35 3 S9-­‐GLA Gestion des riques naturels 5 10 15 1 S9-­‐GRN Risques environnementaux, études d'impact 25 25 2 S9-­‐GRE Sites et Sols pollués 15 15 1 S9-­‐GSP Bureau d'étude en risques 3 6 21 30 3 S9-­‐GBR Stage de terrain en risque environnemental 12 12 1 S9-­‐GRT Total UE Option Risques 63 30 18 21 132 11 Propriétés réservoir 10 10 20 1,5 S9-­‐GRP Monitoring de réservoir 20 20 1,5 S9-­‐GRD Géothermies et énergies nouvelles 20 10 30 3 S9-­‐GEN Stockage souterrain 10 10 20 1 S9-­‐GSS Bureau d'étude en géo-­‐énergies 3 6 21 30 3 S9-­‐GBE Stage de terrain en géo-­‐énergies 12 12 1 S9-­‐GET Total UE Option géo-­‐Energies 63 30 18 21 132 11 30 Total semestre 9 min 165 52 57 57 418 30 30 Total semestre 9 max 184 82 73 57 423 30 Semestres UE ECTS Modules Cours TD TP-­‐ Projet Non encadré Total Coef Code 5 Stage technique Année 4 5 S0-­‐DST 25 Stage de fin d'études Année 5 25 S0-­‐DFE 30 Total semestre 10 30 11 S10 Stages S9 Pratiques d’ingénieur 8 Géosciences et eau 11 Option Aménagement 11 Option Risques 11 Option géo-­‐Energies",
+  "metadata": {
+    "title": "Maquette ST 2022",
+    "secteur": "",
+    "date": "2022-04-11T14:24:23",
+    "auteurs": []
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/pdf_scrapes/Maquette_ST_2022-23_officielle_modif_3.pdf",
+    "site": "scraped_sorbonne",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/formations/sciences-de-la-terre"
+  },
+  "tags": [
+    "Economie",
+    "Environnement",
+    "Ingénierie",
+    "Géosciences",
+    "Hydrogéologie",
+    "Risques naturels",
+    "Aménagement",
+    "Géo-énergies",
+    "Système d'information géographique",
+    "Building Information Modelling",
+    "Monitoring",
+    "Propriétés réservoir",
+    "Aléas naturels",
+    "Sites pollués",
+    "Stage",
+    "Formation"
+  ],
+  "type_specific": {
+    "administratif": {
+      "service": "",
+      "contact": {
+        "email": "",
+        "telephone": ""
+      }
+    }
+  }
+}

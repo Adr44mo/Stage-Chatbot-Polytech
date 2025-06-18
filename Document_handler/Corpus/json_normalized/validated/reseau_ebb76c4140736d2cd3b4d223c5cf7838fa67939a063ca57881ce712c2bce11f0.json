@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Quelle année du cycle ingénieur je peux intégrer dans vos écoles ?"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/quelle_annee_du_cycle_ingenieur_je_peux_integrer_dans_vos_ecoles.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/quelle-annee-du-cycle-ingenieur-je-peux-integrer-dans-vos-ecoles/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Quelle année du cycle ingénieur je peux intégrer dans vos écoles ?\n*Publié parService Commle28 mars 202428 mars 2024*\nA bac+2 et bac+3 l’intégration se fait en 1reannée du cycle ingénieur.\nA bac+4 et plus, l’intégration se fait en 2eannée du cycle ingénieur.\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

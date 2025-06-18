@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "DEVENIR PARTENAIRE | Polytech Sorbonne"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/json_scrapes/devenir_partenaire_polytech_sorbonne.json",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/devenir-partenaire",
+    "site": "polytech.sorbonne-universite.fr"
+  },
+  "content": "## DEVENIR PARTENAIRE\n## Devenir partenaire\nLe partenariat a pour objectif de travailler étroitement avec des entreprises qui sont particulièrement intéressées par les profils d'ingénieurs que nous formons.\nCe partenariat se traduit par une grande visibilité de l'entreprise auprès de nos élèves et la participation de l'entreprise dans la vie de l'école sous diverses formes.\nContactez nous pour que nous puissions collaborer !\n## Les partenaires industriels du réseau Polytech\n## Nos partenaires locaux de Polytech Sorbonne\nL'iIe de France est un bassin d'emplois très important en France métropolitaine. Nous avons également noué de nombreux partenariats localement avec de nombreuses entreprises, grands groupes, startup, PME etc ...\n## Les autres partenaires\nPolytech Sorbonne travaille en étroite relation avec de nombreux autres partenaires, plus institutionnels, tel que l'ITII, le CFA des Sciences, Mécavenir.",
+  "tags": [],
+  "type_specific": {}
+}

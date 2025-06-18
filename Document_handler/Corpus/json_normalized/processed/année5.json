@@ -1,0 +1,46 @@
+{
+  "document_type": "administratif",
+  "content": "Semestre UE ECTS Modules Cours TD TP- Projet Présentiel en semi-autonomie Non présentiel Total Coef Code Anglais 30 30 2 EPU-C9-LAN Séminiaire entreprendre et piloter *** 30 30 1,5 EPU-C9-SEP Economie et entreprise 15 30 45 2,5 EPU-A9-SEE Total UE Entreprise et entrepeunariat 15 60 30 0 105 6 Conception industrielle ** 30 24 10 20 84 6 EPU-A9-DPI Informatique industrielle 12 12 2 EPU-A9-INI Total UE Gestion de projet industriel 30 36 0 10 20 96 8 Développement durable *** 26 4 30 2 EPU-A9-DVD Conservation 36 4 40 3 EPU-A9-BBC Total UE Qualité environnementale 62 8 0 0 70 5 Alimentation et Santé 22 8 30 2 EPU-A9-BNS Enzymes et texturants 13 13 8 10 44 4 EPU-A9-BMV Formulation fonctionnelle et nutritionnelle 15 4 21 20 60 5 EPU-A9-DFC Total UE Formulation 50 25 29 30 134 11 30 Total semestre 9 157 129 59 10 50 405 30 Semestre UE ECTS Modules Cours TD TP- Projet Présentiel en semi-autonomie Non présentiel Total Coef Code Anglais 30 30 2 EPU-C9-LAN Séminiaire entreprendre et piloter *** 30 30 1,5 EPU-C9-SEP Economie et entreprise 15 30 45 2,5 EPU-A9-SEE Total UE Entreprise et entreprenariat 15 60 30 0 105 6 Conception industrielle ** 30 24 54 4 EPU-A9-DPI Informatique industrielle 12 12 1 EPU-A9-INI Total UE Gestion de projet industriel 30 36 0 0 66 5 Développement durable *** 26 4 30 2 EPU-A9-DVD Conservation 36 4 40 3 EPU-A9-BBC Total UE Qualité environnementale 62 8 0 0 70 5 Alimentation et santé 22 8 30 2 EPU-A9-BNS Enzymes et texturants 13 13 8 34 3 EPU-A9-BMV Formulation fonctionnellle et nutritionelle 15 4 21 40 3 EPU-A9-DFC Total UE Formulation 50 25 29 0 104 8 Evolution en milieu professionnel * 6 EPU-A9-DPE Total UE Période entreprise 6 30 Total semestre 9 157 129 59 0 345 30 Semestre UE ECTS Modules Cours TD TP- Projet Présentiel en semi-autonomie Non présentiel Total Coef Code Stage technique * 5 EPU-A0-DST Total UE Stage technique 5 Stage fin d'études * 25 EPU-A0-DFE Total UE Stage fin d'études 25 Total 30 Total semestre 10 30 Semestre UE ECTS Modules Cours TD TP- Projet Présentiel en semi-autonomie Non présentiel Total Coef Code Stage technique * 5 EPU-A0-DST Total UE Stage technique 5 Evolution en milieu professionnel * 25 EPU-A0-DPE Total UE Période entreprise 25 Total 30 Total semestre 10 30 Gestion de projet industriel 8 Total 5 Formulation 8 S9 Entreprise et entrepreunariat Qualité environnementale 6 S10 PRO Stage A4 5 Contrat professionnalisation 25 S9 PRO 6 Formulation 8 Total Entreprise et entreprenariat 6 Projet industriel 5 Qualité environnementale 5 Contrat professionnalisation 25 Stage A5 5 Stage A4 S10 1",
+  "metadata": {
+    "tile": "",
+    "secteur": "",
+    "date": "",
+    "auteurs": []
+  },
+  "source": {
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/test_site/pdf_scrapes/année5.pdf",
+    "site": "scraped_geipi",
+    "url": ""
+  },
+  "tags": [
+    "semestre",
+    "UE",
+    "ECTS",
+    "modules",
+    "cours",
+    "TD",
+    "TP",
+    "projet",
+    "entrepreneuriat",
+    "économie",
+    "gestion de projet",
+    "développement durable",
+    "qualité environnementale",
+    "alimentation",
+    "santé",
+    "formulation",
+    "enzymes",
+    "texturants",
+    "stage technique",
+    "évolution professionnelle"
+  ],
+  "type_specific": {
+    "administratif": {
+      "service": "",
+      "contact": {
+        "email": "",
+        "telephone": ""
+      }
+    }
+  }
+}

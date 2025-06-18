@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Régions :Grand Est"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/regions_grand_est.json",
+    "url": "https://www.geipi-polytech.org/regions/grand-est/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Régions :Grand Est\n## ENIM Metz\nPrésentation Au cœur du groupe ENI (Groupe de quatre grandes écoles : ENI de Brest, ENI de Metz, ENI de Saint-Etienne, ENI de Tarbes) et du collégium Lorraine INP de l’Université de Lorraine, l’Ecole Nationale d’Ingénieurs de Metz est une école publique formant depuis 1962 des ingénieurs dans le domaine du génie mécanique, du génie […]",
+  "tags": [],
+  "type_specific": {}
+}

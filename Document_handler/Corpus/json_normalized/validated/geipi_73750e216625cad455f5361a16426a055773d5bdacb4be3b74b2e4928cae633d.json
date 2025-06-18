@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Nicolas – Grenoble INP Esisar Promotion 2021"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/nicolas_grenoble_inp_esisar_promotion_2021.json",
+    "url": "https://www.geipi-polytech.org/temoignage/nicolas-grenoble-inp-esisar-promotion-2021/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Nicolas – Grenoble INP Esisar Promotion 2021\n# Nicolas – Grenoble INP Esisar Promotion 2021\n- Espace candidat\n- Contact",
+  "tags": [],
+  "type_specific": {}
+}

@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Témoignages"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/temoignages.json",
+    "url": "https://www.geipi-polytech.org/temoignages/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "Accueil/Témoignages\n# Témoignages\nDes ingénieurs diplômés des écoles du concours Geipi Polytech\ntémoignent de leur parcours en vidéo.\n### Annaëlle - ingénieure Bâtiment - Polytech Angers promotion 2022\n### Antoine - Ingénieur produit dans les dispositifs médicaux - Polytech Lille Promotion 2018\n### Arnaud - ingénieur en logistique et entrepreneur - ISEL Le Havre\n### Aymeric - Ingénieur projet - ENIT Promotion 2015\n### Claire - cheffe de projet - EEIGM promotion 2020\n### Damien - Dirigeant d'entreprise - Polytech Nancy Promotion 2012\n- Espace candidat\n- Contact",
+  "tags": [],
+  "type_specific": {}
+}

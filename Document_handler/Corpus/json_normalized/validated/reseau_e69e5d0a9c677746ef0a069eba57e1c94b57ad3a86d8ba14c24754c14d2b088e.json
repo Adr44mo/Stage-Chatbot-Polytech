@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Le Concours Polytech regroupe combien d’écoles ?"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/le_concours_polytech_regroupe_combien_decoles.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/le-concours-polytech-regroupe-combien-decoles/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Le Concours Polytech regroupe combien d’écoles ?\n*Publié parService Commle8 avril 2024*\nLe Concours Polytech c’est 33 écoles d’ingénieurs dont les 16 écoles Polytech.\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

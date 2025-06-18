@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Nos formations"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/nos_formations.json",
+    "url": "https://www.polytech-reseau.org/formations/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Nos formations\n## DIFFÉRENTS PROFILS,DIFFÉRENTS CONCOURS D’ADMISSIONS\nLes écoles du réseau Polytech développent un modèle original de formation des ingénieurs. Alliant approche humaniste et sociétale, développement de la pensée et de la liberté intellectuelle, les écoles mènent une politique globale d’ouverture, fidèlement aux valeurs de l’Université. Le réseau Polytech accompagne des profils variés vers la réussite et l’émergence des talents de chacun.Les spécialités d’ingénieurs des écoles Polytech sont accréditées parla Cti.",
+  "tags": [],
+  "type_specific": {}
+}

@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Mécatronique"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_mecatronique.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-mecatronique/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Mécatronique\n## ENIB Brest\nPrésentation Grande école publique fondée à Brest en 1961, l’ENIB forme en 5 ans des ingénieurs généralistes système en électronique, informatique et mécatronique, au service de l’entreprise et en lien avec une recherche de haut niveau. L’école prépare ses élèves ingénieurs à exercer leur futur métier dans un cadre international. La pédagogie valorise la réflexivité […]",
+  "tags": [],
+  "type_specific": {}
+}

@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "LES PROJETS | Polytech Sorbonne"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_sorbonne/json_scrapes/les_projets_polytech_sorbonne.json",
+    "url": "https://www.polytech.sorbonne-universite.fr/index.php/les-projets",
+    "site": "polytech.sorbonne-universite.fr"
+  },
+  "content": "## LES PROJETS\nLes projets industriels à Polytech Sorbonne\nPolytech Sorbonne offre à ses élèves une occasion unique de travailler sur des projets concrets avec des entreprises de premier plan. Permettant ainsi aux élèves sous statut étudiant d’année 4 ou 5 de tester et de mettre en pratique leurs acquis pédagogiques et aux entreprises de collaborer avec des équipes jeunes, dynamiques inventives et surmotivées. Des élèves formés grâce à un enseignement, une méthodologie et des outils de pointe sans cesse adaptés et mis à jour pour répondre aux besoins du monde professionnel.",
+  "tags": [],
+  "type_specific": {}
+}

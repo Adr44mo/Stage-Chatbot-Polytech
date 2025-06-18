@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Formation :Ingénieur en Systèmes numériques et réseaux"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/geipi_polytech/json_scrapes/formation_ingenieur_en_systemes_numeriques_et_reseaux.json",
+    "url": "https://www.geipi-polytech.org/formations/ingenieur-en-systemes-numeriques-et-reseaux/",
+    "site": "geipi-polytech.org"
+  },
+  "content": "# Formation :Ingénieur en Systèmes numériques et réseaux\n## ESIR Rennes\nPrésentation L’ESIR est une école d’ingénieurs publique située au coeur d’un grand campus scientifique et d’une technopole industrielle.Les formations proposées, sous statut étudiant ou sous statut apprenti, allient des contenus scientifiques de pointe, des enseignements en langues et en sciences humaines et sociales, une formation aux enjeux du développement durable et à l’innovation. Les enseignements […]",
+  "tags": [],
+  "type_specific": {}
+}

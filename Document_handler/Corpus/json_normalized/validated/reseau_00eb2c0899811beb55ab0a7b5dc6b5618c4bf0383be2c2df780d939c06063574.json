@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Quelles sont les épreuves écrites prises en compte par le Concours Polytech ?"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/quelles_sont_les_epreuves_ecrites_prises_en_compte_par_le_concours_polytech_helpie_faq_quelles-sont-les-epreuves-ecrites-prises-en-compte-par-le-concours-polytech-3.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/quelles-sont-les-epreuves-ecrites-prises-en-compte-par-le-concours-polytech-3/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Quelles sont les épreuves écrites prises en compte par le Concours Polytech ?\n*Publié parService Commle8 avril 20248 avril 2024*\nSeules les épreuves listées ci-dessous sont prises en compte par le Concours Polytech :\n- Sciences Industrielles B\n- Informatique et Modélisation\n- Mathématiques C\n- Physique A\n- Français B\n- Langue vivante A\n- Sciences Industrielles A\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

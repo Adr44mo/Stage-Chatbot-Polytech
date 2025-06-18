@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "Combien puis-je émettre de vœux de spécialités à la fin de mon parcours ?"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/combien_puis_je_emettre_de_voeux_de_specialites_a_la_fin_de_mon_parcours.json",
+    "url": "https://www.polytech-reseau.org/helpie_faq/combien-puis-je-emettre-de-voeux-de-specialites-a-la-fin-de-mon-parcours/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# Combien puis-je émettre de vœux de spécialités à la fin de mon parcours ?\n*Publié parService Commle28 mars 2024*\nIl est conseillé d’émettre de 8 à 10 vœux surtout si les résultats des semestres de PeiP sont moyens au sein de votre promotion.\nCatégories :",
+  "tags": [],
+  "type_specific": {}
+}

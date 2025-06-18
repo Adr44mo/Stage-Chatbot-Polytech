@@ -1,0 +1,15 @@
+{
+  "document_type": "page_web",
+  "metadata": {
+    "title": "12 domaines de formation"
+  },
+  "source": {
+    "category": "scrapping",
+    "chemin_local": "/home/adrien/Documents/poly4emeAnee/Projet-Stage/Projet-Chatbot/Document_handler/scraping/data_sites/polytech_réseau/json_scrapes/12_domaines_de_formation.json",
+    "url": "https://www.polytech-reseau.org/12-domaines-de-formation/",
+    "site": "polytech-reseau.org"
+  },
+  "content": "# 12 domaines de formation\nLe réseau des écoles Polytech propose une offre de formation répartie dans 12 grands domaines scientifiques qui regroupent plus de 100 spécialités d’ingénieur habilitées par la CTI (Commission des Titres d’Ingénieur). Durant ses études, l’élève ingénieur a la possibilité de se spécialiser ou de compléter sa formation dans une autre école du réseau Polytech.\nEau, environnement, aménagement\nElectronique et systèmes numériques\nGénie biomédical, instrumentation\nGénie civil\nGénie industriel\nInformatique\nMatériaux\nMathématiques appliquées et modélisation\nMécanique\nSystèmes électriques",
+  "tags": [],
+  "type_specific": {}
+}
