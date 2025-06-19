@@ -97,9 +97,8 @@ def get_sources(context):
             if idx != -1:
                 chemin_local = chemin_local[idx:]
             selected = chemin_local
-        elif url and url.endswith(".json"):
+        else:
             selected = url
-
         if selected:
             sources.add(selected)
     return list(sources)
