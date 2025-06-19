@@ -81,18 +81,23 @@ def get_history(x_session_id: str = Header(...), session: Session = Depends(get_
 
 def get_sources(context):
     """
-    Extrait et formate les sources (URL ou références) à partir du contexte retourné par la chaîne RAG.
-    Retourne une liste de chaînes. Si aucune source, retourne [].
+    Extrait les sources (url ou chemin local) à partir des métadonnées du contexte RAG.
+    Retourne une liste de chaînes uniques.
     """
     sources = set()
     for doc in context:
         metadata = getattr(doc, "metadata", {})
-        url = metadata.get("url", "").strip()
-        source = metadata.get("source", "").strip()
+        url = metadata.get("source.url", "").strip()
+        chemin_local = metadata.get("source.chemin_local", "").strip()
+        if chemin_local:
+            idx = chemin_local.find("/Document_handler")         # On garde un chemin relatif à partir de "/Document_handler"
+            if idx != -1:
+                chemin_local = chemin_local[idx:]
+                print(f"Chemin local extrait : {chemin_local}")
         if url:
             sources.add(url)
-        elif source:
-            sources.add(source)
+        elif chemin_local:
+            sources.add(chemin_local)
     return list(sources)
 
 def get_or_create_conversation(session, session_id):

@@ -4,21 +4,32 @@
 
 import React from "react";
 
-/* Formate les sources (string[]) en éléments cliquables si ce sont des URLs */
+/* Formate les sources en éléments cliquables (URLs et PDFs) */
 export function renderSources(sources: string[]): React.ReactNode {
   return (
     <>
-      {sources.map((src: string, i: number) =>
-        /^https?:\/\//i.test(src) ? (
-          <div key={i}>
-            <a href={src} target="_blank" rel="noopener noreferrer">
-              {src}
-            </a>
-          </div>
-        ) : (
-          <div key={i}>{src}</div>
-        )
-      )}
+      {sources.map((src: string, i: number) => {
+        if (/^https?:\/\//i.test(src)) {
+          return (
+            <div key={i}>
+              <a href={src} target="_blank" rel="noopener noreferrer">
+                {src}
+              </a>
+            </div>
+          );
+        } else if (src.endsWith(".pdf")) {
+          const fileUrl = `/files${encodeURIComponent(src)}`;
+          return (
+            <div key={i}>
+              <a href={fileUrl} target="_blank" rel="noopener noreferrer">
+                {src}
+              </a>
+            </div>
+          );
+        } else {
+          return <div key={i}>{src}</div>;
+        }
+      })}
     </>
   );
 }
