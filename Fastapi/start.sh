@@ -16,6 +16,9 @@ else
   exit 1
 fi
 
+echo "🔁 Reloading Nginx..."
+sudo nginx -t && sudo systemctl reload nginx
+
 # Start the FastAPI backend
 uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload &
 
@@ -33,3 +36,4 @@ FRONTEND_PID=$!
 # Wait for both processes
 wait $BACKEND_PID
 wait $FRONTEND_PID
+
