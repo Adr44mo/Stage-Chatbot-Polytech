@@ -82,6 +82,7 @@ def get_history(x_session_id: str = Header(...), session: Session = Depends(get_
 def get_sources(context):
     """
     Extrait les sources (url ou chemin local) à partir des métadonnées du contexte RAG.
+    Prend le chemin local si c'est un PDF, l'URL si c'est un JSON.
     Retourne une liste de chaînes uniques.
     """
     sources = set()
@@ -89,15 +90,18 @@ def get_sources(context):
         metadata = getattr(doc, "metadata", {})
         url = metadata.get("source.url", "").strip()
         chemin_local = metadata.get("source.chemin_local", "").strip()
-        if chemin_local:
-            idx = chemin_local.find("/Document_handler")         # On garde un chemin relatif à partir de "/Document_handler"
+        selected = None
+
+        if chemin_local and chemin_local.endswith(".pdf"):
+            idx = chemin_local.find("/Document_handler")
             if idx != -1:
                 chemin_local = chemin_local[idx:]
-                print(f"Chemin local extrait : {chemin_local}")
-        if url:
-            sources.add(url)
-        elif chemin_local:
-            sources.add(chemin_local)
+            selected = chemin_local
+        elif url and url.endswith(".json"):
+            selected = url
+
+        if selected:
+            sources.add(selected)
     return list(sources)
 
 def get_or_create_conversation(session, session_id):
