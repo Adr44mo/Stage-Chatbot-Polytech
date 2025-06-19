@@ -15,6 +15,7 @@ from sqlmodel import Session
 from .app.keys_file import OPENAI_API_KEY
 from .app.llmm import initialize_the_rag_chain
 from .app.chat import router as chat_router, get_sources, get_or_create_conversation, add_message
+from .app.server_file import router as server_router
 # from .app.filters import handle_if_uninformative
 from .app.auth.router import router as auth_router
 from .app.auth.database import create_db_and_tables, get_session
@@ -56,6 +57,7 @@ app.add_middleware(
 # Inclusion des routeurs (authentification, chat/historique)
 app.include_router(auth_router)
 app.include_router(chat_router)
+app.include_router(server_router)
 
 # Initialisation de la base de données au démarrage
 @app.on_event("startup")
