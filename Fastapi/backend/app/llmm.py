@@ -21,7 +21,10 @@ sys.path.append(str(Path(__file__).parent))
 from .promptt import qa_prompt  # Import the qa_prompt from the prompt module
 from .promptt import contextualize_q_prompt  # Import the contextualize_q_prompt from the prompt module
 
-persist_directory = Path(__file__).parent.parent.parent / "vectorisation" / "src" / "db"  # Define the directory where the Chroma vector database will be persisted
+# Vector de Polytech Sorbonne
+#persist_directory = Path(__file__).parent.parent.parent / "vectorisation" / "src" / "db"  # Define the directory where the Chroma vector database will be persisted
+
+persist_directory = Path(__file__).parent.parent.parent.parent / "Document_handler" / "Vectorisation" / "vectorstore"  # Define the directory where the Chroma vector database will be persisted
 
 print(f"[INFO] Using persist directory: {persist_directory}")  # Print the persist directory being used
 
