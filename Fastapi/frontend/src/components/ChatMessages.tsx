@@ -19,7 +19,7 @@ export default function ChatMessages({
   messages,
   isLoading,
 }: ChatMessagesProps) {
-  const scrollContentRef = useAutoScroll(isLoading);
+  const scrollContentRef = useAutoScroll(messages.length);
 
   return (
     /* Conteneur principal des messages */

@@ -1,14 +1,13 @@
-/*
- * Hook pour gérer le défilement automatique
- * d'une zone de contenu en fonction de l'activité
- */
+// ===============================================================
+// Hook pour gérer le défilement automatique d'une zone de contenu
+// ===============================================================
 
 import { useEffect, useLayoutEffect, useRef } from "react";
 import type { RefObject } from "react";
 
 const SCROLL_THRESHOLD = 10;
 
-function useAutoScroll(active: boolean): RefObject<HTMLDivElement | null> {
+function useAutoScroll(dependency: any): RefObject<HTMLDivElement | null> {
   const scrollContentRef = useRef<HTMLDivElement>(null);
   const isDisabled = useRef<boolean>(false);
   const prevScrollTop = useRef<number | null>(null);
@@ -22,7 +21,7 @@ function useAutoScroll(active: boolean): RefObject<HTMLDivElement | null> {
         behavior: "smooth",
       });
     }
-  }, [active]);
+  }, [dependency]);
 
   useEffect(() => {
     const el = scrollContentRef.current;
@@ -46,7 +45,7 @@ function useAutoScroll(active: boolean): RefObject<HTMLDivElement | null> {
     const el = scrollContentRef.current;
     if (!el) return;
 
-    if (!active) {
+    if (!dependency || dependency <= 0) {
       isDisabled.current = true;
       return;
     }
@@ -76,7 +75,8 @@ function useAutoScroll(active: boolean): RefObject<HTMLDivElement | null> {
     el.addEventListener("scroll", onScroll);
 
     return () => el.removeEventListener("scroll", onScroll);
-  }, [active]);
+  }, [dependency]);
+  1;
 
   return scrollContentRef;
 }
