@@ -96,6 +96,53 @@ def process_pdf_file(file_path, source_key, specialty="NA", extra_metadata=None)
 
     return doc_json
 
+# ...existing code...
+
+def run_for_input_dirs(input_dirs, output_dir=OUTPUT_DIR):
+    """
+    Traite tous les PDF pour un dictionnaire input_dirs {source_key: dossier}
+    et génère les fichiers JSON correspondants dans output_dir.
+    """
+    count = 0
+
+    for source_key, input_dir in input_dirs.items():
+        is_scraped = source_key.startswith("scraped_")
+        pdf_metadata_map = {}
+
+        if is_scraped:
+            map_path = input_dir.parent / "pdf_map.json"
+            print(f"🔍 Chargement des métadonnées pour {source_key} depuis {map_path}")
+            if map_path.exists():
+                try:
+                    with open(map_path, "r", encoding="utf-8") as f:
+                        pdf_metadata_map = json.load(f)
+                except Exception as e:
+                    print(f"⚠️ Erreur lecture de {map_path}: {e}")
+            else:
+                print(f"ℹ️ Aucun fichier pdf_map.json trouvé pour {source_key}")
+
+        for root, _, files in os.walk(input_dir):
+            specialty = Path(root).relative_to(input_dir).parts[0] if root != str(input_dir) else "NA"
+            for file in files:
+                if file.lower().endswith(".pdf"):
+                    full_path = os.path.join(root, file)
+                    print(f"⏳ Traitement : {file} ({source_key})")
+                    doc = process_pdf_file(
+                        full_path,
+                        source_key,
+                        specialty=specialty,
+                        extra_metadata=pdf_metadata_map if is_scraped else None
+                    )
+                    if doc:
+                        output_filename = os.path.splitext(file)[0] + ".json"
+                        output_path = output_dir / output_filename
+                        with open(output_path, "w", encoding="utf-8") as f:
+                            json.dump(doc, f, ensure_ascii=False, indent=2)
+                        count += 1
+
+    print(f"\n✅ {count} fichiers JSON générés dans : {output_dir}")
+
+
 # --- Main execution logic ---
 
 def run():
