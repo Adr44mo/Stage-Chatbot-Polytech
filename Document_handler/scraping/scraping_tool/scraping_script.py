@@ -83,6 +83,44 @@ def menu(config_files, config_dir):
         except ValueError:
             print("Entrée invalide, veuillez entrer un numéro.")
 
+# -------------------------------------------------
+# Affichage du menu pour le choix du site à scraper
+# -------------------------------------------------
+
+def menu_nom(config_files, config_dir):
+
+    # Affichage du menu 
+    print("Sélectionnez le(s) site(s) à scraper (séparés par des virgules): \n")
+    site_name_map = {}
+    for file in config_files:
+        config_path = os.path.join(config_dir, file)
+        site_name = file.replace(".yaml", "").replace("_", " ").title()
+        site_name_map[site_name] = file
+        try:
+            config = load_yaml(config_path)
+            update_count = count_modified_pages(config)
+        except Exception as e:
+            print(f"[AVERTISSEMENT] Erreur lors du traitement de {file} : {e}")
+            update_count = "?"
+
+        print(f"{site_name} (pages modifiées : {update_count})")
+
+    # Saisie de l'utilisateur
+    while True:
+        choice = input("\nEntrez le nom du/des site(s) : ").title()
+        selected_names = [name.strip() for name in choice.split(",") if name.strip()]
+        matched_files = []
+        for name in selected_names:
+            match = site_name_map.get(name)
+            if match:
+                matched_files.append(match)
+            else:
+                print(f'[ERREUR] Site inconnu : {name}')
+        if matched_files:
+            return matched_files 
+        else:
+            print("Aucun site sélectionné ou nom incorrect. Veuillez réessayer.")
+
 # ------------------
 # Scraping d'un site
 # ------------------
@@ -173,8 +211,7 @@ def main():
         return
     
     # Affichage du menu et détermination des fichiers de configuration à utiliser
-    choice = menu(config_files, config_dir)
-    selected_configs = config_files if choice == 0 else [config_files[choice - 1]]
+    selected_configs = menu_nom(config_files, config_dir)
     
     # Chargement de la configuration du scraping pour chaque site
     for config_file in selected_configs:
