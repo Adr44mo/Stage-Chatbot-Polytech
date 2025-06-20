@@ -15,7 +15,7 @@ from urllib.parse import urljoin, urlparse, unquote
 from PyPDF2 import PdfReader
 from PyPDF2.generic import IndirectObject
 
-from src.scraper_utils import HEADERS, extract_urls_sitemap
+from .scraper_utils import HEADERS, extract_urls_sitemap
 
 # ------------------------------------
 # Initialisation de variables globales

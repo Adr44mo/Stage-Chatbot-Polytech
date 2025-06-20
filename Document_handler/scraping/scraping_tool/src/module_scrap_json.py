@@ -13,7 +13,7 @@ import requests
 from bs4 import BeautifulSoup, Tag
 from datetime import datetime, timezone
 
-from src.scraper_utils import HEADERS, extract_urls_sitemap
+from .scraper_utils import HEADERS, extract_urls_sitemap
 
 # ------------------------------------
 # Initialisation de variables globales
@@ -253,7 +253,7 @@ def archive_old_jsons(download_dir, archive_dir, urls):
             print(f"[ERREUR] Échec de lecture ou d'archivage de {filepath} : {e}")
 
 def extract_main_content(soup):
-    from bs4 import Tag
+
     parts = []
 
     # 1. Supprimer les balises globalement inutiles
@@ -626,7 +626,6 @@ def crawl(site_config):
                     }
         except Exception as e:
             print(f"[WARNING] Impossible de lire {filepath} : {e}")
-
 
     """ # Détection initiale (uniquement sur la première page)
     reference_blocks_html = {

@@ -9,9 +9,8 @@ from datetime import datetime
 from ruamel.yaml import YAML
 
 # Imports des modules de scrap
-import src.module_scrap_pdf
-import src.module_scrap_json
-from src.scraper_utils import count_modified_pages
+from .src import module_scrap_pdf, module_scrap_json
+from .src.scraper_utils import count_modified_pages
 
 # Initialisation de l'instance YAML & configuration des options de mise en forme
 ruamel_yaml = YAML()
@@ -83,6 +82,44 @@ def menu(config_files, config_dir):
         except ValueError:
             print("Entrée invalide, veuillez entrer un numéro.")
 
+# -------------------------------------------------
+# Affichage du menu pour le choix du site à scraper
+# -------------------------------------------------
+
+def menu_nom(config_files, config_dir):
+
+    # Affichage du menu 
+    print("Sélectionnez le(s) site(s) à scraper (séparés par des virgules): \n")
+    site_name_map = {}
+    for file in config_files:
+        config_path = os.path.join(config_dir, file)
+        site_name = file.replace(".yaml", "").replace("_", " ").title()
+        site_name_map[site_name] = file
+        try:
+            config = load_yaml(config_path)
+            update_count = count_modified_pages(config)
+        except Exception as e:
+            print(f"[AVERTISSEMENT] Erreur lors du traitement de {file} : {e}")
+            update_count = "?"
+
+        print(f"{site_name} (pages modifiées : {update_count})")
+
+    # Saisie de l'utilisateur
+    while True:
+        choice = input("\nEntrez le nom du/des site(s) : ").title()
+        selected_names = [name.strip() for name in choice.split(",") if name.strip()]
+        matched_files = []
+        for name in selected_names:
+            match = site_name_map.get(name)
+            if match:
+                matched_files.append(match)
+            else:
+                print(f'[ERREUR] Site inconnu : {name}')
+        if matched_files:
+            return matched_files 
+        else:
+            print("Aucun site sélectionné ou nom incorrect. Veuillez réessayer.")
+
 # ------------------
 # Scraping d'un site
 # ------------------
@@ -114,9 +151,9 @@ def scrap(site, config_path, base_dir, log_dir):
         # Scraping des PDF
         print("\n⌛ Étape 1/2 : Lancement du scraping des PDF\n")
         time.sleep(1)
-        src.module_scrap_pdf.scrape_page(site)
-        pdf_pages = len(src.module_scrap_pdf.visited_pages)
-        pdf_count = src.module_scrap_pdf.new_download_count
+        module_scrap_pdf.scrape_page(site)
+        pdf_pages = len(module_scrap_pdf.visited_pages)
+        pdf_count = module_scrap_pdf.new_download_count
         print("\n✅ Scraping des PDF terminé ! \n")
         print(f"Nombre de pages web visitées : {pdf_pages}")
         print(f"Nombre de PDF téléchargés ou mis à jour : {pdf_count}")
@@ -127,9 +164,9 @@ def scrap(site, config_path, base_dir, log_dir):
         # Scraping des JSON
         print("\n⌛ Étape 2/2 : Lancement du scraping des JSON\n")
         time.sleep(1)
-        src.module_scrap_json.crawl(site)
-        json_pages = len(src.module_scrap_json.visited_pages)
-        json_count = src.module_scrap_json.new_json_count
+        module_scrap_json.crawl(site)
+        json_pages = len(module_scrap_json.visited_pages)
+        json_count = module_scrap_json.new_json_count
         print("\n✅ Scraping des JSON terminé ! \n")
         print(f"Nombre de pages web visitées : {json_pages}")
         print(f"Nombre de JSON téléchargés ou mis à jour : {json_count}\n")
@@ -173,8 +210,7 @@ def main():
         return
     
     # Affichage du menu et détermination des fichiers de configuration à utiliser
-    choice = menu(config_files, config_dir)
-    selected_configs = config_files if choice == 0 else [config_files[choice - 1]]
+    selected_configs = menu_nom(config_files, config_dir)
     
     # Chargement de la configuration du scraping pour chaque site
     for config_file in selected_configs:
