@@ -2,7 +2,7 @@
 
              Scraping du site : Polytech Sorbonne             
 
-Le dernier scraping en date a été effectué le 20/06/2025 à 14:47
+Le dernier scraping en date a été effectué le 20/06/2025 à 15:26
 
   - Pages visitées (PDF)  : 1
   - PDF téléchargés       : 0

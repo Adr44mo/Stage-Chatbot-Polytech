@@ -9,9 +9,8 @@ from datetime import datetime
 from ruamel.yaml import YAML
 
 # Imports des modules de scrap
-import src.module_scrap_pdf
-import src.module_scrap_json
-from src.scraper_utils import count_modified_pages
+from .src import module_scrap_pdf, module_scrap_json
+from .src.scraper_utils import count_modified_pages
 
 # Initialisation de l'instance YAML & configuration des options de mise en forme
 ruamel_yaml = YAML()
@@ -152,9 +151,9 @@ def scrap(site, config_path, base_dir, log_dir):
         # Scraping des PDF
         print("\n⌛ Étape 1/2 : Lancement du scraping des PDF\n")
         time.sleep(1)
-        src.module_scrap_pdf.scrape_page(site)
-        pdf_pages = len(src.module_scrap_pdf.visited_pages)
-        pdf_count = src.module_scrap_pdf.new_download_count
+        module_scrap_pdf.scrape_page(site)
+        pdf_pages = len(module_scrap_pdf.visited_pages)
+        pdf_count = module_scrap_pdf.new_download_count
         print("\n✅ Scraping des PDF terminé ! \n")
         print(f"Nombre de pages web visitées : {pdf_pages}")
         print(f"Nombre de PDF téléchargés ou mis à jour : {pdf_count}")
@@ -165,9 +164,9 @@ def scrap(site, config_path, base_dir, log_dir):
         # Scraping des JSON
         print("\n⌛ Étape 2/2 : Lancement du scraping des JSON\n")
         time.sleep(1)
-        src.module_scrap_json.crawl(site)
-        json_pages = len(src.module_scrap_json.visited_pages)
-        json_count = src.module_scrap_json.new_json_count
+        module_scrap_json.crawl(site)
+        json_pages = len(module_scrap_json.visited_pages)
+        json_count = module_scrap_json.new_json_count
         print("\n✅ Scraping des JSON terminé ! \n")
         print(f"Nombre de pages web visitées : {json_pages}")
         print(f"Nombre de JSON téléchargés ou mis à jour : {json_count}\n")
