@@ -49,3 +49,5 @@ sqlmodel
 # Gestion des pdf
 pymupdf
 
+# Gestion des fichier YAML
+ruamel.yaml

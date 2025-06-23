@@ -9,6 +9,8 @@ from pathlib import Path
 
 from .scraping.scraping_tool.scraping_script import run_scraping_from_configs
 from .Pdf_handler import pdftojson
+from .Pdf_handler.filler import fill_one
+
 
 router = APIRouter()
 
@@ -32,7 +34,7 @@ def supp_temp_files(temp_dirs):
 
 # TODO: make a route for each step in the pipeline
 
-@router.get("run/menu")
+@router.get("menu")
 def run_menu():
     try:
         config_files = [f.name for f in CONFIG_DIR.glob("*.yaml")]
@@ -47,7 +49,7 @@ def run_menu():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur lors du chargement des sites : {e}")
 
-@router.get("/run/scraping")
+@router.get("scraping")
 def run_scraping(config_files: List[str] = Query(...)):
     try:
         run_scraping_from_configs(config_files, str(CONFIG_DIR), str(LOG_DIR))
@@ -56,10 +58,27 @@ def run_scraping(config_files: List[str] = Query(...)):
         raise HTTPException(status_code=500, detail=f"Erreur scraping : {e}")
 
 
-@router.get("run/pdftojson")
+@router.get("supp_temp_files")
+def delete_temp_files():
+    temp_dirs = [
+        Path(__file__).parent.parent / "Corpus" / "json_Output_pdf&Scrap",
+        Path(__file__).parent.parent / "Corpus" / "json_normalized" / "validated",
+        Path(__file__).parent.parent / "Corpus" / "json_normalized" / "processed"
+    ]
+    supp_temp_files(temp_dirs)
+    return {"status": "success", "message": "Temporary files deleted."}
+
+@router.get("pdftojson")
 def run_pdftojson(intput_dirs: list[str] = pdftojson.INPUT_DIRS):
     pdftojson.run_for_input_dirs(intput_dirs)
     return {"status": "success", "message": "PDF to JSON conversion completed."}
+
+
+@router.get("fill_one")
+def run_fill_one():
+    fill_one.main()
+    return {"status": "success", "message": "JSON files filled and validated."}
+
 
 
 ##################### TEMPORARY FILE HANDLER #####################

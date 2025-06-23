@@ -16,10 +16,13 @@ from .app.keys_file import OPENAI_API_KEY
 from .app.llmm import initialize_the_rag_chain
 from .app.chat import router as chat_router, get_sources, get_or_create_conversation, add_message
 from .app.server_file import router as server_router
+from Document_handler.The_handler import router as router_scrapping
+
 # from .app.filters import handle_if_uninformative
 from .app.auth.router import router as auth_router
 from .app.auth.database import create_db_and_tables, get_session
 from .app.chat_models import ChatRequest, ChatResponse
+
 
 # ============================================
 # Initialisation de FastAPI (et rate limiting)
@@ -58,6 +61,7 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(chat_router)
 app.include_router(server_router)
+app.include_router(router_scrapping, prefix="/scrapping", tags=["Scrapping"])
 
 # Initialisation de la base de données au démarrage
 @app.on_event("startup")
