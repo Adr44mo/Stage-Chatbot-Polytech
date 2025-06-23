@@ -1,4 +1,4 @@
-from utils.ollama_wrapper import ask_model
+from ..utils.ollama_wrapper import ask_model
 import json
 
 def detect_document_type(content: str) -> str:
