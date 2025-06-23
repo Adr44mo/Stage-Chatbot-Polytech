@@ -12,9 +12,9 @@ SCRAPPING_DIR = DOCUMENT_HANDLER_DIR / "scraping"
 INPUT_DIRS = {
     "pdf_manual": CORPUS_DIR / "pdf_man",
     
-    #"scraped_geipi": SCRAPPING_DIR / "data_sites" / "geipi_polytech" / "pdf_scrapes",
-    #"scraped_reseau": SCRAPPING_DIR / "data_sites" / "polytech_réseau" / "pdf_scrapes",
-    #"scraped_sorbonne": SCRAPPING_DIR / "data_sites" / "polytech_sorbonne" / "pdf_scrapes"
+    "scraped_geipi": SCRAPPING_DIR / "data_sites" / "geipi_polytech" / "pdf_scrapes",
+    "scraped_reseau": SCRAPPING_DIR / "data_sites" / "polytech_réseau" / "pdf_scrapes",
+    "scraped_sorbonne": SCRAPPING_DIR / "data_sites" / "polytech_sorbonne" / "pdf_scrapes"
 }
 
 OUTPUT_DIR = CORPUS_DIR / "json_Output_pdf&Scrap"

@@ -4,9 +4,9 @@ import time
 import traceback
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from utils.ollama_wrapper import ask_model
+from .utils.ollama_wrapper import ask_model
 from jsonschema import validate, ValidationError
-from fill_logic import route_document
+from .fill_logic import route_document
 
 
 INPUT_DIR = Path(__file__).parent.parent.parent / "Corpus" / "json_Output_pdf&Scrap"

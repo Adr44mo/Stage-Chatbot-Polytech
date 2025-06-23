@@ -61,7 +61,7 @@ def convert_to_documents(raw_docs):
     return lc_docs
 
 
-def main():
+def main(VECTORSTORE_DIR=VECTORSTORE_DIR):
     print("📄 Chargement des documents JSON normalisés...")
     raw_docs = load_normalized_docs()
     print(f"✅ {len(raw_docs)} documents chargés.")
@@ -79,4 +79,4 @@ def main():
     print("✅ Vectorstore sauvegardée.")
 
 if __name__ == "__main__":
-    main()
+    main(VECTORSTORE_DIR)

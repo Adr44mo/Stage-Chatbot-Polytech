@@ -1,8 +1,8 @@
 import json
 import re
 from pathlib import Path
-from utils.ollama_wrapper import ask_model
-from handlers.detect_type import detect_document_type
+from .utils.ollama_wrapper import ask_model
+from .handlers.detect_type import detect_document_type
 
 PROMPTS_DIR = Path(__file__).parent / "prompts"
 

@@ -35,9 +35,17 @@ def normalize_entry(raw_entry: dict, chemin_local: str, site_name: str) -> dict:
         "type_specific": {},  # rien de spécifique pour page_web
     }
 
-def normalize_all():
+def normalize_all(input_dirs=None):
+    """
+    Normalise les fichiers JSON des dossiers spécifiés dans input_dirs.
+    - input_dirs : dict {nom_source: Path_vers_dossier}
+      Si None, utilise INPUT_DIRS par défaut.
+    """
     total = 0
-    for source_key, input_dir in INPUT_DIRS.items():
+    if input_dirs is None:
+        input_dirs = INPUT_DIRS
+
+    for source_key, input_dir in input_dirs.items():
         print(f"📂 Traitement du dossier : {input_dir}")
         site_name = source_key.replace("scraped_", "")
         for json_file in input_dir.glob("*.json"):
@@ -66,4 +74,4 @@ def normalize_all():
     print(f"\n✅ {total} fichiers normalisés sauvegardés dans : {OUTPUT_VALIDATED_DIR}")
 
 if __name__ == "__main__":
-    normalize_all()
+    normalize_all(INPUT_DIRS)

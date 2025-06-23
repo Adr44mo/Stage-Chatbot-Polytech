@@ -61,7 +61,7 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(chat_router)
 app.include_router(server_router)
-app.include_router(router_scrapping, prefix="/scrapping", tags=["Scrapping"])
+app.include_router(router_scrapping, prefix="/scraping", tags=["Scraping"])
 
 # Initialisation de la base de données au démarrage
 @app.on_event("startup")
