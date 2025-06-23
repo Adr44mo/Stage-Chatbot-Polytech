@@ -1,14 +1,20 @@
 import subprocess
 import os
 from pathlib import Path
+from typing import List
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import FileResponse
 from pathlib import Path
 
+from .scraping.scraping_tool.scraping_script import run_scraping_from_configs
 from .Pdf_handler import pdftojson
 
 router = APIRouter()
+
+CONFIG_DIR = Path(__file__).resolve().parent.parent / "scraping" / "config_sites"
+LOG_DIR = Path(__file__).resolve().parent.parent / "logs"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def supp_temp_files(temp_dirs):
@@ -26,14 +32,34 @@ def supp_temp_files(temp_dirs):
 
 # TODO: make a route for each step in the pipeline
 
+@router.get("run/menu")
+def run_menu():
+    try:
+        config_files = [f.name for f in CONFIG_DIR.glob("*.yaml")]
+        site_list = [
+            {
+                "label": f.replace(".yaml", "").replace("_", " ").title(),
+                "value": f
+            }
+            for f in config_files
+        ]
+        return site_list
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur lors du chargement des sites : {e}")
+
+@router.get("/run/scraping")
+def run_scraping(config_files: List[str] = Query(...)):
+    try:
+        run_scraping_from_configs(config_files, str(CONFIG_DIR), str(LOG_DIR))
+        return {"status": "success", "message": f"Scraping lancé pour : {config_files}"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur scraping : {e}")
+
+
 @router.get("run/pdftojson")
 def run_pdftojson(intput_dirs: list[str] = pdftojson.INPUT_DIRS):
     pdftojson.run_for_input_dirs(intput_dirs)
     return {"status": "success", "message": "PDF to JSON conversion completed."}
-
-
-
-
 
 
 ##################### TEMPORARY FILE HANDLER #####################

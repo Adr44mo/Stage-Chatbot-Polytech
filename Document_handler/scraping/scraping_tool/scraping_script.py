@@ -218,7 +218,16 @@ def main():
         # Chargement et récupération des paramètres de scrap depuis le .YAML
         config_path = os.path.join(config_dir, config_file)
         site = load_yaml(config_path)
-        scrap(site, config_path, base_dir, log_dir)      
+        scrap(site, config_path, base_dir, log_dir)   
+
+
+def run_scraping_from_configs(config_files: list[str], config_dir: str, log_dir: str):
+    base_dir = os.path.dirname(__file__)
+    for config_file in config_files:
+        config_path = os.path.join(config_dir, config_file)
+        site = load_yaml(config_path)
+        scrap(site, config_path, base_dir, log_dir)
+   
 
 # -----------------------------------------------------------------------------
 # Fonction principale de type 'if __name__ == "__main__":'
