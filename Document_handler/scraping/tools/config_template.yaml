@@ -9,7 +9,11 @@ SITEMAP_URL: "{SITEMAP_URL}"
 
 # PRÉFIXES DES URL À EXCLURE
 EXCLUDE_URL_KEYWORDS:
-  - "{EXCLUDE_URL_KEYWORDS}"
+  - "/actualites/"
+  - "/acces-refuse/"
+  - "/brouillon"
+  - "/test"
+  - "newsletter"
 
 # DATE DE MODIFICATION DU SCRAPING
 # Cette date est mise à jour à chaque fois que le scraping est effectué

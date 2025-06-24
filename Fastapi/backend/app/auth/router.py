@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, HTTPException, Depends, status, UploadFile, File, Form
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session, select
 from typing import List
@@ -6,6 +6,7 @@ from typing import List
 from .models import User, UserCreate, UserRead
 from .dependencies import get_current_user, get_current_admin, get_session
 from .security import verify_password, get_password_hash, create_access_token
+
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -69,3 +70,4 @@ def create_user_as_admin(
     session.commit()
     session.refresh(user)
     return {"message": f"{role.capitalize()} user created", "user_id": user.id}
+

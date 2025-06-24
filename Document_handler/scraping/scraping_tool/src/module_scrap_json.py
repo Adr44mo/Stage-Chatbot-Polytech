@@ -701,7 +701,7 @@ def crawl(site_config):
         if existing_entry:
             existing_data = existing_entry["data"]
             existing_path = existing_entry["filepath"]
-
+            filepath = existing_path
             json_obj["last_modified"] = existing_data.get("last_modified")
 
             if hash_json(existing_data) == hash_json(json_obj):
@@ -709,7 +709,6 @@ def crawl(site_config):
                 continue
             else:
                 print(f"[INFO] Mise à jour du fichier existant : {filepath}")
-                filepath = existing_path
 
         else:
             # Normalisation du nom de fichier

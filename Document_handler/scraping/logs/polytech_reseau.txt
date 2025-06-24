@@ -2,12 +2,12 @@
 
              Scraping du site : Polytech Réseau             
 
-Le dernier scraping en date a été effectué le 20/06/2025 à 14:59
+Le dernier scraping en date a été effectué le 23/06/2025 à 13:07
 
-  - Pages visitées (PDF)  : 0
+  - Pages visitées (PDF)  : 5
   - PDF téléchargés       : 0
 
-  - Pages visitées (JSON) : 0
+  - Pages visitées (JSON) : 5
   - JSON téléchargés      : 0
 
 

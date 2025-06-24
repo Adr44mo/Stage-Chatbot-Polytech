@@ -3,25 +3,36 @@ import os
 from pathlib import Path
 from typing import List
 from pydantic import BaseModel
+import yaml
 from typing import List
 from typing import Dict
 from typing import Optional
 
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 from pathlib import Path
 
 from .scraping.scraping_tool.scraping_script import run_scraping_from_configs
+from .scraping.tools.manage_config import generate_config, archive_config
+from .scraping.scraping_tool.src.scraper_utils import count_modified_pages
 from .Pdf_handler import pdftojson
 from .Pdf_handler.filler import fill_one
 from .Json_handler import normelizejson
 from .Vectorisation import vectorisation_chunk
 
+class PDFJSONInput(BaseModel):
+    input_dirs_pdf: Dict[str, str]
+    input_dirs_json: Dict[str, str]
+
+class VectorizationInput(BaseModel):
+    vectorstore_dir: Optional[str] = None
+
 router = APIRouter()
 
 CONFIG_DIR = Path(__file__).resolve().parent / "scraping" / "scraping_tool" / "config_sites"
 LOG_DIR = Path(__file__).resolve().parent / "scraping" / "logs"
+CORPUS_DIR = Path(__file__).resolve().parent / "Corpus"
 
 
 def supp_temp_files(temp_dirs):
@@ -38,6 +49,24 @@ def supp_temp_files(temp_dirs):
             print(f"[ℹ️] Le répertoire {temp_dir} n'existe pas, rien à supprimer.")
 
 # TODO: make a route for each step in the pipeline
+
+# Pour l'affichage des informations de chaque site pour le scraping
+@router.get("/site_infos")
+def get_site_infos():
+    try:
+        site_infos = []
+        for f in CONFIG_DIR.glob("*.yaml"):
+            with open(f, "r", encoding="utf-8") as file:
+                data = yaml.safe_load(file)
+                name = data.get("NAME")
+                url = data.get("BASE_URL")
+                scraped = data.get("LAST_MODIFIED_DATE")
+                new_docs = count_modified_pages(data)
+                site_infos.append({"name": name, "url": url, "scraped_at": scraped, "new_docs": new_docs})
+        return site_infos
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur lors de la récupération des informations de sites : {e}")
+
 
 @router.get("/menu")
 def run_menu():
@@ -61,7 +90,22 @@ def run_scraping(config_files: List[str]):
         return {"status": "success", "message": f"Scraping lancé pour : {config_files}"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur scraping : {e}")
-
+    
+@router.post("/add_site")
+def add_site(site_name:str, url:str):
+    try:
+        generate_config(site_name, url)
+        return {"status": "success", "message": f"Site {site_name} ajouté avec succès."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur lors de l'ajout du site : {e}")
+    
+@router.post("/supp_site")
+def supp_site(site_name:str):
+    try:
+        archive_config(site_name)
+        return {"status": "success", "message": f"Site {site_name} archivé avec succès."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur lors de l'archivage du site : {e}")
 
 @router.post("/supp_temp_files")
 def delete_temp_files():
@@ -72,14 +116,6 @@ def delete_temp_files():
     ]
     supp_temp_files(temp_dirs)
     return {"status": "success", "message": "Temporary files deleted."}
-
-
-class PDFJSONInput(BaseModel):
-    input_dirs_pdf: Dict[str, str]
-    input_dirs_json: Dict[str, str]
-
-class VectorizationInput(BaseModel):
-    vectorstore_dir: Optional[str] = None
 
 @router.post("/pdftojson")
 def run_pdftojson(data: PDFJSONInput):
