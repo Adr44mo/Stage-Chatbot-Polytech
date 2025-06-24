@@ -6,10 +6,10 @@
  */
 
 import { useState, useEffect } from "react";
-import type { Message } from "../types";
+import type { Message } from "../../types";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
-import { fetchHistory, sendMessage } from "../chatApi";
+import { fetchHistory, sendMessage } from "../../api/chatApi";
 
 /* Message d'introduction */
 const INTRO_MESSAGE: Message = {
@@ -29,7 +29,11 @@ export default function Chat() {
     fetchHistory()
       .then((history) => {
         if (Array.isArray(history) && history.length > 0) {
-          setMessages(history);
+          if (history[0].content !== INTRO_MESSAGE.content) {
+            setMessages([INTRO_MESSAGE, ...history]);
+          } else {
+            setMessages(history);
+          }
         } else {
           setMessages([INTRO_MESSAGE]);
         }
@@ -67,7 +71,7 @@ export default function Chat() {
   return (
     /* Conteneur principal du chat */
     <div className="chat-container">
-      <h1 className="chat-title">PolyChat</h1>
+      <h1 className="chat-title">PolyBot</h1>
       <div className="chat-subtitle">
         Le chatbot de Polytech Sorbonne qui répond à toutes vos questions !
       </div>

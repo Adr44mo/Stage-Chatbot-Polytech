@@ -3,7 +3,7 @@
 # ==============================================================================
 
 # Imports des bibliothèques nécessaires
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends, Cookie
 from sqlmodel import Session, select
 from typing import List
 import json
@@ -56,12 +56,12 @@ router = APIRouter()
 # ===================================================================================
 
 @router.get("/history", response_model=List[ChatMessage])
-def get_history(x_session_id: str = Header(...), session: Session = Depends(get_session)):
+def get_history(polybot_session_id: str = Cookie(None), session: Session = Depends(get_session)):
     """
     Récupère l'historique des messages (user/assistant) liés à un session_id anonyme.
     Retourne la liste des messages formatés pour le frontend.
     """
-    conversation = session.exec(select(Conversation).where(Conversation.session_id == x_session_id)).first()
+    conversation = session.exec(select(Conversation).where(Conversation.session_id == polybot_session_id)).first()
     if not conversation:
         return []
     messages = session.exec(select(DBMessage).where(DBMessage.conversation_id == conversation.id).order_by(DBMessage.timestamp)).all()

@@ -7,8 +7,8 @@
 
 /* Import des dépendances nécessaires */
 import { useEffect } from "react";
-import useAutosize from "../hooks/useAutosize";
-import sendIcon from "../assets/send.svg";
+import useAutosize from "../../hooks/useAutosize";
+import sendIcon from "../../assets/send.svg";
 
 /* Paramètres du composant ChatInput */
 interface ChatInputProps {
