@@ -1,0 +1,14 @@
+[
+  {
+    "type": "sqlite",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Fastapi/database.db"
+  },
+  {
+    "type": "sqlite",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Fastapi/backend/database.db"
+  },
+  {
+    "type": "sqlite",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/database.db"
+  }
+]

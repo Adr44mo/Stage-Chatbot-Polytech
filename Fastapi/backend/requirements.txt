@@ -51,3 +51,8 @@ pymupdf
 
 # Gestion des fichier YAML
 ruamel.yaml
+
+# Scraping
+beautifulsoup4
+lxml
+PyPDF2
