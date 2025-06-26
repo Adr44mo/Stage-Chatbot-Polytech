@@ -300,6 +300,19 @@ body,
   margin-left: 8px;
 }
 
+/* =======================================================
+   Styles pour la page principale du chatbot (ChatbotPage)
+   ======================================================= */
+.chatbot-captcha-container {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 24px;
+  text-align: center;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(146, 179, 202, 0.08);
+}
+
 /* ========================
    INTERFACE ADMINISTRATEUR
    ======================== */

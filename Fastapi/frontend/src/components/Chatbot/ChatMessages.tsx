@@ -6,7 +6,7 @@
 import Markdown from "react-markdown";
 import useAutoScroll from "../../hooks/useAutoScroll";
 import Spinner from "./Spinner";
-import type { Message } from "../../types";
+import type { Message } from "../../types/chatTypes";
 import userIcon from "../../assets/user.svg";
 import { renderSources } from "../../utils";
 

@@ -6,7 +6,7 @@
  */
 
 import { useState, useEffect } from "react";
-import type { Message } from "../../types";
+import type { Message } from "../../types/chatTypes";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
 import { fetchHistory, sendMessage } from "../../api/chatApi";

@@ -2,7 +2,7 @@
 // Gestionnaire des appels API pour le chatbot
 // ===========================================
 
-import type { Message, ChatRequest, ChatResponse } from "../types";
+import type { Message, ChatRequest, ChatResponse } from "../types/chatTypes";
 
 /* URL de l'API backend */
 const API_URL = import.meta.env.VITE_BACKEND_URL;
