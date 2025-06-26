@@ -300,9 +300,59 @@ body,
   margin-left: 8px;
 }
 
-/* =====================
+/* ========================
    INTERFACE ADMINISTRATEUR
-   =========================*/
+   ======================== */
+
+/* ========================================
+   Styles pour la page de login (LoginPage)
+   ======================================== */
+.login-page-container {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 24px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fff;
+}
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.login-form-group {
+  margin-bottom: 16px;
+}
+.login-input {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+.login-error-message {
+  color: var(--color-error-red);
+  margin-bottom: 12px;
+  text-align: center;
+  font-size: 1rem;
+}
+.login-submit-btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: none;
+  background: #007bff;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.login-submit-btn:disabled {
+  background: #b0c4d8;
+  cursor: not-allowed;
+}
 
 /* ======================================================
    Styles pour la mise en page administrateur (AdminPage)
@@ -343,6 +393,12 @@ body,
   border-left: 4px solid #007bff;
   color: #007bff;
 }
+.admin-logout-btn {
+  margin-left: 16px;
+}
+.admin-logout-btn-wrapper {
+  margin-top: 32px;
+}
 .admin-main-content {
   flex: 1;
   padding: 32px 24px;
@@ -353,6 +409,27 @@ body,
   font-weight: 700;
   margin-bottom: 1rem;
   color: inherit;
+}
+
+/* ===============================================
+   Styles pour l'upload PDF admin (AdminUploadPDF)
+   =============================================== */
+.admin-upload-section {
+  margin: 2rem 0;
+}
+.admin-upload-dropzone {
+  border: 2px dashed #007bff;
+  border-radius: 8px;
+  padding: 32px;
+  text-align: center;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.admin-upload-dropzone:hover,
+.admin-upload-dropzone:focus {
+  border-color: #0056b3;
+  background: #eaf4fb;
 }
 
 /* =====================================================
@@ -422,11 +499,6 @@ body,
   color: #fff;
   cursor: not-allowed;
 }
-.admin-scraping-site-url {
-  color: #888;
-  font-size: 0.97em;
-  margin-left: 6px;
-}
 .admin-scraping-advanced-toggle-wrapper {
   display: flex;
   justify-content: flex-end;
@@ -442,31 +514,6 @@ body,
   padding: 0;
   margin: 0;
 }
-
-/* ===============================================
-   Styles pour l'upload PDF admin (AdminUploadPDF)
-   =============================================== */
-.admin-upload-section {
-  margin: 2rem 0;
-}
-.admin-upload-dropzone {
-  border: 2px dashed #007bff;
-  border-radius: 8px;
-  padding: 32px;
-  text-align: center;
-  background: #f8fafc;
-  cursor: pointer;
-  transition: border-color 0.2s;
-}
-.admin-upload-dropzone:hover,
-.admin-upload-dropzone:focus {
-  border-color: #0056b3;
-  background: #eaf4fb;
-}
-
-/* ===================================================================================
-   Styles pour les options avancées de scraping administrateur (AdminScrapingSettings)
-   =================================================================================== */
 .admin-scraping-advanced-block {
   margin-top: 24px;
   background: #f1f7ff;
@@ -496,6 +543,28 @@ body,
 .admin-scraping-advanced-site-item:last-child {
   border-bottom: none;
 }
+.admin-scraping-site-url {
+  color: #888;
+  font-size: 0.97em;
+  margin-left: 6px;
+}
+.admin-scraping-delete-btn {
+  background: none;
+  border: none;
+  color: #c0392b;
+  font-size: 0.98rem;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.admin-scraping-delete-btn:hover {
+  background: #ffeaea;
+}
+
+/* ====================================================================
+   Styles pour les options avancées de scarping (AdminScrapingSettings)
+   ==================================================================== */
 .admin-scraping-add-form {
   display: flex;
   flex-direction: row;
@@ -520,7 +589,7 @@ body,
   height: 38px;
   background: #fff;
 }
-.admin-scraping-add-site-btn[type="submit"] {
+.admin-scraping-btn[type="submit"] {
   height: 38px;
   padding: 0 18px;
   font-size: 1.05rem;
@@ -537,19 +606,6 @@ body,
   width: auto;
   min-width: 0;
 }
-.admin-scraping-add-site-btn[type="submit"]:hover {
+.admin-scraping-btn[type="submit"]:hover {
   background: #0056b3;
-}
-.admin-scraping-delete-btn {
-  background: none;
-  border: none;
-  color: #c0392b;
-  font-size: 0.98rem;
-  cursor: pointer;
-  padding: 4px 10px;
-  border-radius: 4px;
-  transition: background 0.15s;
-}
-.admin-scraping-delete-btn:hover {
-  background: #ffeaea;
 }

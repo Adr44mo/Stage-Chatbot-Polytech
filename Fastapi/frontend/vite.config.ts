@@ -5,7 +5,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/files': 'http://134.157.105.72:8000'
+      '/files': 'http://134.157.105.72:8000',
+      '/auth': 'http://134.157.105.72:8000',
     }
   }
 });
