@@ -623,9 +623,9 @@ body,
   background: #0056b3;
 }
 
-/* ===================================
-   Styles pour la gestion du corpus PDF
-   =================================== */
+/* ==================================================
+   Styles pour la gestion du corpus PDF (AdminCorpus)
+   ================================================== */
 .admin-corpus-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -711,49 +711,40 @@ body,
   display: flex;
   justify-content: center;
 }
-
 /* Styles pour les fichiers cliquables et drag & drop */
 .admin-corpus-tree-name.clickable {
   cursor: pointer;
   color: #1e40af;
   transition: color 0.2s;
 }
-
 .admin-corpus-tree-name.clickable:hover {
   text-decoration: underline;
   color: #1d4ed8;
 }
-
 .admin-corpus-tree-name.folder-clickable {
   cursor: pointer;
   color: #374151;
   transition: color 0.2s;
 }
-
 .admin-corpus-tree-name.folder-clickable:hover {
   color: #1f2937;
   font-weight: 500;
 }
-
 .admin-corpus-tree-item.drag-over {
   background-color: #dbeafe !important;
   border: 2px dashed #3b82f6;
   border-radius: 4px;
 }
-
 .admin-corpus-tree-item.dragging {
   opacity: 0.5;
   background-color: #f3f4f6;
 }
-
 .admin-corpus-tree-item[draggable="true"] {
   cursor: grab;
 }
-
 .admin-corpus-tree-item[draggable="true"]:active {
   cursor: grabbing;
 }
-
 .admin-corpus-tree-children {
   border-left: 1px solid #e5e7eb;
   margin-left: 1rem;
@@ -796,13 +787,10 @@ body,
   font-weight: 600;
   animation: pulse 1s infinite;
 }
-
-/* Styles pour le drag & drop de fichiers externes */
 .admin-corpus-tree-wrapper.external-drag-over {
   border: 3px dashed #3b82f6;
   background-color: #f0f9ff;
 }
-
 .admin-corpus-external-drop-overlay {
   position: absolute;
   top: 0;
@@ -816,7 +804,6 @@ body,
   z-index: 10;
   pointer-events: none;
 }
-
 .admin-corpus-external-drop-message {
   background: #3b82f6;
   color: white;
@@ -827,7 +814,6 @@ body,
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
   animation: pulse 2s infinite;
 }
-
 .admin-corpus-upload-overlay {
   position: absolute;
   top: 0;
@@ -842,13 +828,15 @@ body,
   z-index: 20;
   gap: 1rem;
 }
-
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
-
-/* Styles pour les contrôles du file tree */
 .admin-corpus-tree-controls {
   display: flex;
   align-items: center;
@@ -859,7 +847,6 @@ body,
   border-radius: 8px;
   border: 1px solid #e5e7eb;
 }
-
 .admin-corpus-add-btn {
   background: #3b82f6;
   color: white;
@@ -874,16 +861,13 @@ body,
   align-items: center;
   gap: 0.5rem;
 }
-
 .admin-corpus-add-btn:hover:not(:disabled) {
   background: #2563eb;
 }
-
 .admin-corpus-add-btn:disabled {
   background: #9ca3af;
   cursor: not-allowed;
 }
-
 .admin-corpus-drag-hint {
   color: #6b7280;
   font-size: 0.9rem;
