@@ -5,7 +5,7 @@
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { logoutAdmin } from "../../api/adminApi";
+import { logoutAdmin } from "../../api/authApi";
 import { useAdminAuth } from "../../auth/AdminAuthContext";
 
 const AdminLogoutButton: React.FC = () => {

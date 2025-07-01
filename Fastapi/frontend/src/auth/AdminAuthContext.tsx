@@ -10,7 +10,7 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import { checkAdminAuth } from "../api/adminApi";
+import { checkAdminAuth } from "../api/authApi";
 
 // Données fournies par le contexte d'authentification admin
 interface AdminAuthContextType {

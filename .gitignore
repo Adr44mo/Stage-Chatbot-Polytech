@@ -13,4 +13,5 @@ Questions_qualité
 
 # Ignore Scraping files
 Document_handler/Corpus
-Document_handler/scraping/data_sites
+
+node_modules

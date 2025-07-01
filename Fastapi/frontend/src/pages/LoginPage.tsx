@@ -6,7 +6,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAdminAuth } from "../auth/AdminAuthContext";
-import { loginAdmin } from "../api/adminApi";
+import { loginAdmin } from "../api/authApi";
 
 const LoginPage: React.FC = () => {
   // États locaux pour le formulaire et l'affichage

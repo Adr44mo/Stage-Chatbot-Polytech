@@ -4,7 +4,7 @@
 
 import { useState } from "react";
 import AdminScraping from "../components/Admin/AdminScraping";
-import AdminUploadPDF from "../components/Admin/AdminUploadPDF";
+import AdminCorpus from "../components/Admin/AdminCorpus";
 import AdminLogoutButton from "../components/Admin/AdminLogoutButton";
 
 export default function AdminPage() {
@@ -52,7 +52,7 @@ export default function AdminPage() {
       </aside>
       {/* On affichage le contenu selon la section choisie */}
       <main className="admin-main-content">
-        {section === "corpus" ? <AdminUploadPDF /> : <AdminScraping />}
+        {section === "corpus" ? <AdminCorpus /> : <AdminScraping />}
       </main>
     </div>
   );
