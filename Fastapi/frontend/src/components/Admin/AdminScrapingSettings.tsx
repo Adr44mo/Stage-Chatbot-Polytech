@@ -65,7 +65,7 @@ export default function AdminScrapingSettings({
           onChange={(e) => setNewSiteUrl(e.target.value)}
           required
         />
-        <button className="admin-scraping-add-site-btn" type="submit">
+        <button className="admin-corpus-add-btn" type="submit">
           Ajouter
         </button>
         {addError && <div className="admin-scraping-error">{addError}</div>}

@@ -288,3 +288,128 @@ export const isDescendant = (tree: FileNode, ancestorId: string, nodeId: string)
   const ancestorNode = findNode(tree, ancestorId);
   return ancestorNode ? checkDescendant(ancestorNode) : false;
 };
+
+// ==============================================
+// FONCTIONS DE HAUT NIVEAU POUR LES COMPOSANTS
+// ==============================================
+
+/**
+ * Gère la suppression complète d'un fichier (API + mise à jour locale)
+ */
+export const handleFileDelete = async (
+  fileId: string,
+  currentTree: FileNode,
+  onSuccess?: (fileId: string) => void
+): Promise<FileNode> => {
+  if (!confirm("Êtes-vous sûr de vouloir supprimer ce fichier ?")) {
+    return currentTree;
+  }
+
+  try {
+    // Appel API pour supprimer le fichier
+    await deleteFile(fileId);
+
+    // Mise à jour locale de l'arborescence
+    const updatedTree = removeFileFromTree(currentTree, fileId);
+
+    // Callback optionnel pour notifier le succès
+    onSuccess?.(fileId);
+
+    return updatedTree;
+  } catch (error) {
+    console.error("Erreur lors de la suppression:", error);
+    alert("Erreur lors de la suppression du fichier");
+    throw error;
+  }
+};
+
+/**
+ * Gère le déplacement complet d'un fichier (API + mise à jour locale)
+ */
+export const handleFileMove = async (
+  draggedItem: FileNode,
+  targetNode: FileNode,
+  currentTree: FileNode
+): Promise<FileNode> => {
+  if (
+    !draggedItem ||
+    targetNode.type !== "folder" ||
+    draggedItem.id === targetNode.id
+  ) {
+    return currentTree;
+  }
+
+  try {
+    // Mise à jour optimiste de l'UI
+    const updatedTree = moveFileInTree(currentTree, draggedItem.id, targetNode.id);
+
+    // Appel API pour déplacer le fichier
+    await moveFile(draggedItem.id, targetNode.path);
+
+    console.log(`Fichier ${draggedItem.name} déplacé vers ${targetNode.name}`);
+    return updatedTree;
+  } catch (error) {
+    console.error("Erreur lors du déplacement:", error);
+    alert("Erreur lors du déplacement du fichier");
+    throw error;
+  }
+};
+
+/**
+ * Gère l'upload complet de fichiers (API + rechargement de l'arborescence)
+ */
+export const handleFileUpload = async (
+  files: FileList,
+  targetFolder?: FileNode,
+  onFileUploaded?: (fileName: string) => void
+): Promise<void> => {
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    if (file.type === "application/pdf") {
+      console.log("PDF à uploader:", file);
+
+      // Utiliser l'API d'upload avec le chemin du dossier cible
+      const targetPath = targetFolder?.path || "/corpus";
+      await uploadFile(file, targetPath);
+
+      // Notifier le composant parent
+      onFileUploaded?.(file.name);
+    } else {
+      alert(`Le fichier ${file.name} n'est pas un PDF`);
+    }
+  }
+};
+
+/**
+ * Gère l'ouverture d'un fichier
+ */
+export const handleFileOpen = async (node: FileNode): Promise<void> => {
+  if (node.type !== "file") return;
+
+  try {
+    const previewUrl = await getFilePreviewUrl(node.id);
+    window.open(previewUrl, "_blank");
+  } catch (error) {
+    console.error("Erreur lors de l'ouverture du fichier:", error);
+    alert("Erreur lors de l'ouverture du fichier");
+  }
+};
+
+/**
+ * Crée un élément input pour sélectionner des fichiers via un bouton
+ */
+export const createFileInput = (
+  onFilesSelected: (files: FileList) => void
+): void => {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "application/pdf";
+  input.multiple = true;
+  input.onchange = (e) => {
+    const files = (e.target as HTMLInputElement).files;
+    if (files) {
+      onFilesSelected(files);
+    }
+  };
+  input.click();
+};
