@@ -8,7 +8,7 @@ import useAutoScroll from "../../hooks/useAutoScroll";
 import Spinner from "./Spinner";
 import type { Message } from "../../types/chatTypes";
 import userIcon from "../../assets/user.svg";
-import { renderSources } from "../../utils";
+import { renderSources } from "../../utils/chatUtils";
 
 interface ChatMessagesProps {
   messages: Message[] /* Liste des messages à afficher */;

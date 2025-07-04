@@ -5,16 +5,16 @@
 
 import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import type { FileNode } from "../../api/corpusApi";
+import { fetchCorpusTree } from "../../api/corpusApi";
 import {
-  fetchCorpusTree,
   updateFolderExpansion,
   isDescendant,
+  createFileInput,
   handleFileDelete,
   handleFileMove,
   handleFileUpload,
   handleFileOpen,
-  createFileInput,
-} from "../../api/corpusApi";
+} from "../../utils/corpusUtils";
 import AdminCorpusTreeNode from "./AdminCorpusTreeNode";
 
 interface AdminCorpusFileTreeProps {
