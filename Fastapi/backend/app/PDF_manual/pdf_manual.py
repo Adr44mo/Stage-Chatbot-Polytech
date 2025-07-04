@@ -3,7 +3,9 @@ from pathlib import Path
 import shutil
 from typing import List
 
-PDF_MANUAL_DIR = Path(__file__).parent.parent.parent.parent.parent / "Document_handler/Corpus/pdf_man"
+# Configuration du corpus PDF
+CORPUS_RELATIVE_PATH = "Document_handler/Corpus/pdf_man"
+PDF_MANUAL_DIR = Path(__file__).parent.parent.parent.parent.parent / CORPUS_RELATIVE_PATH
 
 router = APIRouter()
 
@@ -28,6 +30,15 @@ def upload_files(
         saved_files.append(str(file_path))
 
     return {"message": "Files uploaded successfully", "saved": saved_files}
+
+@router.get("/admin/config")
+def get_corpus_config():
+    """
+    Retourne la configuration du corpus PDF.
+    """
+    return {
+        "corpus_root_path": CORPUS_RELATIVE_PATH
+    }
 
 @router.get("/admin/list-dirs")
 def list_dirs():
@@ -96,7 +107,7 @@ def download_dir(dir: str):
 
     return {"zip_file": str(zip_path)}
 
-# renomer un fichier PDF
+# renommer un fichier PDF
 @router.post("/admin/rename-file/{dir}/{old_filename}")
 def rename_file(dir: str, old_filename: str, new_filename: str):
     old_file_path = PDF_MANUAL_DIR / dir / old_filename

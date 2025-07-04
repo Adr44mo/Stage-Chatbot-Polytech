@@ -2,7 +2,9 @@
 // Gestionnaire des appels API pour le corpus PDF
 // ==============================================
 
-// Types pour la gestion des fichiers et dossiers
+/**
+ * Types pour la gestion des fichiers et dossiers
+ */
 export interface FileNode {
   id: string;
   name: string;
@@ -15,151 +17,256 @@ export interface FileNode {
   isExpanded?: boolean;
 }
 
-// Données mockées pour le développement (à remplacer par des appels API)
-const mockCorpusTree: FileNode = {
-  id: "root",
-  name: "Corpus",
-  path: "/corpus",
-  type: "folder",
-  isExpanded: true,
-  children: [
-    {
-      id: "documents",
-      name: "documents",
-      path: "/corpus/documents",
-      type: "folder",
-      isExpanded: false,
-      children: [
-        {
-          id: "doc1",
-          name: "reglement.pdf",
-          path: "/corpus/documents/reglement.pdf",
-          type: "file",
-          dateAdded: "2025-06-20",
-          dateModified: "2025-06-20",
-        },
-        {
-          id: "doc2",
-          name: "charte.pdf",
-          path: "/corpus/documents/charte.pdf",
-          type: "file",
-          dateAdded: "2025-06-19",
-          dateModified: "2025-06-19",
-        },
-      ],
-    },
-    {
-      id: "guides",
-      name: "guides",
-      path: "/corpus/guides",
-      type: "folder",
-      isExpanded: false,
-      children: [
-        {
-          id: "guide1",
-          name: "tutoriel.pdf",
-          path: "/corpus/guides/tutoriel.pdf",
-          type: "file",
-          dateAdded: "2025-06-18",
-          dateModified: "2025-06-18",
-        },
-      ],
-    },
-    {
-      id: "faq",
-      name: "faq",
-      path: "/corpus/faq",
-      type: "folder",
-      isExpanded: false,
-      children: [
-        {
-          id: "faq1",
-          name: "FAQ_polytech.pdf",
-          path: "/corpus/faq/FAQ_polytech.pdf",
-          type: "file",
-          dateAdded: "2025-06-15",
-          dateModified: "2025-06-15",
-        },
-      ],
-    },
-    {
-      id: "standalone1",
-      name: "presentation_ecole.pdf",
-      path: "/corpus/presentation_ecole.pdf",
-      type: "file",
-      dateAdded: "2025-06-10",
-      dateModified: "2025-06-10",
-    },
-  ],
-};
-
 /**
- * Récupère l'arborescence complète du corpus
- * TODO: Remplacer par un vrai appel API
+ * Récupère l'arborescence du corpus depuis l'API
+ * @returns FileNode - L'arborescence des fichiers et dossiers du corpus
  */
 export const fetchCorpusTree = async (): Promise<FileNode> => {
-  // Simule un délai d'API
-  await new Promise((resolve) => setTimeout(resolve, 100));
-  return mockCorpusTree;
-};
+  try {
+    // On récupère la liste des dossiers
+    const dirsResponse = await fetch("/pdf_manual/admin/list-dirs");
+    if (!dirsResponse.ok) {
+      throw new Error(
+        `Erreur lors de la récupération des dossiers: ${dirsResponse.status}`
+      );
+    }
+    const dirsData = await dirsResponse.json();
 
-/**
- * Supprime un fichier du corpus
- * TODO: Remplacer par un vrai appel API
- */
-export const deleteFile = async (fileId: string): Promise<void> => {
-  // Simule un délai d'API
-  await new Promise((resolve) => setTimeout(resolve, 200));
-  console.log(`Suppression du fichier ${fileId} (API à implémenter)`);
-  // TODO: Appel API DELETE /api/corpus/files/{fileId}
-};
+    // On récupère tous les fichiers
+    const allFilesResponse = await fetch("/pdf_manual/admin/list-all-files");
+    if (!allFilesResponse.ok) {
+      throw new Error(
+        `Erreur lors de la récupération des fichiers: ${allFilesResponse.status}`
+      );
+    }
+    const allFilesData = await allFilesResponse.json();
 
-/**
- * Upload un nouveau fichier PDF dans le corpus
- * TODO: Remplacer par un vrai appel API
- */
-export const uploadFile = async (
-  file: File,
-  path?: string
-): Promise<FileNode> => {
-  // Simule un délai d'API
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+    // On construit l'arborescence
+    const children: FileNode[] = [];
 
-  // TODO: Appel API POST /api/corpus/files avec FormData
-  const newFile: FileNode = {
-    id: `file_${Date.now()}`,
-    name: file.name,
-    path: path ? `${path}/${file.name}` : `/corpus/${file.name}`,
-    type: "file",
-    dateAdded: new Date().toISOString().split("T")[0],
-    dateModified: new Date().toISOString().split("T")[0],
-  };
+    // On ajoute les dossiers
+    for (const dirName of dirsData.directories) {
+      const dirFiles: FileNode[] = [];
 
-  console.log(`Upload du fichier ${file.name} (API à implémenter)`);
-  return newFile;
-};
+      // On ajoute les fichiers de ce dossier
+      for (const fileInfo of allFilesData.files) {
+        if (fileInfo.dir === dirName) {
+          dirFiles.push({
+            id: `${dirName}_${fileInfo.file}`,
+            name: fileInfo.file,
+            path: `/corpus/${dirName}/${fileInfo.file}`,
+            type: "file",
+            dateAdded: new Date().toISOString().split("T")[0], // TODO: changer avec vraie date d'ajout
+            dateModified: new Date().toISOString().split("T")[0], //TODO: changer avec vraie date de modif
+          });
+        }
+      }
 
-/**
- * Déplace un fichier vers un nouveau dossier
- * TODO: Remplacer par un vrai appel API
- */
-export const moveFile = async (fileId: string, newPath: string): Promise<void> => {
-  // Simule un délai d'API
-  await new Promise(resolve => setTimeout(resolve, 300));
-  console.log(`Déplacement du fichier ${fileId} vers ${newPath} (API à implémenter)`);
-  // TODO: Appel API PUT /api/corpus/files/{fileId}/move
+      children.push({
+        id: dirName,
+        name: dirName,
+        path: `/corpus/${dirName}`,
+        type: "folder",
+        isExpanded: false,
+        children: dirFiles,
+      });
+    }
+
+    // On crée la racine
+    const corpusTree: FileNode = {
+      id: "root",
+      name: "Corpus PDF",
+      path: "/corpus",
+      type: "folder",
+      isExpanded: true,
+      children: children,
+    };
+
+    return corpusTree;
+  } catch (error) {
+    console.error("Erreur lors du chargement du corpus :", error);
+    throw error;
+  }
 };
 
 /**
  * Obtient l'URL de prévisualisation d'un fichier
- * TODO: Remplacer par un vrai appel API
+ * @param fileId - L'ID du fichier au format "dossier_nomfichier.pdf"
+ * @returns l'URL pour prévisualiser un fichier PDF
  */
 export const getFilePreviewUrl = async (fileId: string): Promise<string> => {
-  // Simule un délai d'API
-  await new Promise(resolve => setTimeout(resolve, 100));
-  console.log(`Ouverture du fichier ${fileId} (API à implémenter)`);
-  // TODO: Appel API GET /api/corpus/files/{fileId}/preview
-  return `/api/corpus/files/${fileId}/preview`;
+  try {
+    const configResponse = await fetch("/pdf_manual/admin/config");
+    if (!configResponse.ok) {
+      throw new Error("Erreur lors de la récupération de la configuration");
+    }
+    const config = await configResponse.json();
+
+    // On récupère tous les fichiers pour trouver le fichier correspondant à l'ID
+    const allFilesResponse = await fetch("/pdf_manual/admin/list-all-files");
+    if (!allFilesResponse.ok) {
+      throw new Error("Erreur lors de la récupération des fichiers");
+    }
+    const allFilesData = await allFilesResponse.json();
+    const fileInfo = allFilesData.files.find(
+      (file: any) => `${file.dir}_${file.file}` === fileId
+    );
+    if (!fileInfo) {
+      throw new Error(`Fichier non trouvé pour l'ID: ${fileId}`);
+    }
+
+    // On construit le chemin en utilisant les noms de dossier et fichier
+    const filePath = `/${config.corpus_root_path}/${fileInfo.dir}/${fileInfo.file}`;
+    const fileUrl = `/files${encodeURIComponent(filePath)}`;
+
+    return fileUrl;
+  } catch (error) {
+    console.error(
+      "Erreur lors de la génération de l'URL de prévisualisation:",
+      error
+    );
+    throw error;
+  }
+};
+
+/**
+ * Upload un nouveau fichier PDF dans le corpus
+ * @param file - Le fichier à uploader
+ * @param targetFolder - Le dossier cible (utilise le dossier "autre" par défaut)
+ * @returns le nouveau nœud de fichier
+ */
+export const uploadFile = async (
+  file: File,
+  targetFolder?: string
+): Promise<FileNode> => {
+  try {
+    let dirName = "autre"; // dossier par défaut
+    if (targetFolder && targetFolder !== "/corpus") {
+      // Extraire le nom du dossier depuis le path
+      //TODO: changer pour pouvoir gérer les sous-dossiers (éventuellement upload dans corpus directement)
+      const pathParts = targetFolder.split("/");
+      if (pathParts.length >= 3) {
+        dirName = pathParts[2];
+      }
+    }
+
+    // On crée le FormData pour l'upload
+    const formData = new FormData();
+    formData.append("files", file);
+    formData.append("dir", dirName);
+
+    // On appelle l'API pour uploader le fichier
+    const response = await fetch("/pdf_manual/admin/upload-files", {
+      method: "POST",
+      body: formData,
+    });
+    if (!response.ok) {
+      throw new Error(`Erreur lors de l'upload: ${response.status}`);
+    }
+
+    // On crée le nœud de fichier pour la réponse
+    const newFile: FileNode = {
+      id: `${dirName}_${file.name}`,
+      name: file.name,
+      path: `/corpus/${dirName}/${file.name}`,
+      type: "file",
+      dateAdded: new Date().toISOString().split("T")[0],
+      dateModified: new Date().toISOString().split("T")[0],
+    };
+
+    return newFile;
+  } catch (error) {
+    console.error("Erreur lors de l'upload:", error);
+    throw error;
+  }
+};
+
+/**
+ * Supprime un fichier du corpus
+ * @param fileId - L'ID du fichier au format "dossier_nomfichier.pdf"
+ * @returns Promise qui se résout quand la suppression est terminée
+ */
+export const deleteFile = async (fileId: string): Promise<void> => {
+  try {
+    // On récupère tous les fichiers pour trouver le fichier correspondant à l'ID
+    const allFilesResponse = await fetch("/pdf_manual/admin/list-all-files");
+    if (!allFilesResponse.ok) {
+      throw new Error("Erreur lors de la récupération des fichiers");
+    }
+    const allFilesData = await allFilesResponse.json();
+    const fileInfo = allFilesData.files.find(
+      (file: any) => `${file.dir}_${file.file}` === fileId
+    );
+    if (!fileInfo) {
+      throw new Error(`Fichier non trouvé pour l'ID: ${fileId}`);
+    }
+
+    // On appelle l'API pour supprimer le fichier
+    const response = await fetch(
+      `/pdf_manual/admin/delete-file/${encodeURIComponent(
+        fileInfo.dir
+      )}/${encodeURIComponent(fileInfo.file)}`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.detail || `Erreur lors de la suppression: ${response.status}`
+      );
+    }
+  } catch (error) {
+    console.error("Erreur lors de la suppression:", error);
+    throw error;
+  }
+};
+
+/**
+ * Déplace un fichier vers un nouveau dossier
+ * @param fileId - L'ID du fichier au format "dossier_nomfichier.pdf"
+ * @param targetFolderId - L'ID du dossier de destination
+ * @returns Promise qui se résout quand le déplacement est terminé
+ */
+export const moveFile = async (
+  fileId: string,
+  targetFolderId: string
+): Promise<void> => {
+  try {
+    // On récupère tous les fichiers pour trouver le fichier correspondant à l'ID
+    const allFilesResponse = await fetch("/pdf_manual/admin/list-all-files");
+    if (!allFilesResponse.ok) {
+      throw new Error("Erreur lors de la récupération des fichiers");
+    }
+    const allFilesData = await allFilesResponse.json();
+    const fileInfo = allFilesData.files.find(
+      (file: any) => `${file.dir}_${file.file}` === fileId
+    );
+    if (!fileInfo) {
+      throw new Error(`Fichier non trouvé pour l'ID: ${fileId}`);
+    }
+
+    // On crée le FormData pour le déplacement
+    const formData = new FormData();
+    formData.append("dir", fileInfo.dir);
+    formData.append("filename", fileInfo.file); 
+    formData.append("target_dir", targetFolderId); 
+
+    // On appelle l'API pour déplacer le fichier
+    const response = await fetch("/pdf_manual/admin/move-file", {
+      method: "POST",
+      body: formData,
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.detail || `Erreur lors du déplacement: ${response.status}`
+      );
+    }
+  } catch (error) {
+    console.error("Erreur lors du déplacement:", error);
+    throw error;
+  }
 };
 
 /**
@@ -214,44 +321,50 @@ export const removeFileFromTree = (
  * Déplace un fichier dans l'arborescence locale (côté client)
  * Cette fonction est locale et ne nécessite pas d'appel API
  */
-export const moveFileInTree = (tree: FileNode, fileId: string, targetFolderId: string): FileNode => {
+export const moveFileInTree = (
+  tree: FileNode,
+  fileId: string,
+  targetFolderId: string
+): FileNode => {
   let movedFile: FileNode | null = null;
-  
+
   // Fonction pour extraire le fichier de l'arborescence
   const extractFile = (node: FileNode): FileNode => {
     if (node.children) {
-      const newChildren = node.children.filter(child => {
-        if (child.id === fileId) {
-          movedFile = child;
-          return false;
-        }
-        return true;
-      }).map(child => extractFile(child));
-      
+      const newChildren = node.children
+        .filter((child) => {
+          if (child.id === fileId) {
+            movedFile = child;
+            return false;
+          }
+          return true;
+        })
+        .map((child) => extractFile(child));
+
       return { ...node, children: newChildren };
     }
     return node;
   };
-  
+
   // Fonction pour ajouter le fichier au dossier cible
   const addFileToFolder = (node: FileNode): FileNode => {
-    if (node.id === targetFolderId && node.type === 'folder' && movedFile) {
+    if (node.id === targetFolderId && node.type === "folder" && movedFile) {
       return {
         ...node,
-        children: [...(node.children || []), movedFile]
+        children: [...(node.children || []), movedFile],
       };
     }
-    
+
     if (node.children) {
       return {
         ...node,
-        children: node.children.map(child => addFileToFolder(child))
+        children: node.children.map((child) => addFileToFolder(child)),
       };
     }
-    
+
     return node;
   };
-  
+
   // Exécuter le déplacement
   const treeWithoutFile = extractFile(tree);
   return movedFile ? addFileToFolder(treeWithoutFile) : tree;
@@ -261,30 +374,34 @@ export const moveFileInTree = (tree: FileNode, fileId: string, targetFolderId: s
  * Vérifie si un nœud est un descendant d'un autre nœud
  * Empêche de déplacer un dossier dans lui-même ou ses sous-dossiers
  */
-export const isDescendant = (tree: FileNode, ancestorId: string, nodeId: string): boolean => {
+export const isDescendant = (
+  tree: FileNode,
+  ancestorId: string,
+  nodeId: string
+): boolean => {
   const findNode = (node: FileNode, targetId: string): FileNode | null => {
     if (node.id === targetId) return node;
-    
+
     if (node.children) {
       for (const child of node.children) {
         const found = findNode(child, targetId);
         if (found) return found;
       }
     }
-    
+
     return null;
   };
-  
+
   const checkDescendant = (node: FileNode): boolean => {
     if (node.id === nodeId) return true;
-    
+
     if (node.children) {
-      return node.children.some(child => checkDescendant(child));
+      return node.children.some((child) => checkDescendant(child));
     }
-    
+
     return false;
   };
-  
+
   const ancestorNode = findNode(tree, ancestorId);
   return ancestorNode ? checkDescendant(ancestorNode) : false;
 };
@@ -341,10 +458,14 @@ export const handleFileMove = async (
 
   try {
     // Mise à jour optimiste de l'UI
-    const updatedTree = moveFileInTree(currentTree, draggedItem.id, targetNode.id);
+    const updatedTree = moveFileInTree(
+      currentTree,
+      draggedItem.id,
+      targetNode.id
+    );
 
     // Appel API pour déplacer le fichier
-    await moveFile(draggedItem.id, targetNode.path);
+    await moveFile(draggedItem.id, targetNode.id);
 
     console.log(`Fichier ${draggedItem.name} déplacé vers ${targetNode.name}`);
     return updatedTree;
@@ -356,7 +477,10 @@ export const handleFileMove = async (
 };
 
 /**
- * Gère l'upload complet de fichiers (API + rechargement de l'arborescence)
+ * Gère l'upload complet de fichiers (API + rechargement du corpus)
+ * @param files - Liste des fichiers à uploader
+ * @param targetFolder - Dossier cible (optionnel)
+ * @param onFileUploaded - Callback appelé après chaque upload réussi
  */
 export const handleFileUpload = async (
   files: FileList,
@@ -366,14 +490,21 @@ export const handleFileUpload = async (
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
     if (file.type === "application/pdf") {
-      console.log("PDF à uploader:", file);
+      try {
+        console.log("Upload du PDF:", file.name);
 
-      // Utiliser l'API d'upload avec le chemin du dossier cible
-      const targetPath = targetFolder?.path || "/corpus";
-      await uploadFile(file, targetPath);
+        // Utiliser l'API d'upload avec le chemin du dossier cible
+        const targetPath = targetFolder?.path;
+        await uploadFile(file, targetPath);
 
-      // Notifier le composant parent
-      onFileUploaded?.(file.name);
+        // Notifier le composant parent
+        onFileUploaded?.(file.name);
+
+        console.log(`✅ Upload réussi: ${file.name}`);
+      } catch (error) {
+        console.error(`❌ Erreur upload ${file.name}:`, error);
+        alert(`Erreur lors de l'upload de ${file.name}`);
+      }
     } else {
       alert(`Le fichier ${file.name} n'est pas un PDF`);
     }
