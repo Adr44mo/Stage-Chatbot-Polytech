@@ -67,7 +67,7 @@ export const fetchCorpusTree = async (): Promise<FileNode> => {
         name: dirName,
         path: `/corpus/${dirName}`,
         type: "folder",
-        isExpanded: false,
+        isExpanded: true,
         children: dirFiles,
       });
     }

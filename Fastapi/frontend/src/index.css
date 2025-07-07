@@ -372,7 +372,8 @@ body,
    ====================================================== */
 .admin-page-layout {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 .admin-sidebar {
   width: 200px;
@@ -414,35 +415,17 @@ body,
 }
 .admin-main-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   padding: 32px 24px;
   min-width: 0;
+  overflow: hidden;
 }
 .admin-page-subtitle {
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
   color: inherit;
-}
-
-/* ===============================================
-   Styles pour l'upload PDF admin (AdminUploadPDF)
-   =============================================== */
-.admin-upload-section {
-  margin: 2rem 0;
-}
-.admin-upload-dropzone {
-  border: 2px dashed #007bff;
-  border-radius: 8px;
-  padding: 32px;
-  text-align: center;
-  background: #f8fafc;
-  cursor: pointer;
-  transition: border-color 0.2s;
-}
-.admin-upload-dropzone:hover,
-.admin-upload-dropzone:focus {
-  border-color: #0056b3;
-  background: #eaf4fb;
 }
 
 /* =====================================================
@@ -627,9 +610,13 @@ body,
    Styles pour la gestion du corpus PDF (AdminCorpus)
    ================================================== */
 .admin-corpus-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
 }
+
 .admin-corpus-section-title {
   font-size: 1.25rem;
   font-weight: 600;
@@ -637,23 +624,60 @@ body,
   color: var(--color-main-text);
   border-bottom: 2px solid var(--color-primary-blue);
   padding-bottom: 0.5rem;
+  flex-shrink: 0;
 }
 
 /* ============================================================
    Styles pour l'arborescence de fichiers (AdminCorpusFileTree)
    ============================================================ */
 .admin-corpus-tree-section {
-  margin-top: 2rem;
-  margin-bottom: 3rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  margin: 0;
 }
+
 .admin-corpus-tree-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  padding: 1rem;
-  max-height: 600px;
-  overflow-y: auto;
+  padding: 0;
+  overflow: hidden;
   position: relative;
+  min-height: 0;
+  max-height: none;
+}
+
+.admin-corpus-tree-controls {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: #f8fafc;
+  border-radius: 8px 8px 0 0;
+  border-bottom: 1px solid #e5e7eb;
+  margin: 0;
+}
+
+.admin-corpus-tree-header {
+  flex-shrink: 0;
+  border-bottom: 2px solid #e5e7eb;
+  margin: 0;
+  padding: 0.5rem;
+  background: #fafbfc;
+}
+
+.admin-corpus-tree-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.5rem;
+  min-height: 0;
 }
 .admin-corpus-tree-node {
   margin-bottom: 0.25rem;
@@ -666,6 +690,7 @@ body,
   border-radius: 4px;
   transition: background-color 0.2s;
   min-height: 40px;
+  flex-shrink: 0;
 }
 .admin-corpus-tree-item:hover {
   background: #f8fafc;
@@ -749,11 +774,6 @@ body,
   border-left: 1px solid #e5e7eb;
   margin-left: 1rem;
 }
-.admin-corpus-tree-header {
-  border-bottom: 2px solid #e5e7eb;
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.5rem;
-}
 .admin-corpus-tree-header-item {
   display: flex;
   align-items: center;
@@ -828,25 +848,7 @@ body,
   z-index: 20;
   gap: 1rem;
 }
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-.admin-corpus-tree-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  padding: 0.75rem;
-  background: #f8fafc;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-}
+
 .admin-corpus-add-btn {
   background: #3b82f6;
   color: white;
@@ -872,4 +874,42 @@ body,
   color: #6b7280;
   font-size: 0.9rem;
   font-style: italic;
+}
+
+@media (max-height: 600px) {
+  .admin-main-content {
+    padding: 16px 24px;
+  }
+  
+  .admin-corpus-container {
+    height: calc(100vh - 32px);
+  }
+  
+  .admin-corpus-section-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.25rem;
+  }
+  
+  .admin-corpus-tree-controls {
+    padding: 0.5rem;
+  }
+}
+
+/* Ajustements pour les écrans moyens */
+@media (max-height: 800px) {
+  .admin-main-content {
+    padding: 24px;
+  }
+  
+  .admin-corpus-container {
+    height: calc(100vh - 48px);
+  }
+}
+
+/* Ajustements pour les très larges écrans */
+@media (min-height: 1200px) {
+  .admin-corpus-tree-content {
+    padding: 1rem;
+  }
 }

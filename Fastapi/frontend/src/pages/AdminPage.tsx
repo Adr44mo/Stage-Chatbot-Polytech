@@ -3,8 +3,8 @@
 // ================================
 
 import { useState } from "react";
-import AdminScraping from "../components/Admin/AdminScraping";
 import AdminCorpus from "../components/Admin/AdminCorpus";
+import AdminScraping from "../components/Admin/AdminScraping";
 import AdminLogoutButton from "../components/Admin/AdminLogoutButton";
 
 export default function AdminPage() {
