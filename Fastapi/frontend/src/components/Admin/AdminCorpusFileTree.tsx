@@ -48,7 +48,7 @@ const AdminCorpusFileTree = forwardRef<
       const tree = await fetchCorpusTree();
       setCorpusTree(tree);
     } catch (error) {
-      console.error("Erreur lors du chargement de l'arborescence:", error);
+      console.error("Erreur lors du chargement du corpus:", error);
     } finally {
       setLoading(false);
     }
@@ -197,7 +197,7 @@ const AdminCorpusFileTree = forwardRef<
 
     try {
       await handleFileUpload(files, targetFolder, onFileUploaded);
-      
+
       // Recharger l'arborescence après l'upload
       await loadCorpusTree();
     } catch (error) {
@@ -244,7 +244,7 @@ const AdminCorpusFileTree = forwardRef<
       <div className="admin-corpus-tree-wrapper">
         <div style={{ textAlign: "center", padding: "2rem" }}>
           <div className="spinner"></div>
-          <p>Chargement de l'arborescence...</p>
+          <p>Chargement du corpus...</p>
         </div>
       </div>
     );
@@ -254,7 +254,7 @@ const AdminCorpusFileTree = forwardRef<
     return (
       <div className="admin-corpus-tree-wrapper">
         <div style={{ textAlign: "center", padding: "2rem", color: "#666" }}>
-          Erreur lors du chargement de l'arborescence
+          Erreur lors du chargement du corpus
         </div>
       </div>
     );
@@ -275,7 +275,7 @@ const AdminCorpusFileTree = forwardRef<
           onClick={handleAddFileClick}
           disabled={uploading}
         >
-          ➕ Ajouter un PDF
+          Ajouter un PDF
         </button>
         <span className="admin-corpus-drag-hint">
           ou glissez-déposez vos fichiers PDF

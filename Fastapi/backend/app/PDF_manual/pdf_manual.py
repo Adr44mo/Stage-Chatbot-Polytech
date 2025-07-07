@@ -1,6 +1,8 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from pathlib import Path
 import shutil
+import os
+from datetime import datetime
 from typing import List
 
 # Configuration du corpus PDF
@@ -50,7 +52,20 @@ def list_files(dir: str):
     if not target_dir.exists() or not target_dir.is_dir():
         return {"error": "Directory does not exist"}
 
-    files = [f.name for f in target_dir.iterdir() if f.is_file() and f.suffix.lower() == ".pdf"]
+    files = []
+    for file_path in target_dir.iterdir():
+        if file_path.is_file() and file_path.suffix.lower() == ".pdf":
+            stat = file_path.stat()
+            created_time = datetime.fromtimestamp(stat.st_ctime).strftime("%Y-%m-%d")
+            modified_time = datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d")
+            
+            files.append({
+                "name": file_path.name,
+                "date_added": created_time,
+                "date_modified": modified_time,
+                "size": stat.st_size
+            })
+    
     return {"files": files}
 
 @router.get("/admin/list-all-files")
@@ -58,8 +73,20 @@ def list_all_files():
     all_files = []
     for dir in PDF_MANUAL_DIR.iterdir():
         if dir.is_dir():
-            files = [f.name for f in dir.iterdir() if f.is_file() and f.suffix.lower() == ".pdf"]
-            all_files.extend([{"dir": dir.name, "file": f} for f in files])
+            for file_path in dir.iterdir():
+                if file_path.is_file() and file_path.suffix.lower() == ".pdf":
+                    # Récupérer les métadonnées du fichier
+                    stat = file_path.stat()
+                    created_time = datetime.fromtimestamp(stat.st_ctime).strftime("%Y-%m-%d")
+                    modified_time = datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d")
+                    
+                    all_files.append({
+                        "dir": dir.name, 
+                        "file": file_path.name,
+                        "date_added": created_time,
+                        "date_modified": modified_time,
+                        "size": stat.st_size
+                    })
     return {"files": all_files}
 
 @router.delete("/admin/delete-file/{dir}/{filename}")

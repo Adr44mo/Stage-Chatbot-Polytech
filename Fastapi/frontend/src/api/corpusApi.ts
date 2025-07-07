@@ -56,8 +56,13 @@ export const fetchCorpusTree = async (): Promise<FileNode> => {
             name: fileInfo.file,
             path: `/corpus/${dirName}/${fileInfo.file}`,
             type: "file",
-            dateAdded: new Date().toISOString().split("T")[0], // TODO: changer avec vraie date d'ajout
-            dateModified: new Date().toISOString().split("T")[0], //TODO: changer avec vraie date de modif
+            dateAdded:
+              fileInfo.date_added || new Date().toISOString().split("T")[0],
+            dateModified:
+              fileInfo.date_modified || new Date().toISOString().split("T")[0],
+            size: fileInfo.size
+              ? `${Math.round(fileInfo.size / 1024)} KB`
+              : undefined,
           });
         }
       }

@@ -46,7 +46,7 @@ export default function AdminPage() {
           </ul>
         </nav>
         {/* Bouton de déconnexion */}
-        <div className="admin-logout-btn-wrapper">
+        <div style={{ marginTop: "32px" }}>
           <AdminLogoutButton />
         </div>
       </aside>

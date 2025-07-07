@@ -19,7 +19,7 @@ const AdminLogoutButton: React.FC = () => {
   };
 
   return (
-    <button onClick={handleLogout} className="admin-logout-btn">
+    <button onClick={handleLogout} style={{ marginLeft: "20px" }}>
       Déconnexion
     </button>
   );

@@ -407,12 +407,6 @@ body,
   border-left: 4px solid #007bff;
   color: #007bff;
 }
-.admin-logout-btn {
-  margin-left: 16px;
-}
-.admin-logout-btn-wrapper {
-  margin-top: 32px;
-}
 .admin-main-content {
   flex: 1;
   display: flex;
@@ -438,38 +432,6 @@ body,
   background: #f8fafc;
   padding: 24px;
   border-radius: 8px;
-}
-.admin-scraping-selectall {
-  margin-bottom: 8px;
-}
-.admin-scraping-sites-list {
-  list-style: none;
-  padding: 0;
-  margin-bottom: 16px;
-}
-.admin-scraping-site-item {
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.admin-scraping-checkbox-label {
-  cursor: pointer;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  flex: 1;
-}
-.admin-scraping-site-label {
-  flex: 1;
-}
-.admin-scraping-checkbox {
-  margin-right: 6px;
-}
-.admin-scraping-site-date {
-  color: #888;
-  font-size: 13px;
-  margin-left: 8px;
 }
 .admin-scraping-btn {
   margin-top: 8px;
@@ -510,6 +472,46 @@ body,
   padding: 0;
   margin: 0;
 }
+
+/* ===============================================================
+   Styles pour la liste des sites de scraping (AdminScrapingSites)
+   =============================================================== */
+.admin-scraping-selectall {
+  margin-bottom: 8px;
+}
+.admin-scraping-sites-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 16px;
+}
+.admin-scraping-site-item {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.admin-scraping-checkbox-label {
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+.admin-scraping-site-label {
+  flex: 1;
+}
+.admin-scraping-checkbox {
+  margin-right: 6px;
+}
+.admin-scraping-site-date {
+  color: #888;
+  font-size: 13px;
+  margin-left: 8px;
+}
+
+/* ====================================================================
+   Styles pour les options avancées de scarping (AdminScrapingSettings)
+   ==================================================================== */
 .admin-scraping-advanced-block {
   margin-top: 24px;
   background: #f1f7ff;
@@ -557,10 +559,6 @@ body,
 .admin-scraping-delete-btn:hover {
   background: #ffeaea;
 }
-
-/* ====================================================================
-   Styles pour les options avancées de scarping (AdminScrapingSettings)
-   ==================================================================== */
 .admin-scraping-add-form {
   display: flex;
   flex-direction: row;
@@ -616,7 +614,6 @@ body,
   padding: 0;
   overflow: hidden;
 }
-
 .admin-corpus-section-title {
   font-size: 1.25rem;
   font-weight: 600;
@@ -626,10 +623,6 @@ body,
   padding-bottom: 0.5rem;
   flex-shrink: 0;
 }
-
-/* ============================================================
-   Styles pour l'arborescence de fichiers (AdminCorpusFileTree)
-   ============================================================ */
 .admin-corpus-tree-section {
   flex: 1;
   display: flex;
@@ -638,6 +631,9 @@ body,
   margin: 0;
 }
 
+/* ============================================================
+   Styles pour l'arborescence de fichiers (AdminCorpusFileTree)
+   ============================================================ */
 .admin-corpus-tree-wrapper {
   flex: 1;
   display: flex;
@@ -651,7 +647,6 @@ body,
   min-height: 0;
   max-height: none;
 }
-
 .admin-corpus-tree-controls {
   flex-shrink: 0;
   display: flex;
@@ -663,7 +658,6 @@ body,
   border-bottom: 1px solid #e5e7eb;
   margin: 0;
 }
-
 .admin-corpus-tree-header {
   flex-shrink: 0;
   border-bottom: 2px solid #e5e7eb;
@@ -671,7 +665,6 @@ body,
   padding: 0.5rem;
   background: #fafbfc;
 }
-
 .admin-corpus-tree-content {
   flex: 1;
   overflow-y: auto;
@@ -679,6 +672,102 @@ body,
   padding: 0.5rem;
   min-height: 0;
 }
+.admin-corpus-tree-header-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  font-weight: 600;
+  color: var(--color-main-text);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.admin-corpus-tree-header-name {
+  flex: 1;
+  padding-left: 2rem;
+}
+.admin-corpus-tree-header-date {
+  color: #666;
+  min-width: 120px;
+  text-align: center;
+}
+.admin-corpus-tree-header-actions {
+  color: #666;
+  min-width: 100px;
+  text-align: center;
+}
+.admin-corpus-tree-wrapper.external-drag-over {
+  border: 3px dashed #3b82f6;
+  background-color: #f0f9ff;
+}
+.admin-corpus-external-drop-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(59, 130, 246, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+}
+.admin-corpus-external-drop-message {
+  background: #3b82f6;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  animation: pulse 2s infinite;
+}
+.admin-corpus-upload-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  gap: 1rem;
+}
+.admin-corpus-add-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.admin-corpus-add-btn:hover:not(:disabled) {
+  background: #2563eb;
+}
+.admin-corpus-add-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+.admin-corpus-drag-hint {
+  color: #6b7280;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* ============================================================================
+   Styles pour les éléments de l'arborescence de fichiers (AdminCorpusTreeNode)
+   ============================================================================ */
 .admin-corpus-tree-node {
   margin-bottom: 0.25rem;
 }
@@ -736,7 +825,6 @@ body,
   display: flex;
   justify-content: center;
 }
-/* Styles pour les fichiers cliquables et drag & drop */
 .admin-corpus-tree-name.clickable {
   cursor: pointer;
   color: #1e40af;
@@ -774,31 +862,6 @@ body,
   border-left: 1px solid #e5e7eb;
   margin-left: 1rem;
 }
-.admin-corpus-tree-header-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem;
-  font-weight: 600;
-  color: var(--color-main-text);
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.admin-corpus-tree-header-name {
-  flex: 1;
-  padding-left: 2rem;
-}
-.admin-corpus-tree-header-date {
-  color: #666;
-  min-width: 120px;
-  text-align: center;
-}
-.admin-corpus-tree-header-actions {
-  color: #666;
-  min-width: 100px;
-  text-align: center;
-}
 .admin-corpus-tree-drop-indicator {
   position: absolute;
   right: 10px;
@@ -807,107 +870,34 @@ body,
   font-weight: 600;
   animation: pulse 1s infinite;
 }
-.admin-corpus-tree-wrapper.external-drag-over {
-  border: 3px dashed #3b82f6;
-  background-color: #f0f9ff;
-}
-.admin-corpus-external-drop-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(59, 130, 246, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  pointer-events: none;
-}
-.admin-corpus-external-drop-message {
-  background: #3b82f6;
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-  animation: pulse 2s infinite;
-}
-.admin-corpus-upload-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.9);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 20;
-  gap: 1rem;
-}
 
-.admin-corpus-add-btn {
-  background: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.admin-corpus-add-btn:hover:not(:disabled) {
-  background: #2563eb;
-}
-.admin-corpus-add-btn:disabled {
-  background: #9ca3af;
-  cursor: not-allowed;
-}
-.admin-corpus-drag-hint {
-  color: #6b7280;
-  font-size: 0.9rem;
-  font-style: italic;
-}
-
+/* ==============
+    Media queries
+   ============== */
 @media (max-height: 600px) {
   .admin-main-content {
     padding: 16px 24px;
   }
-  
   .admin-corpus-container {
     height: calc(100vh - 32px);
   }
-  
   .admin-corpus-section-title {
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
     padding-bottom: 0.25rem;
   }
-  
   .admin-corpus-tree-controls {
     padding: 0.5rem;
   }
 }
-
-/* Ajustements pour les écrans moyens */
 @media (max-height: 800px) {
   .admin-main-content {
     padding: 24px;
   }
-  
   .admin-corpus-container {
     height: calc(100vh - 48px);
   }
 }
-
-/* Ajustements pour les très larges écrans */
 @media (min-height: 1200px) {
   .admin-corpus-tree-content {
     padding: 1rem;

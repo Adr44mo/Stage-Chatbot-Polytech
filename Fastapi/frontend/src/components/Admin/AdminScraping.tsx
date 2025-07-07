@@ -4,7 +4,7 @@
 // ========================================================
 
 import { useState } from "react";
-import AdminScrapingSelect from "./AdminScrapingSelect";
+import AdminScrapingSelect from "./AdminScrapingSites";
 import AdminScrapingSettings from "./AdminScrapingSettings";
 
 const INITIAL_SITES = [
