@@ -1,0 +1,19 @@
+filler/
+│
+├── graph/
+│   ├── __init__.py
+│   ├── nodes.py           # All node functions (load, detect, fill, validate, save, etc.)
+│   ├── branches.py        # Branching logic (e.g. for validation/correction)
+│   └── build_graph.py     # Graph construction and runner
+│
+├── logic/
+│   ├── __init__.py
+│   ├── fill_logic.py      # Your fill_missing_fields, extract_json, route_document, etc.
+│   └── detect_type.py     # detect_document_type and related helpers
+│
+├── utils/
+│   ├── __init__.py
+│   └── ollama_wrapper.py  # ask_model and any LLM wrappers
+│
+├── main.py                # Entry point: parallelization, file discovery, etc.
+└── config.py              # Paths, constants, etc.

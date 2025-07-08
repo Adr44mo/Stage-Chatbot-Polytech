@@ -1,5 +1,4 @@
 import subprocess
-import os
 from pathlib import Path
 from typing import List
 from pydantic import BaseModel
@@ -19,7 +18,7 @@ from .scraping.scraping_tool.src.scraper_utils import count_modified_pages
 from .Pdf_handler import pdftojson
 from .Pdf_handler.filler import fill_one
 from .Json_handler import normelizejson
-from .Vectorisation import vectorisation_chunk
+# from .Vectorisation import vectorisation_chunk
 
 class PDFJSONInput(BaseModel):
     input_dirs_pdf: Dict[str, str]
@@ -30,7 +29,8 @@ class VectorizationInput(BaseModel):
 
 router = APIRouter()
 
-CONFIG_DIR = Path(__file__).resolve().parent / "scraping" / "scraping_tool" / "config_sites"
+SCRAPING_DIR = Path(__file__).resolve().parent / "scraping" / "scraping_tool"
+CONFIG_DIR = SCRAPING_DIR / "config_sites"
 LOG_DIR = Path(__file__).resolve().parent / "scraping" / "logs"
 CORPUS_DIR = Path(__file__).resolve().parent / "Corpus"
 
@@ -67,26 +67,22 @@ def get_site_infos():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur lors de la récupération des informations de sites : {e}")
 
+# On récupère le nom des sites à scraper donc on les convertit pour avoir les fichiers de configuration
+def site_names_to_config_files(site_names:List[str]) -> List[str]:
+    config_files = []
+    for f in CONFIG_DIR.glob("*.yaml"):
+        with open(f, "r", encoding="utf-8") as file:
+            data = yaml.safe_load(file)
+            name = data.get("NAME")
+            if name in site_names:
+                config_files.append(f.name)
+    return config_files
 
-@router.get("/menu")
-def run_menu():
-    try:
-        config_files = [f.name for f in CONFIG_DIR.glob("*.yaml")]
-        site_list = [
-            {
-                "label": f.replace(".yaml", "").replace("_", " ").title(),
-                "value": f
-            }
-            for f in config_files
-        ]
-        return site_list
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erreur lors du chargement des sites : {e}")
-
+# Pour la réalisation du scraping grâce aux fichiers de configuration
 @router.post("/scraping")
 def run_scraping(config_files: List[str]):
     try:
-        run_scraping_from_configs(config_files, str(CONFIG_DIR), str(LOG_DIR))
+        run_scraping_from_configs(config_files)
         return {"status": "success", "message": f"Scraping lancé pour : {config_files}"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur scraping : {e}")
@@ -117,6 +113,28 @@ def delete_temp_files():
     supp_temp_files(temp_dirs)
     return {"status": "success", "message": "Temporary files deleted."}
 
+
+# Création du dictionnaire INPUT_DIRS (mettre "pdf" ou "json" dans type)
+def get_input_dirs(type: str) -> Dict[str, str]:
+    input_dirs = {}
+    if type == "pdf":
+        input_dirs["pdf_manual"] = str(CORPUS_DIR / "pdf_man")
+    for config_file in CONFIG_DIR.glob("*.yaml"):
+        site_name = config_file.replace(".yaml","")
+        site_key = "scraped_" + site_name
+        if type == "pdf":
+            input_dirs[site_key] = str(CORPUS_DIR / "data_sites" / site_name / "pdf_scrapes")
+        elif type == "json":
+            input_dirs[site_key] = str(CORPUS_DIR / "data_sites" / site_name / "json_scrapes")
+
+    return input_dirs
+
+# Création d'une instance de PDFJSONInput pour les routes
+def build_pdfjsoninput(pdf_type: str = "pdf", json_type: str = "json") -> PDFJSONInput:
+    input_dirs_pdf = get_input_dirs(pdf_type)
+    input_dirs_json = get_input_dirs(json_type)
+    return PDFJSONInput(input_dirs_pdf=input_dirs_pdf, input_dirs_json=input_dirs_json)
+
 @router.post("/pdftojson")
 def run_pdftojson(data: PDFJSONInput):
     pdftojson.run_for_input_dirs(data.input_dirs_pdf)
@@ -135,11 +153,11 @@ def run_normalize_json(data: PDFJSONInput):
     normelizejson.normalize_all(data.input_dirs_json)
     return {"status": "success", "message": "JSON files normalized."}
 
-@router.post("/vectorization")
-def run_vectorization(data: VectorizationInput):
-    vectorstore_dir = Path(data.vectorstore_dir) if data.vectorstore_dir else Path(__file__).parent / "vectorstore"
-    vectorisation_chunk.main(VECTORSTORE_DIR=vectorstore_dir)
-    return {"status": "success", "message": "Vectorization completed."}
+#@router.post("/vectorization")
+#def run_vectorization(data: VectorizationInput):
+#    vectorstore_dir = Path(data.vectorstore_dir) if data.vectorstore_dir else Path(__file__).parent / "vectorstore"
+#    vectorisation_chunk.main(VECTORSTORE_DIR=vectorstore_dir)
+#    return {"status": "success", "message": "Vectorization completed."}
 
 
 ##################### TEMPORARY FILE HANDLER #####################

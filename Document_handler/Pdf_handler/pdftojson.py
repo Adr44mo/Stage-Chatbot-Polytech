@@ -7,14 +7,13 @@ from pathlib import Path
 # Setup paths
 DOCUMENT_HANDLER_DIR = Path(__file__).parent.parent
 CORPUS_DIR = DOCUMENT_HANDLER_DIR / "Corpus"
-SCRAPPING_DIR = DOCUMENT_HANDLER_DIR / "scraping"
 
 INPUT_DIRS = {
     "pdf_manual": CORPUS_DIR / "pdf_man",
     
-    "scraped_geipi": SCRAPPING_DIR / "data_sites" / "geipi_polytech" / "pdf_scrapes",
-    "scraped_reseau": SCRAPPING_DIR / "data_sites" / "polytech_réseau" / "pdf_scrapes",
-    "scraped_sorbonne": SCRAPPING_DIR / "data_sites" / "polytech_sorbonne" / "pdf_scrapes"
+    "scraped_geipi": CORPUS_DIR / "data_sites" / "geipi_polytech" / "pdf_scrapes",
+    "scraped_reseau": CORPUS_DIR / "data_sites" / "polytech_réseau" / "pdf_scrapes",
+    "scraped_sorbonne": CORPUS_DIR / "data_sites" / "polytech_sorbonne" / "pdf_scrapes"
 }
 
 OUTPUT_DIR = CORPUS_DIR / "json_Output_pdf&Scrap"
@@ -73,6 +72,8 @@ def guess_date(lines):
 def process_pdf_file(file_path, source_key, specialty="NA", extra_metadata=None):
     lines = extract_text_lines(file_path)
     if not lines:
+        print(f"❌ Aucun JSON généré pour : {file_path} (process_pdf_file a retourné None)")
+                    
         return None
 
     full_text = "\n".join(lines)
@@ -96,6 +97,24 @@ def process_pdf_file(file_path, source_key, specialty="NA", extra_metadata=None)
 
     return doc_json
 
+# --- Output directory management ---
+
+def clean_output_dir(input_dirs, output_dir=OUTPUT_DIR):
+    """Supprime les fichiers JSON du output_dir qui ne correspondent à aucun PDF dans input_dirs."""
+    # Récupère tous les PDF attendus
+    expected_jsons = set()
+    for input_dir in input_dirs.values():
+        for root, _, files in os.walk(input_dir):
+            for file in files:
+                if file.lower().endswith(".pdf"):
+                    json_name = os.path.splitext(file)[0] + ".json"
+                    expected_jsons.add(json_name)
+    # Supprime les JSON orphelins
+    for json_file in output_dir.glob("*.json"):
+        if json_file.name not in expected_jsons:
+            print(f"🗑️ Suppression du fichier orphelin : {json_file.name}")
+            json_file.unlink()
+
 # ...existing code...
 
 def run_for_input_dirs(input_dirs, output_dir=OUTPUT_DIR):
@@ -103,6 +122,7 @@ def run_for_input_dirs(input_dirs, output_dir=OUTPUT_DIR):
     Traite tous les PDF pour un dictionnaire input_dirs {source_key: dossier}
     et génère les fichiers JSON correspondants dans output_dir.
     """
+    clean_output_dir(input_dirs, output_dir)
     count = 0
 
     for source_key, input_dir in input_dirs.items():
@@ -126,19 +146,31 @@ def run_for_input_dirs(input_dirs, output_dir=OUTPUT_DIR):
             for file in files:
                 if file.lower().endswith(".pdf"):
                     full_path = os.path.join(root, file)
-                    print(f"⏳ Traitement : {file} ({source_key})")
-                    doc = process_pdf_file(
-                        full_path,
-                        source_key,
-                        specialty=specialty,
-                        extra_metadata=pdf_metadata_map if is_scraped else None
-                    )
-                    if doc:
-                        output_filename = os.path.splitext(file)[0] + ".json"
-                        output_path = output_dir / output_filename
-                        with open(output_path, "w", encoding="utf-8") as f:
-                            json.dump(doc, f, ensure_ascii=False, indent=2)
-                        count += 1
+                    output_filename = os.path.splitext(file)[0] + ".json"
+                    output_path = output_dir / output_filename
+
+                    pdf_mtime = os.path.getmtime(full_path)
+                    json_mtime = output_path.stat().st_mtime if output_path.exists() else 0
+
+                    # Vérifie d'abord si le PDF doit être traité (modification, nouveau pdf...)
+                    if not output_path.exists() or pdf_mtime > json_mtime:
+                        print(f"⏳ Traitement : {file} ({source_key})")
+                        doc = process_pdf_file(
+                            full_path,
+                            source_key,
+                            specialty=specialty,
+                            extra_metadata=pdf_metadata_map if is_scraped else None
+                        )
+                        if doc:
+                            if output_path.exists():
+                                print(f"♻️ Fichier écrasé : {output_filename}")
+                            else:
+                                print(f"🆕 Nouveau fichier créé : {output_filename}")
+                            with open(output_path, "w", encoding="utf-8") as f:
+                                json.dump(doc, f, ensure_ascii=False, indent=2)
+                            count += 1
+                    else:
+                        print(f"⏩ Inchangé, non traité : {output_filename}")
 
     print(f"\n✅ {count} fichiers JSON générés dans : {output_dir}")
 
@@ -146,6 +178,7 @@ def run_for_input_dirs(input_dirs, output_dir=OUTPUT_DIR):
 # --- Main execution logic ---
 
 def run():
+    clean_output_dir(INPUT_DIRS, OUTPUT_DIR)
     count = 0
 
     for source_key, input_dir in INPUT_DIRS.items():
@@ -172,19 +205,31 @@ def run():
             for file in files:
                 if file.lower().endswith(".pdf"):
                     full_path = os.path.join(root, file)
-                    print(f"⏳ Traitement : {file} ({source_key})")
-                    doc = process_pdf_file(
-                        full_path,
-                        source_key,
-                        specialty=specialty,
-                        extra_metadata=pdf_metadata_map if is_scraped else None
-                    )
-                    if doc:
-                        output_filename = os.path.splitext(file)[0] + ".json"
-                        output_path = OUTPUT_DIR / output_filename
-                        with open(output_path, "w", encoding="utf-8") as f:
-                            json.dump(doc, f, ensure_ascii=False, indent=2)
-                        count += 1
+                    output_filename = os.path.splitext(file)[0] + ".json"
+                    output_path = OUTPUT_DIR / output_filename
+
+                    pdf_mtime = os.path.getmtime(full_path)
+                    json_mtime = output_path.stat().st_mtime if output_path.exists() else 0
+
+                    # Vérifie d'abord si le PDF doit être traité (modification, nouveau pdf...)
+                    if not output_path.exists() or pdf_mtime > json_mtime:
+                        print(f"⏳ Traitement : {file} ({source_key})")
+                        doc = process_pdf_file(
+                            full_path,
+                            source_key,
+                            specialty=specialty,
+                            extra_metadata=pdf_metadata_map if is_scraped else None
+                        )
+                        if doc:
+                            if output_path.exists():
+                                print(f"♻️ Fichier écrasé : {output_filename}")
+                            else:
+                                print(f"🆕 Nouveau fichier créé : {output_filename}")
+                            with open(output_path, "w", encoding="utf-8") as f:
+                                json.dump(doc, f, ensure_ascii=False, indent=2)
+                            count += 1
+                    else:
+                        print(f"⏩ Inchangé, non traité : {output_filename}")
 
     print(f"\n✅ {count} fichiers JSON générés dans : {OUTPUT_DIR}")
 

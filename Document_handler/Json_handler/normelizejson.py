@@ -4,12 +4,11 @@ from datetime import datetime
 
 DOCUMENT_HANDLER_DIR = Path(__file__).parent.parent
 CORPUS_DIR = DOCUMENT_HANDLER_DIR / "Corpus"
-SCRAPPING_DIR = DOCUMENT_HANDLER_DIR / "scraping"
 
 INPUT_DIRS = {
-    "scraped_geipi": SCRAPPING_DIR / "data_sites" / "geipi_polytech" / "json_scrapes",
-    "scraped_reseau": SCRAPPING_DIR / "data_sites" / "polytech_réseau" / "json_scrapes",
-    "scraped_sorbonne": SCRAPPING_DIR / "data_sites" / "polytech_sorbonne" / "json_scrapes"
+    "scraped_geipi": CORPUS_DIR / "data_sites" / "geipi_polytech" / "json_scrapes",
+    "scraped_reseau": CORPUS_DIR / "data_sites" / "polytech_réseau" / "json_scrapes",
+    "scraped_sorbonne": CORPUS_DIR / "data_sites" / "polytech_sorbonne" / "json_scrapes"
 }
 
 OUTPUT_VALIDATED_DIR = CORPUS_DIR / "json_normalized" / "validated"
