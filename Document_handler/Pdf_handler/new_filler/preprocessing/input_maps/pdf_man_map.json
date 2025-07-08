@@ -1,0 +1,10 @@
+{
+  "MAIN/charte_bons_comportements.pdf": {
+    "hash": "3be9d83478d21165a4765def6f714bdec74df3672c733d017cfa17eb6692e248",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/test/pdf_man/MAIN/charte_bons_comportements.pdf"
+  },
+  "MAIN/syllabus_MAIN.pdf": {
+    "hash": "2724af30251f597eef099fdbd34f4af474dc2c049f8c89634b705806190f6d16",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/test/pdf_man/MAIN/syllabus_MAIN.pdf"
+  }
+}
