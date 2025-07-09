@@ -4,6 +4,7 @@
 
 import re
 import requests
+import time
 from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
@@ -126,11 +127,10 @@ def extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date):
 
     return urls
 
-# ------------------------------------------------
-# Calcule le nombre de pages qui ont été modifiées
-# ------------------------------------------------
 
-def count_modified_pages(config):
+def count_modified_pages_bis(config):
+
+    start_time = time.time()
 
     sitemap_url = config.get("SITEMAP_URL", [])
     base_url = config.get("BASE_URL", "")
@@ -143,5 +143,172 @@ def count_modified_pages(config):
     except Exception:
         limit_date = None
 
-    urls = extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date)
-    return len(urls)
+    try:
+        urls = extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date)
+    except:
+        urls = crawl_site(base_url, exclusions)
+
+    res = len(urls)
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"duration = {duration}")
+    return res
+
+
+# ------------------------------------------------
+# Calcule le nombre de pages qui ont été modifiées
+# ------------------------------------------------
+
+def count_modified_pages(config):
+    start_time = time.time()
+
+
+    sitemap_url = config.get("SITEMAP_URL", [])
+    base_url = config.get("BASE_URL", "")
+    exclusions = config.get("EXCLUDE_URL_KEYWORDS", [])
+    last_modified_date = config.get("LAST_MODIFIED_DATE", None)
+
+    try:
+        limit_date = datetime.strptime(last_modified_date, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+    except Exception:
+        limit_date = None
+
+    res =  extract_modified_urls_count(sitemap_url, base_url, exclusions, limit_date)
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"duration = {duration}")
+    return res
+
+def extract_modified_urls_count(sitemap_url, base_url, exclusions, limit_date):
+
+    count = 0
+
+    try: 
+        response = requests.get(sitemap_url, timeout=10, headers=HEADERS)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.content.decode('utf-8', errors='ignore'), 'xml')
+
+        # Cas d’un sitemap index (contenant d’autres sitemaps)
+        if soup.find('sitemapindex'):
+            for sitemap in soup.find_all('sitemap'):
+                loc = sitemap.loc.text.strip()
+                if is_excluded(loc, exclusions):
+                    continue
+
+                count += extract_modified_urls_count(
+                    sitemap_url=loc,
+                    base_url=base_url,
+                    exclusions=exclusions,
+                    limit_date=limit_date,
+                )
+
+        # Cas d’un sitemap normal
+        elif soup.find('urlset'):
+            for url_tag in soup.find_all('url'):
+                loc = url_tag.loc.text.strip()
+
+                if is_excluded(loc, exclusions):
+                    continue
+
+                lastmod = url_tag.find('lastmod')
+                if lastmod and limit_date:
+                    try:
+                        date_modif = datetime.fromisoformat(lastmod.text.replace("Z", "+00:00"))
+                        if date_modif < limit_date:
+                            continue
+                    except Exception:
+                        continue
+
+                count += 1
+
+    except Exception as e:
+        print(f"[ERREUR] Impossible de lire le sitemap {sitemap_url} ({e})")
+
+    return count
+
+
+######################################################################
+#                            SANS SITEMAP                            #
+######################################################################
+
+
+# --------------------------------------
+# Filtrage des extensions non HTML (PDF, DOC, PPT, etc.)
+# --------------------------------------
+
+def has_valid_extension(url):
+    excluded_extensions = [
+        '.pdf', '.doc', '.docx', '.ppt', '.pptx',
+        '.xls', '.xlsx', '.zip', '.rar', '.jpg',
+        '.jpeg', '.png', '.gif', '.mp4', '.mov',
+        '.avi', '.mp3', '.csv'
+    ]
+    return not any(url.lower().endswith(ext) for ext in excluded_extensions)
+
+
+
+# ------------------------------------------------
+# Extraction d'URLs à partir de la page d'accueil
+# ------------------------------------------------
+
+def crawl_site(base_url, exclusions, max_urls=100):
+
+    visited = set()
+    urls_to_visit = [base_url]
+    collected_urls = []
+
+    try:
+        while urls_to_visit and len(collected_urls) < max_urls:
+            current_url = urls_to_visit.pop(0)
+
+            if current_url in visited:
+                continue
+            visited.add(current_url)
+
+            try:
+                response = requests.get(current_url, timeout=10, headers=HEADERS)
+                response.raise_for_status()
+            except Exception as e:
+                print(f"[ERREUR] Échec de la requête vers {current_url} ({e})")
+                continue
+
+            soup = BeautifulSoup(response.text, 'html.parser')
+
+            for link in soup.find_all('a', href=True):
+                href = link['href']
+                
+                # Normaliser l'URL
+                if href.startswith('/'):
+                    full_url = base_url.rstrip('/') + href
+                elif href.startswith('http'):
+                    full_url = href
+                else:
+                    continue  # on ignore les ancres, javascript:, mailto:
+
+                # Filtrage
+                if is_excluded(full_url, exclusions) or not has_valid_extension(full_url):
+                    continue
+
+                # Filtrage par domaine et duplication
+                if full_url.startswith(base_url) and full_url not in visited and full_url not in urls_to_visit:
+                    try:
+                        # Vérification : est-ce que l'URL retourne 200 ?
+                        res = requests.head(full_url, headers=HEADERS, timeout=5, allow_redirects=True)
+                        if res.status_code == 200:
+                            collected_urls.append((full_url, None))
+                            urls_to_visit.append(full_url)
+                        else:
+                            print(f"[INFO] Ignorée : {full_url} (status {res.status_code})")
+                    except Exception as e:
+                        print(f"[ERREUR] HEAD request échouée pour {full_url} ({e})")
+
+                if len(collected_urls) >= max_urls:
+                    break
+
+    except Exception as e:
+        print(f"[ERREUR] Impossible d'extraire les URLs depuis la page HTML ({e})")
+
+    for url in collected_urls:
+        print(url)
+
+    return collected_urls

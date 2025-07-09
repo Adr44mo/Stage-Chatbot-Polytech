@@ -1,29 +1,31 @@
 import os
+from pathlib import Path
 import shutil
 from urllib.parse import urlparse
 
 # Fichier template pour la configuration du site
-TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'config_template.yaml')
+TEMPLATE_PATH = Path(__file__).parent / 'config_template.yaml'
 
 # Dossier de sortie par défaut pour les fichiers yaml
-CONFIG_DIR = os.path.join(os.path.dirname(__file__), '..', 'scraping_tool', 'config_sites')
-os.makedirs(CONFIG_DIR, exist_ok=True)
+CONFIG_DIR = Path(__file__).parent.parent / 'scraping_tool' / 'config_sites'
+CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
 # Dossier d'archivage 
-ARCHIVE_DIR = os.path.join(os.path.dirname(__file__), '..', 'scraping_tool', 'config_sites', 'config_archives')
-os.makedirs(ARCHIVE_DIR, exist_ok=True)
+ARCHIVE_DIR = CONFIG_DIR / 'config_archives'
+ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
 
 # Dossier des documents du site
-DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data_sites')
-os.makedirs(DATA_DIR, exist_ok=True)
-DATA_ARCHIVE_DIR = os.path.join(os.path.dirname(__file__), '..', 'data_sites', 'archives')
-os.makedirs(DATA_ARCHIVE_DIR, exist_ok=True)
+DATA_DIR = Path(__file__).parent.parent.parent / 'Corpus' / 'data_sites'
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+DATA_ARCHIVE_DIR = DATA_DIR / 'archives'
+DATA_ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
 
 # Dossier du log du site
-LOG_DIR = os.path.join(os.path.dirname(__file__), '..', 'logs')
-os.makedirs(LOG_DIR, exist_ok=True)
-LOG_ARCHIVE_DIR = os.path.join(os.path.dirname(__file__), '..', 'logs', 'archives')
-os.makedirs(LOG_ARCHIVE_DIR, exist_ok=True)
+LOG_DIR = Path(__file__).parent.parent / 'logs'
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+LOG_ARCHIVE_DIR = LOG_DIR / 'archives'
+LOG_ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
+
 
 # ----------------------------------------------
 # Fonction pour générer la configuration du site
@@ -69,7 +71,6 @@ def archive_config(site_name):
         print(f"[ERROR] 1. Aucun fichier trouvé pour : {config_path}")
         return
     arch_path = os.path.join(ARCHIVE_DIR, filename)
-    shutil.move(config_path, arch_path)
 
     # Documents du site
     data_name = filename.replace('.yaml', '')
@@ -78,7 +79,6 @@ def archive_config(site_name):
         print(f"[ERROR] 2. Aucun fichier trouvé pour : {data_path}")
         return
     data_arch_path = os.path.join(DATA_ARCHIVE_DIR, data_name)
-    shutil.move(data_path, data_arch_path)
 
     # Log du site
     log_name = filename.replace('.yaml', '.txt')
@@ -87,9 +87,14 @@ def archive_config(site_name):
         print(f"[ERROR] 3. Aucun fichier trouvé pour : {log_path}")
         return
     log_arch_path = os.path.join(LOG_ARCHIVE_DIR, log_name)
-    shutil.move(log_path, log_arch_path)
 
+    shutil.move(config_path, arch_path)
     print(f"[INFO] Fichier de configuration archivé : {config_path}")
+    shutil.move(data_path, data_arch_path)
+    print(f"[INFO] Fichier de configuration archivé : {data_path}")
+    shutil.move(log_path, log_arch_path)
+    print(f"[INFO] Fichier de configuration archivé : {log_path}")
+
 
 # -------------------------------------------
 # Fonction principale pour exécuter le script

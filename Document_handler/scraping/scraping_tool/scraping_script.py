@@ -5,12 +5,21 @@
 # Imports de librairies
 import time
 import os
+from pathlib import Path
 from datetime import datetime
 from ruamel.yaml import YAML
 
 # Imports des modules de scrap
 from .src import module_scrap_pdf, module_scrap_json
-from .src.scraper_utils import count_modified_pages
+from .src.scraper_utils import count_modified_pages_bis, extract_urls_sitemap, crawl_site
+
+BASE_DIR = Path(__file__).parent
+CONFIG_DIR = BASE_DIR / "config_sites"
+LOG_DIR = BASE_DIR.parent / "logs"
+DATA_SITES_DIR = BASE_DIR.parent.parent / "Corpus" / "data_sites"
+
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+DATA_SITES_DIR.mkdir(parents=True, exist_ok=True)
 
 # Initialisation de l'instance YAML & configuration des options de mise en forme
 ruamel_yaml = YAML()
@@ -53,17 +62,17 @@ def update_date_config(config_path):
 # Affichage du menu pour le choix du site à scraper
 # -------------------------------------------------
 
-def menu(config_files, config_dir):
+def menu(config_files):
 
     # Affichage du menu 
     print("Sélectionnez le site à scraper : \n")
     print("0. Tous les sites")
     for i, file in enumerate(config_files, start=1):
-        config_path = os.path.join(config_dir, file)
+        config_path = CONFIG_DIR / file
         site_name = file.replace(".yaml", "").replace("_", " ").title()
         try:
             config = load_yaml(config_path)
-            update_count = count_modified_pages(config)
+            update_count = count_modified_pages_bis(config)
         except Exception as e:
             print(f"[AVERTISSEMENT] Erreur lors du traitement de {file} : {e}")
             update_count = "?"
@@ -86,18 +95,18 @@ def menu(config_files, config_dir):
 # Affichage du menu pour le choix du site à scraper
 # -------------------------------------------------
 
-def menu_nom(config_files, config_dir):
+def menu_nom(config_files):
 
     # Affichage du menu 
     print("Sélectionnez le(s) site(s) à scraper (séparés par des virgules): \n")
     site_name_map = {}
     for file in config_files:
-        config_path = os.path.join(config_dir, file)
+        config_path = CONFIG_DIR / file
         site_name = file.replace(".yaml", "").replace("_", " ").title()
         site_name_map[site_name] = file
         try:
             config = load_yaml(config_path)
-            update_count = count_modified_pages(config)
+            update_count = count_modified_pages_bis(config)
         except Exception as e:
             print(f"[AVERTISSEMENT] Erreur lors du traitement de {file} : {e}")
             update_count = "?"
@@ -124,24 +133,39 @@ def menu_nom(config_files, config_dir):
 # Scraping d'un site
 # ------------------
 
-def scrap(site, config_path, base_dir, log_dir):
+def scrap(site, config_path):
 
     # Création du dossier de données pour le site
     site_name = site["NAME"]
-    base_data_dir = os.path.abspath(os.path.join(base_dir, "..", "data_sites", site_name.replace(" ", "_").lower()))
-    os.makedirs(base_data_dir, exist_ok=True)
+    base_data_dir = DATA_SITES_DIR / site_name.replace(" ", "_").lower()
+    base_data_dir.mkdir(parents=True, exist_ok=True)
 
     # Ajouter dynamiquement les chemins de travail dans la config (en mémoire seulement)
-    site["DATA_DIR"] = base_data_dir
-    site["PDF_DOWNLOAD_DIR"] = os.path.join(base_data_dir, "pdf_scrapes")
-    site["JSON_DOWNLOAD_DIR"] = os.path.join(base_data_dir, "json_scrapes")
-    os.makedirs(site["PDF_DOWNLOAD_DIR"], exist_ok=True)
-    os.makedirs(site["JSON_DOWNLOAD_DIR"], exist_ok=True)
+    site["DATA_DIR"] = str(base_data_dir)
+    site["PDF_DOWNLOAD_DIR"] = str (base_data_dir / "pdf_scrapes")
+    site["JSON_DOWNLOAD_DIR"] = str(base_data_dir / "json_scrapes")
+    (base_data_dir / "pdf_scrapes").mkdir(parents=True, exist_ok=True)
+    (base_data_dir / "json_scrapes").mkdir(parents=True, exist_ok=True)
+
+    # Extraction des URLS à scraper
+    base_url = site.get("BASE_URL")
+    sitemap_url = site.get("SITEMAP_URL")
+    exclusions = site.get("EXCLUDE_URL_KEYWORDS", [])
+    urls = []
+    try:
+        urls = extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date=None)
+        if not urls:
+            raise Exception("Aucune URL trouvée dans le sitemap.")
+        print(f"[INFO] {len(urls)} URLs extraites du sitemap.")
+    except Exception as e:
+        print(f"[AVERTISSEMENT] Impossible de lire le sitemap ({e}), lancement du crawler interne...")
+        urls = crawl_site(base_url, exclusions)
+        print(f"[INFO] {len(urls)} URLs trouvées par crawling.")
 
     print(f"\n\n============== Scraping du site : {site_name} ==============\n")
 
     log_filename = f"{os.path.basename(config_path).replace(".yaml", "")}.txt"
-    log_path = os.path.join(log_dir, log_filename)
+    log_path = os.path.join(LOG_DIR, log_filename)
 
     with open(log_path, "w", encoding="utf-8") as log_file:
         log_file.write("==========================================================\n")
@@ -187,7 +211,6 @@ def scrap(site, config_path, base_dir, log_dir):
 
     print("\n============== SCRAPING DU SITE WEB TERMINÉ ==============\n")
 
-
 #-------------------------------------------------------------------
 # Définition de la fonction principale main() : on effectue le scrap
 # en appelant les modules et on enregistre ensuite un log en .txt
@@ -197,36 +220,29 @@ def main():
 
     print("\n============== SCRIPT DE SCRAPING DE SITE WEB ==============\n")
 
-    # Dossier des configs et des logs
-    base_dir = os.path.dirname(__file__)
-    config_dir = os.path.join(base_dir, "config_sites")
-    log_dir = os.path.abspath(os.path.join(base_dir, "..", "logs"))
-    os.makedirs(log_dir, exist_ok=True)
-
     # Fichier de configuration du scraping
-    config_files = [f for f in os.listdir(config_dir) if f.endswith('.yaml')]
+    config_files = [f for f in os.listdir(CONFIG_DIR) if f.endswith('.yaml')]
     if not config_files:
         print("[ERREUR] Aucun fichier de configuration trouvé dans le dossier 'config_sites'.")
         return
     
     # Affichage du menu et détermination des fichiers de configuration à utiliser
-    selected_configs = menu_nom(config_files, config_dir)
+    selected_configs = menu_nom(config_files)
     
     # Chargement de la configuration du scraping pour chaque site
     for config_file in selected_configs:
 
         # Chargement et récupération des paramètres de scrap depuis le .YAML
-        config_path = os.path.join(config_dir, config_file)
+        config_path = CONFIG_DIR / config_file
         site = load_yaml(config_path)
-        scrap(site, config_path, base_dir, log_dir)   
+        scrap(site, config_path)   
 
 
-def run_scraping_from_configs(config_files: list[str], config_dir: str, log_dir: str):
-    base_dir = os.path.dirname(__file__)
+def run_scraping_from_configs(config_files: list[str]):
     for config_file in config_files:
-        config_path = os.path.join(config_dir, config_file)
+        config_path = CONFIG_DIR / config_file
         site = load_yaml(config_path)
-        scrap(site, config_path, base_dir, log_dir)
+        scrap(site, config_path)
    
 
 # -----------------------------------------------------------------------------

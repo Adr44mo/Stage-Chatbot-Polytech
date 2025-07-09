@@ -15,14 +15,9 @@ from pathlib import Path
 from .scraping.scraping_tool.scraping_script import run_scraping_from_configs
 from .scraping.tools.manage_config import generate_config, archive_config
 from .scraping.scraping_tool.src.scraper_utils import count_modified_pages
-from .Pdf_handler import pdftojson
-from .Pdf_handler.filler import fill_one
-from .Json_handler import normelizejson
-# from .Vectorisation import vectorisation_chunk
 
-class PDFJSONInput(BaseModel):
-    input_dirs_pdf: Dict[str, str]
-    input_dirs_json: Dict[str, str]
+from .new_filler.Vectorisation import vectorisation_chunk
+from .new_filler import main as vectorisation_graph_preprocessing
 
 class VectorizationInput(BaseModel):
     vectorstore_dir: Optional[str] = None
@@ -103,6 +98,9 @@ def supp_site(site_name:str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur lors de l'archivage du site : {e}")
 
+"""
+TODO: make a route to delete files that are no longer needed
+
 @router.post("/supp_temp_files")
 def delete_temp_files():
     temp_dirs = [
@@ -112,52 +110,22 @@ def delete_temp_files():
     ]
     supp_temp_files(temp_dirs)
     return {"status": "success", "message": "Temporary files deleted."}
+"""
 
-
-# Création du dictionnaire INPUT_DIRS (mettre "pdf" ou "json" dans type)
-def get_input_dirs(type: str) -> Dict[str, str]:
-    input_dirs = {}
-    if type == "pdf":
-        input_dirs["pdf_manual"] = str(CORPUS_DIR / "pdf_man")
-    for config_file in CONFIG_DIR.glob("*.yaml"):
-        site_name = config_file.replace(".yaml","")
-        site_key = "scraped_" + site_name
-        if type == "pdf":
-            input_dirs[site_key] = str(CORPUS_DIR / "data_sites" / site_name / "pdf_scrapes")
-        elif type == "json":
-            input_dirs[site_key] = str(CORPUS_DIR / "data_sites" / site_name / "json_scrapes")
-
-    return input_dirs
-
-# Création d'une instance de PDFJSONInput pour les routes
-def build_pdfjsoninput(pdf_type: str = "pdf", json_type: str = "json") -> PDFJSONInput:
-    input_dirs_pdf = get_input_dirs(pdf_type)
-    input_dirs_json = get_input_dirs(json_type)
-    return PDFJSONInput(input_dirs_pdf=input_dirs_pdf, input_dirs_json=input_dirs_json)
-
-@router.post("/pdftojson")
-def run_pdftojson(data: PDFJSONInput):
-    pdftojson.run_for_input_dirs(data.input_dirs_pdf)
-    return {
-        "status": "success",
-        "message": "PDF to JSON conversion completed."
-    }
-
-@router.post("/fill_one")
+@router.post("/files_normalization")
 def run_fill_one():
-    fill_one.main()
+    vectorisation_graph_preprocessing.main()
     return {"status": "success", "message": "JSON files filled and validated."}
 
-@router.post("/normalize_json")
-def run_normalize_json(data: PDFJSONInput):
-    normelizejson.normalize_all(data.input_dirs_json)
-    return {"status": "success", "message": "JSON files normalized."}
 
-#@router.post("/vectorization")
-#def run_vectorization(data: VectorizationInput):
-#    vectorstore_dir = Path(data.vectorstore_dir) if data.vectorstore_dir else Path(__file__).parent / "vectorstore"
-#    vectorisation_chunk.main(VECTORSTORE_DIR=vectorstore_dir)
-#    return {"status": "success", "message": "Vectorization completed."}
+@router.post("/vectorization")
+def run_vectorization(data: VectorizationInput):
+    if data.vectorstore_dir:
+        vectorstore_dir = Path(data.vectorstore_dir)
+        vectorisation_chunk.main(VECTORSTORE_DIR=vectorstore_dir)
+    else:
+        vectorisation_chunk.main()
+    return {"status": "success", "message": "Vectorization completed."}
 
 
 ##################### TEMPORARY FILE HANDLER #####################

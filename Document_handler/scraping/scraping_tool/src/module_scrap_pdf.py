@@ -2,13 +2,12 @@
 # Imports des utilitaires
 # -----------------------
 
-import os
 import time
 import requests
 import re
 import json
-import shutil
 import hashlib
+from pathlib import Path
 from bs4 import BeautifulSoup
 from datetime import datetime, timezone
 from urllib.parse import urljoin, urlparse, unquote
@@ -29,7 +28,7 @@ new_download_count = 0            # Compteur de nouveaux PDF téléchargés
 # -------------------------------------------------------------
 
 def load_pdf_map(filepath):
-    if os.path.exists(filepath):
+    if filepath.exists():
         with open(filepath, 'r', encoding='utf-8') as f:
             return json.load(f)
     return {}
@@ -49,7 +48,7 @@ def save_pdf_map(pdf_map, filepath):
 def get_pdf_filename(pdf_url, site_config):
 
     # Extraction du nom de fichier à partir de l'url
-    filename = os.path.basename(urlparse(pdf_url).path)
+    filename = Path(urlparse(pdf_url).path).name
     filename = unquote(filename).replace(" ", "_")
     if not filename.lower().endswith(".pdf"):
         # Retirer toute extension incorrecte avant d'ajouter .pdf
@@ -108,8 +107,8 @@ def download_pdf(filename, pdf_url, directory):
     global new_download_count
 
     # Vérification de l'existence du fichier
-    file_path = os.path.join(directory, filename)
-    if os.path.exists(file_path):
+    file_path = directory / filename
+    if file_path.exists():
         print(f"[INFO] Déjà présent : {filename}")
         return True
 
@@ -130,8 +129,8 @@ def download_pdf(filename, pdf_url, directory):
         print(f"[ERREUR] Échec de téléchargement : {pdf_url} ({e})")
 
         # On supprime le fichier partiellement téléchargé s'il existe
-        if os.path.exists(file_path):
-            os.remove(file_path)
+        if file_path.exists():
+            file_path.unlink()
         return False
 
 # -------------------------------------------------
@@ -166,11 +165,11 @@ def get_pdf_metadata(pdf_path):
 
         # Fallback si la date est toujours vide -> date du fichier sur le disque
         if not lastmodif:
-            timestamp = os.path.getmtime(pdf_path)
+            timestamp = Path(pdf_path).stat().st_mtime
             lastmodif = datetime.fromtimestamp(timestamp).isoformat()
 
         return {
-            "title": title if title else os.path.basename(pdf_path),
+            "title": title if title else pdf_path.name,
             "lastmodif": lastmodif
         }
     
@@ -187,22 +186,11 @@ def get_pdf_metadata(pdf_path):
 
 def clean_filename_title(filename):
 
-    # Enlever l'extension
-    name = os.path.splitext(filename)[0]
-
-    # Remplacer tirets/underscores par espaces
+    name = Path(filename).stem
     name = re.sub(r'[_\-]+', ' ', name)
-
-    # Supprimer les suffixes techniques ou numériques non pertinents
     name = re.sub(r'\b(v(er)?(sion)?\.?\s?\d+(\.\d+)?|web|final|modif|officielle|version|diffusable|online|rev\d*)\b', '', name, flags=re.IGNORECASE)
-
-    # Supprimer les groupes de chiffres sans intérêt (hors années 1900-2099)
     name = re.sub(r'\b(?!(19|20)\d{2})\d+\b', '', name)
-
-    # Supprimer les espaces multiples
     name = re.sub(r'\s+', ' ', name).strip()
-
-    # Mettre une majuscule au premier mot
     if name:
         name = name[0].upper() + name[1:]
 
@@ -220,6 +208,26 @@ def compute_file_hash(path):
     except Exception as e:
         print(f"[ERREUR] Échec du calcul de hash pour {path} : {e}")
         return None
+    
+# -------------------------
+# Archivage des anciens pdf
+# -------------------------
+
+def archive_old_pdfs(outdated_filenames, src_dir: Path, archive_dir: Path, pdf_map: dict):
+    for filename in outdated_filenames:
+        src_path = src_dir / filename
+        dest_path = archive_dir / filename
+        try:
+            if src_path.exists():
+                dest_path.parent.mkdir(parents=True, exist_ok=True)  # au cas où
+                src_path.rename(dest_path)
+                print(f"[ARCHIVE] Ancien fichier déplacé : {filename}")
+            else:
+                print(f"[WARN] Fichier à archiver introuvable : {filename}")
+            pdf_map.pop(filename, None)
+        except Exception as e:
+            print(f"[ERREUR] Échec de l'archivage de {filename} : {e}")
+
 
 # -----------------------------------------------------
 # Scrape les PDFs d’un site web à partir de son sitemap
@@ -237,19 +245,20 @@ def scrape_page(site_config):
     # Récupération des paramètres de configuration du site
     base_url = site_config["BASE_URL"]
     sitemap_url = site_config["SITEMAP_URL"]
-    directory_pdfs = site_config["PDF_DOWNLOAD_DIR"]
+    directory_pdfs = Path(site_config["PDF_DOWNLOAD_DIR"])
     exclusions = site_config.get("EXCLUDE_URL_KEYWORDS", [])
 
     # Définition de la date de dernière modification
+    now_date = datetime.now().isoformat()
     if site_config.get("LAST_MODIFIED_DATE") != None:
         limit_date = datetime.strptime(site_config["LAST_MODIFIED_DATE"], "%Y-%m-%d").replace(tzinfo=timezone.utc)
     else:
         limit_date = None
 
     # Création du dossier de téléchargement et du dossier d'archives s'ils n'existent pas
-    os.makedirs(directory_pdfs, exist_ok=True)
-    archive_dir = os.path.join(directory_pdfs, "_archives")
-    os.makedirs(archive_dir, exist_ok=True)
+    directory_pdfs.mkdir(parents=True, exist_ok=True)
+    archive_dir = directory_pdfs / "_archives"
+    archive_dir.mkdir(parents=True, exist_ok=True)
 
     # Extraction des URLs du sitemap et filtrage
     urls_and_dates = extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date)
@@ -258,7 +267,7 @@ def scrape_page(site_config):
     print(f"🔗 {len(urls_pages)} pages HTML à analyser")
 
     # Chargement de la correspondance page -> PDF
-    pdf_map_file = os.path.join(os.path.dirname(directory_pdfs), "pdf_map.json")
+    pdf_map_file = directory_pdfs.parent / "pdf_map.json"
     pdf_map = load_pdf_map(pdf_map_file)
     updated_pdf_map = {}
 
@@ -280,7 +289,7 @@ def scrape_page(site_config):
                 seen_pdf_filenames.add(filename)
                 if download_pdf(filename, pdf, directory_pdfs):
                 
-                    file_path = os.path.join(directory_pdfs, filename)
+                    file_path = directory_pdfs / filename
                     meta = get_pdf_metadata(file_path)
                     updated_pdf_map[filename] = {
                         "title": meta["title"] or filename,
@@ -288,22 +297,14 @@ def scrape_page(site_config):
                         "url": url,
                         "last_modified": meta["lastmodif"] or urls_lastmod.get(url, None),
                         "hash": compute_file_hash(file_path),
-                        "scraped_at": datetime.now().isoformat()
+                        "scraped_at": now_date
                     }
         time.sleep(0.5)
 
     # Archivage des PDF non rencontrés lors du scraping
     old_filenames_from_modified_pages = {f for f, page in pdf_map.items() if page in urls_pages}
     outdated_pdfs = old_filenames_from_modified_pages - seen_pdf_filenames
-    for outdated in outdated_pdfs:
-        src_path = os.path.join(directory_pdfs, outdated)
-        dest_path = os.path.join(archive_dir, outdated)
-        try:
-            shutil.move(src_path, dest_path)
-            print(f"[ARCHIVE] Ancien fichier déplacé : {outdated}")
-            pdf_map.pop(outdated, None)
-        except Exception as e:
-            print(f"[ERREUR] Échec de l'archivage de {outdated} : {e}")
+    archive_old_pdfs(outdated_pdfs, directory_pdfs, archive_dir, pdf_map)
 
     pdf_map.update(updated_pdf_map)
     save_pdf_map(pdf_map, pdf_map_file)

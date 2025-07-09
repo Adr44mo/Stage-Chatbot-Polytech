@@ -9,7 +9,7 @@ SITEMAP_URL: "https://www.polytech.sorbonne-universite.fr/sitemap.xml"
 
 # PRÉFIXES DES URL À EXCLURE
 EXCLUDE_URL_KEYWORDS:
-  - "/actualites/"
+  - "/actualites"
 
 # REMPLACEMENTS DANS LES NOMS DE FICHIERS PDF
 PDF_REPLACEMENTS_IN_FILE_NAMES:
@@ -17,4 +17,4 @@ PDF_REPLACEMENTS_IN_FILE_NAMES:
 
 # DATE DE MODIFICATION DU SCRAPING
 # Cette date est mise à jour à chaque fois que le scraping est effectué
-LAST_MODIFIED_DATE: '2025-06-23'
+LAST_MODIFIED_DATE: '2025-07-07'
