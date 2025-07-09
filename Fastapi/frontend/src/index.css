@@ -180,7 +180,7 @@ body,
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
 }
 .chat-message-row {
   display: flex;
@@ -220,6 +220,7 @@ body,
   width: 100%;
   max-width: 42rem;
   box-sizing: border-box;
+  margin-top: 1rem;
 }
 
 /* ================

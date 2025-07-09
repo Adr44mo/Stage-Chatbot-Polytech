@@ -133,7 +133,7 @@ rag_graph = builder.compile()
 # Affichage du graphe pour visualisation
 # ======================================
 
-output_path = Path(__file__).parent / "rag_graph.png"
+output_path = Path(__file__).parent / "rag_graph_example.png"
 with open(output_path, "wb") as f:
     f.write(rag_graph.get_graph().draw_mermaid_png())
 

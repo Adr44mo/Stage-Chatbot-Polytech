@@ -65,7 +65,7 @@ export default function ChatMessages({
               )}
 
               {/* Affichage des sources pour les messages de l'assistant */}
-              {msg.role === "assistant" && msg.sources && (
+              {msg.role === "assistant" && msg.sources && msg.sources.length > 0 && (
                 <div className="chat-message-sources">
                   <strong>Sources :</strong>
                   <br />

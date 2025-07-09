@@ -26,6 +26,18 @@ from .app.auth.database import create_db_and_tables, get_session
 from .app.chat_models import ChatRequest, ChatResponse
 from .app.auth.dependencies import get_current_admin
 
+# =================
+# Test de LangGraph
+# =================
+
+USE_LANGGRAPH = True
+
+if USE_LANGGRAPH:
+    from .app.langgraph_system.rag_graph import invoke_langgraph_rag
+    print("[INFO] 🚀 LangGraph RAG system will be used")
+else:
+    print("[INFO] 📚 Classic RAG system will be used")
+
 # ============================================
 # Initialisation de FastAPI (et rate limiting)
 # ============================================
@@ -64,7 +76,7 @@ app.include_router(auth_router)
 app.include_router(chat_router)
 app.include_router(server_router)
 app.include_router(router_scrapping, prefix="/scraping", tags=["Scraping"], dependencies=[Depends(get_current_admin)])
-app.include_router(pdf_manual_router, prefix="/pdf_manual", tags=["PDF Manual"], dependencies=[Depends(get_current_admin)])
+app.include_router(pdf_manual_router, prefix="/pdf_manual", tags=["PDF Manual"])#, dependencies=[Depends(get_current_admin)])
 
 # Initialisation de la base de données au démarrage
 @app.on_event("startup")
@@ -81,7 +93,6 @@ rag_chain = initialize_the_rag_chain()
 @app.get("/init-session")
 def init_session(response: Response, polybot_session_id: str = Cookie(None)):
     if polybot_session_id:
-        # Ne rien faire si le cookie existe déjà
         return {"ok": True}
     session_id = str(uuid.uuid4())
     expire_date = datetime.utcnow() + timedelta(days=180)
@@ -110,16 +121,30 @@ async def chat(request: Request, request_body: ChatRequest, polybot_session_id: 
     conversation = get_or_create_conversation(session, polybot_session_id)
     add_message(session, conversation.id, "user", request_body.prompt)
 
-    response = rag_chain.invoke({
-        "input": request_body.prompt,
-        "chat_history": [
-            {"role": msg.role, "content": msg.content}
-            for msg in request_body.chat_history if msg.role == "assistant" or msg.role == "user"
-        ],
-    })
+    # =================================
+    # TEST : LangGraph vs RAG classique
+    # =================================
+
+    if USE_LANGGRAPH:
+        response = invoke_langgraph_rag({
+            "input": request_body.prompt,
+            "chat_history": [
+                {"role": msg.role, "content": msg.content}
+                for msg in request_body.chat_history if msg.role == "assistant" or msg.role == "user"
+            ],
+        })
+    else:
+        response = rag_chain.invoke({
+            "input": request_body.prompt,
+            "chat_history": [
+                {"role": msg.role, "content": msg.content}
+                for msg in request_body.chat_history if msg.role == "assistant" or msg.role == "user"
+            ],
+        })
 
     answer = response.get("answer", "")
-    sources = get_sources(response.get("context", []))
+    context = response.get("context", [])
+    sources = get_sources(context) if context else []
 
     add_message(session, conversation.id, "assistant", answer, sources)
 
