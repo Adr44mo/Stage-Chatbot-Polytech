@@ -20,6 +20,7 @@ import AdminCorpusTreeNode from "./AdminCorpusTreeNode";
 interface AdminCorpusFileTreeProps {
   onFileDeleted?: (fileId: string) => void;
   onFileUploaded?: (fileName: string) => void;
+  editMode?: boolean;
 }
 
 export interface AdminCorpusFileTreeRef {
@@ -29,7 +30,7 @@ export interface AdminCorpusFileTreeRef {
 const AdminCorpusFileTree = forwardRef<
   AdminCorpusFileTreeRef,
   AdminCorpusFileTreeProps
->(({ onFileDeleted, onFileUploaded }, ref) => {
+>(({ onFileDeleted, onFileUploaded, editMode = false }, ref) => {
   const [corpusTree, setCorpusTree] = useState<FileNode | null>(null);
   const [loading, setLoading] = useState(true);
   const [draggedItem, setDraggedItem] = useState<FileNode | null>(null);
@@ -161,6 +162,8 @@ const AdminCorpusFileTree = forwardRef<
 
   // Fonctions de drag & drop de fichiers externes (depuis l'OS)
   const handleExternalDragOver = (e: React.DragEvent) => {
+    if (!editMode) return;
+    
     e.preventDefault();
     e.stopPropagation();
 
@@ -172,6 +175,8 @@ const AdminCorpusFileTree = forwardRef<
   };
 
   const handleExternalDragLeave = (e: React.DragEvent) => {
+    if (!editMode) return;
+    
     e.preventDefault();
     e.stopPropagation();
 
@@ -185,6 +190,8 @@ const AdminCorpusFileTree = forwardRef<
     e: React.DragEvent,
     targetFolder?: FileNode
   ) => {
+    if (!editMode) return;
+    
     e.preventDefault();
     e.stopPropagation();
 
@@ -210,6 +217,8 @@ const AdminCorpusFileTree = forwardRef<
 
   // Fonction pour déclencher l'upload via un bouton
   const handleAddFileClick = () => {
+    if (!editMode) return;
+    
     createFileInput((files) => {
       handleExternalDrop({
         preventDefault: () => {},
@@ -228,6 +237,7 @@ const AdminCorpusFileTree = forwardRef<
         depth={0}
         draggedItem={draggedItem}
         dropTarget={dropTarget}
+        editMode={editMode}
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -235,6 +245,7 @@ const AdminCorpusFileTree = forwardRef<
         onToggleFolder={toggleFolder}
         onFileClick={handleFileClick}
         onDeleteFile={handleDeleteFile}
+        onRefresh={loadCorpusTree}
       />
     );
   };
@@ -270,16 +281,20 @@ const AdminCorpusFileTree = forwardRef<
     >
       {/* Bouton d'ajout et indication */}
       <div className="admin-corpus-tree-controls">
-        <button
-          className="admin-corpus-add-btn"
-          onClick={handleAddFileClick}
-          disabled={uploading}
-        >
-          Ajouter un PDF
-        </button>
-        <span className="admin-corpus-drag-hint">
-          ou glissez-déposez vos fichiers PDF
-        </span>
+        {editMode && (
+          <>
+            <button
+              className="admin-corpus-add-btn"
+              onClick={handleAddFileClick}
+              disabled={uploading}
+            >
+              Ajouter un PDF
+            </button>
+            <span className="admin-corpus-drag-hint">
+              ou glissez-déposez vos fichiers PDF
+            </span>
+          </>
+        )}
       </div>
 
       {/* Indicateur de drop externe */}

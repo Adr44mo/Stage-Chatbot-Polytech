@@ -18,73 +18,58 @@ export interface FileNode {
 }
 
 /**
+ * Interface pour les éléments de l'arborescence depuis l'API
+ */
+interface DirectoryItem {
+  name: string;
+  path: string;
+  type: "file" | "directory";
+  size?: number;
+  date_added?: string;
+  date_modified?: string;
+  children?: DirectoryItem[];
+}
+
+/**
  * Récupère l'arborescence du corpus depuis l'API
  * @returns FileNode - L'arborescence des fichiers et dossiers du corpus
  */
 export const fetchCorpusTree = async (): Promise<FileNode> => {
   try {
-    // On récupère la liste des dossiers
-    const dirsResponse = await fetch("/pdf_manual/admin/list-dirs");
-    if (!dirsResponse.ok) {
-      throw new Error(
-        `Erreur lors de la récupération des dossiers: ${dirsResponse.status}`
-      );
+    const response = await fetch("/pdf_manual/admin/tree");
+    if (!response.ok) {
+      throw new Error(`Erreur lors de la récupération du corpus: ${response.status}`);
     }
-    const dirsData = await dirsResponse.json();
-
-    // On récupère tous les fichiers
-    const allFilesResponse = await fetch("/pdf_manual/admin/list-all-files");
-    if (!allFilesResponse.ok) {
-      throw new Error(
-        `Erreur lors de la récupération des fichiers: ${allFilesResponse.status}`
-      );
-    }
-    const allFilesData = await allFilesResponse.json();
-
-    // On construit l'arborescence
-    const children: FileNode[] = [];
-
-    // On ajoute les dossiers
-    for (const dirName of dirsData.directories) {
-      const dirFiles: FileNode[] = [];
-
-      // On ajoute les fichiers de ce dossier
-      for (const fileInfo of allFilesData.files) {
-        if (fileInfo.dir === dirName) {
-          dirFiles.push({
-            id: `${dirName}_${fileInfo.file}`,
-            name: fileInfo.file,
-            path: `/corpus/${dirName}/${fileInfo.file}`,
-            type: "file",
-            dateAdded:
-              fileInfo.date_added || new Date().toISOString().split("T")[0],
-            dateModified:
-              fileInfo.date_modified || new Date().toISOString().split("T")[0],
-            size: fileInfo.size
-              ? `${Math.round(fileInfo.size / 1024)} KB`
-              : undefined,
-          });
-        }
+    const data = await response.json();
+    
+    // Convertir l'arborescence de l'API en FileNode
+    const convertToFileNode = (item: DirectoryItem): FileNode => {
+      const node: FileNode = {
+        id: item.path || item.name,
+        name: item.name,
+        path: item.path || item.name,
+        type: item.type === "directory" ? "folder" : "file",
+        dateAdded: item.date_added,
+        dateModified: item.date_modified,
+        isExpanded: item.type === "directory",
+        size: item.size ? `${Math.round(item.size / 1024)} KB` : undefined,
+      };
+      
+      if (item.children) {
+        node.children = item.children.map(convertToFileNode);
       }
-
-      children.push({
-        id: dirName,
-        name: dirName,
-        path: `/corpus/${dirName}`,
-        type: "folder",
-        isExpanded: true,
-        children: dirFiles,
-      });
-    }
-
-    // On crée la racine
+      
+      return node;
+    };
+    
+    // Créer le nœud racine
     const corpusTree: FileNode = {
       id: "root",
       name: "Corpus PDF",
-      path: "/corpus",
+      path: "",
       type: "folder",
       isExpanded: true,
-      children: children,
+      children: data.tree.map(convertToFileNode),
     };
 
     return corpusTree;
@@ -96,7 +81,7 @@ export const fetchCorpusTree = async (): Promise<FileNode> => {
 
 /**
  * Obtient l'URL de prévisualisation d'un fichier
- * @param fileId - L'ID du fichier au format "dossier_nomfichier.pdf"
+ * @param fileId - Le chemin du fichier relatif au corpus
  * @returns l'URL pour prévisualiser un fichier PDF
  */
 export const getFilePreviewUrl = async (fileId: string): Promise<string> => {
@@ -107,21 +92,8 @@ export const getFilePreviewUrl = async (fileId: string): Promise<string> => {
     }
     const config = await configResponse.json();
 
-    // On récupère tous les fichiers pour trouver le fichier correspondant à l'ID
-    const allFilesResponse = await fetch("/pdf_manual/admin/list-all-files");
-    if (!allFilesResponse.ok) {
-      throw new Error("Erreur lors de la récupération des fichiers");
-    }
-    const allFilesData = await allFilesResponse.json();
-    const fileInfo = allFilesData.files.find(
-      (file: any) => `${file.dir}_${file.file}` === fileId
-    );
-    if (!fileInfo) {
-      throw new Error(`Fichier non trouvé pour l'ID: ${fileId}`);
-    }
-
-    // On construit le chemin en utilisant les noms de dossier et fichier
-    const filePath = `/${config.corpus_root_path}/${fileInfo.dir}/${fileInfo.file}`;
+    // On construit le chemin en utilisant le chemin relatif
+    const filePath = `/${config.corpus_root_path}/${fileId}`;
     const fileUrl = `/files${encodeURIComponent(filePath)}`;
 
     return fileUrl;
@@ -145,20 +117,15 @@ export const uploadFile = async (
   targetFolder?: string
 ): Promise<FileNode> => {
   try {
-    let dirName = "autre"; // dossier par défaut
-    if (targetFolder && targetFolder !== "/corpus") {
-      // Extraire le nom du dossier depuis le path
-      //TODO: changer pour pouvoir gérer les sous-dossiers (éventuellement upload dans corpus directement)
-      const pathParts = targetFolder.split("/");
-      if (pathParts.length >= 3) {
-        dirName = pathParts[2];
-      }
+    let dirPath = "autre"; // dossier par défaut
+    if (targetFolder && targetFolder !== "" && targetFolder !== "root") {
+      dirPath = targetFolder;
     }
 
     // On crée le FormData pour l'upload
     const formData = new FormData();
     formData.append("files", file);
-    formData.append("dir", dirName);
+    formData.append("dir", dirPath);
 
     // On appelle l'API pour uploader le fichier
     const response = await fetch("/pdf_manual/admin/upload-files", {
@@ -170,10 +137,11 @@ export const uploadFile = async (
     }
 
     // On crée le nœud de fichier pour la réponse
+    const filePath = targetFolder ? `${targetFolder}/${file.name}` : file.name;
     const newFile: FileNode = {
-      id: `${dirName}_${file.name}`,
+      id: filePath,
       name: file.name,
-      path: `/corpus/${dirName}/${file.name}`,
+      path: filePath,
       type: "file",
       dateAdded: new Date().toISOString().split("T")[0],
       dateModified: new Date().toISOString().split("T")[0],
@@ -188,33 +156,14 @@ export const uploadFile = async (
 
 /**
  * Supprime un fichier du corpus
- * @param fileId - L'ID du fichier au format "dossier_nomfichier.pdf"
+ * @param fileId - Le chemin du fichier relatif au corpus
  * @returns Promise qui se résout quand la suppression est terminée
  */
 export const deleteFile = async (fileId: string): Promise<void> => {
   try {
-    // On récupère tous les fichiers pour trouver le fichier correspondant à l'ID
-    const allFilesResponse = await fetch("/pdf_manual/admin/list-all-files");
-    if (!allFilesResponse.ok) {
-      throw new Error("Erreur lors de la récupération des fichiers");
-    }
-    const allFilesData = await allFilesResponse.json();
-    const fileInfo = allFilesData.files.find(
-      (file: any) => `${file.dir}_${file.file}` === fileId
-    );
-    if (!fileInfo) {
-      throw new Error(`Fichier non trouvé pour l'ID: ${fileId}`);
-    }
-
-    // On appelle l'API pour supprimer le fichier
-    const response = await fetch(
-      `/pdf_manual/admin/delete-file/${encodeURIComponent(
-        fileInfo.dir
-      )}/${encodeURIComponent(fileInfo.file)}`,
-      {
-        method: "DELETE",
-      }
-    );
+    const response = await fetch(`/pdf_manual/admin/delete-file?file_path=${encodeURIComponent(fileId)}`, {
+      method: "DELETE",
+    });
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
@@ -229,8 +178,8 @@ export const deleteFile = async (fileId: string): Promise<void> => {
 
 /**
  * Déplace un fichier vers un nouveau dossier
- * @param fileId - L'ID du fichier au format "dossier_nomfichier.pdf"
- * @param targetFolderId - L'ID du dossier de destination
+ * @param fileId - Le chemin du fichier relatif au corpus
+ * @param targetFolderId - Le chemin du dossier de destination
  * @returns Promise qui se résout quand le déplacement est terminé
  */
 export const moveFile = async (
@@ -238,26 +187,10 @@ export const moveFile = async (
   targetFolderId: string
 ): Promise<void> => {
   try {
-    // On récupère tous les fichiers pour trouver le fichier correspondant à l'ID
-    const allFilesResponse = await fetch("/pdf_manual/admin/list-all-files");
-    if (!allFilesResponse.ok) {
-      throw new Error("Erreur lors de la récupération des fichiers");
-    }
-    const allFilesData = await allFilesResponse.json();
-    const fileInfo = allFilesData.files.find(
-      (file: any) => `${file.dir}_${file.file}` === fileId
-    );
-    if (!fileInfo) {
-      throw new Error(`Fichier non trouvé pour l'ID: ${fileId}`);
-    }
-
-    // On crée le FormData pour le déplacement
     const formData = new FormData();
-    formData.append("dir", fileInfo.dir);
-    formData.append("filename", fileInfo.file);
-    formData.append("target_dir", targetFolderId);
+    formData.append("source_path", fileId);
+    formData.append("target_path", targetFolderId);
 
-    // On appelle l'API pour déplacer le fichier
     const response = await fetch("/pdf_manual/admin/move-file", {
       method: "POST",
       body: formData,
@@ -270,6 +203,281 @@ export const moveFile = async (
     }
   } catch (error) {
     console.error("Erreur lors du déplacement:", error);
+    throw error;
+  }
+};
+
+/**
+ * Crée un nouveau dossier
+ * @param dirPath - Le chemin du dossier à créer
+ * @returns Promise qui se résout quand la création est terminée
+ */
+export const createDirectory = async (dirPath: string): Promise<void> => {
+  try {
+    const formData = new FormData();
+    formData.append("dir_path", dirPath);
+
+    const response = await fetch("/pdf_manual/admin/create-dir", {
+      method: "POST",
+      body: formData,
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.detail || `Erreur lors de la création: ${response.status}`
+      );
+    }
+  } catch (error) {
+    console.error("Erreur lors de la création du dossier:", error);
+    throw error;
+  }
+};
+
+/**
+ * Supprime un dossier
+ * @param dirPath - Le chemin du dossier à supprimer
+ * @param force - Forcer la suppression même si le dossier n'est pas vide
+ * @returns Promise qui se résout quand la suppression est terminée
+ */
+export const deleteDirectory = async (dirPath: string, force: boolean = false): Promise<void> => {
+  try {
+    const response = await fetch(`/pdf_manual/admin/delete-dir?dir_path=${encodeURIComponent(dirPath)}&force=${force}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.detail || `Erreur lors de la suppression: ${response.status}`
+      );
+    }
+  } catch (error) {
+    console.error("Erreur lors de la suppression du dossier:", error);
+    throw error;
+  }
+};
+
+/**
+ * Renomme un fichier
+ * @param filePath - Le chemin du fichier à renommer
+ * @param newName - Le nouveau nom du fichier
+ * @returns Promise qui se résout quand le renommage est terminé
+ */
+export const renameFile = async (filePath: string, newName: string): Promise<void> => {
+  try {
+    const formData = new FormData();
+    formData.append("file_path", filePath);
+    formData.append("new_name", newName);
+
+    const response = await fetch("/pdf_manual/admin/rename-file", {
+      method: "POST",
+      body: formData,
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.detail || `Erreur lors du renommage: ${response.status}`
+      );
+    }
+  } catch (error) {
+    console.error("Erreur lors du renommage:", error);
+    throw error;
+  }
+};
+
+/**
+ * Renomme un dossier
+ * @param dirPath - Le chemin du dossier à renommer
+ * @param newName - Le nouveau nom du dossier
+ * @returns Promise qui se résout quand le renommage est terminé
+ */
+export const renameDirectory = async (dirPath: string, newName: string): Promise<void> => {
+  try {
+    const formData = new FormData();
+    formData.append("dir_path", dirPath);
+    formData.append("new_name", newName);
+
+    const response = await fetch("/pdf_manual/admin/rename-dir", {
+      method: "POST",
+      body: formData,
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.detail || `Erreur lors du renommage: ${response.status}`
+      );
+    }
+  } catch (error) {
+    console.error("Erreur lors du renommage du dossier:", error);
+    throw error;
+  }
+};
+
+/**
+ * Déplace un dossier vers un nouveau parent
+ * @param sourcePath - Le chemin du dossier à déplacer
+ * @param targetPath - Le chemin du dossier parent de destination
+ * @returns Promise qui se résout quand le déplacement est terminé
+ */
+export const moveDirectory = async (sourcePath: string, targetPath: string): Promise<void> => {
+  try {
+    const formData = new FormData();
+    formData.append("source_path", sourcePath);
+    formData.append("target_path", targetPath);
+
+    const response = await fetch("/pdf_manual/admin/move-dir", {
+      method: "POST",
+      body: formData,
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.detail || `Erreur lors du déplacement: ${response.status}`
+      );
+    }
+  } catch (error) {
+    console.error("Erreur lors du déplacement du dossier:", error);
+    throw error;
+  }
+};
+
+/**
+ * Obtient les informations sur un dossier
+ * @param dirPath - Le chemin du dossier
+ * @returns Promise avec les informations du dossier
+ */
+export const getDirectoryInfo = async (dirPath: string = ""): Promise<any> => {
+  try {
+    const response = await fetch(`/pdf_manual/admin/dir-info?dir_path=${encodeURIComponent(dirPath)}`);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.detail || `Erreur lors de la récupération des informations: ${response.status}`
+      );
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Erreur lors de la récupération des informations du dossier:", error);
+    throw error;
+  }
+};
+
+/**
+ * Active le mode édition
+ * @returns Promise avec l'ID du snapshot
+ */
+export const enableEditMode = async (): Promise<string> => {
+  try {
+    const response = await fetch("/pdf_manual/admin/enable-edit-mode", {
+      method: "POST",
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.detail || `Erreur lors de l'activation du mode édition: ${response.status}`
+      );
+    }
+    const data = await response.json();
+    return data.snapshot_id;
+  } catch (error) {
+    console.error("Erreur lors de l'activation du mode édition:", error);
+    throw error;
+  }
+};
+
+/**
+ * Désactive le mode édition
+ * @param snapshotId - L'ID du snapshot à nettoyer
+ * @returns Promise qui se résout quand la désactivation est terminée
+ */
+export const disableEditMode = async (snapshotId: string): Promise<void> => {
+  try {
+    const formData = new FormData();
+    formData.append("snapshot_id", snapshotId);
+
+    const response = await fetch("/pdf_manual/admin/disable-edit-mode", {
+      method: "POST",
+      body: formData,
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.detail || `Erreur lors de la désactivation du mode édition: ${response.status}`
+      );
+    }
+  } catch (error) {
+    console.error("Erreur lors de la désactivation du mode édition:", error);
+    throw error;
+  }
+};
+
+/**
+ * Sauvegarde les changements
+ * @param snapshotId - L'ID du snapshot
+ * @returns Promise qui se résout quand la sauvegarde est terminée
+ */
+export const saveChanges = async (snapshotId: string): Promise<void> => {
+  try {
+    const formData = new FormData();
+    formData.append("snapshot_id", snapshotId);
+
+    const response = await fetch("/pdf_manual/admin/save-changes", {
+      method: "POST",
+      body: formData,
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.detail || `Erreur lors de la sauvegarde: ${response.status}`
+      );
+    }
+  } catch (error) {
+    console.error("Erreur lors de la sauvegarde:", error);
+    throw error;
+  }
+};
+
+/**
+ * Annule les changements
+ * @param snapshotId - L'ID du snapshot
+ * @returns Promise qui se résout quand l'annulation est terminée
+ */
+export const cancelChanges = async (snapshotId: string): Promise<void> => {
+  try {
+    const formData = new FormData();
+    formData.append("snapshot_id", snapshotId);
+
+    const response = await fetch("/pdf_manual/admin/cancel-changes", {
+      method: "POST",
+      body: formData,
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.detail || `Erreur lors de l'annulation: ${response.status}`
+      );
+    }
+  } catch (error) {
+    console.error("Erreur lors de l'annulation:", error);
+    throw error;
+  }
+};
+
+/**
+ * Obtient le statut du mode édition
+ * @returns Promise avec le statut du mode édition
+ */
+export const getEditStatus = async (): Promise<any> => {
+  try {
+    const response = await fetch("/pdf_manual/admin/edit-status");
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.detail || `Erreur lors de la récupération du statut: ${response.status}`
+      );
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Erreur lors de la récupération du statut:", error);
     throw error;
   }
 };

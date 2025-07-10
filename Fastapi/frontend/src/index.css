@@ -419,7 +419,7 @@ body,
 .admin-page-subtitle {
   font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 0.25rem;
   color: inherit;
 }
 
@@ -652,7 +652,7 @@ body,
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 1rem;
   padding: 0.75rem;
   background: #f8fafc;
   border-radius: 8px 8px 0 0;
@@ -872,9 +872,185 @@ body,
   animation: pulse 1s infinite;
 }
 
-/* ==============
-    Media queries
-   ============== */
+/* ============================================
+   Styles pour les nouveaux éléments du corpus
+   ============================================ */
+
+/* Header du corpus avec contrôles */
+.admin-corpus-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Contrôles du mode édition */
+.admin-corpus-mode-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.admin-corpus-edit-btn {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.admin-corpus-edit-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+}
+
+.admin-corpus-edit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Variante grise pour le bouton Annuler */
+.admin-corpus-cancel-variant {
+  background: linear-gradient(135deg, #9ca3af, #6b7280) !important;
+  box-shadow: 0 2px 4px rgba(156, 163, 175, 0.2) !important;
+}
+
+.admin-corpus-cancel-variant:hover:not(:disabled) {
+  background: linear-gradient(135deg, #6b7280, #4b5563) !important;
+  box-shadow: 0 4px 8px rgba(156, 163, 175, 0.3) !important;
+}
+
+/* Contrôles en mode édition */
+.admin-corpus-edit-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Styles pour les nouveaux boutons d'action */
+.admin-corpus-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  margin-left: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-corpus-action-btn img {
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.admin-corpus-action-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
+}
+
+.admin-corpus-action-btn:hover img {
+  transform: scale(1.1);
+}
+
+.admin-corpus-rename-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.admin-corpus-rename-btn img {
+  filter: invert(50%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+}
+
+.admin-corpus-delete-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.admin-corpus-delete-btn img {
+  filter: invert(15%) sepia(100%) saturate(4756%) hue-rotate(3deg) brightness(100%) contrast(96%);
+}
+
+.admin-corpus-create-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.admin-corpus-create-btn img {
+  filter: invert(50%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+}
+
+/* Style pour l'input de renommage */
+.admin-corpus-rename-input {
+  background: white;
+  border: 2px solid #3b82f6;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  width: 100%;
+  outline: none;
+}
+
+.admin-corpus-rename-input:focus {
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Ajustements pour les actions dans l'arbre */
+.admin-corpus-tree-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 100px;
+  justify-content: flex-end;
+}
+
+/* Style pour les éléments en mode édition */
+.admin-corpus-tree-item.editing {
+  background: rgba(59, 130, 246, 0.05);
+  border-left: 3px solid #3b82f6;
+}
+
+/* Protection visuelle pour le corpus racine */
+.admin-corpus-tree-item.root-corpus {
+  background: rgba(16, 185, 129, 0.05);
+  border-left: 3px solid #10b981;
+}
+
+.admin-corpus-tree-item.root-corpus .admin-corpus-tree-name {
+  font-weight: 600;
+  color: #059669;
+}
+
+/* Responsivité pour les petits écrans */
+@media (max-width: 768px) {
+  .admin-corpus-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .admin-corpus-mode-controls {
+    justify-content: center;
+  }
+  
+  .admin-corpus-edit-controls {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .admin-corpus-edit-btn {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+  }
+}
 @media (max-height: 600px) {
   .admin-main-content {
     padding: 16px 24px;
