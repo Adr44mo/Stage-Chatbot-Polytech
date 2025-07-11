@@ -24,7 +24,7 @@ from .promptt import contextualize_q_prompt  # Import the contextualize_q_prompt
 # Vector de Polytech Sorbonne
 #persist_directory = Path(__file__).parent.parent.parent / "vectorisation" / "src" / "db"  # Define the directory where the Chroma vector database will be persisted
 
-persist_directory = Path(__file__).parent.parent.parent.parent / "Document_handler" / "Vectorisation" / "vectorstore"  # Define the directory where the Chroma vector database will be persisted
+persist_directory = Path(__file__).parent.parent.parent.parent / "Document_handler" / "new_filler" / "Vectorisation" / "vectorstore_Syllabus"  # Define the directory where the Chroma vector database will be persisted
 
 print(f"[INFO] Using persist directory: {persist_directory}")  # Print the persist directory being used
 

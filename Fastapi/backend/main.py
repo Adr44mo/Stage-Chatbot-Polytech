@@ -25,18 +25,38 @@ from .app.auth.router import router as auth_router
 from .app.auth.database import create_db_and_tables, get_session
 from .app.chat_models import ChatRequest, ChatResponse
 from .app.auth.dependencies import get_current_admin
+from .app.intelligent_rag.api import router as intelligent_rag_router  # Nouveau système RAG
+
+# =================
+# Configuration des systèmes RAG
+# =================
+
+# Variables de configuration - Changez ces valeurs pour tester différents systèmes
+USE_INTELLIGENT_RAG = True   # Système RAG intelligent (nouvelle version)
+USE_LANGGRAPH = True         # LangGraph RAG system 
+# Note: Si USE_INTELLIGENT_RAG est True, il a la priorité sur USE_LANGGRAPH
+
+def get_rag_system_info():
+    """Retourne des informations sur le système RAG utilisé"""
+    if USE_INTELLIGENT_RAG:
+        return "Intelligent RAG (avec analyse d'intention et routage)"
+    elif USE_LANGGRAPH:
+        return "LangGraph RAG"
+    else:
+        return "Classic RAG"
 
 # =================
 # Test de LangGraph
 # =================
 
-USE_LANGGRAPH = True
-
-if USE_LANGGRAPH:
+if USE_INTELLIGENT_RAG:
+    from .app.intelligent_rag.graph import invoke_intelligent_rag
+    print(f"[INFO] {get_rag_system_info()}")
+elif USE_LANGGRAPH:
     from .app.langgraph_system.rag_graph import invoke_langgraph_rag
-    print("[INFO] 🚀 LangGraph RAG system will be used")
+    print(f"[INFO] {get_rag_system_info()}")
 else:
-    print("[INFO] 📚 Classic RAG system will be used")
+    print(f"[INFO] {get_rag_system_info()}")
 
 # ============================================
 # Initialisation de FastAPI (et rate limiting)
@@ -75,8 +95,9 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(chat_router)
 app.include_router(server_router)
-app.include_router(router_scrapping, prefix="/scraping", tags=["Scraping"], dependencies=[Depends(get_current_admin)])
+app.include_router(router_scrapping, prefix="/scraping", tags=["Scraping"])#, dependencies=[Depends(get_current_admin)])
 app.include_router(pdf_manual_router, prefix="/pdf_manual", tags=["PDF Manual"])#, dependencies=[Depends(get_current_admin)])
+app.include_router(intelligent_rag_router)  # Nouveau système RAG intelligent
 
 # Initialisation de la base de données au démarrage
 @app.on_event("startup")
@@ -122,10 +143,24 @@ async def chat(request: Request, request_body: ChatRequest, polybot_session_id: 
     add_message(session, conversation.id, "user", request_body.prompt)
 
     # =================================
-    # TEST : LangGraph vs RAG classique
+    # TEST : Intelligent RAG vs LangGraph vs RAG classique
     # =================================
 
-    if USE_LANGGRAPH:
+    if USE_INTELLIGENT_RAG:
+        # Utiliser le système RAG intelligent
+        chat_history = [
+            {"role": msg.role, "content": msg.content}
+            for msg in request_body.chat_history if msg.role == "assistant" or msg.role == "user"
+        ]
+        
+        response = invoke_intelligent_rag(request_body.prompt, chat_history)
+        
+        # Adapter la réponse au format attendu
+        answer = response.get("answer", "")
+        context = response.get("context", [])
+        sources = response.get("sources", [])
+        
+    elif USE_LANGGRAPH:
         response = invoke_langgraph_rag({
             "input": request_body.prompt,
             "chat_history": [
@@ -133,6 +168,11 @@ async def chat(request: Request, request_body: ChatRequest, polybot_session_id: 
                 for msg in request_body.chat_history if msg.role == "assistant" or msg.role == "user"
             ],
         })
+        
+        answer = response.get("answer", "")
+        context = response.get("context", [])
+        sources = get_sources(context) if context else []
+        
     else:
         response = rag_chain.invoke({
             "input": request_body.prompt,
@@ -141,14 +181,30 @@ async def chat(request: Request, request_body: ChatRequest, polybot_session_id: 
                 for msg in request_body.chat_history if msg.role == "assistant" or msg.role == "user"
             ],
         })
-
-    answer = response.get("answer", "")
-    context = response.get("context", [])
-    sources = get_sources(context) if context else []
+        
+        answer = response.get("answer", "")
+        context = response.get("context", [])
+        sources = get_sources(context) if context else []
 
     add_message(session, conversation.id, "assistant", answer, sources)
 
     return ChatResponse(answer=answer, sources=sources)
+
+# ==========================
+# Endpoint pour obtenir des informations sur le système RAG
+# ==========================
+
+@app.get("/system-info")
+def get_system_info():
+    """
+    Endpoint pour obtenir des informations sur le système RAG actuellement utilisé
+    """
+    return {
+        "rag_system": get_rag_system_info(),
+        "use_intelligent_rag": USE_INTELLIGENT_RAG,
+        "use_langgraph": USE_LANGGRAPH,
+        "timestamp": datetime.utcnow().isoformat()
+    }
 
 # ==========================
 # Lancement de l'application
