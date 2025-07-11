@@ -6,6 +6,7 @@ import type { FileNode } from "../api/corpusApi";
 import {
   deleteFile,
   moveFile,
+  moveDirectory,
   uploadFile,
   getFilePreviewUrl,
 } from "../api/corpusApi";
@@ -304,5 +305,96 @@ export const handleFileOpen = async (node: FileNode): Promise<void> => {
   } catch (error) {
     console.error("Erreur lors de l'ouverture du fichier:", error);
     alert("Erreur lors de l'ouverture du fichier");
+  }
+};
+
+/**
+ * Déplace un dossier dans l'arborescence locale
+ * @param tree - l'arborescence de fichiers
+ * @param folderId - l'ID du dossier à déplacer
+ * @param targetFolderId - l'ID du dossier de destination
+ * @returns la nouvelle arborescence avec le dossier déplacé
+ */
+export const moveFolderInTree = (
+  tree: FileNode,
+  folderId: string,
+  targetFolderId: string
+): FileNode => {
+  let movedFolder: FileNode | null = null;
+
+  /**
+   * Fonction pour extraire le dossier de l'arborescence
+   */
+  const extractFolder = (node: FileNode): FileNode => {
+    if (node.children) {
+      const newChildren = node.children
+        .filter((child) => {
+          if (child.id === folderId) {
+            movedFolder = child;
+            return false;
+          }
+          return true;
+        })
+        .map((child) => extractFolder(child));
+
+      return { ...node, children: newChildren };
+    }
+    return node;
+  };
+
+  /**
+   * Fonction pour ajouter le dossier au dossier de destination
+   */
+  const addFolderToTarget = (node: FileNode): FileNode => {
+    if (node.id === targetFolderId && node.type === "folder" && movedFolder) {
+      return {
+        ...node,
+        children: [...(node.children || []), movedFolder],
+      };
+    }
+
+    if (node.children) {
+      return {
+        ...node,
+        children: node.children.map((child) => addFolderToTarget(child)),
+      };
+    }
+
+    return node;
+  };
+
+  // Exécution du déplacement
+  const treeWithoutFolder = extractFolder(tree);
+  return movedFolder ? addFolderToTarget(treeWithoutFolder) : tree;
+};
+
+/**
+ * Gère le déplacement d'un dossier (API + mise à jour locale)
+ * @param draggedFolder - le dossier à déplacer
+ * @param targetNode - le dossier de destination
+ * @param currentTree - l'arborescence actuelle
+ * @returns la nouvelle arborescence mise à jour
+ */
+export const handleFolderMove = async (
+  draggedFolder: FileNode,
+  targetNode: FileNode,
+  currentTree: FileNode
+): Promise<FileNode> => {
+  try {
+    // Mise à jour optimiste de l'arborescence locale
+    const updatedTree = moveFolderInTree(
+      currentTree,
+      draggedFolder.id,
+      targetNode.id
+    );
+
+    // Appel API pour déplacer le dossier
+    await moveDirectory(draggedFolder.path, targetNode.path);
+
+    return updatedTree;
+  } catch (error) {
+    console.error("Erreur lors du déplacement du dossier:", error);
+    alert("Erreur lors du déplacement du dossier");
+    throw error;
   }
 };

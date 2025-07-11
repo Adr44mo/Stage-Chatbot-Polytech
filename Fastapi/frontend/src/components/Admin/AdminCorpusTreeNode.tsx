@@ -5,20 +5,20 @@
 
 import { useState } from "react";
 import type { FileNode } from "../../api/corpusApi";
-import { 
-  renameFile, 
-  renameDirectory, 
-  createDirectory, 
-  deleteDirectory, 
-  getDirectoryInfo 
+import {
+  renameFile,
+  renameDirectory,
+  createDirectory,
+  deleteDirectory,
+  getDirectoryInfo,
 } from "../../api/corpusApi";
-
-// Import des icônes SVG
 import deleteIcon from "../../assets/delete.svg";
 import editIcon from "../../assets/rename.svg";
 import createFolderIcon from "../../assets/folder.svg";
 
-// Interface qui définit toutes les props que ce composant reçoit du parent
+/**
+ * Interface qui définit tout ce que ce composant reçoit du parent (AdminCorpusFileTree)
+ */
 interface AdminCorpusTreeNodeProps {
   node: FileNode; // données du fichier/dossier à afficher
   depth?: number; // profondeur dans l'arbre
@@ -34,7 +34,7 @@ interface AdminCorpusTreeNodeProps {
   onToggleFolder: (nodeId: string) => void;
   onFileClick: (node: FileNode) => Promise<void>;
   onDeleteFile: (fileId: string) => Promise<void>;
-  onRefresh?: () => void; // Pour rafraîchir l'arborescence après une action
+  onRefresh?: () => void;
 }
 
 const AdminCorpusTreeNode: React.FC<AdminCorpusTreeNodeProps> = ({
@@ -52,8 +52,8 @@ const AdminCorpusTreeNode: React.FC<AdminCorpusTreeNodeProps> = ({
   onDeleteFile,
   onRefresh,
 }) => {
-  const [isRenaming, setIsRenaming] = useState(false);
-  const [newName, setNewName] = useState(node.name);
+  const [isRenaming, setIsRenaming] = useState(false); // mode renommage activé ou non (affiche un input au lieu du nom si true)
+  const [newName, setNewName] = useState(node.name); // valeur temporaire du nom pendant le renommage
 
   // Variables pour savoir quel type de nœud on affiche
   const isFile = node.type === "file";
@@ -61,8 +61,11 @@ const AdminCorpusTreeNode: React.FC<AdminCorpusTreeNodeProps> = ({
   const hasChildren = node.children && node.children.length > 0;
   const isRootCorpus = node.id === "root" || node.path === "";
 
-  // Gestion du renommage
+  /**
+   * Renomme le fichier ou le dossier
+   */
   const handleRename = async () => {
+    // Si le nouveau nom est vide ou n'a pas changé, on annule
     if (!newName.trim() || newName === node.name) {
       setIsRenaming(false);
       setNewName(node.name);
@@ -85,19 +88,22 @@ const AdminCorpusTreeNode: React.FC<AdminCorpusTreeNodeProps> = ({
     }
   };
 
-  // Gestion de la suppression de dossier
+  /**
+   * Supprime le dossier
+   */
   const handleDeleteFolder = async () => {
-    if (isRootCorpus) return;
-    
+    if (isRootCorpus) return; // on ne peut pas supprimer le corpus racine
+
     try {
       const dirInfo = await getDirectoryInfo(node.path);
-      const confirmMessage = dirInfo.file_count > 0 
-        ? `Êtes-vous sûr de vouloir supprimer le dossier "${node.name}" ? Cela supprimera ${dirInfo.file_count} fichier(s) et ${dirInfo.dir_count} sous-dossier(s). Cette action ne peut pas être annulée.`
-        : `Êtes-vous sûr de vouloir supprimer le dossier "${node.name}" ?`;
-      
+      const confirmMessage =
+        dirInfo.file_count > 0
+          ? `Êtes-vous sûr de vouloir supprimer le dossier "${node.name}" ? Cela supprimera ${dirInfo.file_count} fichier(s) et ${dirInfo.dir_count} sous-dossier(s). Cette action ne peut pas être annulée.`
+          : `Êtes-vous sûr de vouloir supprimer le dossier "${node.name}" ?`;
+
       if (!confirm(confirmMessage)) return;
-      
-      await deleteDirectory(node.path, true);
+
+      await deleteDirectory(node.path, true); // force = true pour supprimer même si le dossier n'est pas vide
       onRefresh?.();
     } catch (error) {
       console.error("Erreur lors de la suppression du dossier:", error);
@@ -105,13 +111,17 @@ const AdminCorpusTreeNode: React.FC<AdminCorpusTreeNodeProps> = ({
     }
   };
 
-  // Gestion de la création de sous-dossier
+  /**
+   * Crée un sous-dossier dans le dossier actuel
+   */
   const handleCreateSubfolder = async () => {
     const folderName = prompt("Nom du nouveau dossier:");
     if (!folderName?.trim()) return;
-    
+
     try {
-      const subfolderPath = node.path ? `${node.path}/${folderName}` : folderName;
+      const subfolderPath = node.path
+        ? `${node.path}/${folderName}`
+        : folderName;
       await createDirectory(subfolderPath);
       onRefresh?.();
     } catch (error) {
@@ -120,6 +130,10 @@ const AdminCorpusTreeNode: React.FC<AdminCorpusTreeNodeProps> = ({
     }
   };
 
+  // ===============
+  // RENDU PRINCIPAL
+  // ===============
+
   return (
     <div className="admin-corpus-tree-node">
       <div
@@ -127,12 +141,14 @@ const AdminCorpusTreeNode: React.FC<AdminCorpusTreeNodeProps> = ({
           draggedItem?.id === node.id ? "dragging" : ""
         } ${dropTarget === node.id ? "drag-over" : ""}`}
         style={{ paddingLeft: `${depth * 20}px` }}
-        draggable={isFile && editMode}
-        onDragStart={(e) => isFile && editMode && onDragStart(e, node)}
+        // Gestion des événements de drag & drop (seuls les dossiers acceptent les drops, possible seulement en mode édition)
+        draggable={editMode && !isRootCorpus}
+        onDragStart={(e) => editMode && !isRootCorpus && onDragStart(e, node)}
         onDragOver={(e) => isFolder && editMode && onDragOver(e, node)}
         onDragLeave={editMode ? onDragLeave : undefined}
         onDrop={(e) => isFolder && editMode && onDrop(e, node)}
       >
+        {/* Icône de dossier ou de fichier */}
         {isFolder && (
           <button
             className="admin-corpus-tree-toggle"
@@ -144,6 +160,7 @@ const AdminCorpusTreeNode: React.FC<AdminCorpusTreeNodeProps> = ({
 
         {isFile && <span className="admin-corpus-tree-file-icon">📄</span>}
 
+        {/* Nom du nœud (fichier/dossier) interactif */}
         <span
           className={`admin-corpus-tree-name ${isFile ? "clickable" : ""} ${
             isFolder ? "folder-clickable" : ""
@@ -185,6 +202,7 @@ const AdminCorpusTreeNode: React.FC<AdminCorpusTreeNodeProps> = ({
           )}
         </span>
 
+        {/* Actions pour les fichiers */}
         {isFile && (
           <>
             <span className="admin-corpus-tree-date">
@@ -207,7 +225,12 @@ const AdminCorpusTreeNode: React.FC<AdminCorpusTreeNodeProps> = ({
                     onClick={() => onDeleteFile(node.id)}
                     title="Supprimer"
                   >
-                    <img src={deleteIcon} alt="Supprimer" width="20" height="20" />
+                    <img
+                      src={deleteIcon}
+                      alt="Supprimer"
+                      width="20"
+                      height="20"
+                    />
                   </button>
                 </>
               )}
@@ -215,6 +238,7 @@ const AdminCorpusTreeNode: React.FC<AdminCorpusTreeNodeProps> = ({
           </>
         )}
 
+        {/* Actions pour les dossiers */}
         {isFolder && (
           <>
             <span className="admin-corpus-tree-date"></span>
@@ -226,7 +250,12 @@ const AdminCorpusTreeNode: React.FC<AdminCorpusTreeNodeProps> = ({
                     onClick={handleCreateSubfolder}
                     title="Créer un sous-dossier"
                   >
-                    <img src={createFolderIcon} alt="Créer un sous-dossier" width="20" height="20" />
+                    <img
+                      src={createFolderIcon}
+                      alt="Créer un sous-dossier"
+                      width="20"
+                      height="20"
+                    />
                   </button>
                   {!isRootCorpus && (
                     <>
@@ -235,14 +264,24 @@ const AdminCorpusTreeNode: React.FC<AdminCorpusTreeNodeProps> = ({
                         onClick={() => setIsRenaming(true)}
                         title="Renommer"
                       >
-                        <img src={editIcon} alt="Renommer" width="20" height="20" />
+                        <img
+                          src={editIcon}
+                          alt="Renommer"
+                          width="20"
+                          height="20"
+                        />
                       </button>
                       <button
                         className="admin-corpus-action-btn admin-corpus-delete-btn"
                         onClick={handleDeleteFolder}
                         title="Supprimer"
                       >
-                        <img src={deleteIcon} alt="Supprimer" width="20" height="20" />
+                        <img
+                          src={deleteIcon}
+                          alt="Supprimer"
+                          width="20"
+                          height="20"
+                        />
                       </button>
                     </>
                   )}
@@ -252,6 +291,7 @@ const AdminCorpusTreeNode: React.FC<AdminCorpusTreeNodeProps> = ({
           </>
         )}
 
+        {/* Indicateur de dépôt pour les dossiers */}
         {isFolder && dropTarget === node.id && editMode && (
           <span className="admin-corpus-tree-drop-indicator">
             📁 Déposer ici
@@ -262,7 +302,7 @@ const AdminCorpusTreeNode: React.FC<AdminCorpusTreeNodeProps> = ({
       {/* Si c'est un dossier ouvert qui a des fichiers dedans, on les affiche */}
       {isFolder && node.isExpanded && hasChildren && (
         <div className="admin-corpus-tree-children">
-          {/* Pour chaque enfant, on crée un nouveau AdminCorpusTreeNode récursivement*/}
+          {/* Pour chaque enfant, on crée un nouveau AdminCorpusTreeNode récursivement (toutes les props sont propagées) */}
           {node.children!.map((child) => (
             <AdminCorpusTreeNode
               key={child.id}

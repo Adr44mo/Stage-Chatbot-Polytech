@@ -38,10 +38,12 @@ export const fetchCorpusTree = async (): Promise<FileNode> => {
   try {
     const response = await fetch("/pdf_manual/admin/tree");
     if (!response.ok) {
-      throw new Error(`Erreur lors de la récupération du corpus: ${response.status}`);
+      throw new Error(
+        `Erreur lors de la récupération du corpus: ${response.status}`
+      );
     }
     const data = await response.json();
-    
+
     // Convertir l'arborescence de l'API en FileNode
     const convertToFileNode = (item: DirectoryItem): FileNode => {
       const node: FileNode = {
@@ -54,14 +56,14 @@ export const fetchCorpusTree = async (): Promise<FileNode> => {
         isExpanded: item.type === "directory",
         size: item.size ? `${Math.round(item.size / 1024)} KB` : undefined,
       };
-      
+
       if (item.children) {
         node.children = item.children.map(convertToFileNode);
       }
-      
+
       return node;
     };
-    
+
     // Créer le nœud racine
     const corpusTree: FileNode = {
       id: "root",
@@ -161,9 +163,12 @@ export const uploadFile = async (
  */
 export const deleteFile = async (fileId: string): Promise<void> => {
   try {
-    const response = await fetch(`/pdf_manual/admin/delete-file?file_path=${encodeURIComponent(fileId)}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `/pdf_manual/admin/delete-file?file_path=${encodeURIComponent(fileId)}`,
+      {
+        method: "DELETE",
+      }
+    );
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
@@ -239,11 +244,19 @@ export const createDirectory = async (dirPath: string): Promise<void> => {
  * @param force - Forcer la suppression même si le dossier n'est pas vide
  * @returns Promise qui se résout quand la suppression est terminée
  */
-export const deleteDirectory = async (dirPath: string, force: boolean = false): Promise<void> => {
+export const deleteDirectory = async (
+  dirPath: string,
+  force: boolean = false
+): Promise<void> => {
   try {
-    const response = await fetch(`/pdf_manual/admin/delete-dir?dir_path=${encodeURIComponent(dirPath)}&force=${force}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `/pdf_manual/admin/delete-dir?dir_path=${encodeURIComponent(
+        dirPath
+      )}&force=${force}`,
+      {
+        method: "DELETE",
+      }
+    );
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
@@ -262,7 +275,10 @@ export const deleteDirectory = async (dirPath: string, force: boolean = false): 
  * @param newName - Le nouveau nom du fichier
  * @returns Promise qui se résout quand le renommage est terminé
  */
-export const renameFile = async (filePath: string, newName: string): Promise<void> => {
+export const renameFile = async (
+  filePath: string,
+  newName: string
+): Promise<void> => {
   try {
     const formData = new FormData();
     formData.append("file_path", filePath);
@@ -290,7 +306,10 @@ export const renameFile = async (filePath: string, newName: string): Promise<voi
  * @param newName - Le nouveau nom du dossier
  * @returns Promise qui se résout quand le renommage est terminé
  */
-export const renameDirectory = async (dirPath: string, newName: string): Promise<void> => {
+export const renameDirectory = async (
+  dirPath: string,
+  newName: string
+): Promise<void> => {
   try {
     const formData = new FormData();
     formData.append("dir_path", dirPath);
@@ -312,13 +331,17 @@ export const renameDirectory = async (dirPath: string, newName: string): Promise
   }
 };
 
+//TODO: Fonction à implémenter dans le code du composant
 /**
  * Déplace un dossier vers un nouveau parent
  * @param sourcePath - Le chemin du dossier à déplacer
  * @param targetPath - Le chemin du dossier parent de destination
  * @returns Promise qui se résout quand le déplacement est terminé
  */
-export const moveDirectory = async (sourcePath: string, targetPath: string): Promise<void> => {
+export const moveDirectory = async (
+  sourcePath: string,
+  targetPath: string
+): Promise<void> => {
   try {
     const formData = new FormData();
     formData.append("source_path", sourcePath);
@@ -347,16 +370,22 @@ export const moveDirectory = async (sourcePath: string, targetPath: string): Pro
  */
 export const getDirectoryInfo = async (dirPath: string = ""): Promise<any> => {
   try {
-    const response = await fetch(`/pdf_manual/admin/dir-info?dir_path=${encodeURIComponent(dirPath)}`);
+    const response = await fetch(
+      `/pdf_manual/admin/dir-info?dir_path=${encodeURIComponent(dirPath)}`
+    );
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
-        errorData.detail || `Erreur lors de la récupération des informations: ${response.status}`
+        errorData.detail ||
+          `Erreur lors de la récupération des informations: ${response.status}`
       );
     }
     return await response.json();
   } catch (error) {
-    console.error("Erreur lors de la récupération des informations du dossier:", error);
+    console.error(
+      "Erreur lors de la récupération des informations du dossier:",
+      error
+    );
     throw error;
   }
 };
@@ -373,39 +402,14 @@ export const enableEditMode = async (): Promise<string> => {
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
-        errorData.detail || `Erreur lors de l'activation du mode édition: ${response.status}`
+        errorData.detail ||
+          `Erreur lors de l'activation du mode édition: ${response.status}`
       );
     }
     const data = await response.json();
     return data.snapshot_id;
   } catch (error) {
     console.error("Erreur lors de l'activation du mode édition:", error);
-    throw error;
-  }
-};
-
-/**
- * Désactive le mode édition
- * @param snapshotId - L'ID du snapshot à nettoyer
- * @returns Promise qui se résout quand la désactivation est terminée
- */
-export const disableEditMode = async (snapshotId: string): Promise<void> => {
-  try {
-    const formData = new FormData();
-    formData.append("snapshot_id", snapshotId);
-
-    const response = await fetch("/pdf_manual/admin/disable-edit-mode", {
-      method: "POST",
-      body: formData,
-    });
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(
-        errorData.detail || `Erreur lors de la désactivation du mode édition: ${response.status}`
-      );
-    }
-  } catch (error) {
-    console.error("Erreur lors de la désactivation du mode édition:", error);
     throw error;
   }
 };
@@ -472,7 +476,8 @@ export const getEditStatus = async (): Promise<any> => {
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
-        errorData.detail || `Erreur lors de la récupération du statut: ${response.status}`
+        errorData.detail ||
+          `Erreur lors de la récupération du statut: ${response.status}`
       );
     }
     return await response.json();

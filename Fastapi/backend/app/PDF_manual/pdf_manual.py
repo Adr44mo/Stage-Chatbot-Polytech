@@ -6,9 +6,8 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from pathlib import Path
 import shutil
-import os
 from datetime import datetime
-from typing import List, Dict, Optional
+from typing import List, Optional
 from pydantic import BaseModel
 
 # Configuration du corpus PDF
@@ -91,7 +90,7 @@ def get_corpus_tree(path: str = ""):
             if item.is_dir():
                 # Dossier
                 stat = item.stat()
-                created_time = datetime.fromtimestamp(stat.st_ctime).strftime("%Y-%m-%d")
+                created_time = datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d")
                 modified_time = datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d")
                 
                 dir_item = DirectoryItem(
@@ -107,7 +106,7 @@ def get_corpus_tree(path: str = ""):
             elif item.is_file() and item.suffix.lower() == ".pdf":
                 # Fichier PDF
                 stat = item.stat()
-                created_time = datetime.fromtimestamp(stat.st_ctime).strftime("%Y-%m-%d")
+                created_time = datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d")
                 modified_time = datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d")
                 
                 file_item = DirectoryItem(
@@ -125,41 +124,41 @@ def get_corpus_tree(path: str = ""):
     return {"tree": build_tree(current_path, path)}
 
 
-@router.get("/admin/list-dirs")
-def list_dirs():
-    """
-    Retourne la liste des répertoires dans le corpus PDF.
-    """
-    return {"directories": [d.name for d in PDF_MANUAL_DIR.iterdir() if d.is_dir()]}
+# @router.get("/admin/list-dirs")
+# def list_dirs():
+#     """
+#     Retourne la liste des répertoires dans le corpus PDF.
+#     """
+#     return {"directories": [d.name for d in PDF_MANUAL_DIR.iterdir() if d.is_dir()]}
 
 
-@router.get("/admin/list-files/{dir}")
-def list_files(dir: str):
-    """
-    Retourne la liste des fichiers PDF dans un répertoire spécifique.
-    """
-    if not is_safe_path(dir):
-        raise HTTPException(status_code=400, detail="Invalid path")
+# @router.get("/admin/list-files/{dir}")
+# def list_files(dir: str):
+#     """
+#     Retourne la liste des fichiers PDF dans un répertoire spécifique.
+#     """
+#     if not is_safe_path(dir):
+#         raise HTTPException(status_code=400, detail="Invalid path")
     
-    target_dir = PDF_MANUAL_DIR / dir
-    if not target_dir.exists() or not target_dir.is_dir():
-        return {"error": "Directory does not exist"}
+#     target_dir = PDF_MANUAL_DIR / dir
+#     if not target_dir.exists() or not target_dir.is_dir():
+#         return {"error": "Directory does not exist"}
 
-    files = []
-    for file_path in target_dir.iterdir():
-        if file_path.is_file() and file_path.suffix.lower() == ".pdf":
-            stat = file_path.stat()
-            created_time = datetime.fromtimestamp(stat.st_ctime).strftime("%Y-%m-%d")
-            modified_time = datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d")
+#     files = []
+#     for file_path in target_dir.iterdir():
+#         if file_path.is_file() and file_path.suffix.lower() == ".pdf":
+#             stat = file_path.stat()
+#             created_time = datetime.fromtimestamp(stat.st_ctime).strftime("%Y-%m-%d")
+#             modified_time = datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d")
             
-            files.append({
-                "name": file_path.name,
-                "date_added": created_time,
-                "date_modified": modified_time,
-                "size": stat.st_size
-            })
+#             files.append({
+#                 "name": file_path.name,
+#                 "date_added": created_time,
+#                 "date_modified": modified_time,
+#                 "size": stat.st_size
+#             })
     
-    return {"files": files}
+#     return {"files": files}
 
 
 @router.get("/admin/list-all-files")
@@ -176,7 +175,7 @@ def list_all_files():
                 scan_directory(item, sub_path)
             elif item.is_file() and item.suffix.lower() == ".pdf":
                 stat = item.stat()
-                created_time = datetime.fromtimestamp(stat.st_ctime).strftime("%Y-%m-%d")
+                created_time = datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d")
                 modified_time = datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d")
                 
                 all_files.append({
@@ -189,6 +188,43 @@ def list_all_files():
     
     scan_directory(PDF_MANUAL_DIR)
     return {"files": all_files}
+
+
+@router.get("/admin/dir-info")
+def get_dir_info(dir_path: str = ""):
+    """Retourne des informations sur un dossier (nombre de fichiers, taille, etc.)"""
+    if not is_safe_path(dir_path):
+        raise HTTPException(status_code=400, detail="Invalid path")
+    
+    full_path = PDF_MANUAL_DIR / dir_path if dir_path else PDF_MANUAL_DIR
+    if not full_path.exists() or not full_path.is_dir():
+        raise HTTPException(status_code=404, detail="Directory not found")
+    
+    file_count = 0
+    dir_count = 0
+    total_size = 0
+    
+    def count_recursive(path: Path):
+        nonlocal file_count, dir_count, total_size
+        for item in path.iterdir():
+            if item.is_dir():
+                dir_count += 1
+                count_recursive(item)
+            elif item.is_file() and item.suffix.lower() == ".pdf":
+                file_count += 1
+                total_size += item.stat().st_size
+    
+    count_recursive(full_path)
+    
+    return {
+        "path": dir_path if dir_path else "root",
+        "file_count": file_count,
+        "dir_count": dir_count,
+        "total_size": total_size,
+        "can_be_deleted": not is_corpus_root(dir_path),
+        "can_be_renamed": not is_corpus_root(dir_path),
+        "can_be_moved": not is_corpus_root(dir_path)
+    }
 
 
 @router.delete("/admin/delete-file")
@@ -349,11 +385,12 @@ def move_file(
     if target_full_path.exists():
         raise HTTPException(status_code=400, detail="File already exists in target directory")
 
-    source_full_path.rename(target_full_path)
+    # source_full_path.rename(target_full_path)
+    shutil.copy2(source_full_path, target_full_path)
+    source_full_path.unlink()
     return {"message": "File moved successfully", "new_location": str(target_full_path)}
 
 
-#TODO: Fonction à implémenter (marche pas côté front?)
 @router.post("/admin/move-dir")
 def move_dir(
     source_path: str = Form(...),  # chemin source du dossier
@@ -377,46 +414,10 @@ def move_dir(
     if target_full_path.exists():
         raise HTTPException(status_code=400, detail="Directory already exists in target location")
 
-    source_full_path.rename(target_full_path)
+    # source_full_path.rename(target_full_path)
+    shutil.copytree(source_full_path, target_full_path, copy_function=shutil.copy2)
+    shutil.rmtree(source_full_path)
     return {"message": "Directory moved successfully", "new_location": str(target_full_path)}
-
-
-# Route utilisée pour le debug, peut être utile
-# @router.get("/admin/dir-info")
-# def get_dir_info(dir_path: str = ""):
-#     """Retourne des informations sur un dossier (nombre de fichiers, taille, etc.)"""
-#     if not is_safe_path(dir_path):
-#         raise HTTPException(status_code=400, detail="Invalid path")
-    
-#     full_path = PDF_MANUAL_DIR / dir_path if dir_path else PDF_MANUAL_DIR
-#     if not full_path.exists() or not full_path.is_dir():
-#         raise HTTPException(status_code=404, detail="Directory not found")
-    
-#     file_count = 0
-#     dir_count = 0
-#     total_size = 0
-    
-#     def count_recursive(path: Path):
-#         nonlocal file_count, dir_count, total_size
-#         for item in path.iterdir():
-#             if item.is_dir():
-#                 dir_count += 1
-#                 count_recursive(item)
-#             elif item.is_file() and item.suffix.lower() == ".pdf":
-#                 file_count += 1
-#                 total_size += item.stat().st_size
-    
-#     count_recursive(full_path)
-    
-#     return {
-#         "path": dir_path if dir_path else "root",
-#         "file_count": file_count,
-#         "dir_count": dir_count,
-#         "total_size": total_size,
-#         "can_be_deleted": not is_corpus_root(dir_path),
-#         "can_be_renamed": not is_corpus_root(dir_path),
-#         "can_be_moved": not is_corpus_root(dir_path)
-#     }
 
 
 # =============================================================
@@ -519,16 +520,16 @@ def enable_edit_mode():
         "edit_mode": True
     }
 
-@router.post("/admin/disable-edit-mode")
-def disable_edit_mode(snapshot_id: str = Form(...)):
-    """Désactive le mode édition et nettoie la sauvegarde"""
-    if snapshot_id in corpus_snapshots:
-        del corpus_snapshots[snapshot_id]
+# @router.post("/admin/disable-edit-mode")
+# def disable_edit_mode(snapshot_id: str = Form(...)):
+#     """Désactive le mode édition et nettoie la sauvegarde"""
+#     if snapshot_id in corpus_snapshots:
+#         del corpus_snapshots[snapshot_id]
     
-    return {
-        "message": "Edit mode disabled",
-        "edit_mode": False
-    }
+#     return {
+#         "message": "Edit mode disabled",
+#         "edit_mode": False
+#     }
 
 @router.post("/admin/save-changes")
 def save_changes(snapshot_id: str = Form(...)):

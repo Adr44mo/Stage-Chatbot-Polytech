@@ -1,7 +1,7 @@
-// ======================================================================
+// ===================================================
 // Composant AdminCorpus
-// Gestion du corpus PDF : consultation, suppression et ajout de fichiers
-// ======================================================================s
+// Coordinateur principal de la gestion du corpus PDF
+// ===================================================
 
 import { useRef, useState, useEffect } from "react";
 import AdminCorpusFileTree from "./AdminCorpusFileTree";
@@ -19,35 +19,51 @@ export default function AdminCorpus() {
   const [snapshotId, setSnapshotId] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
-  // Charger le statut du mode édition au montage
+  // On vérifie le statut du mode édition au montage du composant
   useEffect(() => {
     checkEditStatus();
   }, []);
 
+  /**
+   * Récupère l'état actuel du mode édition
+   */
   const checkEditStatus = async () => {
     try {
       const status = await getEditStatus();
       console.log("Status reçu:", status);
       setEditMode(status.edit_mode);
+      // Si on est en mode édition, on récupère le snapshot ID
       if (status.edit_mode && status.snapshot_id) {
         setSnapshotId(status.snapshot_id);
         console.log("Snapshot ID défini:", status.snapshot_id);
       }
     } catch (error) {
       console.error("Erreur lors de la vérification du statut:", error);
+      // En cas d'erreur on reste en mode lecture par défaut
     }
   };
 
+  /**
+   * Notification de la suppression d'un fichier
+   * @param fileId  - l'ID du fichier supprimé
+   */
   const handleFileDeleted = (fileId: string) => {
     console.log(`Fichier supprimé: ${fileId}`);
   };
 
+  /**
+   * Notification d'upload d'un fichier
+   * @param fileName - le nom du fichier uploadé
+   */
   const handleFileUploaded = (fileName: string) => {
     console.log(`Fichier uploadé: ${fileName}`);
     // Refresh l'arborescence après un upload réussi
     fileTreeRef.current?.refreshTree();
   };
 
+  /**
+   * Active le mode édition du corpus
+   */
   const handleEnableEditMode = async () => {
     try {
       setLoading(true);
@@ -62,6 +78,9 @@ export default function AdminCorpus() {
     }
   };
 
+  /**
+   * Sauvegarde les changements effectués dans le corpus
+   */
   const handleSaveChanges = async () => {
     if (!snapshotId) {
       console.log("Aucun snapshot ID disponible pour la sauvegarde");
@@ -85,6 +104,9 @@ export default function AdminCorpus() {
     }
   };
 
+  /**
+   * Annule les changements effectués dans le corpus
+   */
   const handleCancelChanges = async () => {
     if (!snapshotId) {
       console.log("Aucun snapshot ID disponible pour l'annulation");
@@ -116,17 +138,20 @@ export default function AdminCorpus() {
     }
   };
 
+  // ===============
+  // RENDU PRINCIPAL
+  // ===============
+
   return (
     <div className="admin-corpus-container">
       <div className="admin-corpus-header">
         <h2 className="admin-page-subtitle">Gestion du Corpus PDF</h2>
       </div>
 
-      {/* Arborescence des fichiers */}
       <div className="admin-corpus-tree-section">
         <h3 className="admin-corpus-section-title">Structure du corpus</h3>
 
-        {/* Ligne d'état avec boutons alignés */}
+        {/* Barre de contrôle */}
         <div
           style={{
             display: "flex",
@@ -135,9 +160,10 @@ export default function AdminCorpus() {
             marginBottom: "1rem",
           }}
         >
+          {/* Interface en mode lecture */}
           {!editMode ? (
             <>
-              <p className="admin-corpus-readonly-note" style={{ margin: 0 }}>
+              <p style={{ margin: 0, color: "#666" }}>
                 Mode lecture seule - Cliquez sur "Modifier le corpus" pour
                 effectuer des changements
               </p>
@@ -150,6 +176,7 @@ export default function AdminCorpus() {
               </button>
             </>
           ) : (
+            // Interface en mode édition
             <>
               <span style={{ margin: 0, color: "#666" }}>
                 Mode édition - Vous pouvez modifier le corpus
@@ -174,6 +201,7 @@ export default function AdminCorpus() {
           )}
         </div>
 
+        {/* Arborescence des fichiers */}
         <AdminCorpusFileTree
           ref={fileTreeRef}
           onFileDeleted={handleFileDeleted}

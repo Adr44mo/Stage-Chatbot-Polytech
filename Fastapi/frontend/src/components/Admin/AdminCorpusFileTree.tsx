@@ -12,25 +12,28 @@ import {
   createFileInput,
   handleFileDelete,
   handleFileMove,
+  handleFolderMove,
   handleFileUpload,
   handleFileOpen,
 } from "../../utils/corpusUtils";
 import AdminCorpusTreeNode from "./AdminCorpusTreeNode";
 
 interface AdminCorpusFileTreeProps {
-  onFileDeleted?: (fileId: string) => void;
-  onFileUploaded?: (fileName: string) => void;
-  editMode?: boolean;
+  // Callbacks vers le composant parent (AdminCorpus)
+  onFileDeleted?: (fileId: string) => void; // notifie qu'un fichier a été supprimé
+  onFileUploaded?: (fileName: string) => void; // notifie qu'un fichier a été uploadé
+  editMode?: boolean; // active ou désactive les interactions (mode édition)
 }
 
 export interface AdminCorpusFileTreeRef {
-  refreshTree: () => void;
+  refreshTree: () => void; // permet au parent de forcer le refresh
 }
 
 const AdminCorpusFileTree = forwardRef<
   AdminCorpusFileTreeRef,
   AdminCorpusFileTreeProps
 >(({ onFileDeleted, onFileUploaded, editMode = false }, ref) => {
+  // État local du composant
   const [corpusTree, setCorpusTree] = useState<FileNode | null>(null);
   const [loading, setLoading] = useState(true);
   const [draggedItem, setDraggedItem] = useState<FileNode | null>(null);
@@ -38,11 +41,14 @@ const AdminCorpusFileTree = forwardRef<
   const [isDragOverExternal, setIsDragOverExternal] = useState(false);
   const [uploading, setUploading] = useState(false);
 
-  // Charger l'arborescence au montage du composant
+  // On charge l'arborescence au montage du composant
   useEffect(() => {
     loadCorpusTree();
   }, []);
 
+  /**
+   * Charge l'arborescence du corpus depuis l'API
+   */
   const loadCorpusTree = async () => {
     try {
       setLoading(true);
@@ -55,12 +61,14 @@ const AdminCorpusFileTree = forwardRef<
     }
   };
 
-  // Exposer la fonction de refresh au composant parent
+  // Exposer l'API au composant parent
   useImperativeHandle(ref, () => ({
     refreshTree: loadCorpusTree,
   }));
 
-  // Fonction pour basculer l'expansion d'un dossier
+  /**
+   * Fonction pour ouvrir/fermer un dossier
+   */
   const toggleFolder = (nodeId: string) => {
     if (corpusTree) {
       const updatedTree = updateFolderExpansion(corpusTree, nodeId);
@@ -68,7 +76,10 @@ const AdminCorpusFileTree = forwardRef<
     }
   };
 
-  // Actions sur les fichiers
+  /**
+   * Supprime un fichier du corpus
+   * @param fileId - l'ID du fichier à supprimer
+   */
   const handleDeleteFile = async (fileId: string) => {
     try {
       const updatedTree = await handleFileDelete(
@@ -78,21 +89,41 @@ const AdminCorpusFileTree = forwardRef<
       );
       setCorpusTree(updatedTree);
     } catch (error) {
-      // L'erreur est déjà gérée dans handleFileDelete
+      // Erreur déjà gérée dans handleFileDelete
     }
   };
 
-  // Fonctions de drag & drop
+  // =============================
+  // FONCTIONS POUR LE DRAG & DROP
+  // =============================
+
+  /**
+   * Début du drag - Marque un fichier/dossier comme étant glissé
+   * @param e - l'événement de drag & drop
+   * @param node - le nœud qu'on commence à drag
+   */
   const handleDragStart = (e: React.DragEvent, node: FileNode) => {
+    // On peut glisser les fichiers et les dossiers (sauf la racine)
+    const isRootCorpus = node.id === "root" || node.path === "";
+    if (isRootCorpus) {
+      e.preventDefault();
+      return;
+    }
+    
     setDraggedItem(node);
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("text/plain", node.id);
   };
 
+  /**
+   * Survol d'un dossier pendant un drag - Valide la cible
+   * @param e - l'événement de drag & drop
+   * @param targetNode - le nœud cible (dossier) du drag
+   */
   const handleDragOver = (e: React.DragEvent, targetNode: FileNode) => {
     e.preventDefault();
 
-    // Gérer le drag & drop interne (déplacement de fichiers)
+    // Drag & drop interne (fichiers ou dossiers du corpus)
     if (draggedItem) {
       if (
         targetNode.type === "folder" &&
@@ -107,7 +138,7 @@ const AdminCorpusFileTree = forwardRef<
         e.dataTransfer.dropEffect = "none";
       }
     }
-    // Gérer le drag & drop externe (fichiers depuis l'OS)
+    // Drag & drop externe (fichiers depuis l'OS)
     else if (
       e.dataTransfer.types.includes("Files") &&
       targetNode.type === "folder"
@@ -117,32 +148,53 @@ const AdminCorpusFileTree = forwardRef<
     }
   };
 
+  /**
+   * Quitter la zone de drop
+   */
   const handleDragLeave = () => {
     setDropTarget(null);
   };
 
+  /**
+   * Execute l'action de drop (déplacement ou upload)
+   * @param e - l'événement de drag & drop
+   * @param targetNode - le nœud cible (dossier) du drop
+   */
   const handleDrop = async (e: React.DragEvent, targetNode: FileNode) => {
     e.preventDefault();
 
-    // Gérer le drop de fichiers internes (déplacement)
+    // Drop de fichiers ou dossiers internes (déplacement)
     if (
       draggedItem &&
       targetNode.type === "folder" &&
       draggedItem.id !== targetNode.id
     ) {
       try {
-        const updatedTree = await handleFileMove(
-          draggedItem,
-          targetNode,
-          corpusTree!
-        );
+        let updatedTree: FileNode;
+        
+        // Si c'est un fichier
+        if (draggedItem.type === "file") {
+          updatedTree = await handleFileMove(
+            draggedItem,
+            targetNode,
+            corpusTree!
+          );
+        } 
+        // Si c'est un dossier
+        else {
+          updatedTree = await handleFolderMove(
+            draggedItem,
+            targetNode,
+            corpusTree!
+          );
+        }
+        
         setCorpusTree(updatedTree);
       } catch (error) {
-        // En cas d'erreur, recharger l'arborescence pour restaurer l'état correct
         await loadCorpusTree();
       }
     }
-    // Gérer le drop de fichiers externes (upload)
+    // Drop de fichiers externes (upload)
     else if (e.dataTransfer.files.length > 0 && targetNode.type === "folder") {
       await handleExternalDrop(e, targetNode);
     }
@@ -151,19 +203,14 @@ const AdminCorpusFileTree = forwardRef<
     setDropTarget(null);
   };
 
-  // Fonction pour ouvrir un fichier
-  const handleFileClick = async (node: FileNode) => {
-    try {
-      await handleFileOpen(node);
-    } catch (error) {
-      // L'erreur est déjà gérée dans handleFileOpen
-    }
-  };
-
-  // Fonctions de drag & drop de fichiers externes (depuis l'OS)
+  /**
+   * Détecte les fichiers externes glissés depuis l'OS
+   * @param e - l'événement de drag & drop
+   * @param targetNode - le nœud cible (dossier) du drop
+   */
   const handleExternalDragOver = (e: React.DragEvent) => {
     if (!editMode) return;
-    
+
     e.preventDefault();
     e.stopPropagation();
 
@@ -174,9 +221,13 @@ const AdminCorpusFileTree = forwardRef<
     }
   };
 
+  /**
+   * Vérifie si on quitte vraiment la zone de drop externe
+   * @param e - l'événement de drag & drop
+   */
   const handleExternalDragLeave = (e: React.DragEvent) => {
     if (!editMode) return;
-    
+
     e.preventDefault();
     e.stopPropagation();
 
@@ -186,12 +237,18 @@ const AdminCorpusFileTree = forwardRef<
     }
   };
 
+  /**
+   * Upload des fichiers externes qui ont été drop
+   * @param e - l'événement de drag & drop
+   * @param targetFolder - dossier cible (optionnel, dossier autres par défaut)
+   * @returns
+   */
   const handleExternalDrop = async (
     e: React.DragEvent,
     targetFolder?: FileNode
   ) => {
     if (!editMode) return;
-    
+
     e.preventDefault();
     e.stopPropagation();
 
@@ -215,10 +272,29 @@ const AdminCorpusFileTree = forwardRef<
     }
   };
 
-  // Fonction pour déclencher l'upload via un bouton
+  // ===========================================
+  // FONCTIONS POUR L'INTERACTION AVEC LE CORPUS
+  // ===========================================
+
+  /**
+   * Ouvre le fichier PDF si on clique dessus
+   * @param node - le nœud sur lequel on a cliqué
+   */
+  const handleFileClick = async (node: FileNode) => {
+    try {
+      await handleFileOpen(node);
+    } catch (error) {
+      // L'erreur est déjà gérée dans handleFileOpen
+    }
+  };
+
+  /**
+   * Déclenche l'upload via le bouton 'Ajouter un PDF'
+   */
   const handleAddFileClick = () => {
     if (!editMode) return;
-    
+
+    // On simule un évènement de drop pour réutiliser la même logique
     createFileInput((files) => {
       handleExternalDrop({
         preventDefault: () => {},
@@ -228,7 +304,10 @@ const AdminCorpusFileTree = forwardRef<
     });
   };
 
-  // Fonction récursive pour rendre l'arborescence
+  /**
+   * Fonction de rendu récursif qui crée un nœud de l'arborescence
+   * @param node - le nœud qu'on veut afficher
+   */
   const renderTreeNode = (node: FileNode): React.ReactElement => {
     return (
       <AdminCorpusTreeNode
@@ -270,6 +349,11 @@ const AdminCorpusFileTree = forwardRef<
       </div>
     );
   }
+
+  // ===============
+  // RENDU PRINCIPAL
+  // ===============
+
   return (
     <div
       className={`admin-corpus-tree-wrapper ${
@@ -323,7 +407,7 @@ const AdminCorpusFileTree = forwardRef<
         </div>
       </div>
 
-      {/* Arborescence des fichiers */}
+      {/* Arborescence principale des fichiers */}
       <div className="admin-corpus-tree-content">
         {renderTreeNode(corpusTree)}
       </div>
