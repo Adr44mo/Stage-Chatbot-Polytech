@@ -628,7 +628,7 @@ def _retrieve_general_docs(state: IntelligentRAGState) -> List[Any]:
     try:
         # Recherche standard avec similarité
         docs = db.similarity_search(question, k=12)
-        
+        """
         # Filtrer pour EXCLURE les documents syllabus et garder les documents généraux
         filtered_docs = []
         for doc in docs:
@@ -651,6 +651,8 @@ def _retrieve_general_docs(state: IntelligentRAGState) -> List[Any]:
         
         print(f"[Retrieval] {len(filtered_docs)} documents généraux récupérés (sur {len(docs)} total)")
         return filtered_docs[:8]  # Garder les 8 meilleurs
+        """
+        return docs[:8]  # Garder les 8 meilleurs documents
         
     except Exception as e:
         print(f"[Retrieval] Erreur récupération générale: {e}")
