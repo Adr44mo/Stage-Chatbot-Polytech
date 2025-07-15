@@ -7,7 +7,6 @@ from .nodes import (
     fill_metadata_scraped_node, fill_metadata_manual_node, save_to_error_node,
     syllabus_extract_node, end_node
 )
-from .branches import validation_branch
 from typing import TypedDict, Any
 
 class FillerState(TypedDict):
