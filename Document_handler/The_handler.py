@@ -1,26 +1,19 @@
+import yaml
+import json
 import subprocess
 from pathlib import Path
-from typing import List
+from typing import List, Dict, Optional
 from pydantic import BaseModel
-import yaml
-from typing import List
-from typing import Dict
-from typing import Optional
 
-
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, BackgroundTasks
 from fastapi.responses import FileResponse
-from pathlib import Path
 
 from .scraping.scraping_tool.scraping_script import run_scraping_from_configs
 from .scraping.tools.manage_config import generate_config, archive_config
 from .scraping.scraping_tool.src.scraper_utils import count_modified_pages
 
-from .new_filler.Vectorisation import vectorisation_chunk
+from .new_filler.Vectorisation import vectorisation_chunk_dev
 from .new_filler import main as vectorisation_graph_preprocessing
-
-class VectorizationInput(BaseModel):
-    vectorstore_dir: Optional[str] = None
 
 router = APIRouter()
 
@@ -28,6 +21,16 @@ SCRAPING_DIR = Path(__file__).resolve().parent / "scraping" / "scraping_tool"
 CONFIG_DIR = SCRAPING_DIR / "config_sites"
 LOG_DIR = Path(__file__).resolve().parent / "scraping" / "logs"
 CORPUS_DIR = Path(__file__).resolve().parent / "Corpus"
+
+class VectorizationInput(BaseModel):
+    vectorstore_dir: Optional[str] = None
+
+class AddSiteInput(BaseModel):
+    siteName:str
+    url: str
+
+class SuppSiteInput(BaseModel):
+    siteName: str
 
 
 def supp_temp_files(temp_dirs):
@@ -55,12 +58,28 @@ def get_site_infos():
                 data = yaml.safe_load(file)
                 name = data.get("NAME")
                 url = data.get("BASE_URL")
-                scraped = data.get("LAST_MODIFIED_DATE")
-                new_docs = count_modified_pages(data)
-                site_infos.append({"name": name, "url": url, "scraped_at": scraped, "new_docs": new_docs})
+                lastScraped = data.get("LAST_MODIFIED_DATE")
+                site_infos.append({"name": name, "url": url, "lastScraped": lastScraped})
         return site_infos
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur lors de la récupération des informations de sites : {e}")
+    
+# Pour l'affichage du nombre de nouveaux documents pour chaque site
+@router.get("/site_new_docs")
+def get_site_new_docs():
+    try:
+        counts = []
+        for f in CONFIG_DIR.glob("*.yaml"):
+            with open(f, "r", encoding="utf-8") as file:
+                data = yaml.safe_load(file)
+                name = data.get("NAME")
+                url = data.get("BASE_URL")
+                newDocs = count_modified_pages(data)  # cette fonction qui prend du temps
+                counts.append({"name": name, "url": url, "newDocs": newDocs})
+        return counts
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur récupération compte nouveaux docs : {e}")
+
 
 # On récupère le nom des sites à scraper donc on les convertit pour avoir les fichiers de configuration
 def site_names_to_config_files(site_names:List[str]) -> List[str]:
@@ -75,26 +94,44 @@ def site_names_to_config_files(site_names:List[str]) -> List[str]:
 
 # Pour la réalisation du scraping grâce aux fichiers de configuration
 @router.post("/scraping")
-def run_scraping(config_files: List[str]):
+def run_scraping(siteNames: List[str]):
     try:
+        config_files = site_names_to_config_files(siteNames)
         run_scraping_from_configs(config_files)
         return {"status": "success", "message": f"Scraping lancé pour : {config_files}"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur scraping : {e}")
     
-@router.post("/add_site")
-def add_site(site_name:str, url:str):
+# Pour la barre de progression lors du scraping
+@router.get("/progress/{site_name}")
+def get_scraping_progress(site_name: str):
+
+    progress_dir = SCRAPING_DIR / "progress"
+    progress_file = progress_dir / f"{site_name}.json"
+
+    if not progress_file.exists():
+        raise HTTPException(status_code=404, detail="Pas de progression en cours pour ce site")
+
     try:
-        generate_config(site_name, url)
-        return {"status": "success", "message": f"Site {site_name} ajouté avec succès."}
+        with open(progress_file, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur lecture progression : {e}")
+
+    
+@router.post("/add_site")
+def add_site(data: AddSiteInput):
+    try:
+        generate_config(data.siteName, data.url)
+        return {"status": "success", "message": f"Site {data.siteName} ajouté avec succès."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur lors de l'ajout du site : {e}")
     
 @router.post("/supp_site")
-def supp_site(site_name:str):
+def supp_site(data: SuppSiteInput):
     try:
-        archive_config(site_name)
-        return {"status": "success", "message": f"Site {site_name} archivé avec succès."}
+        archive_config(data.siteName)
+        return {"status": "success", "message": f"Site {data.siteName} archivé avec succès."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur lors de l'archivage du site : {e}")
 
@@ -112,20 +149,17 @@ def delete_temp_files():
     return {"status": "success", "message": "Temporary files deleted."}
 """
 
+# Pipeline de traitement
 @router.post("/files_normalization")
 def run_fill_one():
     vectorisation_graph_preprocessing.main()
     return {"status": "success", "message": "JSON files filled and validated."}
 
-
+# Vectorisation
 @router.post("/vectorization")
-def run_vectorization(data: VectorizationInput):
-    if data.vectorstore_dir:
-        vectorstore_dir = Path(data.vectorstore_dir)
-        vectorisation_chunk.main(VECTORSTORE_DIR=vectorstore_dir)
-    else:
-        vectorisation_chunk.main()
-    return {"status": "success", "message": "Vectorization completed."}
+def run_vectorization():
+    result = vectorisation_chunk_dev.build_vectorstore()
+    return result
 
 
 ##################### TEMPORARY FILE HANDLER #####################
