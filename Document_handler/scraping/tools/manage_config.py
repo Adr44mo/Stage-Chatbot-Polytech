@@ -65,35 +65,32 @@ def generate_config(site_name, url):
 def archive_config(site_name):
 
     # Fichier de config
-    filename = f"{site_name.replace(' ', '_').lower()}.yaml"
-    config_path = os.path.join(CONFIG_DIR, filename)
-    if not os.path.exists(config_path):
-        print(f"[ERROR] 1. Aucun fichier trouvé pour : {config_path}")
+    filename = f"{site_name.strip().replace(' ', '_').lower()}.yaml"
+    config_path = CONFIG_DIR / filename
+    if not config_path.exists():
         return
-    arch_path = os.path.join(ARCHIVE_DIR, filename)
+    arch_path = ARCHIVE_DIR / filename
 
     # Documents du site
     data_name = filename.replace('.yaml', '')
-    data_path = os.path.join(DATA_DIR, data_name)
-    if not os.path.exists(data_path):
-        print(f"[ERROR] 2. Aucun fichier trouvé pour : {data_path}")
-        return
-    data_arch_path = os.path.join(DATA_ARCHIVE_DIR, data_name)
+    data_path = DATA_DIR / data_name
+    if data_path.exists():
+        data_arch_path = DATA_ARCHIVE_DIR / data_name
 
     # Log du site
     log_name = filename.replace('.yaml', '.txt')
-    log_path = os.path.join(LOG_DIR, log_name)
-    if not os.path.exists(log_path):
-        print(f"[ERROR] 3. Aucun fichier trouvé pour : {log_path}")
-        return
-    log_arch_path = os.path.join(LOG_ARCHIVE_DIR, log_name)
+    log_path = LOG_DIR / log_name
+    if log_path.exists():
+        log_arch_path = LOG_ARCHIVE_DIR / log_name
 
     shutil.move(config_path, arch_path)
     print(f"[INFO] Fichier de configuration archivé : {config_path}")
-    shutil.move(data_path, data_arch_path)
-    print(f"[INFO] Fichier de configuration archivé : {data_path}")
-    shutil.move(log_path, log_arch_path)
-    print(f"[INFO] Fichier de configuration archivé : {log_path}")
+    if data_arch_path.exists():
+        shutil.move(data_path, data_arch_path)
+        print(f"[INFO] Fichier de configuration archivé : {data_path}")
+    if log_arch_path.exists():
+        shutil.move(log_path, log_arch_path)
+        print(f"[INFO] Fichier de configuration archivé : {log_path}")
 
 
 # -------------------------------------------

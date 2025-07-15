@@ -2,18 +2,19 @@
 # Imports des utilitaires
 # -----------------------
 
-import re
+import os
 import requests
 import time
 from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ---------------------------------
 # User-agent pour les requêtes HTTP
 # ---------------------------------
 HEADERS = {
-    "User-Agent": "PolytechScraper/1.0 (+https://github.com/Adr44mo/Stage-Chatbot-Polytech)"
+    "User-Agent": "PolytechScraper/0.3 (+https://github.com/Adr44mo/Stage-Chatbot-Polytech)"
 }
 
 # --------------------------------------
@@ -59,46 +60,52 @@ def extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date):
 
     # Liste des urls extraites
     urls = []
-    try:
 
+    try:
         # Requête HTTP pour récupérer le contenu du sitemap
         response = requests.get(sitemap_url, timeout=10, headers=HEADERS)
         response.raise_for_status()
-        
-        # Décoder et nettoyer le contenu
         content = response.content.decode('utf-8', errors='ignore')
 
         # Trouver la première déclaration XML valide
         xml_start = content.find('<?xml')
         if xml_start > 0:
-            content = content[xml_start:]  # On supprime tout ce qui précède le XML
+            content = content[xml_start:]
 
         # Parsing du contenu XML avec BeautifulSoup
         soup = BeautifulSoup(content, 'xml')
 
         # Sitemap index : liste de sitemaps
         if soup.find('sitemapindex'):
-            for sitemap in soup.find_all('sitemap'):
-                loc = sitemap.loc.text
-                loc = re.sub(r'<\?xml-stylesheet.*?\?>', '', loc)  # suppression instruction stylesheet qui peuvent bloquer le fonctionnement du sitemap
+            sitemap_locs = [
+                sitemap.loc.text.strip()
+                for sitemap in soup.find_all('sitemap')
+                if not is_excluded(sitemap.loc.text, exclusions)
+            ]
 
-                # Filtrage des urls selon les exclusions
-                if is_excluded(loc, exclusions):
-                    continue
-
-                # Appel récursif sur le sitemap enfant
-                child_urls = extract_urls_sitemap(loc, base_url, exclusions, limit_date)
-                urls.extend(child_urls)
+            # Parallélisation
+            cpu_cores = os.cpu_count() or 2
+            max_workers = min(cpu_cores - 1, len(sitemap_locs))
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                futures = {
+                    executor.submit(extract_urls_sitemap, loc, base_url, exclusions, limit_date): loc
+                    for loc in sitemap_locs
+                }
+                for future in as_completed(futures):
+                    try:
+                        urls.extend(future.result())
+                    except Exception as e:
+                        print(f"[ERREUR] Extraction échouée pour {futures[future]} : {e}")
 
         # Sitemap standard : liste d'urls
         elif soup.find('urlset'):
             for url in soup.find_all('url'):
-                loc = url.loc.text
-                
+                loc = url.loc.text.strip()
+
                 # Filtrage des urls selon les exclusions
                 if is_excluded(loc, exclusions):
                     continue
-                
+
                 # Si une date limite est définie (date du dernier scraping), on ne garde que les pages modifiées après cette date
                 lastmod = url.find('lastmod')
                 derniere_modif = None
@@ -109,14 +116,12 @@ def extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date):
                         pass
                     if limit_date and derniere_modif and derniere_modif < limit_date:
                         continue
+
                 urls.append((loc, derniere_modif))
 
     except Exception as e:
         print(f"[ERREUR] Impossible de lire le sitemap : {sitemap_url} ({e})")
         return []
-
-    # Affichage des sitemaps et urls extraites pour voir leur contenu
-    #print(f"[DEBUG] URLs extraites du sitemap {sitemap_url} : {urls}")
 
     # Si aucune URL n'a été extraite, on retourne une liste vide
     if not urls:
@@ -127,8 +132,11 @@ def extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date):
 
     return urls
 
+# ------------------------------------------------
+# Calcule le nombre de pages qui ont été modifiées
+# ------------------------------------------------
 
-def count_modified_pages_bis(config):
+def count_modified_pages(config):
 
     start_time = time.time()
 
@@ -143,88 +151,13 @@ def count_modified_pages_bis(config):
     except Exception:
         limit_date = None
 
-    try:
-        urls = extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date)
-    except:
-        urls = crawl_site(base_url, exclusions)
+    urls = extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date)
 
-    res = len(urls)
     end_time = time.time()
     duration = end_time - start_time
-    print(f"duration = {duration}")
-    return res
+    print(f"📊 {config.get('NAME')} — {len(urls)} pages modifiées (durée : {duration:.2f}s)")
 
-
-# ------------------------------------------------
-# Calcule le nombre de pages qui ont été modifiées
-# ------------------------------------------------
-
-def count_modified_pages(config):
-    start_time = time.time()
-
-
-    sitemap_url = config.get("SITEMAP_URL", [])
-    base_url = config.get("BASE_URL", "")
-    exclusions = config.get("EXCLUDE_URL_KEYWORDS", [])
-    last_modified_date = config.get("LAST_MODIFIED_DATE", None)
-
-    try:
-        limit_date = datetime.strptime(last_modified_date, "%Y-%m-%d").replace(tzinfo=timezone.utc)
-    except Exception:
-        limit_date = None
-
-    res =  extract_modified_urls_count(sitemap_url, base_url, exclusions, limit_date)
-    end_time = time.time()
-    duration = end_time - start_time
-    print(f"duration = {duration}")
-    return res
-
-def extract_modified_urls_count(sitemap_url, base_url, exclusions, limit_date):
-
-    count = 0
-
-    try: 
-        response = requests.get(sitemap_url, timeout=10, headers=HEADERS)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.content.decode('utf-8', errors='ignore'), 'xml')
-
-        # Cas d’un sitemap index (contenant d’autres sitemaps)
-        if soup.find('sitemapindex'):
-            for sitemap in soup.find_all('sitemap'):
-                loc = sitemap.loc.text.strip()
-                if is_excluded(loc, exclusions):
-                    continue
-
-                count += extract_modified_urls_count(
-                    sitemap_url=loc,
-                    base_url=base_url,
-                    exclusions=exclusions,
-                    limit_date=limit_date,
-                )
-
-        # Cas d’un sitemap normal
-        elif soup.find('urlset'):
-            for url_tag in soup.find_all('url'):
-                loc = url_tag.loc.text.strip()
-
-                if is_excluded(loc, exclusions):
-                    continue
-
-                lastmod = url_tag.find('lastmod')
-                if lastmod and limit_date:
-                    try:
-                        date_modif = datetime.fromisoformat(lastmod.text.replace("Z", "+00:00"))
-                        if date_modif < limit_date:
-                            continue
-                    except Exception:
-                        continue
-
-                count += 1
-
-    except Exception as e:
-        print(f"[ERREUR] Impossible de lire le sitemap {sitemap_url} ({e})")
-
-    return count
+    return len(urls)
 
 
 ######################################################################

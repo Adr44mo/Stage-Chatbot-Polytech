@@ -1,16 +1,19 @@
 # NOM DU SITE WEB
-NAME: "Polytech Réseau"
+NAME: "ChatGPT"
 
 # URL DE BASE DU SITE WEB
-BASE_URL: "https://www.polytech-reseau.org/"
+BASE_URL: "https://chatgpt.com"
 
 # URL DU PLAN DU SITE WEB
-SITEMAP_URL: "https://www.polytech-reseau.org/sitemap.xml"
+SITEMAP_URL: "https://chatgpt.com/sitemap.xml"
 
 # PRÉFIXES DES URL À EXCLURE
 EXCLUDE_URL_KEYWORDS:
   - "/actualites/"
-  - "test"
+  - "/acces-refuse/"
+  - "/brouillon"
+  - "/test"
+  - "newsletter"
 
 # DATE DE MODIFICATION DU SCRAPING
 # Cette date est mise à jour à chaque fois que le scraping est effectué

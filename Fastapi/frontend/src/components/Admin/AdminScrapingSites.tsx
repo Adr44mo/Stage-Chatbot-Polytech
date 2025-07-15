@@ -8,6 +8,7 @@ interface Site {
   name: string;
   url: string;
   lastScraped: string | null;
+  newDocs?: number;
 }
 
 interface AdminScrapingSelectProps {
@@ -51,13 +52,29 @@ export default function AdminScrapingSelect({
             <label
               htmlFor={`site-${site.id}`}
               className="admin-scraping-checkbox-label admin-scraping-site-label"
+              style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
             >
-              {site.name}
-              <span className="admin-scraping-site-date">
-                {site.lastScraped
-                  ? `(Dernier scraping : ${site.lastScraped})`
-                  : "(Jamais scrappé)"}
-              </span>
+              <div>
+                {site.name}
+                <span className="admin-scraping-site-date" style={{ marginLeft: 8, fontSize: "0.85rem", color: "#666" }}>
+                  {site.lastScraped ? `(Dernier scraping : ${site.lastScraped})` : "(Jamais scrappé)"}
+                </span>
+              </div>
+
+              {site.newDocs === undefined ? (
+                <span className="admin-scraping-newdocs loading" style={{ fontWeight: 500, fontSize: "0.9rem" }}>
+                  Chargement...
+                </span>
+              ) : (
+                <span
+                  className={`admin-scraping-newdocs ${site.newDocs > 0 ? "has-new" : "no-new"}`}
+                  style={{ fontWeight: 500, fontSize: "0.9rem" }}
+                >
+                  {site.newDocs > 0
+                    ? `${site.newDocs} nouveau${site.newDocs > 1 ? "x" : ""}`
+                    : "Aucun nouveau"}
+                </span>
+              )}
             </label>
           </li>
         ))}

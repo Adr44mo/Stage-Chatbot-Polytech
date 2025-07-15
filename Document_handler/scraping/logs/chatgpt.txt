@@ -1,13 +1,13 @@
 ==========================================================
 
-             Scraping du site : Polytech Sorbonne             
+             Scraping du site : ChatGPT             
 
-Le dernier scraping en date a été effectué le 15/07/2025 à 08:02
+Le dernier scraping en date a été effectué le 15/07/2025 à 07:53
 
-  - Pages visitées (PDF)  : 4
+  - Pages visitées (PDF)  : 0
   - PDF téléchargés       : 0
 
-  - Pages visitées (JSON) : 4
+  - Pages visitées (JSON) : 0
   - JSON téléchargés      : 0
 
 

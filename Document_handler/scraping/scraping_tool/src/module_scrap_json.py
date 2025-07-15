@@ -164,7 +164,6 @@ def extract_main_content(soup):
     # 2. Définir la zone de contenu principale
     article = soup.find("article")
     container = article if article else soup.body
-
     if container is None:
         return ""
     
@@ -180,6 +179,15 @@ def extract_main_content(soup):
             text = author_date.get_text(strip=True)
             if text:
                 parts.append(f"*{text}*")
+
+    # ✅ Cas spécial : domaine de formations Polytech
+    formation_links = soup.select("a.col-sm-4")
+    if formation_links:
+        for link in formation_links:
+            title_tag = link.select_one(".title")
+            title = title_tag.get_text(strip=True)
+            parts.append(title)
+
 
 
     # 3. Traitement spécifique : h1 ou .banner
@@ -219,6 +227,7 @@ def extract_main_content(soup):
             if duration:
                 parts.append(duration.get_text(strip=True))
             return
+        
 
         if tag.name == "span" and tag.find_parent(class_="header-info"):
             field_items = tag.select(".field--item")
@@ -303,6 +312,8 @@ def crawl(site_config):
     sitemap_url = site_config["SITEMAP_URL"]
     download_dir = Path(site_config["JSON_DOWNLOAD_DIR"])
     exclusions = site_config.get("EXCLUDE_URL_KEYWORDS", [])
+
+    start = time.time()
 
     # Définition de la date de dernière modification
     if site_config.get("LAST_MODIFIED_DATE") is not None:
@@ -418,9 +429,86 @@ def crawl(site_config):
 
         # Pause pour éviter de surcharger le serveur
         time.sleep(0.5)
+    
+    end = time.time()
+    print(f"duration pas parallélisée = {end-start}")
 
     # Archivage des anciens JSON
     if all_urls:
         archive_old_jsons(download_dir, archive_dir, all_urls)
     else:
         print("[INFO] Archivage désactivé : aucune URL récupérée sur le site (site inaccessible ?)")
+
+
+def crawl_test(url_test):
+
+    # Pages visitées et compteur de nouveaux JSON
+    global visited_pages, new_json_count
+
+    # Réinitialisation des compteurs à chaque appel
+    visited_pages.clear()
+    new_json_count = 0
+
+    # Création du dossier de téléchargement s'il n'existe pas
+    download_dir = Path(__file__).parent / "test"
+    download_dir.mkdir(parents=True, exist_ok=True)
+
+
+    # Requête HTTP pour récupérer le contenu de la page
+    try:
+        response = requests.get(url_test, timeout=10, headers=HEADERS)
+        response.raise_for_status()
+
+    except requests.exceptions.RequestException as e:
+        print(f"[ERREUR] Requête échouée pour {url_test} : {e}")
+
+    # Analyse HTML et extraction du titre et du contenu
+    soup = BeautifulSoup(response.text, "html.parser")
+    title = extract_title(soup, url_test)
+    content = extract_main_content(soup)
+    if not content:
+        print(f"[WARNING] Contenu vide pour : {url_test}")
+
+    # Analyse de l'URL pour extraire le site et la catégorie
+    parsed = urlparse(url_test)
+    site = parsed.netloc.replace("www.", "")
+    parts = [p for p in parsed.path.split('/') if p]
+    category = parts[1] if len(parts) >= 2 else (parts[0] if parts else "NA")
+
+    # Création de l'objet JSON final
+    now_date = datetime.now(timezone.utc).isoformat()
+    json_obj = {
+        "url": url_test,
+        "site": site,
+        "category": category,
+        "title": title,
+        "hash" : "NA",
+        "last_modified": "NA",
+        "scraped_at": now_date,
+        "content": content
+    }
+
+
+    # Normalisation du nom de fichier
+    filename = normalize_filename(title, url_test, download_dir)
+    filepath = download_dir / filename
+
+    # Écriture du nouveau fichier JSON
+    try:
+        json_obj["last_modified"] = "NA"
+        json_obj["hash"] = hash_json(json_obj)
+        
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(json_obj, f, ensure_ascii=False, indent=4)
+        new_json_count += 1
+        print(f"[DOWNLOAD] {filepath}")
+
+    except Exception as e:
+        print(f"[ERREUR] Écriture échouée de {filepath} : {e}")
+
+    # Pause pour éviter de surcharger le serveur
+    time.sleep(0.5)
+    
+
+if __name__ == "__main__":
+    crawl_test("https://www.polytech-reseau.org/12-domaines-de-formation/")

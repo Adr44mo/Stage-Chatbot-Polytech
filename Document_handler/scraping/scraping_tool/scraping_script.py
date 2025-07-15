@@ -4,14 +4,13 @@
 
 # Imports de librairies
 import time
-import os
 from pathlib import Path
 from datetime import datetime
 from ruamel.yaml import YAML
 
 # Imports des modules de scrap
 from .src import module_scrap_pdf, module_scrap_json
-from .src.scraper_utils import count_modified_pages_bis, extract_urls_sitemap, crawl_site
+from .src.scraper_utils import count_modified_pages
 
 BASE_DIR = Path(__file__).parent
 CONFIG_DIR = BASE_DIR / "config_sites"
@@ -53,7 +52,7 @@ def update_date_config(config_path):
         with open(config_path, 'w', encoding='utf-8') as f:
             ruamel_yaml.dump(config_data, f)
 
-        print(f"[INFO] Date de dernier scraping mise à jour dans le fichier {os.path.basename(config_path)}\n")
+        print(f"[INFO] Date de dernier scraping mise à jour dans le fichier {config_path.name}\n")
     
     except Exception as e:
         print(f"[ERREUR] Impossible de mettre à jour {config_path} : {e}")
@@ -72,7 +71,7 @@ def menu(config_files):
         site_name = file.replace(".yaml", "").replace("_", " ").title()
         try:
             config = load_yaml(config_path)
-            update_count = count_modified_pages_bis(config)
+            update_count = count_modified_pages(config)
         except Exception as e:
             print(f"[AVERTISSEMENT] Erreur lors du traitement de {file} : {e}")
             update_count = "?"
@@ -102,11 +101,11 @@ def menu_nom(config_files):
     site_name_map = {}
     for file in config_files:
         config_path = CONFIG_DIR / file
-        site_name = file.replace(".yaml", "").replace("_", " ").title()
+        site_name = file.stem.replace("_", " ").title()
         site_name_map[site_name] = file
         try:
             config = load_yaml(config_path)
-            update_count = count_modified_pages_bis(config)
+            update_count = count_modified_pages(config)
         except Exception as e:
             print(f"[AVERTISSEMENT] Erreur lors du traitement de {file} : {e}")
             update_count = "?"
@@ -147,25 +146,10 @@ def scrap(site, config_path):
     (base_data_dir / "pdf_scrapes").mkdir(parents=True, exist_ok=True)
     (base_data_dir / "json_scrapes").mkdir(parents=True, exist_ok=True)
 
-    # Extraction des URLS à scraper
-    base_url = site.get("BASE_URL")
-    sitemap_url = site.get("SITEMAP_URL")
-    exclusions = site.get("EXCLUDE_URL_KEYWORDS", [])
-    urls = []
-    try:
-        urls = extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date=None)
-        if not urls:
-            raise Exception("Aucune URL trouvée dans le sitemap.")
-        print(f"[INFO] {len(urls)} URLs extraites du sitemap.")
-    except Exception as e:
-        print(f"[AVERTISSEMENT] Impossible de lire le sitemap ({e}), lancement du crawler interne...")
-        urls = crawl_site(base_url, exclusions)
-        print(f"[INFO] {len(urls)} URLs trouvées par crawling.")
-
     print(f"\n\n============== Scraping du site : {site_name} ==============\n")
 
-    log_filename = f"{os.path.basename(config_path).replace(".yaml", "")}.txt"
-    log_path = os.path.join(LOG_DIR, log_filename)
+    log_filename = config_path.stem + ".txt"
+    log_path = LOG_DIR / log_filename
 
     with open(log_path, "w", encoding="utf-8") as log_file:
         log_file.write("==========================================================\n")
@@ -184,7 +168,7 @@ def scrap(site, config_path):
         log_file.write(f"  - Pages visitées (PDF)  : {pdf_pages}\n")
         log_file.write(f"  - PDF téléchargés       : {pdf_count}\n\n")
         time.sleep(1)
-
+        
         # Scraping des JSON
         print("\n⌛ Étape 2/2 : Lancement du scraping des JSON\n")
         time.sleep(1)
@@ -221,7 +205,7 @@ def main():
     print("\n============== SCRIPT DE SCRAPING DE SITE WEB ==============\n")
 
     # Fichier de configuration du scraping
-    config_files = [f for f in os.listdir(CONFIG_DIR) if f.endswith('.yaml')]
+    config_files = [f for f in CONFIG_DIR.iterdir() if f.suffix == '.yaml']
     if not config_files:
         print("[ERREUR] Aucun fichier de configuration trouvé dans le dossier 'config_sites'.")
         return
