@@ -155,9 +155,9 @@ ax.add_patch(stats_box)
 ax.text(7.5, 1.3, 'Métriques de Performance', fontsize=12, fontweight='bold', ha='center')
 
 stats = [
-    'Temps de réponse: ~2-3 secondes',
+    'Temps de réponse: ~5-20 secondes',
     'Précision d\'intention: >95%',
-    'Coût par question: ~$0.02-0.05',
+    'Coût par question: ~$0.0002-0.0005',
     'Documents récupérés: 8-12 par requête'
 ]
 
