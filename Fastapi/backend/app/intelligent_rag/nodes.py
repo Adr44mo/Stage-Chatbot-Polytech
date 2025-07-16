@@ -9,14 +9,21 @@ from ..llmm import llm, db, initialize_the_rag_chain
 from ..chat import get_sources
 from .state import IntelligentRAGState, IntentType, SpecialityType, IntentAnalysisResult
 from .token_tracker import track_openai_call, token_tracker
+from .prompts import (
+    get_intent_analysis_prompt,
+    get_direct_answer_prompt,
+    get_general_rag_prompt,
+    get_speciality_overview_prompt
+)
+from color_utils import ColorPrint as cp
 
 @track_openai_call("intent_analysis")
 def intent_analysis_node(state: IntelligentRAGState) -> Dict[str, Any]:
     """
     Analyse l'intention de l'utilisateur en utilisant OpenAI avec sortie JSON
     """
-    print(f"[Intent] Début - État reçu: {list(state.keys())}")
-    print(f"[Intent] État complet: {state}")
+    cp.print_step("Analyse d'intention")
+    cp.print_info(f"État reçu: {list(state.keys())}")
     
     try:
         # Construire l'historique de conversation
@@ -28,45 +35,7 @@ def intent_analysis_node(state: IntelligentRAGState) -> Dict[str, Any]:
             ])
         
         # Prompt structuré pour obtenir une réponse JSON
-        prompt = f"""You are an intent classification system for Polytech Sorbonne chatbot.
-Analyze the user's question and return a JSON response with this exact structure:
-
-{{
-    "intent": "DIRECT_ANSWER|RAG_NEEDED|SYLLABUS_SPECIFIC_COURSE|SYLLABUS_SPECIALITY_OVERVIEW",
-    "speciality": "AGRAL|EISE|EI2I|GM|MAIN|MTX|ROB|ST|GENERAL|null",
-    "confidence": 0.95,
-    "reasoning": "Brief explanation of the classification",
-    "needs_history": true,
-    "course_name": "Course name if specific course mentioned, otherwise null"
-}}
-
-Classification rules:
-- DIRECT_ANSWER: Only for greetings, thanks, casual conversation unrelated to Polytech
-- RAG_NEEDED: For factual questions about Polytech (admissions, campus, associations, testimonials, general information about the speciality, etc.)
-- SYLLABUS_SPECIFIC_COURSE: For questions about a specific course (e.g., "What is taught in Algorithmique?")
-- SYLLABUS_SPECIALITY_OVERVIEW: For questions about all courses of a speciality or general curriculum (e.g., "What courses are in ROB speciality?", "Table of contents")
-
-Specialities:
-- AGRAL: Agroalimentaire
-- EISE: Électronique et Informatique - Systèmes Embarqués
-- EI2I: Électronique et Informatique - Informatique Industrielle
-- GM: Génie Mécanique
-- MAIN: Mathématiques Appliquées et Informatique
-- MTX: Matériaux
-- ROB: Robotique
-- ST: Sciences de la Terre
-- GENERAL: General curriculum questions without specific speciality
-
-History necessity rules:
-- needs_history: true if the question refers to "this", "that", previous conversation, or context is needed
-- needs_history: false if the question is self-contained
-
-Context:
-{history_text}
-
-Question: {state['input_question']}
-
-Return only valid JSON:"""
+        prompt = get_intent_analysis_prompt(state['input_question'], history_text)
 
         response = llm.invoke([HumanMessage(content=prompt)])
         
@@ -92,9 +61,9 @@ Return only valid JSON:"""
                 course_name=result.get("course_name") if result.get("course_name") and result["course_name"] != "null" else None
             )
             
-            print(f"[Intent] Intention détectée: {intent_analysis['intent']}")
-            print(f"[Intent] Spécialité: {intent_analysis['speciality']}")
-            print(f"[Intent] Confiance: {intent_analysis['confidence']}")
+            cp.print_success(f"Intention détectée: {intent_analysis['intent']}")
+            cp.print_info(f"Spécialité: {intent_analysis['speciality']}")
+            cp.print_info(f"Confiance: {intent_analysis['confidence']:.2f}")
             
             return {
                 "intent_analysis": intent_analysis,
@@ -102,8 +71,8 @@ Return only valid JSON:"""
             }
             
         except json.JSONDecodeError as e:
-            print(f"[Intent] Erreur parsing JSON: {e}")
-            print(f"[Intent] Réponse brute: {response.content}")
+            cp.print_error(f"Erreur parsing JSON: {e}")
+            cp.print_warning(f"Réponse brute: {response.content}")
             
             # Fallback avec classification simple
             content = response.content.lower()
@@ -123,13 +92,15 @@ Return only valid JSON:"""
                 course_name=None
             )
             
+            cp.print_warning("Utilisation du fallback pour l'analyse d'intention")
+            
             return {
                 "intent_analysis": fallback_analysis,
                 "processing_steps": state.get("processing_steps", []) + ["Intent analysis with fallback"]
             }
             
     except Exception as e:
-        print(f"[Intent] Erreur lors de l'analyse: {e}")
+        cp.print_error(f"Erreur lors de l'analyse: {e}")
         import traceback
         traceback.print_exc()
         return {
@@ -150,23 +121,15 @@ def direct_answer_node(state: IntelligentRAGState) -> Dict[str, Any]:
     """
     Génère une réponse directe sans recherche documentaire
     """
+    cp.print_step("Génération de réponse directe")
+    
     try:
-        direct_prompt = f"""Tu es l'assistant virtuel de Polytech Sorbonne. Tu réponds aux salutations et questions générales.
+        prompt = get_direct_answer_prompt(state['input_question'])
 
-Règles:
-- Reste professionnel et amical
-- Pour les salutations, présente-toi brièvement
-- Pour les questions générales, propose d'aider avec des informations spécifiques sur Polytech
-- Réponds dans la langue de la question
-
-Question: {state['input_question']}
-
-Réponse:"""
-
-        response = llm.invoke([HumanMessage(content=direct_prompt)])
+        response = llm.invoke([HumanMessage(content=prompt)])
         answer = response.content.strip()
         
-        print(f"[Direct] Réponse directe générée")
+        cp.print_success("Réponse directe générée")
         
         return {
             "answer": answer,
@@ -176,7 +139,7 @@ Réponse:"""
         }
         
     except Exception as e:
-        print(f"[Direct] Erreur: {e}")
+        cp.print_error(f"Erreur: {e}")
         return {
             "answer": "Je suis désolé, je rencontre une difficulté technique. Pouvez-vous reformuler votre question ?",
             "context": [],
@@ -194,17 +157,16 @@ def document_retrieval_node(state: IntelligentRAGState) -> Dict[str, Any]:
         if not intent_analysis:
             raise ValueError("Intent analysis not found")
         
-        print(f"[Retrieval] Récupération pour intention: {intent_analysis['intent']}")
+        cp.print_step(f"Récupération pour intention: {intent_analysis['intent']}")
         
-        # Différentes stratégies selon l'intention
+        # Traitement unifié : seules les vues d'ensemble de spécialité ont un traitement spécial
         if intent_analysis["intent"] == IntentType.SYLLABUS_SPECIALITY_OVERVIEW:
             docs = _retrieve_speciality_overview_docs(state)
-        elif intent_analysis["intent"] == IntentType.SYLLABUS_SPECIFIC_COURSE:
-            docs = _retrieve_specific_course_docs(state)
         else:
+            # Traitement classique pour RAG_NEEDED et SYLLABUS_SPECIFIC_COURSE
             docs = _retrieve_general_docs(state)
         
-        print(f"[Retrieval] {len(docs)} documents récupérés")
+        cp.print_success(f"{len(docs)} documents récupérés")
         
         return {
             "retrieved_docs": docs,
@@ -212,72 +174,12 @@ def document_retrieval_node(state: IntelligentRAGState) -> Dict[str, Any]:
         }
         
     except Exception as e:
-        print(f"[Retrieval] Erreur: {e}")
+        cp.print_error(f"Erreur: {e}")
         return {
             "retrieved_docs": [],
             "processing_steps": state.get("processing_steps", []) + ["Document retrieval failed"],
             "error": str(e)
         }
-
-def _retrieve_specific_course_docs(state: IntelligentRAGState) -> List[Any]:
-    """Récupération spécialisée pour un cours spécifique"""
-    intent_analysis = state["intent_analysis"]
-    question = state["input_question"]
-    course_name = intent_analysis.get("course_name")
-    
-    try:
-        # Construire la requête avec le nom du cours si disponible
-        search_query = question
-        if course_name:
-            search_query = f"{course_name} {question}"
-        
-        # Recherche avec plus de documents pour pouvoir filtrer
-        docs = db.similarity_search(search_query, k=20)
-        
-        # Filtrer pour garder SEULEMENT les documents syllabus/cours
-        filtered_docs = []
-        for doc in docs:
-            metadata = doc.metadata
-            tags = str(metadata.get("tags", "")).lower()
-            doc_type = str(metadata.get("metadata.type", "")).lower()
-            document_type = str(metadata.get("document_type", "")).lower()
-            content = str(doc.page_content).lower()
-            
-            # INCLURE les documents de cours spécifiques
-            is_course_doc = (
-                # Tags contiennent "cours" ou "syllabus"
-                "cours" in tags or "syllabus" in tags or
-                # Type est fiche_cours
-                doc_type == "fiche_cours" or
-                # Document type cours
-                document_type == "cours"
-            )
-            
-            # Si un nom de cours est spécifié, vérifier la correspondance
-            if course_name and is_course_doc:
-                course_match = (
-                    course_name.lower() in content or
-                    course_name.lower() in tags or
-                    any(word in content for word in course_name.lower().split())
-                )
-                if course_match:
-                    filtered_docs.append(doc)
-            elif not course_name and is_course_doc:
-                filtered_docs.append(doc)
-        
-        # Optionnel : filtrer par spécialité si spécifiée
-        speciality = intent_analysis.get("speciality")
-        if speciality and filtered_docs:
-            speciality_filtered_docs = _filter_by_speciality(filtered_docs, speciality)
-            if len(speciality_filtered_docs) >= 2:
-                filtered_docs = speciality_filtered_docs
-        
-        print(f"[Retrieval] {len(filtered_docs)} documents de cours spécifique récupérés")
-        return filtered_docs[:8]  # Garder les 8 meilleurs
-        
-    except Exception as e:
-        print(f"[Retrieval] Erreur récupération cours spécifique: {e}")
-        return []
 
 def _retrieve_speciality_overview_docs(state: IntelligentRAGState) -> List[Any]:
     """Récupération spécialisée pour une vue d'ensemble des cours d'une spécialité"""
@@ -287,7 +189,7 @@ def _retrieve_speciality_overview_docs(state: IntelligentRAGState) -> List[Any]:
     
     try:
         # Recherche directe par métadonnées pour les documents TOC
-        print(f"[Retrieval] Recherche TOC pour spécialité: {speciality}")
+        cp.print_info(f"[Retrieval] Recherche TOC pour spécialité: {speciality}")
         
         # Récupérer TOUS les documents de la collection
         collection = db.get()
@@ -327,11 +229,11 @@ def _retrieve_speciality_overview_docs(state: IntelligentRAGState) -> List[Any]:
             # Les DEUX critères doivent être vrais
             if is_toc_doc and speciality_match:
                 filtered_docs.append(doc)
-                print(f"[Retrieval] TOC trouvé: type={metadata_type}, specialite={metadata_specialite}")
+                cp.print_info(f"[Retrieval] TOC trouvé: type={metadata_type}, specialite={metadata_specialite}")
         
         # Si pas assez de documents TOC, faire une recherche complémentaire
         if len(filtered_docs) < 2:
-            print(f"[Retrieval] Seulement {len(filtered_docs)} docs TOC trouvés, recherche complémentaire...")
+            cp.print_warning(f"[Retrieval] Seulement {len(filtered_docs)} docs TOC trouvés, recherche complémentaire...")
             
             # Recherche par similarité comme backup MAIS toujours avec les critères TOC
             similarity_docs = db.similarity_search(question, k=15)
@@ -352,13 +254,13 @@ def _retrieve_speciality_overview_docs(state: IntelligentRAGState) -> List[Any]:
                     
                     if is_toc_doc and speciality_match:
                         filtered_docs.append(doc)
-                        print(f"[Retrieval] TOC complémentaire: type={metadata_type}, specialite={metadata_specialite}")
+                        cp.print_info(f"[Retrieval] TOC complémentaire: type={metadata_type}, specialite={metadata_specialite}")
         
-        print(f"[Retrieval] {len(filtered_docs)} documents TOC récupérés au total")
+        cp.print_success(f"[Retrieval] {len(filtered_docs)} documents TOC récupérés au total")
         return filtered_docs[:12]  # Garder plus de documents pour une vue d'ensemble complète
         
     except Exception as e:
-        print(f"[Retrieval] Erreur récupération vue d'ensemble spécialité: {e}")
+        cp.print_error(f"[Retrieval] Erreur récupération vue d'ensemble spécialité: {e}")
         import traceback
         traceback.print_exc()
         return []
@@ -414,19 +316,18 @@ def rag_generation_node(state: IntelligentRAGState) -> Dict[str, Any]:
         
         if not retrieved_docs:
             # Fallback vers RAG standard
-            print("[RAG] Pas de documents, utilisation RAG standard")
+            cp.print_warning("[RAG] Pas de documents, utilisation RAG standard")
             return _fallback_rag_generation(state)
         
-        # Génération spécialisée selon l'intention
-        if intent_analysis and intent_analysis["intent"] == IntentType.SYLLABUS_SPECIFIC_COURSE:
-            return _generate_specific_course_response(state, retrieved_docs)
-        elif intent_analysis and intent_analysis["intent"] == IntentType.SYLLABUS_SPECIALITY_OVERVIEW:
+        # Génération simplifiée : seules les vues d'ensemble de spécialité ont un traitement spécial
+        if intent_analysis and intent_analysis["intent"] == IntentType.SYLLABUS_SPECIALITY_OVERVIEW:
             return _generate_speciality_overview_response(state, retrieved_docs)
         else:
+            # Traitement unifié pour RAG_NEEDED et SYLLABUS_SPECIFIC_COURSE
             return _generate_general_response(state, retrieved_docs)
             
     except Exception as e:
-        print(f"[RAG] Erreur: {e}")
+        cp.print_error(f"[RAG] Erreur: {e}")
         return {
             "answer": "Je suis désolé, je rencontre une difficulté pour traiter votre demande.",
             "context": [],
@@ -436,7 +337,7 @@ def rag_generation_node(state: IntelligentRAGState) -> Dict[str, Any]:
         }
 
 def _generate_general_response(state: IntelligentRAGState, docs: List[Any]) -> Dict[str, Any]:
-    """Génère une réponse générale"""
+    """Génère une réponse générale (pour RAG_NEEDED et SYLLABUS_SPECIFIC_COURSE)"""
     
     if not docs:
         return {
@@ -448,52 +349,8 @@ def _generate_general_response(state: IntelligentRAGState, docs: List[Any]) -> D
     
     context_text = "\n\n".join([doc.page_content for doc in docs[:6]])
     
-    prompt = f"""Tu es l'assistant de Polytech Sorbonne. Utilise les informations fournies pour répondre à la question de manière précise et utile.
-
-Contexte (Informations générales):
-{context_text}
-
-Question: {state['input_question']}
-
-Instructions:
-- Utilise uniquement les informations du contexte
-- Reste précis et factuel
-- Organise ta réponse de manière claire
-- Mentionne les sources spécifiques si pertinentes
-
-Réponse:"""
-
-    response = llm.invoke([HumanMessage(content=prompt)])
-    answer = response.content.strip()
-    
-    # Extraire les sources
-    sources = get_sources(docs) if docs else []
-    
-    print(f"[RAG] Réponse générale générée avec {len(docs)} documents")
-    
-    return {
-        "answer": answer,
-        "context": docs,
-        "sources": sources,
-        "processing_steps": state.get("processing_steps", []) + ["General response generated"]
-    }
-
-def _generate_specific_course_response(state: IntelligentRAGState, docs: List[Any]) -> Dict[str, Any]:
-    """Génère une réponse spécialisée pour un cours spécifique"""
-    intent_analysis = state.get("intent_analysis")
-    course_name = intent_analysis.get("course_name") if intent_analysis else None
-    
-    if not docs:
-        return {
-            "answer": f"Je n'ai pas trouvé d'informations sur le cours {course_name if course_name else 'demandé'}.",
-            "context": [],
-            "sources": [],
-            "processing_steps": state.get("processing_steps", []) + ["No specific course documents found"]
-        }
-    
-    context_text = "\n\n".join([doc.page_content for doc in docs[:6]])
-    
     # Utiliser l'historique si nécessaire
+    intent_analysis = state.get("intent_analysis")
     history_context = ""
     if intent_analysis and intent_analysis.get("needs_history") and state.get("chat_history"):
         history_context = "\n".join([
@@ -502,21 +359,11 @@ def _generate_specific_course_response(state: IntelligentRAGState, docs: List[An
         ])
         history_context = f"\n\nHistorique de conversation:\n{history_context}\n"
     
-    prompt = f"""Tu es l'assistant de Polytech Sorbonne. Utilise les informations du syllabus pour répondre précisément à la question sur ce cours spécifique.
-
-Contexte (Syllabus du cours):
-{context_text}{history_context}
-
-Question: {state['input_question']}
-
-Instructions:
-- Concentre-toi sur les détails du cours mentionné
-- Inclus les objectifs pédagogiques, le programme, les modalités d'évaluation si disponibles
-- Mentionne le code du cours et les prérequis si pertinents
-- Sois précis et structuré dans ta réponse
-- Utilise l'historique de conversation si nécessaire pour le contexte
-
-Réponse:"""
+    prompt = get_general_rag_prompt(
+        input_question=state['input_question'],
+        context_text=context_text,
+        history_context=history_context
+    )
 
     response = llm.invoke([HumanMessage(content=prompt)])
     answer = response.content.strip()
@@ -524,13 +371,13 @@ Réponse:"""
     # Extraire les sources
     sources = get_sources(docs) if docs else []
     
-    print(f"[RAG] Réponse cours spécifique générée avec {len(docs)} documents")
+    cp.print_success(f"[RAG] Réponse générale générée avec {len(docs)} documents")
     
     return {
         "answer": answer,
         "context": docs,
         "sources": sources,
-        "processing_steps": state.get("processing_steps", []) + ["Specific course response generated"]
+        "processing_steps": state.get("processing_steps", []) + ["General response generated"]
     }
 
 def _generate_speciality_overview_response(state: IntelligentRAGState, docs: List[Any]) -> Dict[str, Any]:
@@ -560,22 +407,12 @@ def _generate_speciality_overview_response(state: IntelligentRAGState, docs: Lis
     
     speciality_name = speciality.value if speciality else "la spécialité"
     
-    prompt = f"""Tu es l'assistant de Polytech Sorbonne. Utilise les informations des tables des matières et syllabus pour donner une vue d'ensemble des cours de la spécialité {speciality_name}.
-
-Contexte (Tables des matières et syllabus):
-{context_text}{history_context}
-
-Question: {state['input_question']}
-
-Instructions:
-- Organise les cours par semestre si possible
-- Donne une vue d'ensemble structurée et claire
-- Mentionne les grandes thématiques et modules
-- Utilise des listes à puces ou des tableaux pour la lisibilité
-- Inclus les codes de cours et ECTS si disponibles
-- Utilise l'historique de conversation si nécessaire pour le contexte
-
-Réponse:"""
+    prompt = get_speciality_overview_prompt(
+        input_question=state['input_question'],
+        context_text=context_text,
+        speciality_name=speciality_name,
+        history_context=history_context
+    )
 
     response = llm.invoke([HumanMessage(content=prompt)])
     answer = response.content.strip()
@@ -583,7 +420,7 @@ Réponse:"""
     # Extraire les sources
     sources = get_sources(docs) if docs else []
     
-    print(f"[RAG] Réponse vue d'ensemble spécialité générée avec {len(docs)} documents")
+    cp.print_success(f"[RAG] Réponse vue d'ensemble spécialité générée avec {len(docs)} documents")
     
     return {
         "answer": answer,
@@ -612,7 +449,7 @@ def _fallback_rag_generation(state: IntelligentRAGState) -> Dict[str, Any]:
         }
         
     except Exception as e:
-        print(f"[RAG] Erreur fallback: {e}")
+        cp.print_error(f"[RAG] Erreur fallback: {e}")
         return {
             "answer": "Je suis désolé, je ne peux pas traiter votre demande pour le moment.",
             "context": [],
@@ -628,32 +465,8 @@ def _retrieve_general_docs(state: IntelligentRAGState) -> List[Any]:
     try:
         # Recherche standard avec similarité
         docs = db.similarity_search(question, k=12)
-        """
-        # Filtrer pour EXCLURE les documents syllabus et garder les documents généraux
-        filtered_docs = []
-        for doc in docs:
-            metadata = doc.metadata
-            tags = str(metadata.get("tags", "")).lower()
-            doc_type = str(metadata.get("metadata.type", "")).lower()
-            document_type = str(metadata.get("document_type", "")).lower()
-            
-            # EXCLURE les documents de syllabus/cours pour le RAG général
-            is_syllabus_doc = (
-                "syllabus" in tags or
-                "cours" in tags or
-                doc_type in ["toc", "fiche_cours"] or
-                document_type == "cours"
-            )
-            
-            # Garder SEULEMENT les documents généraux (non-syllabus)
-            if not is_syllabus_doc:
-                filtered_docs.append(doc)
-        
-        print(f"[Retrieval] {len(filtered_docs)} documents généraux récupérés (sur {len(docs)} total)")
-        return filtered_docs[:8]  # Garder les 8 meilleurs
-        """
         return docs[:8]  # Garder les 8 meilleurs documents
         
     except Exception as e:
-        print(f"[Retrieval] Erreur récupération générale: {e}")
+        cp.print_error(f"[Retrieval] Erreur récupération générale: {e}")
         return []

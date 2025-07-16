@@ -94,7 +94,7 @@ class TokenCostTracker:
         """Récupère le coût d'une conversation"""
         return self.conversations.get(session_id)
     
-    def estimate_tokens(self, text: str, model: str = "gpt-4") -> int:
+    def estimate_tokens(self, text: str, model: str = "gpt-4o-mini") -> int:
         """Estime le nombre de tokens dans un texte"""
         try:
             encoding = tiktoken.encoding_for_model(model)
@@ -102,6 +102,27 @@ class TokenCostTracker:
         except Exception:
             # Fallback : approximation grossière
             return len(text) // 4
+    
+    def estimate_prompt_tokens(self, state: dict, model: str) -> int:
+        """Estimation des tokens pour les prompts système"""
+        prompt_tokens = 0
+        
+        # Tokens pour les prompts système de base
+        system_prompts = [
+            "Vous êtes un assistant spécialisé dans l'aide aux étudiants de Polytech.",
+            "Analysez la question et déterminez si elle porte sur un cours spécifique.",
+            "Répondez de manière claire et structurée."
+        ]
+        
+        for prompt in system_prompts:
+            prompt_tokens += self.estimate_tokens(prompt, model)
+        
+        # Tokens pour les instructions spécifiques selon le type de question
+        if state.get("is_course_question"):
+            course_prompt = "Répondez spécifiquement à cette question de cours en utilisant le contexte fourni."
+            prompt_tokens += self.estimate_tokens(course_prompt, model)
+        
+        return prompt_tokens
     
     def get_stats(self) -> Dict[str, Any]:
         """Récupère les statistiques globales"""
@@ -183,15 +204,36 @@ def track_openai_call(operation: str, model: str = None):
                     from ..llmm import llm
                     actual_model = getattr(llm, 'model_name', 'gpt-4o-mini')
                 except:
-                    actual_model = "gpt-4o-mini"  # Fallback vers le modèle réel
+                    actual_model = "gpt-4o-mini"
             
-            # Estimer les tokens d'entrée
+            # Calculer les tokens d'entrée plus précisément
             input_text = ""
             if args and hasattr(args[0], 'get'):
                 state = args[0]
                 input_text = state.get("input_question", "")
+                
+                # Ajouter l'historique de conversation si présent
+                if state.get("chat_history"):
+                    history_text = "\n".join([
+                        f"User: {msg['content']}" if msg['role'] == "user" else f"Assistant: {msg['content']}"
+                        for msg in state["chat_history"]
+                    ])
+                    input_text += f"\n\nHistorique:\n{history_text}"
+                
+                # Ajouter les documents RAG si présents
+                if state.get("retrieved_docs"):
+                    docs_text = "\n\n".join([
+                        doc.page_content for doc in state["retrieved_docs"][:6]
+                    ])
+                    input_text += f"\n\nContexte RAG:\n{docs_text}"
             
+            # Estimer les tokens d'entrée avec le contenu complet
             prompt_tokens = token_tracker.estimate_tokens(input_text, actual_model)
+            
+            # Ajouter les tokens des prompts système
+            if args and hasattr(args[0], 'get'):
+                system_prompt_tokens = token_tracker.estimate_prompt_tokens(args[0], actual_model)
+                prompt_tokens += system_prompt_tokens
             
             # Exécuter la fonction
             result = func(*args, **kwargs)

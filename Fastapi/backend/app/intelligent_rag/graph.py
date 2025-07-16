@@ -11,7 +11,12 @@ from .nodes import (
     document_retrieval_node,
     rag_generation_node
 )
-from .logger import rag_logger
+from .db_logger import rag_db_logger
+
+# Import color utilities
+from color_utils import ColorPrint
+
+cp = ColorPrint()
 
 def create_intelligent_rag_graph():
     """
@@ -35,18 +40,18 @@ def create_intelligent_rag_graph():
         intent_analysis = state.get("intent_analysis")
         
         if not intent_analysis:
-            print("[Routing] Pas d'analyse d'intention, fallback vers document_retrieval")
+            cp.print_warning("[Routing] Pas d'analyse d'intention, fallback vers document_retrieval")
             return "document_retrieval"  # Fallback
         
         intent = intent_analysis["intent"]
-        print(f"[Routing] Intention détectée: {intent}, routage vers le bon nœud")
+        cp.print_info(f"[Routing] Intention détectée: {intent}, routage vers le bon nœud")
         
         if intent == IntentType.DIRECT_ANSWER:
-            print("[Routing] → direct_answer (pas de RAG)")
+            cp.print_info("[Routing] → direct_answer (pas de RAG)")
             return "direct_answer"
         else:
             # Pour tous les autres types (RAG_NEEDED, SYLLABUS_*), on passe par la récupération de documents
-            print("[Routing] → document_retrieval (avec RAG)")
+            cp.print_info("[Routing] → document_retrieval (avec RAG)")
             return "document_retrieval"
     
     # Branchement conditionnel après l'analyse d'intention
@@ -157,7 +162,7 @@ def invoke_intelligent_rag(question: str, chat_history: list = None) -> dict:
                         for op in session_ops
                     ]
             
-            session_id = rag_logger.log_conversation(
+            session_id = rag_db_logger.log_conversation(
                 question=question,
                 result=final_result,
                 chat_history=chat_history,
@@ -165,18 +170,18 @@ def invoke_intelligent_rag(question: str, chat_history: list = None) -> dict:
                 intermediate_operations=session_operations
             )
             final_result["session_id"] = session_id
-            print(f"[Graph] Conversation loggée: {session_id}")
+            cp.print_info(f"[Graph] Conversation loggée: {session_id}")
         except Exception as log_error:
-            print(f"[Graph] Erreur logging: {log_error}")
+            cp.print_error(f"[Graph] Erreur logging: {log_error}")
         
         return final_result
         
     except Exception as e:
         response_time = time.time() - start_time
-        print(f"[Graph] Erreur critique: {e}")
+        cp.print_error(f"[Graph] Erreur critique: {e}")
         import traceback
         traceback.print_exc()
-        print(f"[Graph] État initial: {initial_state}")
+        cp.print_debug(f"[Graph] État initial: {initial_state}")
         
         # Finaliser le tracking même en cas d'erreur
         conversation_cost = token_tracker.end_conversation(session_id)
@@ -209,7 +214,7 @@ def invoke_intelligent_rag(question: str, chat_history: list = None) -> dict:
         
         # Logger l'erreur aussi
         try:
-            session_id = rag_logger.log_conversation(
+            session_id = rag_db_logger.log_conversation(
                 question=question,
                 result=error_result,
                 chat_history=chat_history,
@@ -217,7 +222,7 @@ def invoke_intelligent_rag(question: str, chat_history: list = None) -> dict:
             )
             error_result["session_id"] = session_id
         except Exception as log_error:
-            print(f"[Graph] Erreur logging erreur: {log_error}")
+            cp.print_error(f"[Graph] Erreur logging erreur: {log_error}")
         
         return error_result
 
