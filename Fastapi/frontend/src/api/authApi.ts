@@ -21,11 +21,20 @@ export async function logoutAdmin() {
 }
 
 // Effectue le login admin (pose le cookie JWT)
-export async function loginAdmin(username: string, password: string): Promise<{ ok: boolean; error?: string }> {
+export async function loginAdmin(
+  username: string,
+  password: string,
+  recaptchaToken?: string
+): Promise<{ ok: boolean; error?: string }> {
   try {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+    headers["X-Recaptcha-Token"] = recaptchaToken || "";
+
     const res = await fetch("/auth/login", {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      headers,
       credentials: "include",
       body: new URLSearchParams({ username, password }),
     });

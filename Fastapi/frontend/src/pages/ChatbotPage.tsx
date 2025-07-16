@@ -1,28 +1,33 @@
-import { useState } from "react";
-import Chat from "../components/Chatbot/Chat";
-import ReCAPTCHA from "react-google-recaptcha";
+// ==========================
+// Page principale du chatbot
+//  =========================
 
-// Utilisation de la clé reCAPTCHA
-const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+import Chat from "../components/Chatbot/Chat";
+import useRecaptcha from "../hooks/useRecaptcha";
 
 export default function ChatbotPage() {
-  const [captchaValid, setCaptchaValid] = useState(false);
-
-  // Callback appelé quand l'utilisateur valide le captcha
-  const handleCaptcha = (token: string | null) => {
-    if (token) setCaptchaValid(true);
-  };
+  const { isValid, token, RecaptchaComponent } = useRecaptcha();
+  const isCaptchaValidated = isValid && token;
 
   return (
-    <div>
-      {!captchaValid ? (
-        <div className="chatbot-captcha-container">
-          <h2>Vérification anti-robot</h2>
-          <p>Merci de valider le captcha pour accéder au chatbot.</p>
-          <ReCAPTCHA sitekey={RECAPTCHA_SITE_KEY} onChange={handleCaptcha} />
-        </div>
-      ) : (
+    <div className="chatbot-page">
+      <div className={`chat-wrapper ${!isCaptchaValidated ? "disabled" : ""}`}>
         <Chat />
+      </div>
+
+      {!isCaptchaValidated && (
+        <div className="captcha-overlay">
+          <div className="captcha-modal">
+            <div className="captcha-header">
+              <h3>Bienvenue sur PolyBot</h3>
+              <p>
+                Votre assistant virtuel Polytech Sorbonne vous attend ! <br />
+                Complétez la vérification pour commencer à discuter.
+              </p>
+            </div>
+            <div className="captcha-widget">{RecaptchaComponent}</div>
+          </div>
+        </div>
       )}
     </div>
   );

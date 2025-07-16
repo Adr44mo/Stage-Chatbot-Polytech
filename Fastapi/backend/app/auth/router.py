@@ -8,7 +8,7 @@ from .dependencies import get_current_user_from_cookie, get_current_admin_from_c
 from .security import verify_password, get_password_hash, create_access_token
 from datetime import timedelta
 from .dependencies import get_current_admin
-
+from ..recaptcha import verify_recaptcha_token
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -21,7 +21,19 @@ def authenticate_user(session: Session, username: str, password: str):
     return user
 
 @router.post("/login")
-def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), session: Session = Depends(get_session)):
+async def login(
+    response: Response, 
+    request: Request,
+    form_data: OAuth2PasswordRequestForm = Depends(), 
+    session: Session = Depends(get_session)
+):
+    # Vérification reCAPTCHA obligatoire
+    recaptcha_token = request.headers.get("X-Recaptcha-Token")
+    if not recaptcha_token:
+        raise HTTPException(status_code=400, detail="reCAPTCHA token required")
+    if not await verify_recaptcha_token(recaptcha_token):
+        raise HTTPException(status_code=400, detail="Invalid reCAPTCHA token")
+    
     user = authenticate_user(session, form_data.username, form_data.password)
     if not user or user.role != "admin":
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials or not admin")
@@ -33,7 +45,7 @@ def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), 
         key="admin_token",
         value=access_token,
         httponly=True,
-        secure=False,  # mettre True en prod avec HTTPS
+        secure=False,  #TODO: mettre True en prod avec HTTPS
         samesite="lax",
         max_age=3600,
         path="/"
@@ -68,4 +80,3 @@ def register_user(user_create: UserCreate, session: Session = Depends(get_sessio
     session.commit()
     session.refresh(user)
     return user
-

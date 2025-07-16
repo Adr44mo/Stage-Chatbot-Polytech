@@ -14,6 +14,7 @@ export interface Message {
 export interface ChatRequest {
   prompt: string;
   chat_history: Message[];
+  recaptcha_token?: string;
 }
 
 // Structure de la réponse renvoyée par l'API /chat

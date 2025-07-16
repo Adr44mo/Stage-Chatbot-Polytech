@@ -48,6 +48,7 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     prompt: str
     chat_history: List[ChatMessage]
+    recaptcha_token: Optional[str] = None
 
 class ChatResponse(BaseModel):
     answer: str

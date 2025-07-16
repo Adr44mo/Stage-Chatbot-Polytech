@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAdminAuth } from "../auth/AdminAuthContext";
 import { loginAdmin } from "../api/authApi";
+import useRecaptcha from "../hooks/useRecaptcha";
 
 const LoginPage: React.FC = () => {
   // États locaux pour le formulaire et l'affichage
@@ -16,13 +17,20 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { refreshAuth } = useAdminAuth();
+  const { token: recaptchaToken, RecaptchaComponent } = useRecaptcha();
 
   // Gère la soumission du formulaire de login
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!recaptchaToken) {
+      setError("Veuillez valider le reCAPTCHA");
+      return;
+    }
+
     setLoading(true);
     setError("");
-    const result = await loginAdmin(username, password); // Appel API : /auth/login
+    const result = await loginAdmin(username, password, recaptchaToken);
     if (result.ok) {
       // On met à jour l'état d'auth global et on redirige vers la page admin si succès
       await refreshAuth();
@@ -58,6 +66,15 @@ const LoginPage: React.FC = () => {
           />
         </div>
         {error && <div className="login-error-message">{error}</div>}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            margin: "1rem 0",
+          }}
+        >
+          {RecaptchaComponent}
+        </div>
         <button type="submit" disabled={loading} className="login-submit-btn">
           {loading ? "Connexion..." : "Se connecter"}
         </button>

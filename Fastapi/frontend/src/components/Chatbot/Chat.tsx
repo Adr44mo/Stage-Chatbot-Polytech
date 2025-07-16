@@ -10,6 +10,7 @@ import type { Message } from "../../types/chatTypes";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
 import { fetchHistory, sendMessage } from "../../api/chatApi";
+import useRecaptcha from "../../hooks/useRecaptcha";
 
 /* Message d'introduction */
 const INTRO_MESSAGE: Message = {
@@ -23,6 +24,7 @@ export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const { token: recaptchaToken } = useRecaptcha();
 
   /* Récupère l'historique d'un utilisateur depuis le backend au chargement */
   useEffect(() => {
@@ -53,7 +55,11 @@ export default function Chat() {
     setLoading(true);
 
     try {
-      const data = await sendMessage(input, [...messages, newUserMessage]);
+      const data = await sendMessage(
+        input,
+        [...messages, newUserMessage],
+        recaptchaToken
+      );
       const botMessage: Message = {
         role: "assistant",
         content: data.answer,

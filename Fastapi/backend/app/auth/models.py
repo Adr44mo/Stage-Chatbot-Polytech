@@ -16,3 +16,8 @@ class UserRead(BaseModel):
     id: int
     username: str
     role: str
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+    recaptcha_token: Optional[str] = None

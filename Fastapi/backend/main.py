@@ -3,7 +3,7 @@
 # =====================================================
 
 # Imports des bibliothèques nécessaires
-from fastapi import FastAPI, Depends, Request, Response, Cookie
+from fastapi import FastAPI, Depends, Request, Response, Cookie, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
@@ -12,11 +12,17 @@ from redis import Redis
 from sqlmodel import Session
 from datetime import datetime, timedelta
 import uuid
+import os
+
+from color_utils import ColorPrint
+
+cp = ColorPrint()
 
 # Imports internes 
 from .app.keys_file import OPENAI_API_KEY
 from .app.llmm import initialize_the_rag_chain
 from .app.chat import router as chat_router, get_sources, get_or_create_conversation, add_message
+from .app.recaptcha import verify_recaptcha_token
 from .app.server_file import router as server_router
 from Document_handler.The_handler import router as router_scrapping
 from .app.PDF_manual.pdf_manual import router as pdf_manual_router
@@ -25,13 +31,14 @@ from .app.auth.router import router as auth_router
 from .app.auth.database import create_db_and_tables, get_session
 from .app.chat_models import ChatRequest, ChatResponse
 from .app.auth.dependencies import get_current_admin
-from .app.intelligent_rag.api import router as intelligent_rag_router  # Nouveau système RAG
+from .app.intelligent_rag.api import router as intelligent_rag_router
+from .app.intelligent_rag.db_routes import router as db_router
 
-# =================
+# ==============================
 # Configuration des systèmes RAG
-# =================
+# ==============================
 
-# Variables de configuration - Changez ces valeurs pour tester différents systèmes
+# Variables de configuration 
 USE_INTELLIGENT_RAG = True   # Système RAG intelligent (nouvelle version)
 USE_LANGGRAPH = True         # LangGraph RAG system 
 # Note: Si USE_INTELLIGENT_RAG est True, il a la priorité sur USE_LANGGRAPH
@@ -51,12 +58,12 @@ def get_rag_system_info():
 
 if USE_INTELLIGENT_RAG:
     from .app.intelligent_rag.graph import invoke_intelligent_rag
-    print(f"[INFO] {get_rag_system_info()}")
+    cp.print_info(f"{get_rag_system_info()}")
 elif USE_LANGGRAPH:
     from .app.langgraph_system.rag_graph import invoke_langgraph_rag
-    print(f"[INFO] {get_rag_system_info()}")
+    cp.print_info(f"{get_rag_system_info()}")
 else:
-    print(f"[INFO] {get_rag_system_info()}")
+    cp.print_info(f"{get_rag_system_info()}")
 
 # ============================================
 # Initialisation de FastAPI (et rate limiting)
@@ -64,7 +71,7 @@ else:
 
 # Initialisation de l'application FastAPI
 app = FastAPI()
-print("[INFO] FastAPI app initialized")
+cp.print_info("FastAPI app initialized")
 
 # Initialisation du limiteur de requêtes (avec Redis comme stockage)
 redis = Redis(host="localhost", port = 6379, decode_responses=True)
@@ -98,6 +105,7 @@ app.include_router(server_router)
 app.include_router(router_scrapping, prefix="/scraping", tags=["Scraping"])#, dependencies=[Depends(get_current_admin)])
 app.include_router(pdf_manual_router, prefix="/pdf_manual", tags=["PDF Manual"])#, dependencies=[Depends(get_current_admin)])
 app.include_router(intelligent_rag_router)  # Nouveau système RAG intelligent
+app.include_router(db_router)  # Routes pour la base de données RAG
 
 # Initialisation de la base de données au démarrage
 @app.on_event("startup")
@@ -139,15 +147,20 @@ async def chat(request: Request, request_body: ChatRequest, polybot_session_id: 
     """
     Endpoint principal pour le chatbot RAG : gestion des messages et historique de conversation.
     """
+    # Vérification reCAPTCHA
+    if not request_body.recaptcha_token:
+        raise HTTPException(status_code=400, detail="reCAPTCHA token required")
+    if not await verify_recaptcha_token(request_body.recaptcha_token):
+        raise HTTPException(status_code=400, detail="Invalid reCAPTCHA token")
+
     conversation = get_or_create_conversation(session, polybot_session_id)
     add_message(session, conversation.id, "user", request_body.prompt)
 
-    # =================================
+    # ====================================================
     # TEST : Intelligent RAG vs LangGraph vs RAG classique
-    # =================================
+    # ====================================================
 
     if USE_INTELLIGENT_RAG:
-        # Utiliser le système RAG intelligent
         chat_history = [
             {"role": msg.role, "content": msg.content}
             for msg in request_body.chat_history if msg.role == "assistant" or msg.role == "user"
@@ -155,7 +168,6 @@ async def chat(request: Request, request_body: ChatRequest, polybot_session_id: 
         
         response = invoke_intelligent_rag(request_body.prompt, chat_history)
         
-        # Adapter la réponse au format attendu
         answer = response.get("answer", "")
         context = response.get("context", [])
         sources = response.get("sources", [])
@@ -190,9 +202,9 @@ async def chat(request: Request, request_body: ChatRequest, polybot_session_id: 
 
     return ChatResponse(answer=answer, sources=sources)
 
-# ==========================
+# =========================================================
 # Endpoint pour obtenir des informations sur le système RAG
-# ==========================
+# =========================================================
 
 @app.get("/system-info")
 def get_system_info():
@@ -214,6 +226,6 @@ import os
 port = int(os.environ.get("PORT", 8000))
 
 if __name__ == "__main__":
-    print(f"[INFO] Starting FastAPI app on port {port}...")
+    cp.print_info(f"Starting FastAPI app on port {port}...")
     import uvicorn
     uvicorn.run("backend.main:app", host="0.0.0.0", port=port, reload=False)

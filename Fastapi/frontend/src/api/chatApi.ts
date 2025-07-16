@@ -41,9 +41,14 @@ export async function fetchHistory(): Promise<Message[]> {
 /* Envoie un message utilisateur et récupère la réponse du bot */
 export async function sendMessage(
   input: string,
-  chat_history: Message[]
+  chat_history: Message[],
+  recaptcha_token?: string
 ): Promise<ChatResponse> {
-  const payload: ChatRequest = { prompt: input, chat_history };
+  const payload: ChatRequest = {
+    prompt: input,
+    chat_history,
+    recaptcha_token,
+  };
   const res = await fetch(`${API_URL}/chat`, {
     method: "POST",
     headers: {
