@@ -1,0 +1,64 @@
+{
+  "name": "polytech-chatbot-rag",
+  "version": "2.1.0",
+  "description": "Intelligent RAG chatbot system for Polytech Sorbonne students",
+  "main": "index.js",
+  "scripts": {
+    "start": "./start.sh",
+    "dev": "./start.sh",
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "cd Fastapi/frontend && npm run build",
+    "build:backend": "cd Fastapi/backend && pip install -r requirements.txt",
+    "test": "npm run test:frontend && npm run test:backend",
+    "test:frontend": "cd Fastapi/frontend && npm test",
+    "test:backend": "cd Fastapi/backend && python -m pytest",
+    "lint": "npm run lint:frontend && npm run lint:backend",
+    "lint:frontend": "cd Fastapi/frontend && npm run lint",
+    "lint:backend": "cd Fastapi/backend && flake8 .",
+    "format": "npm run format:frontend && npm run format:backend",
+    "format:frontend": "cd Fastapi/frontend && npm run format",
+    "format:backend": "cd Fastapi/backend && black . && isort .",
+    "clean": "rm -rf node_modules Fastapi/frontend/node_modules Fastapi/frontend/dist",
+    "install:all": "npm run install:frontend && npm run install:backend",
+    "install:frontend": "cd Fastapi/frontend && npm install",
+    "install:backend": "cd Fastapi/backend && pip install -r requirements.txt",
+    "docs:generate": "python generate_langgraph_diagram.py",
+    "vectorize": "cd Fastapi/backend && python -m Document_handler.new_filler.main",
+    "db:init": "cd Fastapi/backend && python -c 'from app.auth.database import create_db_and_tables; create_db_and_tables()'",
+    "db:cleanup": "cd Fastapi/backend && python -c 'from app.intelligent_rag.database import rag_database; rag_database.cleanup_old_data(30)'",
+    "health": "curl -f http://localhost:8000/health && curl -f http://localhost:5173",
+    "logs": "tail -f Fastapi/backend/logs/system.log"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adr44mo/Stage-Chatbot-Polytech.git"
+  },
+  "keywords": [
+    "chatbot",
+    "rag",
+    "ai",
+    "polytech",
+    "education",
+    "fastapi",
+    "react",
+    "langchain",
+    "openai"
+  ],
+  "author": "Polytech Sorbonne",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Adr44mo/Stage-Chatbot-Polytech/issues"
+  },
+  "homepage": "https://github.com/Adr44mo/Stage-Chatbot-Polytech#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "python": ">=3.12.0"
+  },
+  "devDependencies": {
+    "@types/react-google-recaptcha": "^2.1.9",
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "react-google-recaptcha": "^3.1.0"
+  }
+}
