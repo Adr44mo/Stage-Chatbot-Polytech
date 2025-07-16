@@ -5,7 +5,7 @@
 # Imports de librairies
 import time
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from ruamel.yaml import YAML
 
 # Imports des modules de scrap
@@ -46,7 +46,7 @@ def update_date_config(config_path):
         config_data = load_yaml(config_path)
 
         # Mise à jour de la date
-        config_data["LAST_MODIFIED_DATE"] = datetime.now().strftime("%Y-%m-%d")
+        config_data["LAST_MODIFIED_DATE"] = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
         # Réécriture du fichier YAML sans perte de style
         with open(config_path, 'w', encoding='utf-8') as f:
@@ -222,6 +222,7 @@ def main():
         scrap(site, config_path)   
 
 
+
 def run_scraping_from_configs(config_files: list[str]):
     for config_file in config_files:
         config_path = CONFIG_DIR / config_file
@@ -229,13 +230,9 @@ def run_scraping_from_configs(config_files: list[str]):
         scrap(site, config_path)
    
 
-# -----------------------------------------------------------------------------
+# --------------------------------------------------------
 # Fonction principale de type 'if __name__ == "__main__":'
-# ATTENTION : CETTE FONCTION N'EST PAS EXECUTEE AUTOMATIQUEMENT EN CAS D'IMPORT
-# Cela ne pose pas de problème puisque ce scraping_script.py n'est pas importé
-# dans d'autres fichiers. Il doit être éxécuté seul pour régénérer le corpus
-# si besoin (si le site a évolué, s'il contient de nouveaux pdf, etc...)
-# -----------------------------------------------------------------------------
+# --------------------------------------------------------
 
 if __name__ == "__main__":
     main()

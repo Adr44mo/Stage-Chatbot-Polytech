@@ -5,10 +5,16 @@
 import os
 import requests
 import time
+import json
+from pathlib import Path
 from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
+
+# Répertoire des fichiers de progression
+PROGRESS_DIR = Path(__file__).resolve().parent.parent / "progress"
+PROGRESS_DIR.mkdir(exist_ok=True)
 
 # ---------------------------------
 # User-agent pour les requêtes HTTP
@@ -147,7 +153,9 @@ def count_modified_pages(config):
     # Date de dernière modification du site
     last_modified_date = config.get("LAST_MODIFIED_DATE", None)
     try:
-        limit_date = datetime.strptime(last_modified_date, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+        limit_date = datetime.fromisoformat(last_modified_date)
+        if limit_date.tzinfo is None:
+            limit_date = limit_date.replace(tzinfo=timezone.utc)
     except Exception:
         limit_date = None
 
@@ -245,3 +253,16 @@ def crawl_site(base_url, exclusions, max_urls=100):
         print(url)
 
     return collected_urls
+
+
+def save_progress(site_name: str, current: int, total: int):
+    """Sauvegarde l'état d'avancement du scraping dans un fichier JSON"""
+    progress_path = PROGRESS_DIR / f"{site_name}.json"
+    with open(progress_path, "w", encoding="utf-8") as f:
+        json.dump({"site": site_name, "current": current, "total": total}, f)
+
+def clear_progress(site_name: str):
+    """Supprime le fichier de progression une fois le scraping terminé"""
+    progress_path = PROGRESS_DIR / f"{site_name}.json"
+    if progress_path.exists():
+        progress_path.unlink()

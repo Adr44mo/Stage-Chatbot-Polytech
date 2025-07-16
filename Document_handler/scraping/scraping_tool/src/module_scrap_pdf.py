@@ -14,7 +14,7 @@ from urllib.parse import urljoin, urlparse, unquote
 from PyPDF2 import PdfReader
 from PyPDF2.generic import IndirectObject
 
-from .scraper_utils import HEADERS, extract_urls_sitemap
+from .scraper_utils import PROGRESS_DIR, HEADERS, extract_urls_sitemap, save_progress, clear_progress
 
 # ------------------------------------
 # Initialisation de variables globales
@@ -250,8 +250,10 @@ def scrape_page(site_config):
 
     # Définition de la date de dernière modification
     now_date = datetime.now().isoformat()
-    if site_config.get("LAST_MODIFIED_DATE") != None:
-        limit_date = datetime.strptime(site_config["LAST_MODIFIED_DATE"], "%Y-%m-%d").replace(tzinfo=timezone.utc)
+    if site_config.get("LAST_MODIFIED_DATE") is not None:
+        limit_date = datetime.fromisoformat(site_config["LAST_MODIFIED_DATE"])
+        if limit_date.tzinfo is None:
+            limit_date = limit_date.replace(tzinfo=timezone.utc)
     else:
         limit_date = None
 
@@ -264,7 +266,8 @@ def scrape_page(site_config):
     urls_and_dates = extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date)
     urls_pages = [u for u, _ in urls_and_dates]
     urls_lastmod = {u: d for u, d in urls_and_dates}
-    print(f"🔗 {len(urls_pages)} pages HTML à analyser")
+    total_pages = len(urls_pages)
+    print(f"🔗 {total_pages} pages HTML à analyser")
 
     # Chargement de la correspondance page -> PDF
     pdf_map_file = directory_pdfs.parent / "pdf_map.json"
@@ -274,12 +277,15 @@ def scrape_page(site_config):
     # Liste des pdfs rencontrés lors du scraping
     seen_pdf_filenames = set()
 
+    site_name = site_config["NAME"].replace(" ", "_").lower()
+
     # Parcours des URLs extraites
     for i, url in enumerate(urls_pages):
 
         # Extraction des pdfs et ajout à l'ensemble des pages visitées
         visited_pages.add(url)
         print(f"[{i+1}/{len(urls_pages)}] {url}")
+        save_progress(site_name, i+1, total_pages)
         pdfs = extract_pdf(url)
 
         # Téléchargement des PDF extraits
@@ -300,6 +306,8 @@ def scrape_page(site_config):
                         "scraped_at": now_date
                     }
         time.sleep(0.5)
+
+    clear_progress(site_name)
 
     # Archivage des PDF non rencontrés lors du scraping
     old_filenames_from_modified_pages = {f for f, page in pdf_map.items() if page in urls_pages}

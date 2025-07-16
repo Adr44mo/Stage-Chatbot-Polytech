@@ -13,7 +13,7 @@ import requests
 from bs4 import BeautifulSoup, Tag
 from datetime import datetime, timezone
 
-from .scraper_utils import HEADERS, extract_urls_sitemap
+from .scraper_utils import PROGRESS_DIR, HEADERS, extract_urls_sitemap, save_progress, clear_progress
 
 # ------------------------------------
 # Initialisation de variables globales
@@ -294,6 +294,7 @@ def extract_main_content(soup):
 
     return "\n".join(parts).replace('\u00A0', ' ').strip()
 
+
 # --------------------------------
 # Fonction gérant le scraping JSON
 # --------------------------------
@@ -317,7 +318,9 @@ def crawl(site_config):
 
     # Définition de la date de dernière modification
     if site_config.get("LAST_MODIFIED_DATE") is not None:
-        limit_date = datetime.strptime(site_config["LAST_MODIFIED_DATE"], "%Y-%m-%d").replace(tzinfo=timezone.utc)
+        limit_date = datetime.fromisoformat(site_config["LAST_MODIFIED_DATE"])
+        if limit_date.tzinfo is None:
+            limit_date = limit_date.replace(tzinfo=timezone.utc)
     else:
         limit_date = None
 
@@ -332,7 +335,8 @@ def crawl(site_config):
     urls_and_dates = extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date)
     urls_pages = [u for u, _ in urls_and_dates]
     urls_lastmod = {u: d for u, d in urls_and_dates}
-    print(f"🔗 {len(urls_pages)} pages HTML à analyser")
+    total_pages = len(urls_pages)
+    print(f"🔗 {total_pages} pages HTML à analyser")
 
     # Chargement des JSON déjà présents, indexés par URL
     existing_by_url = {}
@@ -350,11 +354,15 @@ def crawl(site_config):
         except Exception as e:
             print(f"[WARNING] Impossible de lire {filepath} : {e}")
 
+    site_name = site_config["NAME"].replace(" ", "_").lower()
+
     # Parcours des URLs extraites
     for i, url in enumerate(urls_pages):
 
         visited_pages.add(url)
         print(f"[{i+1}/{len(urls_pages)}] {url}")
+
+        save_progress(site_name, i + 1, total_pages)
 
         # Requête HTTP pour récupérer le contenu de la page
         try:
@@ -433,12 +441,15 @@ def crawl(site_config):
     end = time.time()
     print(f"duration pas parallélisée = {end-start}")
 
+    clear_progress(site_name)
+
+
     # Archivage des anciens JSON
     if all_urls:
         archive_old_jsons(download_dir, archive_dir, all_urls)
     else:
         print("[INFO] Archivage désactivé : aucune URL récupérée sur le site (site inaccessible ?)")
-
+       
 
 def crawl_test(url_test):
 
