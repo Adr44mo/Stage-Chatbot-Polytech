@@ -30,7 +30,7 @@ from .app.PDF_manual.pdf_manual import router as pdf_manual_router
 from .app.auth.router import router as auth_router
 from .app.auth.database import create_db_and_tables, get_session
 from .app.chat_models import ChatRequest, ChatResponse
-from .app.auth.dependencies import get_current_admin
+from .app.auth.dependencies import get_current_admin_from_cookie
 from .app.intelligent_rag.api import router as intelligent_rag_router
 from .app.intelligent_rag.db_routes import router as db_router
 
@@ -92,7 +92,7 @@ def session_id_key(request: Request):
 # Configuration CORS (Cross-Origin Resource Sharing)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # En production, restreindre à ton domaine
+    allow_origins=["*"],  #TODO: En production, restreindre à ton domaine
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -102,10 +102,10 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(chat_router)
 app.include_router(server_router)
-app.include_router(router_scrapping, prefix="/scraping", tags=["Scraping"])#, dependencies=[Depends(get_current_admin)])
-app.include_router(pdf_manual_router, prefix="/pdf_manual", tags=["PDF Manual"])#, dependencies=[Depends(get_current_admin)])
+app.include_router(router_scrapping, prefix="/scraping", tags=["Scraping"], dependencies=[Depends(get_current_admin_from_cookie)])
+app.include_router(pdf_manual_router, prefix="/pdf_manual", tags=["PDF Manual"], dependencies=[Depends(get_current_admin_from_cookie)])
 app.include_router(intelligent_rag_router)  # Nouveau système RAG intelligent
-app.include_router(db_router)  # Routes pour la base de données RAG
+app.include_router(db_router, dependencies=[Depends(get_current_admin_from_cookie)])  # Routes pour la base de données RAG
 
 # Initialisation de la base de données au démarrage
 @app.on_event("startup")
@@ -132,7 +132,7 @@ def init_session(response: Response, polybot_session_id: str = Cookie(None)):
         max_age=60*60*24*180,  # 6 mois
         expires=expire_date.strftime("%a, %d-%b-%Y %H:%M:%S GMT"),
         samesite="lax",
-        secure=False  # True si HTTPS
+        secure=False  #TODO: Passer à True si HTTPS
     )
     return {"ok": True}
 
@@ -140,9 +140,10 @@ def init_session(response: Response, polybot_session_id: str = Cookie(None)):
 # Endpoint principal : /chat
 # ==========================
 
+#TODO: Passer les constantes de rate limiting dans un fichier de configuration
 @app.post("/chat", response_model=ChatResponse)
-@limiter.limit("10/second")  # Limite par IP (clé par défaut)
-@limiter.limit("1/second", key_func=session_id_key)  # Limite par session_id 
+@limiter.limit("10/second; 60/minute; 500/hour")  # Limite par IP (clé par défaut)
+@limiter.limit("1/second; 20/minute; 100/hour", key_func=session_id_key)  # Limite par session_id 
 async def chat(request: Request, request_body: ChatRequest, polybot_session_id: str = Cookie(None), session: Session = Depends(get_session)):
     """
     Endpoint principal pour le chatbot RAG : gestion des messages et historique de conversation.

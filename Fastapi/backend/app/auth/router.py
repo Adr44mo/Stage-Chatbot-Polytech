@@ -7,7 +7,6 @@ from .models import User, UserCreate, UserRead
 from .dependencies import get_current_user_from_cookie, get_current_admin_from_cookie, get_session
 from .security import verify_password, get_password_hash, create_access_token
 from datetime import timedelta
-from .dependencies import get_current_admin
 from ..recaptcha import verify_recaptcha_token
 
 router = APIRouter(prefix="/auth", tags=["auth"])
