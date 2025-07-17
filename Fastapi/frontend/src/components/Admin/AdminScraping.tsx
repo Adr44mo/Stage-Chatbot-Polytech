@@ -10,19 +10,17 @@ import type { SiteInfo } from "../../api/scrapingApi";
 import { fetchSiteInfos, fetchSiteNewDocs } from "../../api/scrapingApi";
 import { addSite as apiAddSite, suppSite as apiSuppSite } from "../../api/scrapingApi";
 import { runScraping } from "../../api/scrapingApi";
+import { runProcessingAndVectorization } from "../../api/scrapingApi";
+import { fetchScrapingProgress } from "../../api/scrapingApi";
+import { formatDateFrench } from "../../utils/scrapingUtils";
 
-/* const INITIAL_SITES = [
-	{ id: 1, name: "Site 1", url: "https://site1.com", lastScraped: "22/06/2025 14:12" },
-	{ id: 2, name: "Site 2", url: "https://site2.com", lastScraped: "21/06/2025 09:30" },
-	{ id: 3, name: "Site 3", url: "https://site3.com", lastScraped: null },
-]; */
 
 export default function AdminScraping() {
-	//const [sites, setSites] = useState(INITIAL_SITES);
 	const [sites, setSites] = useState<({ id: number } & SiteInfo)[]>([]);
 	const [selectedSites, setSelectedSites] = useState<number[]>([]);
-	const [loading, setLoading] = useState(false);
 	const [loadingSites, setLoadingSites] = useState(false);
+	const [isScraping, setIsScraping] = useState(false);
+	const [isVectorizing, setIsVectorizing] = useState(false);
 	const [showAdvanced, setShowAdvanced] = useState(false);
 
 	const allSelected = selectedSites.length === sites.length && sites.length > 0;
@@ -36,7 +34,7 @@ export default function AdminScraping() {
 					id: index + 1,
 					name: site.name,
 					url: site.url,
-					lastScraped: site.lastScraped,
+					lastScraped: formatDateFrench(site.lastScraped),
 					newDocs: undefined, // mis à jour ensuite
 				}));
 				setSites(formattedSites);
@@ -77,7 +75,7 @@ export default function AdminScraping() {
 	};
 
 	const handleScrape = async () => {
-		setLoading(true);
+		setIsScraping(true);
 		try {
 			const selectedSiteNames = sites
 				.filter((site) => selectedSites.includes(site.id))
@@ -100,7 +98,21 @@ export default function AdminScraping() {
 			console.error("Erreur scraping :", err.message);
 			alert("Erreur lors du scraping : " + err.message);
 		} finally {
-			setLoading(false);
+			setIsScraping(false);
+		}
+	};
+
+	const handleVectorization = async () => {
+		setIsVectorizing(true);
+		try {
+			const result = await runProcessingAndVectorization();
+			console.log("[✅ Vectorisation terminée] :", result);
+			alert("Vectorisation terminée avec succès !");
+		} catch (err: any) {
+			console.error("Erreur vectorisation :", err.message);
+			alert("Erreur pendant la vectorisation : " + err.message);
+		} finally {
+			setIsVectorizing(false);
 		}
 	};
 
@@ -163,15 +175,26 @@ export default function AdminScraping() {
 						onSelectSite={handleCheckbox}
 						allSelected={allSelected}
 						onSelectAll={handleSelectAll}
+						//siteProgress={progress}
 					/>
 				)}
-				<button
-					className="admin-scraping-btn admin-scraping-launch-btn"
-					disabled={selectedSites.length === 0 || loading}
-					onClick={handleScrape}
-				>
-					{loading ? "Scraping en cours..." : "Lancer le scraping"}
-				</button>
+
+				<div className="admin-scraping-actions">
+					<button
+						className="admin-scraping-btn admin-scraping-launch-btn"
+						disabled={selectedSites.length === 0 || isScraping}
+						onClick={handleScrape}
+					>
+						{isScraping ? "Scraping en cours..." : "Lancer le scraping"}
+					</button>
+					<button
+						className="admin-scraping-btn admin-scraping-launch-btn"
+						onClick={handleVectorization}
+					>
+						{isVectorizing ? "Vectorisation en cours..." : "Lancer la vectorisation"}
+					</button>
+				</div>
+
 				<div className="admin-scraping-advanced-toggle-wrapper">
 					<button
 						className="admin-scraping-advanced-toggle"

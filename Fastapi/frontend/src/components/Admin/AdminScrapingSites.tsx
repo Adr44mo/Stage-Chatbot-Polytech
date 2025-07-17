@@ -54,11 +54,18 @@ export default function AdminScrapingSelect({
               className="admin-scraping-checkbox-label admin-scraping-site-label"
               style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
             >
-              <div>
+              <div style={{ display: "flex", alignItems: "center", flex: 1 }}>
                 {site.name}
                 <span className="admin-scraping-site-date" style={{ marginLeft: 8, fontSize: "0.85rem", color: "#666" }}>
                   {site.lastScraped ? `(Dernier scraping : ${site.lastScraped})` : "(Jamais scrappé)"}
                 </span>
+                <div style={{ flex: 1 }}>
+                  <progress
+                    value={50}
+                    max={100}
+                    className="admin-scraping-progress"
+                  />
+                </div>
               </div>
 
               {site.newDocs === undefined ? (
