@@ -11,7 +11,7 @@
 [![ChromaDB](https://img.shields.io/badge/ChromaDB-Latest-purple.svg)](https://chromadb.com)
 [![SQLite](https://img.shields.io/badge/SQLite-3-blue.svg)](https://sqlite.org)
 
-![Polytech Chatbot Demo](docs/images/chat.png)
+![Polytech Chatbot Demo](docs/chat.png)
 
 </div>
 
