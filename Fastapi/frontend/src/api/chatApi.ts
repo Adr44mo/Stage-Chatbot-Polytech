@@ -42,18 +42,24 @@ export async function fetchHistory(): Promise<Message[]> {
 export async function sendMessage(
   input: string,
   chat_history: Message[],
-  recaptcha_token?: string
+  recaptcha_token?: string,
+  recaptcha_validated?: boolean
 ): Promise<ChatResponse> {
   const payload: ChatRequest = {
     prompt: input,
     chat_history,
     recaptcha_token,
   };
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  if (!recaptcha_token && recaptcha_validated) {
+    headers["X-Recaptcha-Validated"] = "true";
+  }
+
   const res = await fetch(`${API_URL}/chat`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
     body: JSON.stringify(payload),
     credentials: "include",
   });

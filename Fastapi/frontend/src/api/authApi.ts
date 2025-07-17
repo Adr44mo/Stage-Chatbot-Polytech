@@ -24,13 +24,17 @@ export async function logoutAdmin() {
 export async function loginAdmin(
   username: string,
   password: string,
-  recaptchaToken?: string
+  recaptchaToken?: string,
+  isCaptchaValidated?: boolean
 ): Promise<{ ok: boolean; error?: string }> {
   try {
     const headers: Record<string, string> = {
       "Content-Type": "application/x-www-form-urlencoded",
     };
     headers["X-Recaptcha-Token"] = recaptchaToken || "";
+    if (isCaptchaValidated && !recaptchaToken) {
+      headers["X-Recaptcha-Validated"] = "true";
+    }
 
     const res = await fetch("/auth/login", {
       method: "POST",

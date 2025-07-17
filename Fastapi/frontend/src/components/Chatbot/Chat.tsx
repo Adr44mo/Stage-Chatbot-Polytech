@@ -24,7 +24,7 @@ export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const { token: recaptchaToken } = useRecaptcha();
+  const { token: recaptchaToken, isValid: recaptchaValidated } = useRecaptcha();
 
   /* Récupère l'historique d'un utilisateur depuis le backend au chargement */
   useEffect(() => {
@@ -58,7 +58,8 @@ export default function Chat() {
       const data = await sendMessage(
         input,
         [...messages, newUserMessage],
-        recaptchaToken
+        recaptchaToken,
+        recaptchaValidated
       );
       const botMessage: Message = {
         role: "assistant",
@@ -68,6 +69,7 @@ export default function Chat() {
       /* Ajoute la réponse du bot à la liste des messages */
       setMessages((prev) => [...prev, botMessage]);
     } catch (err) {
+      console.error("Erreur lors de l'envoi du message:", err);
       /* Optionnel : gestion d'erreur utilisateur */
     } finally {
       setLoading(false);

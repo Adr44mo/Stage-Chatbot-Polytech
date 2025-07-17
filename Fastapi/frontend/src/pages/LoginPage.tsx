@@ -17,20 +17,23 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { refreshAuth } = useAdminAuth();
-  const { token: recaptchaToken, RecaptchaComponent } = useRecaptcha();
+  const {
+    token: recaptchaToken,
+    isValid: isCaptchaValidated,
+    RecaptchaComponent,
+  } = useRecaptcha();
 
   // Gère la soumission du formulaire de login
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!recaptchaToken) {
-      setError("Veuillez valider le reCAPTCHA");
-      return;
-    }
-
     setLoading(true);
     setError("");
-    const result = await loginAdmin(username, password, recaptchaToken);
+    const result = await loginAdmin(
+      username,
+      password,
+      recaptchaToken,
+      isCaptchaValidated
+    );
     if (result.ok) {
       // On met à jour l'état d'auth global et on redirige vers la page admin si succès
       await refreshAuth();

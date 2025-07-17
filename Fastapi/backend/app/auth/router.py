@@ -26,11 +26,16 @@ async def login(
     form_data: OAuth2PasswordRequestForm = Depends(), 
     session: Session = Depends(get_session)
 ):
-    # Vérification reCAPTCHA obligatoire
+    # Vérification reCAPTCHA
     recaptcha_token = request.headers.get("X-Recaptcha-Token")
+    recaptcha_validated = request.headers.get("X-Recaptcha-Validated")
     if not recaptcha_token:
-        raise HTTPException(status_code=400, detail="reCAPTCHA token required")
-    if not await verify_recaptcha_token(recaptcha_token):
+        # Si le frontend indique que le captcha a déjà été validé, on accepte
+        if recaptcha_validated == "true":
+            pass
+        else:
+            raise HTTPException(status_code=400, detail="reCAPTCHA token required")
+    elif not await verify_recaptcha_token(recaptcha_token):
         raise HTTPException(status_code=400, detail="Invalid reCAPTCHA token")
     
     user = authenticate_user(session, form_data.username, form_data.password)

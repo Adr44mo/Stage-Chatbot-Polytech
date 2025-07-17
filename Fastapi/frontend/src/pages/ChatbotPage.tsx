@@ -6,8 +6,8 @@ import Chat from "../components/Chatbot/Chat";
 import useRecaptcha from "../hooks/useRecaptcha";
 
 export default function ChatbotPage() {
-  const { isValid, token, RecaptchaComponent } = useRecaptcha();
-  const isCaptchaValidated = isValid && token;
+  const { isValid, RecaptchaComponent } = useRecaptcha();
+  const isCaptchaValidated = isValid;
 
   return (
     <div className="chatbot-page">
@@ -15,6 +15,7 @@ export default function ChatbotPage() {
         <Chat />
       </div>
 
+      {/* On affiche le widget de validation captcha s'il n'a pas été validé récemment*/}
       {!isCaptchaValidated && (
         <div className="captcha-overlay">
           <div className="captcha-modal">

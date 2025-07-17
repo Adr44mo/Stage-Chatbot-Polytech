@@ -148,60 +148,81 @@ async def chat(request: Request, request_body: ChatRequest, polybot_session_id: 
     """
     Endpoint principal pour le chatbot RAG : gestion des messages et historique de conversation.
     """
-    # Vérification reCAPTCHA
-    if not request_body.recaptcha_token:
-        raise HTTPException(status_code=400, detail="reCAPTCHA token required")
-    if not await verify_recaptcha_token(request_body.recaptcha_token):
-        raise HTTPException(status_code=400, detail="Invalid reCAPTCHA token")
+    try:
+        # Vérification reCAPTCHA
+        recaptcha_validated = request.headers.get("X-Recaptcha-Validated")
+        if not request_body.recaptcha_token:
+            # Si le frontend indique que le captcha a déjà été validé, on accepte
+            if recaptcha_validated == "true":
+                pass
+            else:
+                raise HTTPException(status_code=400, detail="reCAPTCHA token required")
+        elif not await verify_recaptcha_token(request_body.recaptcha_token):
+            raise HTTPException(status_code=400, detail="Invalid reCAPTCHA token")
 
-    conversation = get_or_create_conversation(session, polybot_session_id)
-    add_message(session, conversation.id, "user", request_body.prompt)
+        conversation = get_or_create_conversation(session, polybot_session_id)
+        add_message(session, conversation.id, "user", request_body.prompt)
 
-    # ====================================================
-    # TEST : Intelligent RAG vs LangGraph vs RAG classique
-    # ====================================================
+        # ====================================================
+        # TEST : Intelligent RAG vs LangGraph vs RAG classique
+        # ====================================================
 
-    if USE_INTELLIGENT_RAG:
-        chat_history = [
-            {"role": msg.role, "content": msg.content}
-            for msg in request_body.chat_history if msg.role == "assistant" or msg.role == "user"
-        ]
-        
-        response = invoke_intelligent_rag(request_body.prompt, chat_history)
-        
-        answer = response.get("answer", "")
-        context = response.get("context", [])
-        sources = response.get("sources", [])
-        
-    elif USE_LANGGRAPH:
-        response = invoke_langgraph_rag({
-            "input": request_body.prompt,
-            "chat_history": [
+        if USE_INTELLIGENT_RAG:
+            chat_history = [
                 {"role": msg.role, "content": msg.content}
                 for msg in request_body.chat_history if msg.role == "assistant" or msg.role == "user"
-            ],
-        })
-        
-        answer = response.get("answer", "")
-        context = response.get("context", [])
-        sources = get_sources(context) if context else []
-        
-    else:
-        response = rag_chain.invoke({
-            "input": request_body.prompt,
-            "chat_history": [
-                {"role": msg.role, "content": msg.content}
-                for msg in request_body.chat_history if msg.role == "assistant" or msg.role == "user"
-            ],
-        })
-        
-        answer = response.get("answer", "")
-        context = response.get("context", [])
-        sources = get_sources(context) if context else []
+            ]
+            try:
+                response = invoke_intelligent_rag(request_body.prompt, chat_history)
+            except Exception as e:
+                cp.print_error(f"Error in invoke_intelligent_rag: {e}")
+                raise HTTPException(status_code=500, detail=f"Error in intelligent RAG: {str(e)}")
+            answer = response.get("answer", "")
+            context = response.get("context", [])
+            sources = response.get("sources", [])
+        elif USE_LANGGRAPH:
+            try:
+                response = invoke_langgraph_rag({
+                    "input": request_body.prompt,
+                    "chat_history": [
+                        {"role": msg.role, "content": msg.content}
+                        for msg in request_body.chat_history if msg.role == "assistant" or msg.role == "user"
+                    ],
+                })
+            except Exception as e:
+                cp.print_error(f"Error in invoke_langgraph_rag: {e}")
+                raise HTTPException(status_code=500, detail=f"Error in LangGraph RAG: {str(e)}")
+            answer = response.get("answer", "")
+            context = response.get("context", [])
+            sources = get_sources(context) if context else []
+        else:
+            try:
+                response = rag_chain.invoke({
+                    "input": request_body.prompt,
+                    "chat_history": [
+                        {"role": msg.role, "content": msg.content}
+                        for msg in request_body.chat_history if msg.role == "assistant" or msg.role == "user"
+                    ],
+                })
+            except Exception as e:
+                cp.print_error(f"Error in rag_chain.invoke: {e}")
+                raise HTTPException(status_code=500, detail=f"Error in classic RAG: {str(e)}")
+            answer = response.get("answer", "")
+            context = response.get("context", [])
+            sources = get_sources(context) if context else []
 
-    add_message(session, conversation.id, "assistant", answer, sources)
+        try:
+            add_message(session, conversation.id, "assistant", answer, sources)
+        except Exception as e:
+            cp.print_error(f"Error in add_message: {e}")
+            raise HTTPException(status_code=500, detail=f"Error saving assistant message: {str(e)}")
 
-    return ChatResponse(answer=answer, sources=sources)
+        return ChatResponse(answer=answer, sources=sources)
+    except HTTPException as http_exc:
+        raise http_exc
+    except Exception as e:
+        cp.print_error(f"Unexpected error in /chat endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
 
 # =========================================================
 # Endpoint pour obtenir des informations sur le système RAG
