@@ -21,12 +21,14 @@ sys.path.append(str(Path(__file__).parent))
 from .promptt import qa_prompt  # Import the qa_prompt from the prompt module
 from .promptt import contextualize_q_prompt  # Import the contextualize_q_prompt from the prompt module
 
-# Vector de Polytech Sorbonne
-#persist_directory = Path(__file__).parent.parent.parent / "vectorisation" / "src" / "db"  # Define the directory where the Chroma vector database will be persisted
+from color_utils import ColorPrint  # Import the ColorPrint class for colored console output
 
+cp = ColorPrint()  # Create an instance of ColorPrint for colored output
+
+# Vector de Polytech Sorbonne
 persist_directory = Path(__file__).parent.parent.parent.parent / "Document_handler" / "new_filler" / "Vectorisation" / "vectorstore_Syllabus"  # Define the directory where the Chroma vector database will be persisted
 
-print(f"[INFO] Using persist directory: {persist_directory}")  # Print the persist directory being used
+cp.print_info(f"Using persist directory: {persist_directory}")  # Print the persist directory using colored output
 
 embeddings = OpenAIEmbeddings()  # Create an instance of the OpenAIEmbeddings class (ensure to pass your OpenAI API key as an environment variable named 'OPENAI_API_KEY')
 
@@ -46,8 +48,7 @@ db = Chroma(
     embedding_function=embeddings,  # Pass the embeddings instance for generating text embeddings
 )
 # Print information about the Chroma collection
-print(f"[INFO] ChromaDB collection Name: {db._LANGCHAIN_DEFAULT_COLLECTION_NAME}, with collection count {db._collection.count()}")
-
+cp.print_info(f"ChromaDB collection Name: {db._LANGCHAIN_DEFAULT_COLLECTION_NAME}, with collection count {db._collection.count()}")  # Print the collection name and count using colored output
 # intiate the model
 llm = ChatOpenAI(model="gpt-4o-mini",
     temperature=0.7)  # Create an instance of the ChatOpenAI class with the specified model name "gpt-4o-mini"
@@ -132,24 +133,22 @@ if __name__ == "__main__":
     # Ask the first question
     first_question = "What is MAIN?"
     ai_response_1 = rag_chain.invoke({"input": first_question, "chat_history": chat_history})  # Invoke the RAG chain with the question and an empty chat history
-    print('user query:', first_question) 
-    print('ai response:', ai_response_1["answer"])  # Print the answer from the RAG chain
+    cp.print_info(f"Answer to '{first_question}': {ai_response_1['answer']}")  # Print the answer using colored output
+    # Add the first question and answer to the chat history
     chat_history.extend([HumanMessage(content=first_question), ai_response_1["answer"]])  # Add the question and answer to the chat history
 
     # Ask the second question
     second_question = "What are the courses in it?"
     ai_response_2 = rag_chain.invoke({"input": second_question, "chat_history": chat_history})  # Invoke the RAG chain with the second question and the updated chat history
     chat_history.extend([HumanMessage(content=second_question), ai_response_2["answer"]])  # Add the second question and answer to the chat history
-    print('user query:', (second_question)) 
-    print('ai response:', ai_response_2["answer"])   # Print the answer to the second question
+    cp.print_info(f"Answer to '{second_question}': {ai_response_2['answer']}")  # Print the answer using colored output
 
     # Ask the third question
     third_question = "Can you translate your previous response to French?"
     ai_response_3 = rag_chain.invoke({"input": third_question, "chat_history": chat_history})  # Invoke the RAG chain with the third question and the updated chat history
-    print('user query:', (third_question)) 
+    cp.print_info(f"Answer to '{third_question}': {ai_response_3['answer']}")  # Print the answer using colored output
     print('ai response:', ai_response_3["answer"])   # Print the answer from the RAG chain
     chat_history.extend([HumanMessage(content=third_question), ai_response_3["answer"]])  # Add the third question and answer to the chat history
 
     # Pour accéder au contexte utilisé (c'est déjà formaté comme une chaîne)
-    print('\nContexte utilisé pour la réponse:')
-    print(ai_response_3["context"])
+    cp.print_info(f"Context used for the answer: {ai_response_3['context']}")  # Print the context used for the answer using colored output

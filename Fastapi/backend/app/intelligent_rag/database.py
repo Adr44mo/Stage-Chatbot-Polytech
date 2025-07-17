@@ -2,6 +2,7 @@
 Base de données SQLite pour le système RAG intelligent
 """
 
+import os
 import sqlite3
 import json
 from datetime import datetime
@@ -23,13 +24,26 @@ class RAGDatabase:
         self.db_path = db_path or Path(__file__).parent / "logs" / "rag_system.db"
         self.db_path = Path(self.db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
-        
+        cp.print_info(f"[Database] Initialisation de la base de données à {self.db_path}")
+        # donner les droit en écriture à tous les utilisateurs
+        self._set_db_permissions()
+
         # Thread lock pour la sécurité
         self._lock = threading.Lock()
         
         # Initialiser la base de données
         self._init_database()
     
+    def _set_db_permissions(self):
+        """Définir les permissions de la base de données pour tous les utilisateurs"""
+        try:
+            # on commence par le dossier parent
+            os.chmod(self.db_path.parent, 0o777)  # Permissions en écriture
+            os.chmod(self.db_path, 0o666)  # Permissions en écriture
+            cp.print_info(f"[Database] Permissions définies pour {self.db_path}")
+        except Exception as e:
+            cp.print_error(f"[Database] Erreur lors de la définition des permissions: {e}")
+
     def _init_database(self):
         """Initialiser les tables de la base de données"""
         with self._get_connection() as conn:

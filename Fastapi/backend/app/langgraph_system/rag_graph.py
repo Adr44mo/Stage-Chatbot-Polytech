@@ -90,7 +90,7 @@ def direct_generation(state: RAGState) -> RAGState:
     """
     Génère une réponse directe pour les questions simples ne nécessitant pas de RAG.
     """
-    direct_system_prompt = """You are a Polytech Sorbonne chatbot assistant. Respond in the user's language.
+    direct_system_prompt = """You are a Polytech Sorbonne chatbot assistant. You will always answer in the language you are spoken to.
 
 Handle: greetings, general questions about your role/capabilities, simple guidance.
 
