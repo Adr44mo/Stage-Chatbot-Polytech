@@ -21,6 +21,7 @@ export default function AdminScraping() {
 	const [loadingSites, setLoadingSites] = useState(false);
 	const [isScraping, setIsScraping] = useState(false);
 	const [isVectorizing, setIsVectorizing] = useState(false);
+	const [progress, setProgress] = useState<{ [site: string]: { current: number; total: number } }>({});
 	const [showAdvanced, setShowAdvanced] = useState(false);
 
 	const allSelected = selectedSites.length === sites.length && sites.length > 0;
@@ -63,6 +64,22 @@ export default function AdminScraping() {
 				console.error("Erreur lors de la récupération des sites :", err);
 			});
 	}, [sites.length]);
+
+	useEffect(() => {
+		// Polling toutes les 2 secondes pendant le scraping
+		if (!isScraping) return;
+		const interval = setInterval(() => {
+			sites.forEach(site => {
+			fetchScrapingProgress(site.name).then((prog) => {
+				setProgress(prev => ({
+				...prev,
+				[site.name]: prog
+				}));
+			});
+			});
+		}, 1000);
+		return () => clearInterval(interval);
+	}, [isScraping, sites]);
 
 	const handleCheckbox = (id: number) => {
 		setSelectedSites((prev) =>
@@ -175,7 +192,7 @@ export default function AdminScraping() {
 						onSelectSite={handleCheckbox}
 						allSelected={allSelected}
 						onSelectAll={handleSelectAll}
-						//siteProgress={progress}
+						siteProgress={progress}
 					/>
 				)}
 

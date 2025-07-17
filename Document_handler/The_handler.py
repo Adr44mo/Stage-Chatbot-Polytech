@@ -161,6 +161,21 @@ def run_vectorization():
     result = vectorisation_chunk_dev.build_vectorstore()
     return result
 
+# Pipeline de traitement et vectorisation
+@router.post("/process_and_vectorize")
+def run_processing_and_vectorizaing():
+    try:
+        processing_res = vectorisation_graph_preprocessing.main()
+        vectorization_res = vectorisation_chunk_dev.build_vectorstore()
+        return {
+            "status": "success",
+            "message": "Traitement et vectorisation terminés.",
+            "processing_result": str(processing_res),
+            "vectorization_result": str(vectorization_res)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur traitement/vectorisation : {e}")
+
 
 ##################### TEMPORARY FILE HANDLER #####################
 def run_scripts():

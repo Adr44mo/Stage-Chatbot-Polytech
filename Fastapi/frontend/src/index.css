@@ -570,17 +570,35 @@ body,
 .admin-scraping-newdocs.no-new {
   color: #999;
 }
+/* Style général de la barre */
 .admin-scraping-progress {
   margin-left: 20px;
   vertical-align: middle;
   height: 10px;
-  min-width: none;
+  min-width: 100px;
   max-width: 400px;
   width: 100%;
-  accent-color: #007bff;
+  appearance: none;
+  -webkit-appearance: none;
+  border-color: #c0c0c0;
+  border-radius: 8px;
+  background-color: #e0e6ed; /* important pour webkit */
+  overflow: hidden;
+}
+/* Pour Chrome, Edge, Safari */
+.admin-scraping-progress::-webkit-progress-bar {
   background-color: #e0e6ed;
   border-radius: 8px;
-  border-color: #c0c0c0;
+}
+/* Barre de progression (valeur) */
+.admin-scraping-progress::-webkit-progress-value {
+  background-color: #007bff;
+  border-radius: 8px;
+}
+/* Pour Firefox */
+.admin-scraping-progress::-moz-progress-bar {
+  background-color: #007bff;
+  border-radius: 8px;
 }
 
 /* ====================================================================

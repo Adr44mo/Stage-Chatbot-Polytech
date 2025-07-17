@@ -25,3 +25,8 @@ export function formatDateFrench(dateStr: string | null | undefined): string {
         return dateStr;
     }
 }
+
+// Fonction pour convertir le nom du site en nom de fichier
+export function siteNameToFileName(siteName: string): string {
+    return siteName.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "_");
+}

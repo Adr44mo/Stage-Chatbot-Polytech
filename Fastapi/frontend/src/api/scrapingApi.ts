@@ -1,3 +1,5 @@
+import { siteNameToFileName } from "../utils/scrapingUtils";
+
 export interface SiteInfo {
     name: string;
     url:string;
@@ -62,4 +64,54 @@ export async function runScraping(siteNames: string[]) {
 	}
 
 	return await response.json();
+}
+
+// Pipeline
+export async function runProcessing(): Promise<{ status: string; message: string }> {
+    const response = await fetch("/scraping/files_normalization", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+    });
+    if (!response.ok) {
+        throw new Error("Erreur lors du traitement des fichiers.");
+    }
+    return await response.json();
+}
+
+// Vectorisation
+export async function runVectorization(): Promise<any> {
+    const response = await fetch("/scraping/vectorization", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+    });
+    if (!response.ok) {
+        throw new Error("Erreur lors de la vectorisation.");
+    }
+    return await response.json();
+}
+
+// Pipeline et vectorisation
+export async function runProcessingAndVectorization():Promise<any> {
+    const response = await fetch("/scraping/process_and_vectorize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+    });
+    if (!response.ok) {
+        throw new Error("Erreur lors du traitement et de la vectorisation.");
+    }
+    return await response.json();
+}
+
+// Progression
+export async function fetchScrapingProgress(siteName: string): Promise<{ current: number; total: number }> {
+    const fileName = siteNameToFileName(siteName);
+    const response = await fetch(`/scraping/progress/${encodeURIComponent(fileName)}`);
+    if (response.status === 404) {
+        // Fichier de progression absent : scraping pas commencé ou déjà fini
+        return { current: 0, total: 1 };
+    }
+    if (!response.ok) {
+        throw new Error("Erreur lors de la récupération de la progression du scraping");
+    }
+    return response.json();
 }

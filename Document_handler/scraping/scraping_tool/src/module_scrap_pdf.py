@@ -278,6 +278,7 @@ def scrape_page(site_config):
     seen_pdf_filenames = set()
 
     site_name = site_config["NAME"].replace(" ", "_").lower()
+    clear_progress(site_name)
 
     # Parcours des URLs extraites
     for i, url in enumerate(urls_pages):
@@ -306,8 +307,6 @@ def scrape_page(site_config):
                         "scraped_at": now_date
                     }
         time.sleep(0.5)
-
-    clear_progress(site_name)
 
     # Archivage des PDF non rencontrés lors du scraping
     old_filenames_from_modified_pages = {f for f, page in pdf_map.items() if page in urls_pages}

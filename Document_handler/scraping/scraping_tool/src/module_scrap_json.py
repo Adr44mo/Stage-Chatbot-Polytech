@@ -355,6 +355,7 @@ def crawl(site_config):
             print(f"[WARNING] Impossible de lire {filepath} : {e}")
 
     site_name = site_config["NAME"].replace(" ", "_").lower()
+    clear_progress(site_name)
 
     # Parcours des URLs extraites
     for i, url in enumerate(urls_pages):
@@ -440,8 +441,6 @@ def crawl(site_config):
     
     end = time.time()
     print(f"duration pas parallélisée = {end-start}")
-
-    clear_progress(site_name)
 
 
     # Archivage des anciens JSON

@@ -17,6 +17,7 @@ interface AdminScrapingSelectProps {
   onSelectSite: (id: number) => void;
   allSelected: boolean;
   onSelectAll: () => void;
+  siteProgress: { [site: string]: { current: number; total: number } };
 }
 
 export default function AdminScrapingSelect({
@@ -25,6 +26,7 @@ export default function AdminScrapingSelect({
   onSelectSite,
   allSelected,
   onSelectAll,
+  siteProgress
 }: AdminScrapingSelectProps) {
   return (
     <>
@@ -61,8 +63,8 @@ export default function AdminScrapingSelect({
                 </span>
                 <div style={{ flex: 1 }}>
                   <progress
-                    value={50}
-                    max={100}
+                    value={siteProgress[site.name]?.current ?? 0}
+                    max={siteProgress[site.name]?.total ?? 1}
                     className="admin-scraping-progress"
                   />
                 </div>
