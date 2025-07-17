@@ -11,7 +11,7 @@
 [![ChromaDB](https://img.shields.io/badge/ChromaDB-Latest-purple.svg)](https://chromadb.com)
 [![SQLite](https://img.shields.io/badge/SQLite-3-blue.svg)](https://sqlite.org)
 
-![Polytech Chatbot Demo](docs/images/demo_preview.png)
+![Polytech Chatbot Demo](docs/images/chat.png)
 
 </div>
 
@@ -19,7 +19,7 @@
 
 ## 🚀 Aperçu
 
-**Chatbot RAG intelligent** utilisant l'IA pour fournir des réponses précises aux étudiants de Polytech Sorbonne sur leurs cours, spécialités et vie étudiante. Le système analyse automatiquement l'intention des questions et route les requêtes vers les meilleures stratégies de récupération.
+**Chatbot RAG intelligent** utilisant l'IA pour fournir des réponses précises à toute personne souhaitant obtenir des informations sur Polytech Sorbonne : futurs étudiants (lycéens), parents, élèves actuels ou toute personne intéressée. Le système analyse automatiquement l'intention des questions et oriente les requêtes vers les meilleures stratégies de récupération.
 
 ## ✨ Fonctionnalités Clés
 
@@ -29,27 +29,10 @@
 - 🔐 **Sécurité intégrée** - Rate limiting et authentification
 - ⚡ **Réponses temps réel** - Interface chat moderne
 
-## 📊 Architecture
-
-<div align="center">
-  <img src="docs/architecture_diagram.png" alt="Architecture du Système RAG" width="800">
-</div>
-
-### 🔄 Workflow LangGraph
-
-<div align="center">
-  <img src="docs/langgraph_architecture.png" alt="LangGraph Workflow" width="700">
-</div>
-
-## 🛠️ Stack Technique
-
-**Backend** : FastAPI • LangChain • ChromaDB • SQLite • OpenAI • Redis  
-**Frontend** : React 19 • TypeScript • Vite  
-**Infrastructure** : Docker • Nginx • Python 3.12
-
 ## ⚡ Installation Rapide
 
 ```bash
+# TODO: tester l'instalation
 # 1. Cloner le projet
 git clone https://github.com/Adr44mo/Stage-Chatbot-Polytech.git
 cd Stage-Chatbot-Polytech
@@ -67,6 +50,35 @@ chmod +x start.sh
 ./start.sh
 ```
 
+## 📊 Architecture
+
+### 🏗️ Vue d'ensemble du Projet
+
+<div align="center">
+  <img src="docs/project_architecture.png" alt="Architecture complète du projet" width="900">
+  <p><em>Architecture complète : Sources, Backend, Frontend</em></p>
+</div>
+
+### 🔧 Architecture Simplifiée
+
+<div align="center">
+  <img src="docs/architecture_simple.png" alt="Architecture simplifiée" width="800">
+  <p><em>Vue simplifiée des trois composants principaux</em></p>
+</div>
+
+### 🔄 Workflow LangGraph
+
+<div align="center">
+  <img src="docs/langgraph_architecture.png" alt="LangGraph Workflow" width="700">
+  <p><em>Processus de traitement des documents avec LangGraph</em></p>
+</div>
+
+## 🛠️ Stack Technique
+
+**Backend** : FastAPI • LangChain • ChromaDB • SQLite • OpenAI • Redis  
+**Frontend** : React 19 • TypeScript • Vite  
+**Infrastructure** : Docker • Nginx • Python 3.12
+
 **Accès** : http://localhost:5173
 
 ## 📚 Documentation Complète
@@ -78,19 +90,10 @@ chmod +x start.sh
 
 ### 🔧 Développement
 - **[🏗️ Architecture](https://github.com/Adr44mo/Stage-Chatbot-Polytech/wiki/Architecture)** - Structure technique
-- **[🧪 Tests](https://github.com/Adr44mo/Stage-Chatbot-Polytech/wiki/Tests)** - Tests et validation
-- **[🤝 Contribution](https://github.com/Adr44mo/Stage-Chatbot-Polytech/wiki/Contribution)** - Guide de contribution
 
 ### 📊 Utilisation
 - **[👤 Guide Utilisateur](https://github.com/Adr44mo/Stage-Chatbot-Polytech/wiki/Guide-Utilisateur)** - Manuel utilisateur
 - **[🌐 API Reference](https://github.com/Adr44mo/Stage-Chatbot-Polytech/wiki/API-Reference)** - Documentation API
-- **[❓ FAQ](https://github.com/Adr44mo/Stage-Chatbot-Polytech/wiki/FAQ)** - Questions fréquentes
-
-## 🆘 Support
-
-- **[🐛 Issues](https://github.com/Adr44mo/Stage-Chatbot-Polytech/issues)** - Signaler un problème
-- **[💬 Discussions](https://github.com/Adr44mo/Stage-Chatbot-Polytech/discussions)** - Questions et discussions
-- **[📞 Contact](mailto:votre.email@polytech.fr)** - Support direct
 
 ## 🎯 Utilisation Rapide
 
@@ -117,19 +120,9 @@ curl "http://localhost:8000/intelligent-rag/database/statistics"
 
 ## 📈 Performance
 
-- **Temps de réponse** : 2-3 secondes
-- **Précision** : >95%
-- **Coût/question** : ~$0.02-0.05
-- **Disponibilité** : 99.9%
+- **Temps de réponse** : 5-15 secondes
+- **Coût/question** : ~$0.002-0.005
 
-## 🤝 Contribution
-
-1. **Fork** le repository
-2. **Créer une branche** : `git checkout -b feature/ma-fonctionnalite`
-3. **Committer** : `git commit -m 'feat: nouvelle fonctionnalité'`
-4. **Pull Request** : Ouvrir une PR
-
-Voir le **[Guide de Contribution](https://github.com/Adr44mo/Stage-Chatbot-Polytech/wiki/Contribution)** pour plus de détails.
 
 ## 📄 Licence
 
@@ -137,10 +130,8 @@ Ce projet est sous licence **MIT**. Voir [LICENSE](LICENSE) pour plus de détail
 
 ## 👥 Équipe
 
-- **Développeur** : [Adr44mo](https://github.com/Adr44mo)
-- **Institution** : Polytech Sorbonne
-- **Contact** : [votre.email@polytech.fr](mailto:votre.email@polytech.fr)
-
+- **Développeur** : [Adr44mo](https://github.com/Adr44mo) 
+- **Institution** : [Polytech Sorbonne](https://www.polytech.sorbonne-universite.fr/), [LIMICS](https://www.limics.fr/)
 ---
 
 <div align="center">
