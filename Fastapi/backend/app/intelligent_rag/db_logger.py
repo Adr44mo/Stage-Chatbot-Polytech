@@ -6,7 +6,7 @@ import tiktoken
 import hashlib
 from datetime import datetime
 from typing import Dict, Any, Optional, List
-from .database import rag_database
+from ..database.rag_database import rag_database
 from .token_tracker import token_tracker
 
 # Import color utilities

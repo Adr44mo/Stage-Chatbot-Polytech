@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException, Query, Path
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
-from .database import rag_database
+from ..database.rag_database import rag_database
 from .db_logger import rag_db_logger
 
 # Import color utilities

@@ -520,17 +520,6 @@ def enable_edit_mode():
         "edit_mode": True
     }
 
-# @router.post("/admin/disable-edit-mode")
-# def disable_edit_mode(snapshot_id: str = Form(...)):
-#     """Désactive le mode édition et nettoie la sauvegarde"""
-#     if snapshot_id in corpus_snapshots:
-#         del corpus_snapshots[snapshot_id]
-    
-#     return {
-#         "message": "Edit mode disabled",
-#         "edit_mode": False
-#     }
-
 @router.post("/admin/save-changes")
 def save_changes(snapshot_id: str = Form(...)):
     """Sauvegarde les changements et désactive le mode édition"""
@@ -544,14 +533,10 @@ def save_changes(snapshot_id: str = Form(...)):
     
     # Supprimer le snapshot
     del corpus_snapshots[snapshot_id]
-    
-    # TODO: Implémenter la logique de vectorisation après avoir sauvegarder les changements:
-    # await vectorize_corpus()
-    
+        
     return {
         "message": "Changes saved successfully",
-        "edit_mode": False,
-        "vectorization_triggered": False  #TODO: Passer à True quand la vectorisation sera implémentée
+        "edit_mode": False
     }
 
 @router.post("/admin/cancel-changes")
