@@ -29,10 +29,11 @@ from .app.PDF_manual.pdf_manual import router as pdf_manual_router
 # from .app.filters import handle_if_uninformative
 from .app.auth.router import router as auth_router
 from .app.database.database import create_db_and_tables, get_session
-from .app.chat_models import ChatRequest, ChatResponse
+from .app.database.models import ChatRequest, ChatResponse
 from .app.auth.dependencies import get_current_admin_from_cookie
-from .app.intelligent_rag.api import router as intelligent_rag_router
-from .app.intelligent_rag.db_routes import router as db_router
+#from .app.intelligent_rag.api import router as intelligent_rag_router
+from .app.database.db_routes import router as db_router
+from .app.database.db_update_stat import update_rag_conversation
 
 # ==============================
 # Configuration des systèmes RAG
@@ -104,13 +105,16 @@ app.include_router(chat_router)
 app.include_router(server_router)
 app.include_router(router_scrapping, prefix="/scraping", tags=["Scraping"], dependencies=[Depends(get_current_admin_from_cookie)])
 app.include_router(pdf_manual_router, prefix="/pdf_manual", tags=["PDF Manual"], dependencies=[Depends(get_current_admin_from_cookie)])
-app.include_router(intelligent_rag_router)  # Nouveau système RAG intelligent
+#app.include_router(intelligent_rag_router)  # Nouveau système RAG intelligent
 app.include_router(db_router, dependencies=[Depends(get_current_admin_from_cookie)])  # Routes pour la base de données RAG
 
 # Initialisation de la base de données au démarrage
 @app.on_event("startup")
 def on_startup():
     create_db_and_tables()
+    # Initialiser la base de données unifiée (tables RAG)
+    from .app.database.database import unified_database
+    # L'initialisation RAG se fait automatiquement dans le constructeur
 
 # Initialisation de la chaîne RAG
 rag_chain = initialize_the_rag_chain()
@@ -175,7 +179,7 @@ async def chat(request: Request, request_body: ChatRequest, polybot_session_id: 
                 for msg in request_body.chat_history if msg.role == "assistant" or msg.role == "user"
             ]
             try:
-                response = invoke_intelligent_rag(request_body.prompt, chat_history)
+                response = invoke_intelligent_rag(request_body.prompt, chat_history, False)
             except Exception as e:
                 cp.print_error(f"Error in invoke_intelligent_rag: {e}")
                 raise HTTPException(status_code=500, detail=f"Error in intelligent RAG: {str(e)}")
@@ -215,6 +219,12 @@ async def chat(request: Request, request_body: ChatRequest, polybot_session_id: 
 
         try:
             add_message(session, conversation.id, "assistant", answer, sources)
+            update_rag_conversation(
+                invoke_result=response,
+                conversation=conversation,
+                session=session
+            )
+            
         except Exception as e:
             cp.print_error(f"Error in add_message: {e}")
             raise HTTPException(status_code=500, detail=f"Error saving assistant message: {str(e)}")

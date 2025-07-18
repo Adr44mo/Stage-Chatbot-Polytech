@@ -6,10 +6,11 @@ from fastapi import APIRouter, HTTPException, Query, Path
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
-from ..database.rag_database import rag_database
-from .db_logger import rag_db_logger
+from .database import unified_database
 
 # Import color utilities
+import sys
+from pathlib import Path as PathLib
 from color_utils import ColorPrint
 
 cp = ColorPrint()
@@ -63,7 +64,7 @@ class DatabaseInfo(BaseModel):
     database_path: str
     database_size_mb: float
     tables: Dict[str, int]
-    date_range: Dict[str, Optional[str]]
+    architecture: str
 
 class TokenAnalysis(BaseModel):
     session_id: str
@@ -79,7 +80,7 @@ class TokenAnalysis(BaseModel):
 async def get_database_info():
     """Obtenir des informations sur la base de données"""
     try:
-        info = rag_database.get_database_info()
+        info = unified_database.get_database_info()
         return DatabaseInfo(**info)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur récupération infos DB: {str(e)}")
@@ -89,7 +90,7 @@ async def database_health():
     """Vérifier l'état de la base de données"""
     try:
         # Test simple de connexion
-        stats = rag_database.get_statistics()
+        stats = unified_database.get_rag_statistics()
         return {
             "status": "healthy",
             "message": "Base de données opérationnelle",
@@ -107,7 +108,7 @@ async def database_health():
 async def get_recent_conversations(limit: int = Query(10, ge=1, le=100)):
     """Récupérer les conversations récentes"""
     try:
-        conversations = rag_database.get_recent_conversations(limit)
+        conversations = unified_database.get_recent_rag_conversations(limit)
         return [ConversationSummary(**conv) for conv in conversations]
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur récupération conversations: {str(e)}")
@@ -116,7 +117,7 @@ async def get_recent_conversations(limit: int = Query(10, ge=1, le=100)):
 async def get_conversation(session_id: str = Path(..., description="ID de la session")):
     """Récupérer une conversation complète"""
     try:
-        conversation = rag_database.get_conversation(session_id)
+        conversation = unified_database.get_rag_conversation(session_id)
         if not conversation:
             raise HTTPException(status_code=404, detail="Conversation non trouvée")
         return ConversationDetail(**conversation)
@@ -176,7 +177,7 @@ async def get_conversations_by_intent(
 async def get_statistics():
     """Obtenir les statistiques complètes"""
     try:
-        stats = rag_database.get_statistics()
+        stats = unified_database.get_rag_statistics()
         return DatabaseStatistics(**stats)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur récupération statistiques: {str(e)}")
@@ -191,7 +192,7 @@ async def get_daily_report(date: Optional[str] = Query(None, description="Date Y
             except ValueError:
                 raise HTTPException(status_code=400, detail="Format de date invalide (YYYY-MM-DD)")
         
-        report = rag_database.get_daily_report(date)
+        report = unified_database.get_daily_report(date)
         if not report:
             report = {
                 "requests": 0,
@@ -233,7 +234,7 @@ async def get_statistics_range(
         current_date = start
         while current_date <= end:
             date_str = current_date.strftime('%Y-%m-%d')
-            daily_report = rag_database.get_daily_report(date_str)
+            daily_report = unified_database.get_daily_report(date_str)
             if daily_report and daily_report.get("requests", 0) > 0:
                 range_stats.append({
                     "date": date_str,
@@ -295,7 +296,7 @@ async def cleanup_database(
 ):
     """Nettoyer les anciennes données"""
     try:
-        deleted_count = rag_database.cleanup_old_data(days_to_keep)
+        deleted_count = unified_database.cleanup_old_rag_data(days_to_keep)
         return {
             "message": f"{deleted_count} conversations supprimées",
             "days_kept": days_to_keep,
@@ -308,7 +309,7 @@ async def cleanup_database(
 async def clean_all_data():
     """Nettoyer toutes les données de la base"""
     try:
-        rag_database.clean_all_data()
+        unified_database.clean_all_rag_data()
         return {
             "message": "Toutes les données ont été supprimées",
             "cleanup_date": datetime.now().isoformat()
@@ -355,7 +356,7 @@ async def export_conversations_csv(
 async def get_performance_metrics():
     """Métriques de performance du système"""
     try:
-        stats = rag_database.get_statistics()
+        stats = unified_database.get_rag_statistics()
         performance = stats.get("performance", {})
         
         return {
@@ -381,7 +382,7 @@ async def get_performance_metrics():
 async def get_cost_metrics():
     """Métriques de coût du système"""
     try:
-        stats = rag_database.get_statistics()
+        stats = unified_database.get_rag_statistics()
         
         return {
             "total_cost": stats.get("estimated_cost", {}).get("total_cost_usd", 0),

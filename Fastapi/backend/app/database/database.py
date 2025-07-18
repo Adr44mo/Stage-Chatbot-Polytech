@@ -4,14 +4,12 @@ from pathlib import Path
 import os
 import sqlite3
 import json
+import sys
+import threading
 from datetime import datetime
 from typing import Dict, Any, Optional, List, Tuple
-import threading
 
 # Import color utilities
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 from color_utils import ColorPrint
 
 cp = ColorPrint()
@@ -26,6 +24,7 @@ engine = create_engine(sqlite_url, echo=True)
 def create_db_and_tables():
     """Créer les tables SQLModel (auth + chat)"""
     SQLModel.metadata.create_all(engine)
+    cp.print_success("[Database] Tables SQLModel créées avec succès")
 
 def get_session():
     """Session SQLModel pour auth et chat"""
@@ -45,15 +44,15 @@ class UnifiedDatabase:
         # Thread lock pour la sécurité
         self._lock = threading.Lock()
         
-        # Initialiser la base de données pour le RAG intelligent
-        self._init_rag_database()
+        # Initialiser les tables RAG (SQLite brut pour compatibilité)
+        self._init_rag_tables()
     
-    def _init_rag_database(self):
-        """Initialiser les tables additionnelles pour le RAG intelligent"""
+    def _init_rag_tables(self):
+        """Initialiser les tables RAG (SQLite brut pour compatibilité avec l'ancien système)"""
         with self._get_connection() as conn:
             cursor = conn.cursor()
             
-            # Table des conversations RAG (en plus des conversations SQLModel)
+            # Table des conversations RAG
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS rag_conversations (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -473,6 +472,63 @@ class UnifiedDatabase:
             cp.print_error(f"[UnifiedDatabase] Erreur calcul statistiques RAG: {e}")
             return {}
     
+    def get_daily_report(self, date: str = None) -> Dict[str, Any]:
+        """Obtenir le rapport journalier RAG"""
+        if not date:
+            date = datetime.now().strftime('%Y-%m-%d')
+        
+        try:
+            with self._get_connection() as conn:
+                cursor = conn.cursor()
+                
+                cursor.execute('''
+                    SELECT 
+                        COUNT(*) as requests,
+                        SUM(total_input_tokens) as input_tokens,
+                        SUM(total_output_tokens) as output_tokens,
+                        SUM(grand_total_tokens) as total_tokens,
+                        SUM(total_cost_usd) as cost_usd,
+                        AVG(response_time) as avg_response_time,
+                        SUM(CASE WHEN success = 0 THEN 1 ELSE 0 END) as errors
+                    FROM rag_conversations
+                    WHERE DATE(timestamp) = ?
+                ''', (date,))
+                
+                row = cursor.fetchone()
+                
+                # Statistiques par intention pour ce jour
+                cursor.execute('''
+                    SELECT 
+                        JSON_EXTRACT(intent_analysis, '$.intent') as intent,
+                        COUNT(*) as count
+                    FROM rag_conversations
+                    WHERE DATE(timestamp) = ?
+                    AND intent_analysis IS NOT NULL
+                    GROUP BY JSON_EXTRACT(intent_analysis, '$.intent')
+                ''', (date,))
+                
+                intents = {}
+                for intent_row in cursor.fetchall():
+                    if intent_row["intent"]:
+                        intents[intent_row["intent"]] = intent_row["count"]
+                
+                return {
+                    "requests": row["requests"] or 0,
+                    "tokens": {
+                        "input": row["input_tokens"] or 0,
+                        "output": row["output_tokens"] or 0,
+                        "total": row["total_tokens"] or 0
+                    },
+                    "cost_usd": row["cost_usd"] or 0.0,
+                    "avg_response_time": row["avg_response_time"] or 0.0,
+                    "errors": row["errors"] or 0,
+                    "intents": intents
+                }
+                
+        except Exception as e:
+            cp.print_error(f"[UnifiedDatabase] Erreur rapport journalier: {e}")
+            return {}
+    
     def cleanup_old_rag_data(self, days_to_keep: int = 30) -> int:
         """Nettoyer les anciennes données RAG"""
         try:
@@ -508,8 +564,26 @@ class UnifiedDatabase:
             cp.print_error(f"[UnifiedDatabase] Erreur nettoyage RAG: {e}")
             return 0
     
+    def clean_all_rag_data(self) -> None:
+        """Nettoyer toutes les données RAG"""
+        try:
+            with self._lock:
+                with self._get_connection() as conn:
+                    cursor = conn.cursor()
+                    
+                    cursor.execute('DELETE FROM rag_conversations')
+                    cursor.execute('DELETE FROM token_operations')
+                    cursor.execute('DELETE FROM context_documents')
+                    cursor.execute('DELETE FROM global_statistics')
+                    
+                    conn.commit()
+                    cp.print_success("[UnifiedDatabase] Toutes les données RAG ont été nettoyées")
+                    
+        except Exception as e:
+            cp.print_error(f"[UnifiedDatabase] Erreur nettoyage complet RAG: {e}")
+    
     def get_database_info(self) -> Dict[str, Any]:
-        """Obtenir des informations sur la base de données unifiée"""
+        """Obtenir des informations complètes sur la base de données unifiée"""
         try:
             with self._get_connection() as conn:
                 cursor = conn.cursor()
@@ -517,37 +591,41 @@ class UnifiedDatabase:
                 # Taille de la base de données
                 db_size = self.db_path.stat().st_size / 1024 / 1024  # MB
                 
-                # Nombre d'enregistrements par table RAG
-                cursor.execute('SELECT COUNT(*) FROM rag_conversations')
-                rag_conversations_count = cursor.fetchone()[0]
+                # Compter les tables et enregistrements
+                cursor.execute('''
+                    SELECT name FROM sqlite_master 
+                    WHERE type='table' AND name NOT LIKE 'sqlite_%'
+                ''')
                 
-                cursor.execute('SELECT COUNT(*) FROM token_operations')
-                operations_count = cursor.fetchone()[0]
+                tables = {}
+                for row in cursor.fetchall():
+                    table_name = row["name"]
+                    cursor.execute(f'SELECT COUNT(*) FROM {table_name}')
+                    count = cursor.fetchone()[0]
+                    tables[table_name] = count
                 
-                cursor.execute('SELECT COUNT(*) FROM context_documents')
-                documents_count = cursor.fetchone()[0]
-                
-                # Première et dernière conversation RAG
+                # Dates de première et dernière activité
                 cursor.execute('SELECT MIN(timestamp), MAX(timestamp) FROM rag_conversations')
-                rag_date_range = cursor.fetchone()
+                date_range = cursor.fetchone()
                 
                 return {
                     "database_path": str(self.db_path),
                     "database_size_mb": round(db_size, 2),
-                    "rag_tables": {
-                        "rag_conversations": rag_conversations_count,
-                        "token_operations": operations_count,
-                        "context_documents": documents_count
+                    "architecture": "Hybrid: SQLModel + SQLite Raw for RAG",
+                    "tables": tables,
+                    "activity_period": {
+                        "first_activity": date_range[0] if date_range[0] else None,
+                        "last_activity": date_range[1] if date_range[1] else None
                     },
-                    "rag_date_range": {
-                        "first_conversation": rag_date_range[0],
-                        "last_conversation": rag_date_range[1]
-                    }
+                    "last_updated": datetime.now().isoformat()
                 }
                 
         except Exception as e:
             cp.print_error(f"[UnifiedDatabase] Erreur info base de données: {e}")
-            return {}
+            return {
+                "database_path": str(self.db_path),
+                "error": str(e)
+            }
 
 
 # Instance globale de la base de données unifiée

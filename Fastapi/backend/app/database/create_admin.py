@@ -1,14 +1,15 @@
 from .database import engine
-from .models import User
+from .models_user import User
 from sqlmodel import Session, select
 from ..auth.security import get_password_hash
+from color_utils import cp
 
 def create_admin():
     with Session(engine) as session:
         # Check if the admin user already exists
         existing_admin = session.exec(select(User).where(User.username == "admin")).first()
         if existing_admin:
-            print("Admin user already exists.")
+            cp.print_warning("Admin user already exists.")
             return
         
         # Create a new admin user
@@ -21,8 +22,8 @@ def create_admin():
         session.add(admin_user)
         session.commit()
         session.refresh(admin_user)
-        print(f"Admin user created: {admin_user.username}")
+        cp.print_info(f"Admin user created: {admin_user.username}")
 
 if __name__ == "__main__":
     create_admin()
-    print("Admin user creation script executed.")
+    cp.print_info("Admin user creation script executed.")

@@ -10,7 +10,7 @@ import json
 from color_utils import cp
 
 # Imports des modèles et outils
-from .chat_models import Conversation, Message as DBMessage, ChatMessage
+from .database.models import Conversation, Message as DBMessage, ChatMessage
 from .database.database import get_session
 
 # Initialisation du routeur API
