@@ -5,16 +5,20 @@
 import { useState } from "react";
 import AdminCorpus from "../components/Admin/AdminCorpus";
 import AdminScraping from "../components/Admin/AdminScraping";
+import AdminStatistics from "../components/Admin/AdminStatistics";
 import AdminLogoutButton from "../components/Admin/AdminLogoutButton";
 
 export default function AdminPage() {
-  // État local pour savoir quelle section afficher ("corpus" ou "scraping")
-  const [section, setSection] = useState<"corpus" | "scraping">("corpus");
+  // État local pour savoir quelle section afficher
+  const [section, setSection] = useState<"corpus" | "scraping" | "statistics">(
+    "corpus"
+  );
 
   return (
     <div className="admin-page-layout">
       {/* Barre de navigation admin pour changer de section */}
       <aside className="admin-sidebar">
+        
         <nav>
           <ul>
             <li>
@@ -30,6 +34,7 @@ export default function AdminPage() {
                 Corpus PDF
               </button>
             </li>
+
             <li>
               {/* Section scraping web */}
               <button
@@ -43,16 +48,34 @@ export default function AdminPage() {
                 Scraping Web
               </button>
             </li>
+
+            <li>
+              {/* Section statistiques */}
+              <button
+                className={
+                  section === "statistics"
+                    ? "admin-sidebar-btn active"
+                    : "admin-sidebar-btn"
+                }
+                onClick={() => setSection("statistics")}
+              >
+                Statistiques
+              </button>
+            </li>
           </ul>
         </nav>
+
         {/* Bouton de déconnexion */}
         <div style={{ marginTop: "32px" }}>
           <AdminLogoutButton />
         </div>
       </aside>
+      
       {/* On affichage le contenu selon la section choisie */}
       <main className="admin-main-content">
-        {section === "corpus" ? <AdminCorpus /> : <AdminScraping />}
+        {section === "corpus" && <AdminCorpus />}
+        {section === "scraping" && <AdminScraping />}
+        {section === "statistics" && <AdminStatistics />}
       </main>
     </div>
   );
