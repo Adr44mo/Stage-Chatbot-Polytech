@@ -7,10 +7,11 @@ from fastapi import APIRouter, Depends, Cookie
 from sqlmodel import Session, select
 from typing import List
 import json
+from color_utils import cp
 
 # Imports des modèles et outils
 from .chat_models import Conversation, Message as DBMessage, ChatMessage
-from .auth.database import get_session
+from .database.database import get_session
 
 # Initialisation du routeur API
 router = APIRouter()
@@ -25,10 +26,12 @@ def get_history(polybot_session_id: str = Cookie(None), session: Session = Depen
     Récupère l'historique des messages (user/assistant) liés à un session_id anonyme.
     Retourne la liste des messages formatés pour le frontend.
     """
+    cp.print_debug(f"Fetching history for session: {polybot_session_id}")
     conversation = session.exec(select(Conversation).where(Conversation.session_id == polybot_session_id)).first()
     if not conversation:
         return []
     messages = session.exec(select(DBMessage).where(DBMessage.conversation_id == conversation.id).order_by(DBMessage.timestamp)).all()
+    cp.print_debug(f"Retrieved {len(messages)} messages for session {polybot_session_id}")
     return [
         ChatMessage(
             role=m.role,
@@ -82,10 +85,18 @@ def get_or_create_conversation(session, session_id):
 def add_message(session, conversation_id, role, content, sources=None):
     """
     Ajoute un message (user ou assistant) à la conversation spécifiée.
+    Affiche des informations de debug, notamment l'emplacement de la base de données.
     """
+
+    # Debug : emplacement de la base de données
+    db_url = str(session.bind.url) if hasattr(session.bind, "url") else "inconnue"
+    cp.print_debug(f"Ajout d'un message dans la conversation {conversation_id} (role={role})")
+    cp.print_debug(f"Emplacement de la base de données : {db_url}")
+
     if isinstance(sources, list):
         sources = json.dumps(sources)
     msg = DBMessage(conversation_id=conversation_id, role=role, content=content, sources=sources)
     session.add(msg)
     session.commit()
+    cp.print_debug(f"Message ajouté avec l'ID {msg.id}")
     return msg

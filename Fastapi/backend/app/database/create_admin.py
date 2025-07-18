@@ -1,7 +1,7 @@
 from .database import engine
 from .models import User
 from sqlmodel import Session, select
-from .security import get_password_hash
+from ..auth.security import get_password_hash
 
 def create_admin():
     with Session(engine) as session:

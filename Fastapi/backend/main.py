@@ -28,7 +28,7 @@ from Document_handler.The_handler import router as router_scrapping
 from .app.PDF_manual.pdf_manual import router as pdf_manual_router
 # from .app.filters import handle_if_uninformative
 from .app.auth.router import router as auth_router
-from .app.auth.database import create_db_and_tables, get_session
+from .app.database.database import create_db_and_tables, get_session
 from .app.chat_models import ChatRequest, ChatResponse
 from .app.auth.dependencies import get_current_admin_from_cookie
 from .app.intelligent_rag.api import router as intelligent_rag_router
@@ -159,6 +159,8 @@ async def chat(request: Request, request_body: ChatRequest, polybot_session_id: 
                 raise HTTPException(status_code=400, detail="reCAPTCHA token required")
         elif not await verify_recaptcha_token(request_body.recaptcha_token):
             raise HTTPException(status_code=400, detail="Invalid reCAPTCHA token")
+
+        cp.print_debug(f"User prompt: {request_body.prompt}")
 
         conversation = get_or_create_conversation(session, polybot_session_id)
         add_message(session, conversation.id, "user", request_body.prompt)
