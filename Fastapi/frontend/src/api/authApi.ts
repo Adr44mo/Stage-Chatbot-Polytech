@@ -1,6 +1,6 @@
-// ===========================================================
-// Gestionnaire des appels API pour l'interface administrateur
-// ===========================================================
+// ==================================================================
+// Gestionnaire des appels API pour l'authentification administrateur
+// ==================================================================
 
 // Vérifie si l'utilisateur admin est authentifié (cookie JWT)
 export async function checkAdminAuth(): Promise<boolean> {
