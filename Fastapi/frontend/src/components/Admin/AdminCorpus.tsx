@@ -11,6 +11,7 @@ import {
   saveChanges,
   cancelChanges,
   getEditStatus,
+  runCorpusVectorization,
 } from "../../api/corpusApi";
 
 export default function AdminCorpus() {
@@ -18,6 +19,7 @@ export default function AdminCorpus() {
   const [editMode, setEditMode] = useState(false);
   const [snapshotId, setSnapshotId] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [isVectorizing, setIsVectorizing] = useState(false);
 
   // On vérifie le statut du mode édition au montage du composant
   useEffect(() => {
@@ -138,6 +140,23 @@ export default function AdminCorpus() {
     }
   };
 
+  /**
+   * Lance la vectorisation du corpus (pipeline + vectorisation)
+   */
+  const handleVectorization = async () => {
+    setIsVectorizing(true);
+    try {
+      const result = await runCorpusVectorization();
+      console.log("[✅ Vectorisation terminée] :", result);
+      alert("Vectorisation terminée avec succès !");
+    } catch (err: any) {
+      console.error("Erreur vectorisation :", err?.message || err);
+      alert("Erreur pendant la vectorisation : " + (err?.message || err));
+    } finally {
+      setIsVectorizing(false);
+    }
+  };
+
   // ===============
   // RENDU PRINCIPAL
   // ===============
@@ -208,6 +227,30 @@ export default function AdminCorpus() {
           onFileUploaded={handleFileUploaded}
           editMode={editMode}
         />
+
+        {/*Vectorisation */}
+        {!editMode && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              marginTop: "1rem",
+            }}
+          >
+            <button
+              className="admin-corpus-edit-btn"
+              onClick={handleVectorization}
+              disabled={isVectorizing}
+            >
+              {isVectorizing
+                ? "Vectorisation en cours..."
+                : "Lancer la vectorisation"}
+            </button>
+
+            {/* TODO: Cassandra je te laisse gérer pour la barre de progression :) */}
+            
+          </div>
+        )}
       </div>
     </div>
   );

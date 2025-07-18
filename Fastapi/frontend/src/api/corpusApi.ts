@@ -2,6 +2,8 @@
 // Gestionnaire des appels API pour le corpus PDF
 // ==============================================
 
+import { runProcessingAndVectorization } from "./scrapingApi";
+
 /**
  * Types pour la gestion des fichiers et dossiers
  */
@@ -331,7 +333,6 @@ export const renameDirectory = async (
   }
 };
 
-//TODO: Fonction à implémenter dans le code du composant
 /**
  * Déplace un dossier vers un nouveau parent
  * @param sourcePath - Le chemin du dossier à déplacer
@@ -486,3 +487,12 @@ export const getEditStatus = async (): Promise<any> => {
     throw error;
   }
 };
+
+/**
+ * Lance le traitement et la vectorisation du corpus
+ * (réutilise la même logique que pour le scraping)
+ * @returns Promise qui se résout quand la vectorisation est terminée
+ */
+export const runCorpusVectorization = runProcessingAndVectorization;
+
+//TODO: rajouter les autres fonctions pour la barre de progression ou les importer direct
