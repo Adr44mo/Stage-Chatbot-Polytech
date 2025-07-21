@@ -6,6 +6,7 @@ from typing import Optional, List
 from sqlmodel import SQLModel, Field, Relationship
 from pydantic import BaseModel
 from datetime import datetime
+import datetime as dt
 
 # ==================================
 # Modèles SQLModel (base de données)
@@ -116,6 +117,124 @@ class RAGContextDocument(SQLModel, table=True):
     
     # Relation vers la conversation RAG
     rag_conversation: Optional[RAGConversation] = Relationship()
+
+# ==================================
+# Modèles de statistiques RAG
+# ==================================
+
+class RAGDailyStats(SQLModel, table=True):
+    """Statistiques journalières agrégées du système RAG"""
+    __tablename__ = "rag_daily_stats"
+    
+    id: Optional[int] = Field(default=None, primary_key=True)
+    date: dt.date = Field(unique=True, index=True)
+    
+    # Métriques de base
+    total_conversations: int = Field(default=0)
+    successful_conversations: int = Field(default=0)
+    failed_conversations: int = Field(default=0)
+    success_rate: float = Field(default=0.0)
+    
+    # Métriques de tokens et coûts
+    total_tokens: int = Field(default=0)
+    total_input_tokens: int = Field(default=0)
+    total_output_tokens: int = Field(default=0)
+    total_cost_usd: float = Field(default=0.0)
+    
+    # Métriques de performance
+    avg_response_time: float = Field(default=0.0)
+    min_response_time: float = Field(default=0.0)
+    max_response_time: float = Field(default=0.0)
+    
+    # Métriques contextuelles
+    total_context_docs: int = Field(default=0)
+    total_sources: int = Field(default=0)
+    avg_context_docs_per_conv: float = Field(default=0.0)
+    avg_sources_per_conv: float = Field(default=0.0)
+    
+    # Distributions (JSON)
+    intents_distribution: Optional[str] = Field(default=None, description="Distribution des intentions au format JSON")
+    specialities_distribution: Optional[str] = Field(default=None, description="Distribution des spécialités au format JSON")
+    
+    # Métadonnées
+    unique_sessions: int = Field(default=0)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class RAGMonthlyStats(SQLModel, table=True):
+    """Statistiques mensuelles agrégées du système RAG"""
+    __tablename__ = "rag_monthly_stats"
+    
+    id: Optional[int] = Field(default=None, primary_key=True)
+    year: int = Field(index=True)
+    month: int = Field(index=True)
+    
+    # Contrainte d'unicité sur year/month
+    __table_args__ = {"sqlite_autoincrement": True}
+    
+    # Métriques de base
+    total_conversations: int = Field(default=0)
+    successful_conversations: int = Field(default=0)
+    failed_conversations: int = Field(default=0)
+    success_rate: float = Field(default=0.0)
+    
+    # Métriques de tokens et coûts
+    total_tokens: int = Field(default=0)
+    total_cost_usd: float = Field(default=0.0)
+    
+    # Métriques de performance
+    avg_response_time: float = Field(default=0.0)
+    
+    # Distributions (JSON)
+    intents_distribution: Optional[str] = Field(default=None)
+    specialities_distribution: Optional[str] = Field(default=None)
+    
+    # Métriques temporelles
+    active_days: int = Field(default=0)
+    avg_conversations_per_day: float = Field(default=0.0)
+    peak_day: Optional[str] = Field(default=None)
+    peak_day_conversations: int = Field(default=0)
+    
+    # Métadonnées
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class RAGYearlyStats(SQLModel, table=True):
+    """Statistiques annuelles agrégées du système RAG"""
+    __tablename__ = "rag_yearly_stats"
+    
+    id: Optional[int] = Field(default=None, primary_key=True)
+    year: int = Field(unique=True, index=True)
+    
+    # Métriques de base
+    total_conversations: int = Field(default=0)
+    successful_conversations: int = Field(default=0)
+    failed_conversations: int = Field(default=0)
+    success_rate: float = Field(default=0.0)
+    
+    # Métriques de tokens et coûts
+    total_tokens: int = Field(default=0)
+    total_cost_usd: float = Field(default=0.0)
+    
+    # Métriques de performance
+    avg_response_time: float = Field(default=0.0)
+    
+    # Distributions (JSON)
+    intents_distribution: Optional[str] = Field(default=None)
+    specialities_distribution: Optional[str] = Field(default=None)
+    
+    # Métriques temporelles
+    active_months: int = Field(default=0)
+    avg_conversations_per_month: float = Field(default=0.0)
+    peak_month: Optional[int] = Field(default=None)
+    peak_month_conversations: int = Field(default=0)
+    
+    # Évolution mensuelle (JSON)
+    monthly_evolution: Optional[str] = Field(default=None, description="Évolution mois par mois au format JSON")
+    
+    # Métadonnées
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 # ======================
 # Schémas Pydantic (API)
