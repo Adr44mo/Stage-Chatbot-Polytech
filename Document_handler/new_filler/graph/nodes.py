@@ -3,7 +3,7 @@ import traceback
 from pathlib import Path
 
 
-from ..config import VALID_DIR, REJECTED_DIR, ColorPrint
+from ..config import VALID_DIR, REJECTED_DIR, cp
 from ..logic.fill_logic import fill_missing_fields, route_document, validate_with_schema
 from ..logic.detect_type import detect_document_type
 from ..logic.webjson import normalize_entry
@@ -11,8 +11,62 @@ from ..logic.load_pdf import process_scraped_pdf_file, process_manual_pdf_file
 from ..logic.syllabus import extract_syllabus_structure
 from ..preprocessing.update_map import update_output_maps_entry, clean_output_maps, clean_map_files
 
-def log_callback(state, msg, color="white"):
-    ColorPrint.print(f"[{msg}] {state.get('file_path', '')}", color=color, bold=True)
+def log_callback(state, msg, color="white", step_number=None):
+    """
+    Improved callback with better color usage and step tracking
+    """
+    file_path = state.get('file_path', 'unknown')
+    file_name = Path(file_path).name if file_path != 'unknown' else 'unknown'
+    
+    # Use appropriate color methods based on message type
+    if "ERROR" in msg.upper():
+        cp.print_error(f"[{msg}] {file_name}")
+    elif "SUCCESS" in msg.upper() or "OK" in msg.upper():
+        cp.print_success(f"[{msg}] {file_name}")
+    elif "WARNING" in msg.upper():
+        cp.print_warning(f"[{msg}] {file_name}")
+    elif step_number:
+        cp.print_step(f"[{msg}] {file_name}", step_number)
+    else:
+        # Use the info method for regular messages with colored tags
+        if color == "blue":
+            cp.print_info(f"[{msg}] {file_name}")
+        elif color == "green":
+            cp.print_success(f"[{msg}] {file_name}")
+        elif color == "red":
+            cp.print_error(f"[{msg}] {file_name}")
+        elif color == "yellow":
+            cp.print_warning(f"[{msg}] {file_name}")
+        else:
+            cp.print_debug(f"[{msg}] {file_name}")
+
+def log_step_start(state, step_name, step_number=None):
+    """Log the start of a processing step"""
+    file_name = Path(state.get('file_path', 'unknown')).name
+    if step_number:
+        cp.print_step(f"Début {step_name} - {file_name}", step_number)
+    else:
+        cp.print_step(f"Début {step_name} - {file_name}")
+
+def log_step_success(state, step_name, details=None):
+    """Log successful completion of a step"""
+    file_name = Path(state.get('file_path', 'unknown')).name
+    if details:
+        cp.print_success(f"✅ {step_name} terminé - {file_name} ({details})")
+    else:
+        cp.print_success(f"✅ {step_name} terminé - {file_name}")
+
+def log_step_info(state, step_name, info):
+    """Log informational message during step processing"""
+    file_name = Path(state.get('file_path', 'unknown')).name
+    cp.print_info(f"ℹ️  {step_name} - {file_name}: {info}")
+
+def log_processing_stats(state, stats_dict):
+    """Log processing statistics"""
+    file_name = Path(state.get('file_path', 'unknown')).name
+    cp.print_result(f"📊 Statistiques pour {file_name}:")
+    for key, value in stats_dict.items():
+        cp.print_result(f"   • {key}: {value}")
 
 def api_friendly_wrapper(func):
     """
@@ -24,52 +78,59 @@ def api_friendly_wrapper(func):
         except Exception as e:
             state["error"] = f"{func.__name__} error: {e}"
             state["traceback"] = traceback.format_exc()
-            log_callback(state, f"{func.__name__.upper()} ERROR", color="red")
+            file_name = Path(state.get('file_path', 'unknown')).name
+            cp.print_error(f"❌ ERREUR dans {func.__name__} - {file_name}: {e}")
             return state
     return wrapper
 
 @api_friendly_wrapper
 def load_json_node(state):
+    log_step_start(state, "Chargement JSON", 1)
     file_path = state["file_path"]
     with open(file_path, "r", encoding="utf-8") as f:
         data = json.load(f)
     state["data"] = data
-    log_callback(state, "LOAD", color="green")
+    log_step_success(state, "Chargement JSON", f"{len(str(data))} caractères")
     return state
 
 @api_friendly_wrapper
 def load_pdf_to_data_manual_node(state):
+    log_step_start(state, "Traitement PDF manuel", 2)
     pdf_path = state["file_path"]
     result = process_manual_pdf_file(pdf_path)
     if not result:
         raise ValueError("Failed to process PDF")
     state["data"] = result
-    log_callback(state, "LOAD_PDF_MANUAL", color="green")
+    log_step_success(state, "Traitement PDF manuel", f"Contenu extrait")
     return state
 
 @api_friendly_wrapper
 def load_pdf_to_data_scraped_node(state):
+    log_step_start(state, "Traitement PDF scrapé", 2)
     pdf_path = state["file_path"]
     result = process_scraped_pdf_file(pdf_path)
     if not result:
         raise ValueError("Failed to process scraped PDF")
     state["data"] = result
-    log_callback(state, "LOAD_PDF_SCRAPED", color="green")
+    log_step_success(state, "Traitement PDF scrapé", f"Contenu extrait")
     return state
 
+# pas utilisé dans le graphe actuel,
 @api_friendly_wrapper
 def detect_type_node(state):
+    log_step_start(state, "Détection du type de document", 3)
     content = state["data"].get("content", "")
     doc_type = detect_document_type(content)
     state["data"]["doc_type"] = doc_type
     if "output_data" not in state:
         state["output_data"] = {}
     state["output_data"]["document_type"] = doc_type
-    log_callback(state, f"DETECT_TYPE: {doc_type}", color="blue")
+    log_step_success(state, "Détection du type", f"Type: {doc_type}")
     return state
 
 @api_friendly_wrapper
 def fill_metadata_scraped_node(state):
+    log_step_start(state, "Remplissage métadonnées (scrapé)")
     data = state["data"]
     output_data = {
         "document_type": "pdf_scraped",
@@ -88,11 +149,12 @@ def fill_metadata_scraped_node(state):
     output_data["metadata"]["date"] = data.get("metadata", {}).get("last_modified", "")
     output_data["metadata"]["auteurs"] = data.get("metadata", {}).get("auteurs", [])
     state["output_data"] = output_data
-    log_callback(state, "FILL_METADATA_SCRAPED", color="blue")
+    log_step_success(state, "Métadonnées scrapées", "Structure créée")
     return state
 
 @api_friendly_wrapper
 def fill_metadata_manual_node(state):
+    log_step_start(state, "Remplissage métadonnées (manuel)")
     data = state["data"]
     output_data = {
         "document_type": "pdf_ajouté_manuellement",
@@ -112,7 +174,7 @@ def fill_metadata_manual_node(state):
         "globals/metadata.txt"
     )
     state["output_data"] = output_data
-    log_callback(state, "FILL_METADATA_MANUAL", color="blue")
+    log_step_success(state, "Métadonnées manuelles", "Champs remplis")
     return state
 
 @api_friendly_wrapper
@@ -126,29 +188,39 @@ def fill_tags_node(state):
 
 @api_friendly_wrapper
 def process_document_node(state):
+    log_step_start(state, "Traitement du document")
     data = state["data"]
     updated = route_document(data)
     state["output_data"] = updated
-    log_callback(state, "PROCESS", color="blue")
+    log_step_success(state, "Traitement document", "Document routé")
     return state
 
 @api_friendly_wrapper
 def validate_node(state):
+    log_step_start(state, "Validation du document", 4)
+    
     if state.get("is_syllabus"):
         state["is_valid"] = bool(state["output_data"].get("specialite", "").strip())
         if not state["is_valid"]:
             state["error"] = "Syllabus specialite is empty"
-            log_callback(state, f"VALIDATE SYLLABUS EMPTY", color="red")
+            cp.print_error(f"❌ Validation échouée: Spécialité syllabus vide - {Path(state.get('file_path', 'unknown')).name}")
         else:
-            log_callback(state, f"VALIDATE SYLLABUS OK", color="green")
+            log_step_success(state, "Validation syllabus", "Spécialité présente")
         return state
 
     is_valid = validate_with_schema(state["output_data"])
     state["is_valid"] = is_valid
+    
+    if is_valid:
+        log_step_success(state, "Validation schéma", "Document valide")
+    else:
+        cp.print_error(f"❌ Validation échouée: Document invalide - {Path(state.get('file_path', 'unknown')).name}")
+    
     return state
 
 @api_friendly_wrapper
 def save_node(state):
+    log_step_start(state, "Sauvegarde du document", 5)
     file_path = Path(state["file_path"])
     out_dir = VALID_DIR if state.get("is_valid") else REJECTED_DIR
 
@@ -161,7 +233,9 @@ def save_node(state):
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(state["output_data"], f, ensure_ascii=False, indent=2)
     state["out_path"] = str(out_path)
-    log_callback(state, f"SAVE: {out_path}", color="green")
+    
+    status = "validé" if state.get("is_valid") else "rejeté"
+    log_step_success(state, f"Sauvegarde ({status})", f"→ {out_path.name}")
     return state
 
 @api_friendly_wrapper
@@ -177,15 +251,24 @@ def save_to_error_node(state):
 
 @api_friendly_wrapper
 def correction_node(state):
-    print(f"[CORRECTION] Document {state.get('file_path')} needs correction or manual review.")
+    cp.print_warning(f"⚠️  Correction nécessaire: {Path(state.get('file_path', 'unknown')).name} nécessite une révision manuelle")
     return state
 
 @api_friendly_wrapper
 def error_handler_node(state):
-    print(f"[❌ ERROR] {state.get('file_path')}: {state.get('error')}")
-    print(state.get("traceback", ""))
+    file_name = Path(state.get('file_path', 'unknown')).name
+    error_msg = state.get('error', 'Erreur inconnue')
+    cp.print_error(f"❌ ERREUR - {file_name}: {error_msg}")
+    
+    # Show traceback only in debug mode or if specifically requested
+    if state.get("show_traceback", False):
+        traceback_info = state.get("traceback", "")
+        if traceback_info:
+            cp.print_debug("Traceback détaillé:")
+            cp.print_debug(traceback_info)
     return state
 
+# pas utilisé dans le graphe actuel,
 @api_friendly_wrapper
 def fill_type_specific_node(state):
     data = state["data"]
@@ -221,6 +304,7 @@ def fill_type_specific_node(state):
 
 @api_friendly_wrapper
 def normalize_json_file_node(state):
+    log_step_start(state, "Normalisation JSON")
     file_path = state["file_path"]
     site_name = Path(file_path).parent.parent.name.replace("scraped_", "")
     with open(file_path, "r", encoding="utf-8") as f:
@@ -234,11 +318,12 @@ def normalize_json_file_node(state):
     state["data"] = entries[0] if entries else {}
     normalized = normalize_entry(entries[0], chemin_local=str(file_path), site_name=site_name)
     state["output_data"] = normalized
-    log_callback(state, "NORMALIZE_JSON_FILE", color="blue")
+    log_step_success(state, "Normalisation JSON", f"Site: {site_name}")
     return state
 
 @api_friendly_wrapper
 def check_type_of_input_node(state):
+    log_step_start(state, "Analyse du type d'entrée")
     file_path = state["file_path"]
     if "data_sites" in file_path:
         state["web_page"] = True
@@ -255,7 +340,8 @@ def check_type_of_input_node(state):
     else:
         state["is_syllabus"] = False
 
-    log_callback(state, f"CHECK_TYPE_OF_INPUT: web_page={state.get('web_page', False)}, pdf_scraped={state.get('pdf_scraped', False)}, is_syllabus={state.get('is_syllabus', False)}", color="blue")
+    info_details = f"web_page={state.get('web_page', False)}, pdf_scraped={state.get('pdf_scraped', False)}, syllabus={state.get('is_syllabus', False)}"
+    log_step_success(state, "Analyse type d'entrée", info_details)
     return state
 
 @api_friendly_wrapper
@@ -267,12 +353,30 @@ def syllabus_extract_node(state):
 
 @api_friendly_wrapper
 def end_node(state):
+    file_name = Path(state.get('file_path', 'unknown')).name
+    
     if state.get("is_valid"):
         hash_val = state.get("hash", "")
         input_path = Path(state["file_path"])
         update_output_maps_entry(hash_val, input_path)
         clean_output_maps()
         clean_map_files()
+        
+        # Log processing summary
+        stats = {
+            "Statut": "✅ Validé et sauvegardé",
+            "Fichier de sortie": state.get("out_path", "N/A"),
+            "Type de document": state.get("output_data", {}).get("document_type", "N/A")
+        }
+        log_processing_stats(state, stats)
+    else:
+        stats = {
+            "Statut": "❌ Rejeté",
+            "Raison": state.get("error", "Validation échouée"),
+            "Fichier de sortie": state.get("out_path", "N/A")
+        }
+        log_processing_stats(state, stats)
 
-    log_callback(state, "END", color="green")
+    cp.print_result(f"🏁 Traitement terminé pour {file_name}")
+    cp.print_separator()
     return state
