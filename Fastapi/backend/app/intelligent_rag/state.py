@@ -4,6 +4,9 @@ Intelligent RAG System - State Definitions
 
 from typing import TypedDict, List, Optional, Dict, Any, NotRequired
 from enum import Enum
+# Coûts des tokens pour le suivi des dépenses pour 1,000,000 tokens
+INPUT_TOKEN_COST = 0.15  # Coût par token d'entrée
+OUTPUT_TOKEN_COST = 0.6  # Coût par token de sortie
 
 class IntentType(str, Enum):
     """Types d'intentions supportées"""
@@ -32,6 +35,16 @@ class IntentAnalysisResult(TypedDict):
     reasoning: str
     needs_history: bool  # Nouveau champ pour déterminer si l'historique est nécessaire
     course_name: Optional[str]  # Nom du cours spécifique si applicable
+    reformulation: Optional[str]  # Question reformulée si nécessaire
+
+class TokenCostTrackerState(TypedDict):
+    """État du tracker de coûts de tokens"""
+    session_id: str  # ID de session pour le suivi des coûts
+    prompt_tokens: int  # Nombre de tokens dans le prompt
+    completion_tokens: int  # Nombre de tokens dans la réponse
+    total_tokens: int  # Total des tokens utilisés
+    model: str  # Nom du modèle utilisé
+    operation: str  # Nom de l'opération (intent_analysis, rag_generation, etc.)
 
 class IntelligentRAGState(TypedDict):
     """État du graphe RAG intelligent"""
@@ -49,3 +62,5 @@ class IntelligentRAGState(TypedDict):
     processing_steps: NotRequired[List[str]]
     error: NotRequired[Optional[str]]
     session_id: NotRequired[Optional[str]]  # Pour le tracking des coûts
+    token_tracker: NotRequired[Optional[List[TokenCostTrackerState]]]  # Instance du token tracker
+

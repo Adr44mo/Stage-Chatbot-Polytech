@@ -8,7 +8,7 @@ from langchain_core.messages import HumanMessage
 from ..llmm import llm, db, initialize_the_rag_chain
 from ..chat import get_sources
 from .state import IntelligentRAGState, IntentType, SpecialityType, IntentAnalysisResult
-from .token_tracker import track_openai_call, token_tracker
+from .openai_tracker import track_openai_call_manual, get_tokens_from_response
 from .prompts import (
     get_intent_analysis_prompt,
     get_direct_answer_prompt,
@@ -17,7 +17,6 @@ from .prompts import (
 )
 from color_utils import ColorPrint as cp
 
-@track_openai_call("intent_analysis")
 def intent_analysis_node(state: IntelligentRAGState) -> Dict[str, Any]:
     """
     Analyse l'intention de l'utilisateur en utilisant OpenAI avec sortie JSON
@@ -26,18 +25,33 @@ def intent_analysis_node(state: IntelligentRAGState) -> Dict[str, Any]:
     cp.print_info(f"État reçu: {list(state.keys())}")
     
     try:
-        # Construire l'historique de conversation
+        # Récupérer la liste token tracker du state
+        token_tracker = state.get("token_tracker", [])
+        session_id = state.get("session_id", "unknown")
+        
+        # Construire l'historique de conversation (seulement les 5 derniers messages)
         history_text = ""
         if state.get("chat_history"):
+            last_msgs = state["chat_history"][-6:]
             history_text = "\n".join([
-                f"User: {msg['content']}" if msg['role'] == "user" else f"Assistant: {msg['content']}"
-                for msg in state["chat_history"]
+            f"User: {msg['content']}" if msg['role'] == "user" else f"Assistant: {msg['content']}"
+            for msg in last_msgs
             ])
         
         # Prompt structuré pour obtenir une réponse JSON
         prompt = get_intent_analysis_prompt(state['input_question'], history_text)
 
-        response = llm.invoke([HumanMessage(content=prompt)])
+        # Utiliser le tracking manuel pour récupérer les vrais tokens
+        track_result = track_openai_call_manual(
+            llm=llm, 
+            prompt=prompt, 
+            operation="intent_analysis", 
+            token_tracker=token_tracker, 
+            session_id=session_id
+        )
+        response = track_result["response"]
+        token_info = track_result["tokens"]
+        cp.print_info(f"Tokens utilisés: {token_info['total']} (prompt: {token_info['prompt']}, completion: {token_info['completion']})")
         
         # Parser la réponse JSON
         try:
@@ -58,8 +72,10 @@ def intent_analysis_node(state: IntelligentRAGState) -> Dict[str, Any]:
                 confidence=float(result.get("confidence", 0.8)),
                 reasoning=result.get("reasoning", ""),
                 needs_history=result.get("needs_history", False),
-                course_name=result.get("course_name") if result.get("course_name") and result["course_name"] != "null" else None
+                course_name=result.get("course_name") if result.get("course_name") and result["course_name"] != "null" else None,
+                reformulation=result.get("reformulation") if result.get("reformulation") and result["reformulation"] != "null" else None
             )
+            cp.print_debug(f"raw: {result}")
             
             cp.print_success(f"Intention détectée: {intent_analysis['intent']}")
             cp.print_info(f"Spécialité: {intent_analysis['speciality']}")
@@ -78,7 +94,7 @@ def intent_analysis_node(state: IntelligentRAGState) -> Dict[str, Any]:
             content = response.content.lower()
             if any(word in content for word in ["direct", "greeting", "casual"]):
                 intent = IntentType.DIRECT_ANSWER
-            elif any(word in content for word in ["syllabus", "toc", "course"]):
+            elif any(word in content for word in ["syllabus", "toc"]):
                 intent = IntentType.SYLLABUS_SPECIALITY_OVERVIEW
             else:
                 intent = IntentType.RAG_NEEDED
@@ -116,7 +132,6 @@ def intent_analysis_node(state: IntelligentRAGState) -> Dict[str, Any]:
             "error": str(e)
         }
 
-@track_openai_call("direct_answer")
 def direct_answer_node(state: IntelligentRAGState) -> Dict[str, Any]:
     """
     Génère une réponse directe sans recherche documentaire
@@ -124,9 +139,24 @@ def direct_answer_node(state: IntelligentRAGState) -> Dict[str, Any]:
     cp.print_step("Génération de réponse directe")
     
     try:
+        # Récupérer la liste token tracker du state
+        token_tracker = state.get("token_tracker", [])
+        session_id = state.get("session_id", "unknown")
+        
         prompt = get_direct_answer_prompt(state['input_question'])
 
-        response = llm.invoke([HumanMessage(content=prompt)])
+        # Utiliser le tracking manuel pour récupérer les vrais tokens
+        track_result = track_openai_call_manual(
+            llm=llm, 
+            prompt=prompt, 
+            operation="direct_answer", 
+            token_tracker=token_tracker, 
+            session_id=session_id
+        )
+        response = track_result["response"]
+        token_info = track_result["tokens"]
+        cp.print_info(f"Tokens utilisés: {token_info['total']} (prompt: {token_info['prompt']}, completion: {token_info['completion']})")
+            
         answer = response.content.strip()
         
         cp.print_success("Réponse directe générée")
@@ -160,7 +190,7 @@ def document_retrieval_node(state: IntelligentRAGState) -> Dict[str, Any]:
         cp.print_step(f"Récupération pour intention: {intent_analysis['intent']}")
         
         # Traitement unifié : seules les vues d'ensemble de spécialité ont un traitement spécial
-        if intent_analysis["intent"] == IntentType.SYLLABUS_SPECIALITY_OVERVIEW:
+        if intent_analysis["intent"] == IntentType.SYLLABUS_SPECIALITY_OVERVIEW and not intent_analysis["speciality"] == "GENERAL":
             docs = _retrieve_speciality_overview_docs(state)
         else:
             # Traitement classique pour RAG_NEEDED et SYLLABUS_SPECIFIC_COURSE
@@ -305,7 +335,6 @@ def _filter_by_speciality(docs: List[Any], speciality: SpecialityType) -> List[A
     
     return filtered_docs
 
-@track_openai_call("rag_generation")
 def rag_generation_node(state: IntelligentRAGState) -> Dict[str, Any]:
     """
     Génère une réponse en utilisant les documents récupérés
@@ -355,7 +384,7 @@ def _generate_general_response(state: IntelligentRAGState, docs: List[Any]) -> D
     if intent_analysis and intent_analysis.get("needs_history") and state.get("chat_history"):
         history_context = "\n".join([
             f"User: {msg['content']}" if msg['role'] == "user" else f"Assistant: {msg['content']}"
-            for msg in state["chat_history"][-3:]  # Garder les 3 derniers échanges
+            for msg in state["chat_history"]
         ])
         history_context = f"\n\nHistorique de conversation:\n{history_context}\n"
     
@@ -365,7 +394,22 @@ def _generate_general_response(state: IntelligentRAGState, docs: List[Any]) -> D
         history_context=history_context
     )
 
-    response = llm.invoke([HumanMessage(content=prompt)])
+    # Récupérer la liste token tracker du state
+    token_tracker = state.get("token_tracker", [])
+    session_id = state.get("session_id", "unknown")
+    
+    # Utiliser le tracking manuel pour récupérer les vrais tokens
+    track_result = track_openai_call_manual(
+        llm=llm, 
+        prompt=prompt, 
+        operation="rag_generation_general", 
+        token_tracker=token_tracker, 
+        session_id=session_id
+    )
+    response = track_result["response"]
+    token_info = track_result["tokens"]
+    cp.print_info(f"Tokens utilisés: {token_info['total']} (prompt: {token_info['prompt']}, completion: {token_info['completion']})")
+        
     answer = response.content.strip()
     
     # Extraire les sources
@@ -401,7 +445,7 @@ def _generate_speciality_overview_response(state: IntelligentRAGState, docs: Lis
     if intent_analysis and intent_analysis.get("needs_history") and state.get("chat_history"):
         history_context = "\n".join([
             f"User: {msg['content']}" if msg['role'] == "user" else f"Assistant: {msg['content']}"
-            for msg in state["chat_history"][-3:]  # Garder les 3 derniers échanges
+            for msg in state["chat_history"]
         ])
         history_context = f"\n\nHistorique de conversation:\n{history_context}\n"
     
@@ -414,7 +458,22 @@ def _generate_speciality_overview_response(state: IntelligentRAGState, docs: Lis
         history_context=history_context
     )
 
-    response = llm.invoke([HumanMessage(content=prompt)])
+    # Récupérer la liste token tracker du state
+    token_tracker = state.get("token_tracker", [])
+    session_id = state.get("session_id", "unknown")
+    
+    # Utiliser le tracking manuel pour récupérer les vrais tokens
+    track_result = track_openai_call_manual(
+        llm=llm, 
+        prompt=prompt, 
+        operation="rag_generation_speciality", 
+        token_tracker=token_tracker, 
+        session_id=session_id
+    )
+    response = track_result["response"]
+    token_info = track_result["tokens"]
+    cp.print_info(f"Tokens utilisés: {token_info['total']} (prompt: {token_info['prompt']}, completion: {token_info['completion']})")
+        
     answer = response.content.strip()
     
     # Extraire les sources
@@ -426,7 +485,7 @@ def _generate_speciality_overview_response(state: IntelligentRAGState, docs: Lis
         "answer": answer,
         "context": docs,
         "sources": sources,
-        "processing_steps": state.get("processing_steps", []) + ["Speciality overview response generated"]
+        "processing_steps": state.get("processing_steps", []) + ["speciality overview response generated"]
     }
 
 def _fallback_rag_generation(state: IntelligentRAGState) -> Dict[str, Any]:
@@ -460,7 +519,11 @@ def _fallback_rag_generation(state: IntelligentRAGState) -> Dict[str, Any]:
 
 def _retrieve_general_docs(state: IntelligentRAGState) -> List[Any]:
     """Récupération classique pour les documents généraux (RAG standard)"""
-    question = state["input_question"]
+    reformulated_question = state.get("intent_analysis", {}).get("reformulation")
+    if reformulated_question:
+        question = reformulated_question
+    else:
+        question = state["input_question"]
     
     try:
         # Recherche standard avec similarité

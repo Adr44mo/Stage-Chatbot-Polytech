@@ -86,8 +86,8 @@ def update_rag_conversation(
             session_id=rag_conversation.session_id,
             operation=operation.get("operation", "unknown"),
             model=operation.get("model", "unknown"),
-            input_tokens=operation.get("input_tokens", 0),
-            output_tokens=operation.get("output_tokens", 0),
+            input_tokens=operation.get("prompt_tokens", 0),
+            output_tokens=operation.get("completion_tokens", 0),
             total_tokens=operation.get("tokens", operation.get("total_tokens", 0)),
             cost_usd=operation.get("cost_usd", 0.0),
             timestamp=datetime.fromisoformat(operation.get("timestamp", datetime.utcnow().isoformat()).replace('Z', '+00:00')) if operation.get("timestamp") else datetime.utcnow()
