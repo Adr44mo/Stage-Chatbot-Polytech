@@ -4,6 +4,7 @@
 // =====================================
 
 import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import useAutoScroll from "../../hooks/useAutoScroll";
 import Spinner from "./Spinner";
 import type { Message } from "../../types/chatTypes";
@@ -55,23 +56,27 @@ export default function ChatMessages({
               {isLastAssistantMsg ? (
                 <Spinner />
               ) : msg.role === "assistant" ? (
+                /* Message de l'assistant */
                 <div className="markdown-container">
-                  <Markdown>{msg.content}</Markdown>
+                  <Markdown remarkPlugins={[remarkGfm]}>{msg.content}</Markdown>
                 </div>
               ) : (
+                /* Message utilisateur */
                 <div className="chat-message-user-content">
                   {msg.content.trimEnd()}
                 </div>
               )}
 
               {/* Affichage des sources pour les messages de l'assistant */}
-              {msg.role === "assistant" && msg.sources && msg.sources.length > 0 && (
-                <div className="chat-message-sources">
-                  <strong>Sources :</strong>
-                  <br />
-                  {renderSources(msg.sources)}
-                </div>
-              )}
+              {msg.role === "assistant" &&
+                msg.sources &&
+                msg.sources.length > 0 && (
+                  <div className="chat-message-sources">
+                    <strong>Sources :</strong>
+                    <br />
+                    {renderSources(msg.sources)}
+                  </div>
+                )}
             </div>
           </div>
         );
