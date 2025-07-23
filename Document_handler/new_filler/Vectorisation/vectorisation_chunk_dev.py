@@ -12,9 +12,12 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
 
 from ..logic.chunck_syll import chunk_syllabus_for_rag
+from ..logic.chunk_docs import adaptive_semantic_chunk
 from ..config import OPENAI_API_KEY, VALID_DIR, PROGRESS_DIR
 
 from color_utils import cp
+from Fastapi.backend.app.llmm import full_clean_and_reload
+
 
 progress_lock = threading.Lock()
 
@@ -161,7 +164,8 @@ def _chunk_raw_docs(raw_docs: list[dict]) -> list[Document]:
             continue
         normalized = _ensure_polytech_structure(doc)
         flat_md = _flatten_metadata({k: v for k, v in normalized.items() if k != "content"})
-        for chunk in splitter.split_text(content):
+        # for chunk in splitter.split_text(content):
+        for chunk in adaptive_semantic_chunk(content, chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP):
             lc_docs.append(Document(page_content=chunk, metadata=flat_md))
     return lc_docs
 
@@ -233,17 +237,37 @@ def build_vectorstore() -> dict:
         # 4) Persist & permissions ----------------------------------------------------
         # db.persist()
         save_progress(100, 100, "2/2 - Sauvegarde vectorstore")
-        _backup_existing_vectorstore()
+
+        # Donne les droits d’écriture sur le nouveau vectorstore
+        _check_write_permissions(_BUILD_DIR)
+        _BUILD_DIR.chmod(0o777)
+        for file in _BUILD_DIR.glob("*"):
+            file.chmod(0o777)
+
+        # Sauvegarde de l'ancien vectorstore
+        #_backup_existing_vectorstore()
+
+        # 🧹 Supprime l'ancien si présent
         if VECTORSTORE_DIR.exists():
-            VECTORSTORE_DIR.rmdir()  # juste un lien/dir vide après backup
+            import shutil
+            shutil.rmtree(VECTORSTORE_DIR, ignore_errors=True)
+
+        # Renomme _BUILD_DIR (nouveau) en VECTORSTORE_DIR (chemin officiel)
         _BUILD_DIR.rename(VECTORSTORE_DIR)
         logging.info("✅ Vectorstore construit et sauvegardé ⟶ %s", VECTORSTORE_DIR)
 
-        # give 777 permissions to the chroma vectorstore directory
+        # Redonne les permissions sur le nouveau dossier (renommé)
         _check_write_permissions(VECTORSTORE_DIR)
-        VECTORSTORE_DIR.chmod(0o777)  # Permissions de lecture, écriture et exécution pour le répertoire
+        VECTORSTORE_DIR.chmod(0o777)
         for file in VECTORSTORE_DIR.glob("*"):
-            file.chmod(0o777)  # Permissions de lecture, écriture et exécution pour tous les utilisateurs
+            file.chmod(0o777)
+
+        # 🧠 ⬇️ Recharge complètement un ChromaDB propre (plus fiable que reload_persist_directory)
+        #full_clean_and_reload(new_path=VECTORSTORE_DIR)
+
+        cp.print_success("Répertoire de persistance rechargé avec succès.")
+        cp.print_debug(f"Persist directory: {VECTORSTORE_DIR}")
+
 
         save_progress(100, 100, "2/2 - Vectorisation terminée")
 
