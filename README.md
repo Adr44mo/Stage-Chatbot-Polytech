@@ -73,6 +73,103 @@ chmod +x start.sh
   <p><em>Processus de traitement des documents avec LangGraph</em></p>
 </div>
 
+```mermaid
+flowchart TD
+    %% Utilisateur
+    USER[👤 Utilisateur]
+    
+    %% Frontend
+    subgraph FRONTEND[🖥️ Frontend - React]
+        CHAT[💬 Interface Chat]
+        ADMIN[⚙️ Administration]
+        STATS[📊 Statistiques]
+        SOURCES_UI[📁 Gestion Sources]
+        SCRAPING_UI[🔍 Interface Scraping]
+    end
+    
+    %% Backend API
+    subgraph BACKEND[🚀 Backend - FastAPI]
+        API[🌐 API Endpoints]
+        RAG_SYSTEM[🧠 Système RAG Intelligent]
+        INTENT[🎯 Analyse d'Intention]
+        ROUTER[🔀 Routage Intelligent]
+        
+        subgraph RAG_STRATEGIES[💡 Stratégies RAG]
+            RAG_GENERAL[📚 RAG Général<br/>Témoignages]
+            RAG_SYLLABUS[📖 Cours Spécifique<br/>Syllabus]
+            RAG_TOC[📋 Vue d'Ensemble<br/>TOC]
+            DIRECT[💭 Réponse Directe]
+        end
+        
+        LLM[🤖 OpenAI GPT-4o-mini]
+        MONITORING[📈 Monitoring & Logs]
+    end
+    
+    %% Gestion des Sources
+    subgraph SOURCES[📂 Gestion des Sources]
+        SCRAPING[🕷️ Scraping Web]
+        PDF_HANDLER[📄 Traitement PDF]
+        DOC_VALIDATION[✅ Validation Documents]
+        VECTORIZATION[🔢 Vectorisation]
+        EMBEDDINGS[🎯 Génération Embeddings]
+        CORPUS_MGMT[📦 Gestion Corpus]
+    end
+    
+    %% Stockage
+    subgraph STORAGE[💾 Stockage]
+        CHROMADB[(🔍 ChromaDB<br/>Embeddings)]
+        SQLITE[(📊 SQLite<br/>Logs & Stats)]
+        FILES[(📁 Fichiers<br/>PDF & JSON)]
+    end
+    
+    %% Connexions principales
+    USER --> FRONTEND
+    FRONTEND --> BACKEND
+    BACKEND --> SOURCES
+    SOURCES --> STORAGE
+    
+    %% Connexions détaillées Frontend
+    CHAT --> API
+    ADMIN --> API
+    STATS --> MONITORING
+    SOURCES_UI --> SCRAPING
+    SCRAPING_UI --> SCRAPING
+    
+    %% Connexions Backend
+    API --> RAG_SYSTEM
+    RAG_SYSTEM --> INTENT
+    INTENT --> ROUTER
+    ROUTER --> RAG_STRATEGIES
+    RAG_STRATEGIES --> LLM
+    RAG_STRATEGIES --> STORAGE
+    LLM --> MONITORING
+    
+    %% Connexions Sources
+    SCRAPING --> DOC_VALIDATION
+    PDF_HANDLER --> DOC_VALIDATION
+    DOC_VALIDATION --> VECTORIZATION
+    VECTORIZATION --> EMBEDDINGS
+    EMBEDDINGS --> CORPUS_MGMT
+    CORPUS_MGMT --> CHROMADB
+    
+    %% Connexions Stockage
+    MONITORING --> SQLITE
+    CORPUS_MGMT --> FILES
+    
+    %% Styles
+    classDef frontend fill:#3498db,stroke:#2980b9,stroke-width:2px,color:#fff
+    classDef backend fill:#e74c3c,stroke:#c0392b,stroke-width:2px,color:#fff
+    classDef sources fill:#f39c12,stroke:#e67e22,stroke-width:2px,color:#fff
+    classDef storage fill:#34495e,stroke:#2c3e50,stroke-width:2px,color:#fff
+    classDef rag fill:#9b59b6,stroke:#8e44ad,stroke-width:2px,color:#fff
+    
+    class FRONTEND,CHAT,ADMIN,STATS,SOURCES_UI,SCRAPING_UI frontend
+    class BACKEND,API,RAG_SYSTEM,INTENT,ROUTER,LLM,MONITORING backend
+    class RAG_GENERAL,RAG_SYLLABUS,RAG_TOC,DIRECT rag
+    class SOURCES,SCRAPING,PDF_HANDLER,DOC_VALIDATION,VECTORIZATION,EMBEDDINGS,CORPUS_MGMT sources
+    class STORAGE,CHROMADB,SQLITE,FILES storage
+```
+
 ## 🛠️ Stack Technique
 
 **Backend** : FastAPI • LangChain • ChromaDB • SQLite • OpenAI • Redis  
