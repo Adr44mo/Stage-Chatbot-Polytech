@@ -12,9 +12,13 @@ import {
   deleteDirectory,
   getDirectoryInfo,
 } from "../../api/corpusApi";
+
 import deleteIcon from "../../assets/delete.svg";
 import editIcon from "../../assets/rename.svg";
-import createFolderIcon from "../../assets/folder.svg";
+import createFolderIcon from "../../assets/folder-create.svg";
+import folderOpenIcon from "../../assets/folder-open.svg";
+import folderCloseIcon from "../../assets/folder-close.svg";
+import fileIcon from "../../assets/file.svg";
 
 /**
  * Interface qui définit tout ce que ce composant reçoit du parent (AdminCorpusFileTree)
@@ -149,16 +153,42 @@ const AdminCorpusTreeNode: React.FC<AdminCorpusTreeNodeProps> = ({
         onDrop={(e) => isFolder && editMode && onDrop(e, node)}
       >
         {/* Icône de dossier ou de fichier */}
+
         {isFolder && (
           <button
             className="admin-corpus-tree-toggle"
             onClick={() => onToggleFolder(node.id)}
+            aria-label={
+              node.isExpanded ? "Fermer le dossier" : "Ouvrir le dossier"
+            }
+            style={{
+              background: "none",
+              border: "none",
+              padding: 0,
+              marginRight: 4,
+            }}
           >
-            {node.isExpanded ? "📂" : "📁"}
+            <img
+              src={node.isExpanded ? folderOpenIcon : folderCloseIcon}
+              alt={node.isExpanded ? "Dossier ouvert" : "Dossier fermé"}
+              width={20}
+              height={20}
+              style={{ verticalAlign: "middle" }}
+            />
           </button>
         )}
 
-        {isFile && <span className="admin-corpus-tree-file-icon">📄</span>}
+        {isFile && (
+          <span className="admin-corpus-tree-file-icon">
+            <img
+              src={fileIcon}
+              alt="Fichier"
+              width={20}
+              height={20}
+              style={{ verticalAlign: "middle" }}
+            />
+          </span>
+        )}
 
         {/* Nom du nœud (fichier/dossier) interactif */}
         <span
