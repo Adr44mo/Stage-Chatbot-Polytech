@@ -235,6 +235,9 @@ def archive_old_pdfs(outdated_filenames, src_dir: Path, archive_dir: Path, pdf_m
 
 def scrape_page(site_config):
 
+    site_name = site_config["NAME"].replace(" ", "_").lower()
+    clear_progress(site_name, "1/2 - Récupération des PDFs")
+
     # Pages visitées et compteur de nouveaux téléchargements
     global visited_pages, new_download_count
 
@@ -277,16 +280,13 @@ def scrape_page(site_config):
     # Liste des pdfs rencontrés lors du scraping
     seen_pdf_filenames = set()
 
-    site_name = site_config["NAME"].replace(" ", "_").lower()
-    clear_progress(site_name)
-
     # Parcours des URLs extraites
     for i, url in enumerate(urls_pages):
 
         # Extraction des pdfs et ajout à l'ensemble des pages visitées
         visited_pages.add(url)
         print(f"[{i+1}/{len(urls_pages)}] {url}")
-        save_progress(site_name, i+1, total_pages)
+        save_progress(site_name, i+1, total_pages, "1/2 - Récupération des PDFs")
         pdfs = extract_pdf(url)
 
         # Téléchargement des PDF extraits
@@ -315,4 +315,6 @@ def scrape_page(site_config):
 
     pdf_map.update(updated_pdf_map)
     save_pdf_map(pdf_map, pdf_map_file)
+
+    clear_progress(site_name, "2/2 - Récupération des pages web")
 

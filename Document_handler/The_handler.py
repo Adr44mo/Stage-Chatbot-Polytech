@@ -1,12 +1,15 @@
 import yaml
 import json
+import time
 import subprocess
+import threading
 from pathlib import Path
 from typing import List, Dict, Optional
 from pydantic import BaseModel
+from datetime import datetime
 
 from fastapi import APIRouter, HTTPException, BackgroundTasks
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 
 from .scraping.scraping_tool.scraping_script import run_scraping_from_configs
 from .scraping.tools.manage_config import generate_config, archive_config
@@ -15,7 +18,13 @@ from .scraping.scraping_tool.src.scraper_utils import count_modified_pages
 from .new_filler.Vectorisation import vectorisation_chunk_dev
 from .new_filler import main as vectorisation_graph_preprocessing
 
+from color_utils import cp
+from Fastapi.backend.app.llmm import reload_persist_directory
+
 router = APIRouter()
+
+# Un verrou pour éviter plusieurs lancements simultanés
+processing_lock = threading.Lock()
 
 SCRAPING_DIR = Path(__file__).resolve().parent / "scraping" / "scraping_tool"
 CONFIG_DIR = SCRAPING_DIR / "config_sites"
@@ -117,7 +126,21 @@ def get_scraping_progress(site_name: str):
             return json.load(f)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur lecture progression : {e}")
+    
+# Pour réinitialiser la progression du scraping
+@router.post("/reset_progress/{site_name}")
+def reset_scraping_progress(site_name: str):
 
+    progress_dir = SCRAPING_DIR / "progress"
+    progress_file = progress_dir / f"{site_name}.json"
+
+    try:
+        with open(progress_file, "w", encoding="utf-8") as f:
+            json.dump({"site": site_name, "current": 0, "total": 1, "status": "1/2 - Récupération des PDFs"}, f)
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur lecture progression : {e}")
+    
     
 @router.post("/add_site")
 def add_site(data: AddSiteInput):
@@ -163,18 +186,65 @@ def run_vectorization():
 
 # Pipeline de traitement et vectorisation
 @router.post("/process_and_vectorize")
-def run_processing_and_vectorizaing():
-    try:
-        processing_res = vectorisation_graph_preprocessing.main()
-        vectorization_res = vectorisation_chunk_dev.build_vectorstore()
-        return {
-            "status": "success",
-            "message": "Traitement et vectorisation terminés.",
-            "processing_result": str(processing_res),
-            "vectorization_result": str(vectorization_res)
-        }
+def run_processing_and_vectorizing(background_tasks: BackgroundTasks):
+
+    def run_full_pipeline():
+        try:
+            cp.print_info("Démarrage du preprocessing...")
+            vectorisation_graph_preprocessing.main()
+            cp.print_success("Preprocessing terminé !")
+            
+            time.sleep(0.5)
+
+            cp.print_info("Démarrage de la vectorisation...")
+            vectorisation_chunk_dev.build_vectorstore()
+            cp.print_success("Vectorisation terminée !")
+
+            cp.print_info("Rechargement du répertoire de persistance...")
+            reload_persist_directory()
+            cp.print_success("Répertoire de persistance rechargé avec succès.")
+            cp.print_debug(f"Persist directory")
+
+        except Exception as e:
+            cp.print_error(f"Erreur dans le pipeline : {e}")
+
+    background_tasks.add_task(run_full_pipeline)
+    return {
+        "status": "started",
+        "message": "Traitement et vectorisation lancés en arrière-plan.",
+    }
+    
+
+# Pour la barre de progression lors de la vectorisation
+@router.get("/vectorization_progress")
+def get_vectorization_progress():
+    progress_file = Path(__file__).resolve().parent / "new_filler" / "progress" / "progress.json"
+
+    if not progress_file.exists():
+        raise HTTPException(status_code=404, detail="Pas de progression en cours pour la vectorisation")
+
+    try: 
+        with open(progress_file, "r", encoding="utf-8") as pf:
+            data = json.load(pf)        
+        return data
+    
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erreur traitement/vectorisation : {e}")
+        raise HTTPException(status_code=500, detail=f"Erreur lecture progression vect : {e}")
+    
+# Pour réinitialiser la progression de la vectorisation
+@router.post("/vectorization_reset_progress")
+def reset_vectorization_progress():
+
+    progress_file = Path(__file__).resolve().parent / "new_filler" / "progress" / "progress.json"
+
+    try:
+        with open(progress_file, "w", encoding="utf-8") as f:
+            json.dump({"current": 0, "total": 1, "status": "1/2 - Traitement des fichiers"}, f)
+            return {"status": "success", "message": "Progression réinitialisée"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur reset progression vect : {e}")
+
 
 
 ##################### TEMPORARY FILE HANDLER #####################

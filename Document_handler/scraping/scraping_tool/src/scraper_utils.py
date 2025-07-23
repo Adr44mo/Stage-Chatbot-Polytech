@@ -255,14 +255,14 @@ def crawl_site(base_url, exclusions, max_urls=100):
     return collected_urls
 
 
-def save_progress(site_name: str, current: int, total: int):
+def save_progress(site_name: str, current: int, total: int, status: str):
     """Sauvegarde l'état d'avancement du scraping dans un fichier JSON"""
     progress_path = PROGRESS_DIR / f"{site_name}.json"
     with open(progress_path, "w", encoding="utf-8") as f:
-        json.dump({"site": site_name, "current": current, "total": total}, f)
+        json.dump({"site": site_name, "current": current, "total": total, "status": status}, f)
 
-def clear_progress(site_name: str):
+def clear_progress(site_name: str, status: str):
     """Supprime le fichier de progression une fois le scraping terminé"""
     progress_path = PROGRESS_DIR / f"{site_name}.json"
-    if progress_path.exists():
-        progress_path.unlink()
+    with open(progress_path, "w", encoding="utf-8") as f:
+        json.dump({"site": site_name, "current": 0, "total": 1, "status": status}, f)

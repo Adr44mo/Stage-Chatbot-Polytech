@@ -301,6 +301,9 @@ def extract_main_content(soup):
 
 def crawl(site_config):
 
+    site_name = site_config["NAME"].replace(" ", "_").lower()
+    clear_progress(site_name, "2/2 - Récupération des pages web")
+
     # Pages visitées et compteur de nouveaux JSON
     global visited_pages, new_json_count
 
@@ -354,16 +357,13 @@ def crawl(site_config):
         except Exception as e:
             print(f"[WARNING] Impossible de lire {filepath} : {e}")
 
-    site_name = site_config["NAME"].replace(" ", "_").lower()
-    clear_progress(site_name)
-
     # Parcours des URLs extraites
     for i, url in enumerate(urls_pages):
 
         visited_pages.add(url)
         print(f"[{i+1}/{len(urls_pages)}] {url}")
 
-        save_progress(site_name, i + 1, total_pages)
+        save_progress(site_name, i + 1, total_pages, "2/2 - Récupération des pages web")
 
         # Requête HTTP pour récupérer le contenu de la page
         try:
@@ -447,8 +447,7 @@ def crawl(site_config):
     if all_urls:
         archive_old_jsons(download_dir, archive_dir, all_urls)
     else:
-        print("[INFO] Archivage désactivé : aucune URL récupérée sur le site (site inaccessible ?)")
-       
+        print("[INFO] Archivage désactivé : aucune URL récupérée sur le site (site inaccessible ?)")       
 
 def crawl_test(url_test):
 
@@ -462,7 +461,6 @@ def crawl_test(url_test):
     # Création du dossier de téléchargement s'il n'existe pas
     download_dir = Path(__file__).parent / "test"
     download_dir.mkdir(parents=True, exist_ok=True)
-
 
     # Requête HTTP pour récupérer le contenu de la page
     try:
