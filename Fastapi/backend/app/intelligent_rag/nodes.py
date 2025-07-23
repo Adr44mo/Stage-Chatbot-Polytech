@@ -387,9 +387,16 @@ def _generate_general_response(state: IntelligentRAGState, docs: List[Any]) -> D
             for msg in state["chat_history"]
         ])
         history_context = f"\n\nHistorique de conversation:\n{history_context}\n"
-    
+
+    # Utiliser la reformulation si disponible
+    reformulated_question = state.get("intent_analysis", {}).get("reformulation")
+    if reformulated_question:
+        question = reformulated_question
+    else:
+        question = state["input_question"]
+
     prompt = get_general_rag_prompt(
-        input_question=state['input_question'],
+        input_question=question,
         context_text=context_text,
         history_context=history_context
     )
