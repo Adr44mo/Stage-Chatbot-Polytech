@@ -6,11 +6,12 @@ import { useState } from "react";
 import AdminCorpus from "../components/Admin/AdminCorpus";
 import AdminScraping from "../components/Admin/AdminScraping";
 import AdminStatistics from "../components/Admin/AdminStatistics";
+import AdminMaintenance from "../components/Admin/AdminMaintenance";
 import AdminLogoutButton from "../components/Admin/AdminLogoutButton";
 
 export default function AdminPage() {
   // État local pour savoir quelle section afficher
-  const [section, setSection] = useState<"corpus" | "scraping" | "statistics">(
+  const [section, setSection] = useState<"corpus" | "scraping" | "statistics" | "maintenance">(
     "corpus"
   );
 
@@ -62,6 +63,20 @@ export default function AdminPage() {
                 Statistiques
               </button>
             </li>
+
+            <li>
+              {/* Section maintenance */}
+              <button
+                className={
+                  section === "maintenance"
+                    ? "admin-sidebar-btn active"
+                    : "admin-sidebar-btn"
+                }
+                onClick={() => setSection("maintenance")}
+              >
+                Maintenance
+              </button>
+            </li>
           </ul>
         </nav>
 
@@ -76,6 +91,7 @@ export default function AdminPage() {
         {section === "corpus" && <AdminCorpus />}
         {section === "scraping" && <AdminScraping />}
         {section === "statistics" && <AdminStatistics />}
+        {section === "maintenance" && <AdminMaintenance />}
       </main>
     </div>
   );

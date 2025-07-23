@@ -9,6 +9,7 @@ export default defineConfig({
       '/auth': 'http://134.157.105.72:8000',
       '/pdf_manual': 'http://134.157.105.72:8000',
       '/scraping': 'http://134.157.105.72:8000',
+      '/intelligent-rag': 'http://134.157.105.72:8000',
     }
   }
 });
