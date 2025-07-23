@@ -178,5 +178,9 @@
   "Enquête_Emploi_2025_version_Diffusable_v02.pdf": {
     "hash": "2e5456dc7e341186112c7ecdc14b60943241765c18a81eb0b1b6a53707e18e82",
     "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/data_sites/polytech_sorbonne/pdf_scrapes/Enquête_Emploi_2025_version_Diffusable_v02.pdf"
+  },
+  "Maquette_PEIPB-25-26.pdf": {
+    "hash": "566edb555e018c3c4272040b287bcf7d5abb6d943923659c6407d3b68fc4d50d",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/data_sites/polytech_sorbonne/pdf_scrapes/Maquette_PEIPB-25-26.pdf"
   }
 }

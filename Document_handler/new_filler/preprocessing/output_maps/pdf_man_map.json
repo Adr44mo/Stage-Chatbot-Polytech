@@ -3,36 +3,92 @@
     "hash": "f1aacc3d2dc4e5456bc7e203679c394790b3522bf2b05dc5b6c0f37a67c1b544",
     "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/reglement_des_etudes.pdf"
   },
-  "rapport_projet_RAG_renamed.pdf": {
-    "hash": "1942e1afa7cdb42f12d22f52c008aaff8eef618f07994b838e3b834d1984a27a",
-    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/admin_move/rapport_projet_RAG_renamed.pdf"
+  "Concours Polytech bac +1.pdf": {
+    "hash": "ce962d6436ec7e66595395511b43743e8f9738ae1a9f4d5dd2c8155a3c435da4",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/Concours Polytech bac +1.pdf"
+  },
+  "charte_bons_comportements.pdf": {
+    "hash": "3be9d83478d21165a4765def6f714bdec74df3672c733d017cfa17eb6692e248",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/charte_bons_comportements.pdf"
+  },
+  "syllabus_ROB.pdf": {
+    "hash": "e1ff660e9906eda613a9b2bcdd9a062afe5063d012798924c9b006a8fb4cb73b",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/ROB/syllabus_ROB.pdf"
+  },
+  "Reglement-Concours-GP-General-2025.pdf": {
+    "hash": "e12ad2914fe7811efc19e49c5a756b5f0feb12a2947a902e508d4633e3d21fa3",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/Reglement-Concours-GP-General-2025.pdf"
+  },
+  "syllabus_AGRAL.pdf": {
+    "hash": "b7dffd6285240856f830aecd8fe092dbdeef8b120e4a54c80412d2737735216c",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/AGRAL/syllabus_AGRAL.pdf"
+  },
+  "syllabus_EI_FISE.pdf": {
+    "hash": "5ebf667ead72d8ed262d4d2c0b7fe4f7c70de41a64f9a9a9c315a641a2bb7557",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/EISE/syllabus_EI_FISE.pdf"
+  },
+  "syllabus_ST.pdf": {
+    "hash": "50669c74a1fd79f081f10422edc9d0f66f196f9a66e00f02be31da53ca785bf9",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/ST/syllabus_ST.pdf"
+  },
+  "specialites_spes.pdf": {
+    "hash": "ad9e23497f9a8a4bc9ba0e2ec09e309334ce8e75ee7414e3259dddd65bae4333",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/specialites_spes.pdf"
+  },
+  "Reglement-Concours-GP-Technol.-2025.pdf": {
+    "hash": "02582c4a39115773434d6739cef970c3ed5cb16a9fd7c2638a8dcf61c23c1943",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/Reglement-Concours-GP-Technol.-2025.pdf"
   },
   "tutoriel_stages.pdf": {
     "hash": "e1c9b59f9d29001d10eaa2ce52503af1a8bfb78ed18bc910289720981c5f054a",
     "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/tutoriel_stages.pdf"
   },
+  "Rapport auto-évaluation CTI version Chatbot.pdf": {
+    "hash": "05bcc8a7de1465424a29e7d9d5ff7c63a75c1461c915f54fec063560a98336a7",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/Rapport auto-évaluation CTI version Chatbot.pdf"
+  },
+  "ECOLES_admettant_bacs_etrangers_2023-2024.pdf": {
+    "hash": "897e4839b525261c35492579a6c8e56d246c128a951660d1c8dad1aaae569faa",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/ECOLES_admettant_bacs_etrangers_2023-2024.pdf"
+  },
+  "admissions_etudiants_etrangers.pdf": {
+    "hash": "7516df056b7376c128d05ee7820e556eb5504be116e9d1460b55b771c9f5f5a1",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/admissions_etudiants_etrangers.pdf"
+  },
   "syllabus_MAIN.pdf": {
     "hash": "2724af30251f597eef099fdbd34f4af474dc2c049f8c89634b705806190f6d16",
     "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/MAIN/syllabus_MAIN.pdf"
   },
-  "reglement_interieur.pdf": {
-    "hash": "d6b41fa0031c776964325f0d6a004652edef11c6e1c8fb566e879aeef017c0a2",
-    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/reglement_interieur.pdf"
-  },
-  "specialites.pdf": {
-    "hash": "1b6c81fbdf7ecce7d18852ac0cb012a46d139d94282d84958e506e3e5422c649",
-    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/specialites.pdf"
+  "syllabus_MTX.pdf": {
+    "hash": "014d041757dc2b35ae43ef09c35dda1e4c198300020017bb943cca87e0cd23e2",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/MTX/syllabus_MTX.pdf"
   },
   "reponses.pdf": {
     "hash": "77417ecf84ff6fc6ce2e7767f648f941c5686cbfbcc1344a863ea2a9c8033dbf",
     "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/reponses.pdf"
   },
-  "charte_bons_comportements.pdf": {
-    "hash": "3be9d83478d21165a4765def6f714bdec74df3672c733d017cfa17eb6692e248",
-    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/MAIN/charte_bons_comportements.pdf"
+  "Associations_clubs.pdf": {
+    "hash": "e96785f56d9df7353d596f4cc6a93fd903e6f63b69babda7be3cf9a93122b4ef",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/Associations_clubs.pdf"
   },
-  "admissions_etudiants_etrangers.pdf": {
-    "hash": "7516df056b7376c128d05ee7820e556eb5504be116e9d1460b55b771c9f5f5a1",
-    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/MAIN/admissions_etudiants_etrangers.pdf"
+  "reglement_interieur.pdf": {
+    "hash": "d6b41fa0031c776964325f0d6a004652edef11c6e1c8fb566e879aeef017c0a2",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/reglement_interieur.pdf"
+  },
+  "syllabus_EI_FISA.pdf": {
+    "hash": "919d45ea915fd6f176997f7ba15ce4564720aaec7baf15731a6bd06f01671d3e",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/EI2I/syllabus_EI_FISA.pdf"
+  },
+  "syllabus_GM.pdf": {
+    "hash": "e2e3845cddae166d7e4dfe80f48b9f4e0406c9f3236927d72f48f6ade093f94c",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/GM/syllabus_GM.pdf"
+  },
+  "livret_étudiant_Polytech_2025-26.pdf": {
+    "hash": "cb0370f7ff4d71e220e802bb9a5f21edd01e69b40475ae2115acf68b219a731e",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/livret_étudiant_Polytech_2025-26.pdf"
+  },
+  "étudiants_référents.pdf": {
+    "hash": "57b27a50c16056dd85e0fa50187234c9aa6e0863d0472c29ad8ae8dcc0e0704c",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/étudiants_référents.pdf"
   }
 }

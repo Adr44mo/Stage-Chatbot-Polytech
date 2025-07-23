@@ -2,6 +2,7 @@ import os
 import json
 import uuid
 import logging
+import threading
 from pathlib import Path
 from datetime import datetime
 
@@ -11,7 +12,29 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
 
 from ..logic.chunck_syll import chunk_syllabus_for_rag
-from ..config import OPENAI_API_KEY, VALID_DIR
+from ..config import OPENAI_API_KEY, VALID_DIR, PROGRESS_DIR
+
+from color_utils import cp
+
+progress_lock = threading.Lock()
+
+def save_progress(current: int, total: int, status: str):
+    """Sauvegarde l'état d'avancement du scraping dans un fichier JSON"""
+    progress_path = PROGRESS_DIR / "progress.json"
+    with progress_lock:
+        with open(progress_path, "w", encoding="utf-8") as f:
+            json.dump({"current": current, "total": total, "status": status}, f)
+            f.flush()
+            os.fsync(f.fileno())
+
+def clear_progress(status: str):
+    """Supprime le fichier de progression une fois le scraping terminé"""
+    progress_path = PROGRESS_DIR / "progress.json"
+    with progress_lock:
+        with open(progress_path, "w", encoding="utf-8") as f:
+            json.dump({"current": 0, "total": 1, "status": status}, f)
+            f.flush()
+            os.fsync(f.fileno())
 
 # ---------------------------------------------------------------------------
 # Config & logging -----------------------------------------------------------
@@ -27,9 +50,9 @@ _BUILD_DIR: Path = VECTORSTORE_DIR.parent / "vectorstore_Syllabus_Construct"  # 
 _BACKUP_DIR: Path = VECTORSTORE_DIR.parent / "vectorstore_backup"  # backups successifs
 
 # Taille des chunks / batchs -------------------------------------------------
-CHUNK_SIZE = 500
-CHUNK_OVERLAP = 50
-BATCH_SIZE = 200  # nombre de Documents par lot lors de l'insertion Chroma
+CHUNK_SIZE = 1000
+CHUNK_OVERLAP = 100
+BATCH_SIZE = 100  # nombre de Documents par lot lors de l'insertion Chroma
 
 # ---------------------------------------------------------------------------
 # Outils utilitaires ---------------------------------------------------------
@@ -161,17 +184,24 @@ def _syllabus_to_lc_docs(syllabus_raw: list[dict]) -> list[Document]:
 
 def build_vectorstore() -> dict:
     """Construit le vectorstore Chroma à partir des JSON + syllabus."""
+
+    save_progress(0, 1, "2/2 - Initialisation vectorisation")
+
     try:
         _ensure_dir(_BUILD_DIR)
         _check_write_permissions(_BUILD_DIR)
 
         # 1) Chargement & conversion -------------------------------------------------
         logging.info("📄 Chargement des documents JSON normalisés…")
+        save_progress(0, 4, "2/2 - Chargement des documents")
+
         raw_docs = _load_json_docs()
         syllabus_raw = _load_syllabus_json_docs()
 
+        save_progress(1, 4, "2/2 - Conversion en chunks")
         lc_docs = _chunk_raw_docs(raw_docs) + _syllabus_to_lc_docs(syllabus_raw)
         logging.info("✅ %s chunks prêts à être vectorisés.", len(lc_docs))
+
         if not lc_docs:
             return {"status": "error", "message": "Aucun document à vectoriser."}
 
@@ -182,6 +212,7 @@ def build_vectorstore() -> dict:
         batches = list(_split_list(lc_docs, BATCH_SIZE))
         first_batch, *rest = batches
 
+        save_progress(2, 4, "2/2 - Création base vectorielle")
         logging.info("💾 Création de la base Chroma (%s docs)…", len(first_batch))
         db = Chroma.from_documents(
             documents=first_batch,
@@ -189,13 +220,19 @@ def build_vectorstore() -> dict:
             persist_directory=str(_BUILD_DIR),
         )
 
+        total_batches = len(batches)
         for i, batch in enumerate(rest, start=2):
-            logging.info("➕ Ajout batch %s/%s (%s docs)…", i, len(batches), len(batch))
+            logging.info("➕ Ajout batch %s/%s (%s docs)…", i, total_batches, len(batch))
             # ids uniques impératifs si on fournit ids → ici on laisse Chroma gérer UUID
             db.add_documents(batch)
 
+            progress_ratio = (i - 1) / (total_batches - 1) if total_batches > 1 else 1
+            current_progress = 3 + progress_ratio
+            save_progress(int(current_progress * 100), 400, f"2/2 - Vectorisation batch {i}/{total_batches}")
+
         # 4) Persist & permissions ----------------------------------------------------
         # db.persist()
+        save_progress(100, 100, "2/2 - Sauvegarde vectorstore")
         _backup_existing_vectorstore()
         if VECTORSTORE_DIR.exists():
             VECTORSTORE_DIR.rmdir()  # juste un lien/dir vide après backup
@@ -207,6 +244,8 @@ def build_vectorstore() -> dict:
         VECTORSTORE_DIR.chmod(0o777)  # Permissions de lecture, écriture et exécution pour le répertoire
         for file in VECTORSTORE_DIR.glob("*"):
             file.chmod(0o777)  # Permissions de lecture, écriture et exécution pour tous les utilisateurs
+
+        save_progress(100, 100, "2/2 - Vectorisation terminée")
 
         return {"status": "success", "message": "Vectorstore sauvegardé avec succès."}
 

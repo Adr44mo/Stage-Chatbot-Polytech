@@ -1,6 +1,6 @@
 // Fonction pour la normalisation de l'affichage de date / heure
 export function formatDateFrench(dateStr: string | null | undefined): string {
-    if (!dateStr) return "-";
+    if (!dateStr) return "";
 
     try {
         const date = new Date(dateStr);

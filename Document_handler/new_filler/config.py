@@ -39,10 +39,13 @@ SCHEMA_PATH = BASE_DIR / "schema" / "polytech_schema.json"
 with open(SCHEMA_PATH, encoding="utf-8") as f:
     SCHEMA = json.load(f)
 
-TEST_DIR = BASE_DIR.parents[1] / "Test" / "Color"
-sys.path.append(str(TEST_DIR))
+# Répertoire des fichiers de progression
+PROGRESS_DIR = Path(__file__).resolve().parent / "progress"
+PROGRESS_DIR.mkdir(exist_ok=True)
 
 
-from colored_print import ColorPrint
+from color_utils import ColorPrint  # Import the ColorPrint class for colored console output
 
-ColorPrint.print_info("Configuration chargée avec succès.")
+cp = ColorPrint()
+
+cp.print_info("Configuration chargée avec succès.")

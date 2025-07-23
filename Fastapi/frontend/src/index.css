@@ -601,6 +601,36 @@ body,
   border-radius: 8px;
 }
 
+/* Style général de la barre */
+.admin-vectorization-progress {
+  margin-left: 20px;
+  height: 10px;
+  min-width: 100px;
+  max-width: 400px;
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  border-color: #c0c0c0;
+  border-radius: 8px;
+  background-color: #e0e6ed; /* important pour webkit */
+  overflow: hidden;
+}
+/* Pour Chrome, Edge, Safari */
+.admin-vectorization-progress::-webkit-progress-bar {
+  background-color: #e0e6ed;
+  border-radius: 8px;
+}
+/* Barre de progression (valeur) */
+.admin-vectorization-progress::-webkit-progress-value {
+  background-color: #007bff;
+  border-radius: 8px;
+}
+/* Pour Firefox */
+.admin-vectorization-progress::-moz-progress-bar {
+  background-color: #007bff;
+  border-radius: 8px;
+}
+
 /* ====================================================================
    Styles pour les options avancées de scarping (AdminScrapingSettings)
    ==================================================================== */
@@ -695,21 +725,18 @@ body,
 .admin-scraping-btn[type="submit"]:hover {
   background: #0056b3;
 }
-
 .admin-scraping-actions {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  align-items: center;
   gap: 16px;
   margin-top: 24px;
-  flex-wrap: wrap;
 }
-
 .admin-scraping-actions .admin-scraping-launch-btn {
   flex: 1;
   text-align: center;
   min-width: 180px;
-  max-width: 400px;
+  max-width: 300px;
 }
 
 /* ==================================================
@@ -1190,7 +1217,3 @@ body,
     padding: 1rem;
   }
 }
-
-/* ===================================
-   Page Chatbot avec overlay reCAPTCHA (ChatbotPage)
-   =================================== */

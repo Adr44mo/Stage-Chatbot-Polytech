@@ -108,7 +108,7 @@
     "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/data_sites/polytech_sorbonne/json_scrapes/enquetes_emploi_polytech_sorbonne_enquetes-emploi-0.json"
   },
   "cycle_preparatoire_peip_b.json": {
-    "hash": "72d71b5c4a5993bcd0c52f1be692967a51f8f8a36af14195555c34fac4cd9900",
+    "hash": "89704a3f0c04f6b2626730166eb33ebb43b8a9e677b46fd2cfb4f8393f222580",
     "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/data_sites/polytech_sorbonne/json_scrapes/cycle_preparatoire_peip_b.json"
   },
   "taxe_d_apprentissage_polytech_sorbonne.json": {
@@ -148,7 +148,7 @@
     "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/data_sites/polytech_sorbonne/json_scrapes/temoignages_node_493.json"
   },
   "polytech_sorbonne_ecole_d_ingenieurs_de_sorbonne_universite.json": {
-    "hash": "a8201b441e98b14cf261fd1ce61c1859025249fcfd4baa2432afdc3c9b4a89a6",
+    "hash": "468b7bee534aef5e1dd4c8efc8ca34ee1cb183125f7364d21d96ef22d988a1af",
     "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/data_sites/polytech_sorbonne/json_scrapes/polytech_sorbonne_ecole_d_ingenieurs_de_sorbonne_universite.json"
   },
   "materiaux_mtx.json": {
