@@ -110,6 +110,27 @@ def create_rag_chain(db):
     )
 
     return create_retrieval_chain(history_aware_retriever, question_answer_chain)
+
+def reload_persist_directory(new_directory = Path(__file__).parent.parent.parent.parent / "Document_handler" / "new_filler" / "Vectorisation" / "vectorstore_Syllabus"):
+    """
+    Reload the persist directory and reinitialize the ChromaDB client.
+    
+    Args:
+        new_directory (str): The new directory path for the vectorstore.
+    """
+    global persist_directory, persistent_client, db
+    persist_directory = Path(new_directory)
+    cp.print_info(f"Reloading persist directory: {persist_directory}")
+    
+    # Reinitialize the persistent client and ChromaDB
+    persistent_client = chromadb.PersistentClient(path=str(persist_directory))
+    db = Chroma(
+        client=persistent_client,
+        collection_name=LANGCHAIN_DEFAULT_COLLECTION_NAME,
+        embedding_function=embeddings
+    )
+    cp.print_info(f"ChromaDB collection Name: {db._LANGCHAIN_DEFAULT_COLLECTION_NAME}, with collection count {db._collection.count()}")  # Print the collection name and count using colored output
+
 #####################################################################################################
 # This script sets up a Retrieval-Augmented Generation (RAG) system using Langchain and ChromaDB.   #
 # The __name__ == "__main__" is used uniquely for the test purpose of the SecondSol project.        #
