@@ -14,6 +14,10 @@ Document_handler/Corpus/*/*
 
 node_modules
 
+Document_handler/scraping/logs/
+Document_handler/scraping/scraping_tool/progress/
+Document_handler/scraping/scraping_tool/config_sites/
+
 Document_handler/new_filler/Vectorisation/vectorstore/
 Document_handler/new_filler/Vectorisation/vectorstore_Syllabus/
 Document_handler/new_filler/Vectorisation/vectorstore_Syllabus_Construct/
