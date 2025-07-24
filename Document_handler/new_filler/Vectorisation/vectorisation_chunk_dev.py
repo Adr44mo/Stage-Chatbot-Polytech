@@ -16,8 +16,7 @@ from ..logic.chunk_docs import adaptive_semantic_chunk
 from ..config import OPENAI_API_KEY, VALID_DIR, PROGRESS_DIR
 
 from color_utils import cp
-from Fastapi.backend.app.llmm import full_clean_and_reload
-
+from Fastapi.backend.app.llmm import clean_and_reload_vectorstore
 
 progress_lock = threading.Lock()
 
@@ -244,13 +243,7 @@ def build_vectorstore() -> dict:
         for file in _BUILD_DIR.glob("*"):
             file.chmod(0o777)
 
-        # Sauvegarde de l'ancien vectorstore
-        #_backup_existing_vectorstore()
-
-        # 🧹 Supprime l'ancien si présent
-        if VECTORSTORE_DIR.exists():
-            import shutil
-            shutil.rmtree(VECTORSTORE_DIR, ignore_errors=True)
+        _backup_existing_vectorstore()
 
         # Renomme _BUILD_DIR (nouveau) en VECTORSTORE_DIR (chemin officiel)
         _BUILD_DIR.rename(VECTORSTORE_DIR)
@@ -261,9 +254,6 @@ def build_vectorstore() -> dict:
         VECTORSTORE_DIR.chmod(0o777)
         for file in VECTORSTORE_DIR.glob("*"):
             file.chmod(0o777)
-
-        # 🧠 ⬇️ Recharge complètement un ChromaDB propre (plus fiable que reload_persist_directory)
-        #full_clean_and_reload(new_path=VECTORSTORE_DIR)
 
         cp.print_success("Répertoire de persistance rechargé avec succès.")
         cp.print_debug(f"Persist directory: {VECTORSTORE_DIR}")
