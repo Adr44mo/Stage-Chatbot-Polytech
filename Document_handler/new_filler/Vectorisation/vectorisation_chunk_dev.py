@@ -12,11 +12,12 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
 
 from ..logic.chunck_syll import chunk_syllabus_for_rag
-from ..logic.chunk_docs import adaptive_semantic_chunk
+# from ..logic.chunk_docs import adaptive_semantic_chunk
+from ..logic.chunk_docs_sem import adaptive_semantic_chunk
 from ..config import OPENAI_API_KEY, VALID_DIR, PROGRESS_DIR
 
 from color_utils import cp
-from Fastapi.backend.app.llmm import clean_and_reload_vectorstore
+from Fastapi.backend.app import llmm
 
 progress_lock = threading.Lock()
 
@@ -207,6 +208,11 @@ def build_vectorstore() -> dict:
 
         if not lc_docs:
             return {"status": "error", "message": "Aucun document à vectoriser."}
+        
+        _check_write_permissions(_BUILD_DIR)
+        _BUILD_DIR.chmod(0o777)
+        for file in _BUILD_DIR.glob("*"):
+            file.chmod(0o777)
 
         # 2) EmbeddingFunction unique (une seule instance) ---------------------------
         embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
@@ -235,6 +241,7 @@ def build_vectorstore() -> dict:
 
         # 4) Persist & permissions ----------------------------------------------------
         # db.persist()
+        llmm.db = db
         save_progress(100, 100, "2/2 - Sauvegarde vectorstore")
 
         # Donne les droits d’écriture sur le nouveau vectorstore

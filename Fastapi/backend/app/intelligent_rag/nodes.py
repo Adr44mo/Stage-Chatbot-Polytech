@@ -5,7 +5,8 @@ Intelligent RAG System - Core Nodes
 import json
 from typing import Dict, Any, List
 from langchain_core.messages import HumanMessage
-from ..llmm import llm, db, initialize_the_rag_chain
+from ..llmm import llm, initialize_the_rag_chain
+from ...app import llmm
 from ..chat import get_sources
 from .state import IntelligentRAGState, IntentType, SpecialityType, IntentAnalysisResult
 from .openai_tracker import track_openai_call_manual, get_tokens_from_response
@@ -222,7 +223,7 @@ def _retrieve_speciality_overview_docs(state: IntelligentRAGState) -> List[Any]:
         cp.print_info(f"[Retrieval] Recherche TOC pour spécialité: {speciality}")
         
         # Récupérer TOUS les documents de la collection
-        collection = db.get()
+        collection = llmm.db.get()
         all_docs = []
         
         # Reconstruire les documents avec leurs métadonnées
@@ -266,7 +267,7 @@ def _retrieve_speciality_overview_docs(state: IntelligentRAGState) -> List[Any]:
             cp.print_warning(f"[Retrieval] Seulement {len(filtered_docs)} docs TOC trouvés, recherche complémentaire...")
             
             # Recherche par similarité comme backup MAIS toujours avec les critères TOC
-            similarity_docs = db.similarity_search(question, k=15)
+            similarity_docs = llmm.db.similarity_search(question, k=15)
             
             for doc in similarity_docs:
                 if doc not in filtered_docs:
@@ -534,7 +535,8 @@ def _retrieve_general_docs(state: IntelligentRAGState) -> List[Any]:
     
     try:
         # Recherche standard avec similarité
-        docs = db.similarity_search(question, k=12)
+        docs = llmm.db.similarity_search(question, k=12)
+        cp.print_debug(f"[Retrieval] taille des docs {llmm.db._collection.count()}")
         return docs[:8]  # Garder les 8 meilleurs documents
         
     except Exception as e:

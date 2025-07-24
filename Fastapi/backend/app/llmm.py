@@ -15,6 +15,10 @@ from langchain.chains.combine_documents import create_stuff_documents_chain  # I
 
 from pathlib import Path
 import sys
+
+import gc
+from chromadb.config import Settings
+
 # Add the directory containing promptt.py to the Python path
 # This assumes promptt.py is in the same directory as this file
 sys.path.append(str(Path(__file__).parent))
@@ -111,25 +115,72 @@ def create_rag_chain(db):
 
     return create_retrieval_chain(history_aware_retriever, question_answer_chain)
 
-def reload_persist_directory(new_directory = Path(__file__).parent.parent.parent.parent / "Document_handler" / "new_filler" / "Vectorisation" / "vectorstore_Syllabus"):
+def clean_and_reload_vectorstore(active_directory: str, new_directory: str, collection_name=LANGCHAIN_DEFAULT_COLLECTION_NAME):
     """
-    Reload the persist directory and reinitialize the ChromaDB client.
+    Libère proprement l'ancien vectorstore et recharge le nouveau dans ChromaDB.
     
     Args:
-        new_directory (str): The new directory path for the vectorstore.
+        active_directory (str): Le chemin actuel utilisé par ChromaDB.
+        new_directory (str): Le nouveau répertoire contenant le vectorstore.
+        collection_name (str): Nom de la collection Chroma à recharger.
     """
-    global persist_directory, persistent_client, db
-    persist_directory = Path(new_directory)
-    cp.print_info(f"Reloading persist directory: {persist_directory}")
-    
-    # Reinitialize the persistent client and ChromaDB
-    persistent_client = chromadb.PersistentClient(path=str(persist_directory))
+    global persistent_client, db, persist_directory
+
+    active_path = Path(active_directory).resolve()
+    new_path = Path(new_directory).resolve()
+
+    cp.print_info(f" Switching from: {active_path} → {new_path}")
+
+    # ⚠️ Fermer proprement le client si possible
+    try:
+        if persistent_client:
+            persistent_client.reset()
+            cp.print_info("🧹 Persistent client reset done.")
+    except Exception as e:
+        cp.print_warning(f"Client reset failed: {e}")
+
+    try:
+        del persistent_client
+    except:
+        cp.print_warning("Failed to delete persistent_client, it might not exist.")
+        pass
+
+    try:
+        del db
+    except:
+        cp.print_warning("Failed to delete db, it might not exist.")
+        pass
+
+    gc.collect()
+
+    # 🗑️ Supprimer l'ancien dossier si nécessaire (optionnel)
+    # if active_path.exists() and active_path != new_path:
+    #     cp.print_info(f"🔥 Deleting old vectorstore directory: {active_path}")
+    #     shutil.rmtree(active_path, ignore_errors=True)
+
+    # ✅ Recharger le nouveau
+    cp.print_info(f"🚀 Loading new vectorstore from: {new_path}")
+
+    persist_directory = new_path
+    try:
+        persistent_client = chromadb.PersistentClient(
+            path=str(persist_directory),
+            settings=Settings(allow_reset=True)  # permet le reset futur
+        )
+    except ValueError as e:
+        cp.print_error(f"[Chroma] Impossible de ré-instancier PersistentClient: {e}")
+        cp.print_error("Redémarre le process Python pour libérer l'ancienne instance Chroma.")
+        return
+
+    embeddings = OpenAIEmbeddings()
     db = Chroma(
         client=persistent_client,
-        collection_name=LANGCHAIN_DEFAULT_COLLECTION_NAME,
+        collection_name=collection_name,
         embedding_function=embeddings
     )
-    cp.print_info(f"ChromaDB collection Name: {db._LANGCHAIN_DEFAULT_COLLECTION_NAME}, with collection count {db._collection.count()}")  # Print the collection name and count using colored output
+
+    cp.print_info(f" ✅ Loaded ChromaDB collection: {collection_name}, with {db._collection.count()} documents.")
+
 
 #####################################################################################################
 # This script sets up a Retrieval-Augmented Generation (RAG) system using Langchain and ChromaDB.   #
