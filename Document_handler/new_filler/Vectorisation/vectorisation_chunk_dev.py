@@ -12,8 +12,6 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
 
 from ..logic.chunck_syll import chunk_syllabus_for_rag
-# from ..logic.chunk_docs import adaptive_semantic_chunk
-from ..logic.chunk_docs_sem import adaptive_semantic_chunk
 from ..config import OPENAI_API_KEY, VALID_DIR, PROGRESS_DIR
 
 from color_utils import cp
@@ -164,8 +162,7 @@ def _chunk_raw_docs(raw_docs: list[dict]) -> list[Document]:
             continue
         normalized = _ensure_polytech_structure(doc)
         flat_md = _flatten_metadata({k: v for k, v in normalized.items() if k != "content"})
-        # for chunk in splitter.split_text(content):
-        for chunk in adaptive_semantic_chunk(content, chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP):
+        for chunk in splitter.split_text(content):
             lc_docs.append(Document(page_content=chunk, metadata=flat_md))
     return lc_docs
 
