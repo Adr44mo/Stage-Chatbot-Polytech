@@ -33,7 +33,10 @@ from .app.database.models import ChatRequest, ChatResponse
 from .app.auth.dependencies import get_current_admin_from_cookie
 #from .app.intelligent_rag.api import router as intelligent_rag_router
 from .app.database.db_routes import router as db_router
+from .app.database.automated_tasks import AutomatedMaintenanceService
 from .app.database.db_update_stat import update_rag_conversation
+from .app.database.stats_routes import router as stats_router
+from .app.database.maintenance_routes import router as maintenance_router
 
 # ==============================
 # Configuration des systèmes RAG
@@ -93,7 +96,7 @@ def session_id_key(request: Request):
 # Configuration CORS (Cross-Origin Resource Sharing)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  #TODO: En production, restreindre à ton domaine
+    allow_origins=["http://134.157.105.72", "http://localhost:5173", "http://localhost:3000", "polybot"],  # Domaines spécifiques
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -107,14 +110,28 @@ app.include_router(router_scrapping, prefix="/scraping", tags=["Scraping"], depe
 app.include_router(pdf_manual_router, prefix="/pdf_manual", tags=["PDF Manual"], dependencies=[Depends(get_current_admin_from_cookie)])
 #app.include_router(intelligent_rag_router)  # Nouveau système RAG intelligent
 app.include_router(db_router, dependencies=[Depends(get_current_admin_from_cookie)])  # Routes pour la base de données RAG
+app.include_router(stats_router, dependencies=[Depends(get_current_admin_from_cookie)])  # Routes pour les statistiques
+app.include_router(maintenance_router, dependencies=[Depends(get_current_admin_from_cookie)])  # Routes pour la maintenance
+
 
 # Initialisation de la base de données au démarrage
+maintenance_service = AutomatedMaintenanceService()
+
 @app.on_event("startup")
 def on_startup():
     create_db_and_tables()
-    # Initialiser la base de données unifiée (tables RAG)
-    from .app.database.database import unified_database
-    # L'initialisation RAG se fait automatiquement dans le constructeur
+    cp.print_success("[Startup] Base de données initialisée")
+
+    # Démarrer le service de maintenance automatique
+    # maintenance_service.start_background_service()
+    # cp.print_success("[Startup] Service de maintenance automatique démarré")
+
+# Nettoyage à l'arrêt de l'application
+@app.on_event("shutdown")
+def on_shutdown():
+    # maintenance_service.stop_background_service()
+    # cp.print_info("[Shutdown] Service de maintenance arrêté")
+    pass
 
 # Initialisation de la chaîne RAG
 rag_chain = initialize_the_rag_chain()
@@ -126,7 +143,7 @@ rag_chain = initialize_the_rag_chain()
 @app.get("/init-session")
 def init_session(response: Response, polybot_session_id: str = Cookie(None)):
     if polybot_session_id:
-        return {"ok": True}
+        return {"ok": True, "session_id": polybot_session_id}
     session_id = str(uuid.uuid4())
     expire_date = datetime.utcnow() + timedelta(days=180)
     response.set_cookie(
@@ -136,9 +153,11 @@ def init_session(response: Response, polybot_session_id: str = Cookie(None)):
         max_age=60*60*24*180,  # 6 mois
         expires=expire_date.strftime("%a, %d-%b-%Y %H:%M:%S GMT"),
         samesite="lax",
-        secure=False  #TODO: Passer à True si HTTPS
+        secure=False,  # TODO: Passer à True si HTTPS
+        path="/",      # Important pour les iframes
+        domain=None    # Utilise le domaine actuel
     )
-    return {"ok": True}
+    return {"ok": True, "session_id": session_id}
 
 # ==========================
 # Endpoint principal : /chat

@@ -5,7 +5,7 @@
 import type { Message, ChatRequest, ChatResponse } from "../types/chatTypes";
 
 /* URL de l'API backend */
-const API_URL = import.meta.env.VITE_BACKEND_URL;
+const API_URL = import.meta.env.VITE_BACKEND_URL || "/api";
 
 /* Vérifie la présence du cookie de session */
 export function hasSessionCookie() {

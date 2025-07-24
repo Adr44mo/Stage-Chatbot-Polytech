@@ -31,8 +31,15 @@ else
   exit 1
 fi
 
-echo "🔁 Reloading Nginx..."
-sudo ./Fastapi/nginx -t && sudo systemctl reload nginx
+echo "🔁 Configuring Nginx with custom config..."
+# Tester la config personnalisée
+sudo nginx -t -c /srv/partage/Stage-Chatbot-Polytech/Fastapi/nginx/nginx.conf
+
+# Stopper nginx pour éviter les conflits
+sudo systemctl stop nginx
+
+# Lancer nginx avec notre config personnalisée
+sudo nginx -c /srv/partage/Stage-Chatbot-Polytech/Fastapi/nginx/nginx.conf
 
 # Start the FastAPI backend
 uvicorn Fastapi.backend.main:app --host 0.0.0.0 --port 8000 --reload &

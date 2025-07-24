@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: true,
+    hmr: { host: 'polybot' },
     proxy: {
       '/files': 'http://134.157.105.72:8000',
       '/auth': 'http://134.157.105.72:8000',
