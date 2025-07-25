@@ -51,8 +51,8 @@ _BUILD_DIR: Path = VECTORSTORE_DIR.parent / "vectorstore_Syllabus_Construct"  # 
 _BACKUP_DIR: Path = VECTORSTORE_DIR.parent / "vectorstore_backup"  # backups successifs
 
 # Taille des chunks / batchs -------------------------------------------------
-CHUNK_SIZE = 1000
-CHUNK_OVERLAP = 100
+CHUNK_SIZE = 1500
+CHUNK_OVERLAP = 150
 BATCH_SIZE = 100  # nombre de Documents par lot lors de l'insertion Chroma
 
 # ---------------------------------------------------------------------------
