@@ -4,9 +4,11 @@
 
 # Imports de librairies
 import time
+import json
 from pathlib import Path
 from datetime import datetime, timezone
 from ruamel.yaml import YAML
+from color_utils import cp
 
 # Imports des modules de scrap
 from .src import module_scrap_pdf, module_scrap_json
@@ -56,6 +58,98 @@ def update_date_config(config_path):
     
     except Exception as e:
         print(f"[ERREUR] Impossible de mettre à jour {config_path} : {e}")
+
+# -------------------------------------------------------------------
+# Sauvegarde les statistiques de scraping dans un fichier JSON global
+# -------------------------------------------------------------------
+
+def save_scraping_summary(site_name, pdf_pages, pdf_count, json_pages, json_count):
+
+    # Fichier de log résumé pour l'affichage dans le front
+    summary_data = {
+        "siteName": site_name,
+        "scrapingDate": datetime.now().isoformat(),
+        "pdfStats": {
+            "pagesVisited": pdf_pages,
+            "newDownloads": pdf_count
+        },
+        "jsonStats": {
+            "pagesVisited": json_pages,
+            "newDownloads": json_count
+        },
+        "totalNewDocuments": pdf_count + json_count
+    }
+
+    # Charger les résumés existants ou créer un nouveau dictionnaire
+    summary_file = LOG_DIR / "log_summary.json"
+    if summary_file.exists():
+        try:
+            with open(summary_file, "r", encoding="utf-8") as f:
+                all_summaries = json.load(f)
+        except (json.JSONDecodeError, FileNotFoundError):
+            all_summaries = {}
+    else:
+        all_summaries = {}
+
+    # Ajouter ce scraping
+    all_summaries[site_name] = summary_data
+
+    # Sauvegarder avec gestion d'erreur
+    try:
+        with open(summary_file, "w", encoding="utf-8") as f:
+            json.dump(all_summaries, f, indent=4, ensure_ascii=False)
+    except Exception as e:
+        print(f"[ERREUR] Impossible de sauvegarder {summary_file} : {e}")
+
+# -----------------------------------------------
+# Statistiques globales de la session de scraping
+# -----------------------------------------------
+
+def create_session_summary(scraped_sites):
+
+    summary_file = LOG_DIR / "log_summary.json"
+    if not summary_file.exists():
+        return {
+            "scrapingDate": datetime.now().isoformat(),
+            "sitesScraped": scraped_sites,
+            "totalNewDocuments": 0,
+            "detailsBySite": {}
+        }
+    
+    try:
+        with open(summary_file, "r", encoding="utf-8") as f:
+            all_summaries = json.load(f)
+    except (json.JSONDecodeError, FileNotFoundError):
+        all_summaries = {}
+
+    total_docs = 0
+    details_by_site = {}
+
+    for site_name in scraped_sites:
+        if site_name in all_summaries:
+            site_total = all_summaries[site_name]["totalNewDocuments"]
+            details_by_site[site_name] = site_total
+            total_docs += site_total
+        else :
+            details_by_site[site_name] = 0
+
+    session_summary = {
+        "scrapingDate": datetime.now().isoformat(),
+        "sitesScraped": scraped_sites,
+        "totalNewDocuments": total_docs,
+        "detailsBySite": details_by_site
+    }
+
+    # Sauvegarder le résumé de session
+    session_file = LOG_DIR / "last_scraping_session.json"
+    try:
+        with open(session_file, "w", encoding="utf-8") as f:
+            json.dump(session_summary, f, indent=4, ensure_ascii=False)
+        cp.print_info(f"Résumé de session sauvegardé dans {session_file.name}")
+    except Exception as e:
+        cp.print_error(f"Impossible de sauvegarder le résumé de session : {e}")
+
+    return session_summary
 
 # -------------------------------------------------
 # Affichage du menu pour le choix du site à scraper
@@ -186,6 +280,8 @@ def scrap(site, config_path):
         log_file.write("\n\nAttention : parfois, les fichiers téléchargés/mis à jour le sont par précaution et non pas parce qu'ils sont nouveaux. \n\n")
         log_file.write("==========================================================\n")
 
+    save_scraping_summary(site_name, pdf_pages, pdf_count, json_pages, json_count)
+
 
     # Enregistrement du log dans le dossier parent
     print("\n✅ log_scraping.txt enregistré avec succès dans le dossier parent ! \n")
@@ -224,10 +320,15 @@ def main():
 
 
 def run_scraping_from_configs(config_files: list[str]):
+    scraped_sites = []
+
     for config_file in config_files:
         config_path = CONFIG_DIR / config_file
         site = load_yaml(config_path)
         scrap(site, config_path)
+        scraped_sites.append(site["NAME"])
+
+    return create_session_summary(scraped_sites)
    
 
 # --------------------------------------------------------

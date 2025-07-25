@@ -24,6 +24,13 @@ export interface ProgressInfo {
 	status: string;
 }
 
+export interface ScrapingSummary {
+    scrapingSite: string;
+    sitesScraped: string[];
+    totalNewDocuments : number;
+    detailsBySite: { [siteName: string]: number };
+}
+
 export interface ApiResponse {
     status: string;
     message: string;
@@ -138,6 +145,17 @@ export const resetScrapingProgress = async (siteNames: string[]): Promise<void> 
     });
 
     await Promise.all(resetPromises);
+};
+
+export const fetchLastScrapingSummary = async (): Promise<ScrapingSummary> => {
+    const response = await fetch("/scraping/scraping_session_summary");
+
+    if (response.status === 404) {
+        throw new Error("Aucun résumé de scraping disponible");
+    }
+
+    await handleApiResponse(response);
+    return response.json();
 };
 
 

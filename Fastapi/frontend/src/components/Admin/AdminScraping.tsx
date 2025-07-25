@@ -10,7 +10,7 @@ import type { SiteInfo, ProgressInfo } from "../../api/scrapingApi";
 import { 
 	fetchSiteInfos, fetchSiteNewDocs,
 	addSite as apiAddSite, suppSite as apiSuppSite,
-	runScraping, resetScrapingProgress, fetchScrapingProgress,
+	runScraping, resetScrapingProgress, fetchScrapingProgress, fetchLastScrapingSummary,
 	runProcessingAndVectorization, resetVectorizationProgress, fetchVectorizationProgress 
 } from "../../api/scrapingApi";
 import { formatDateFrench } from "../../utils/scrapingUtils";
@@ -117,6 +117,26 @@ export default function AdminScraping() {
 		return () => clearInterval(interval);
 	}, [isVectorizing]);
 
+	// Fonction utilitaire pour afficher le résumé de scraping
+	const showScrapingSummary = useCallback(async () => {
+		try {
+			const summary = await fetchLastScrapingSummary();
+			const message = `Scraping terminé avec succès !\n\n` +
+				`Résumé :\n` +
+				`- Sites scrappés : ${summary.sitesScraped.join(", ")}\n` +
+				`- Total nouveaux documents : ${summary.totalNewDocuments}\n\n` +
+				`Détails par site :\n` +
+				Object.entries(summary.detailsBySite)
+					.map(([site, count]) => `- ${site} : ${count} nouveau${count > 1 ? "x" : ""} document${count > 1 ? "s" : ""}`)
+					.join("\n");
+
+			alert(message);
+		} catch (err) {
+			console.warn("Impossible de récupérer le résumé de scraping :", err);
+			alert("Scraping terminé avec succès !");
+		}
+	}, []);
+
 	// Gestionnaires d'événements
 	const handleCheckbox = useCallback((id: number) => {
 		setSelectedSites(prev => 
@@ -140,17 +160,20 @@ export default function AdminScraping() {
 			const result = await runScraping(selectedSiteNames);
 			console.log("[✅ Scraping lancé] :", result.message);
 
+			await loadSites(); // Recharge les sites après scraping
 			await updateSitesWithNewDocs();
 			await resetScrapingProgress(selectedSiteNames);
-			alert("Scraping terminé avec succès !");
+			await showScrapingSummary();
 			
 		} catch (err: any) {
 			console.error("Erreur scraping :", err.message);
 			alert("Erreur lors du scraping : " + err.message);
 		} finally {
 			setIsScraping(false);
+			setProgress({}); // Réinitialise la progression
+			setSelectedSites([]); // Réinitialise la sélection
 		}
-	}, [sites, selectedSites, updateSitesWithNewDocs]);
+	}, [sites, selectedSites, updateSitesWithNewDocs, showScrapingSummary]);
 
 	const handleVectorization = useCallback(async () => {
 		try {

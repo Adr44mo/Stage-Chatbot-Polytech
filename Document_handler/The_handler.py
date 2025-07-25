@@ -19,7 +19,7 @@ from .new_filler.Vectorisation import vectorisation_chunk_dev
 from .new_filler import main as vectorisation_graph_preprocessing
 
 from color_utils import cp
-from Fastapi.backend.app.llmm import reload_persist_directory
+
 
 router = APIRouter()
 
@@ -199,14 +199,13 @@ def run_processing_and_vectorizing(background_tasks: BackgroundTasks):
             cp.print_info("Démarrage de la vectorisation...")
             vectorisation_chunk_dev.build_vectorstore()
             cp.print_success("Vectorisation terminée !")
-
-            cp.print_info("Rechargement du répertoire de persistance...")
-            reload_persist_directory()
-            cp.print_success("Répertoire de persistance rechargé avec succès.")
-            cp.print_debug(f"Persist directory")
-
         except Exception as e:
             cp.print_error(f"Erreur dans le pipeline : {e}")
+        finally:
+            import os
+            # On met a jour la base chromadb avec les nouveaux fichiers
+            cp.print_info("Redémarrage automatique du backend...")
+            #os._exit(0)
 
     background_tasks.add_task(run_full_pipeline)
     return {
@@ -244,7 +243,23 @@ def reset_vectorization_progress():
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur reset progression vect : {e}")
+    
 
+# Pour récupérer le résumé du scraping
+@router.get("/scraping_session_summary")
+def get_last_scraping_session_summary():
+
+    session_file = LOG_DIR / "last_scraping_session.json"
+
+    if not session_file.exists():
+        raise HTTPException(status_code=404, detail="Aucun résumé de scraping trouvé")
+    
+    try:
+        with open(session_file, "r", encoding="utf-8") as f:
+            summary = json.load(f)
+        return summary
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur lecture résumé scraping : {e}")
 
 
 ##################### TEMPORARY FILE HANDLER #####################
