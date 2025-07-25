@@ -124,43 +124,6 @@ def get_corpus_tree(path: str = ""):
     return {"tree": build_tree(current_path, path)}
 
 
-# @router.get("/admin/list-dirs")
-# def list_dirs():
-#     """
-#     Retourne la liste des répertoires dans le corpus PDF.
-#     """
-#     return {"directories": [d.name for d in PDF_MANUAL_DIR.iterdir() if d.is_dir()]}
-
-
-# @router.get("/admin/list-files/{dir}")
-# def list_files(dir: str):
-#     """
-#     Retourne la liste des fichiers PDF dans un répertoire spécifique.
-#     """
-#     if not is_safe_path(dir):
-#         raise HTTPException(status_code=400, detail="Invalid path")
-    
-#     target_dir = PDF_MANUAL_DIR / dir
-#     if not target_dir.exists() or not target_dir.is_dir():
-#         return {"error": "Directory does not exist"}
-
-#     files = []
-#     for file_path in target_dir.iterdir():
-#         if file_path.is_file() and file_path.suffix.lower() == ".pdf":
-#             stat = file_path.stat()
-#             created_time = datetime.fromtimestamp(stat.st_ctime).strftime("%Y-%m-%d")
-#             modified_time = datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d")
-            
-#             files.append({
-#                 "name": file_path.name,
-#                 "date_added": created_time,
-#                 "date_modified": modified_time,
-#                 "size": stat.st_size
-#             })
-    
-#     return {"files": files}
-
-
 @router.get("/admin/list-all-files")
 def list_all_files():
     """
@@ -280,16 +243,59 @@ def upload_files(files: List[UploadFile] = File(...), dir: str = Form(...)):
     target_dir.mkdir(parents=True, exist_ok=True)
 
     saved_files = []
+    failed_files = []
+    
     for file in files:
-        if not file.filename.endswith(".pdf"):
+        try:
+            if not file.filename.endswith(".pdf"):
+                failed_files.append(f"{file.filename}: Non-PDF file")
+                continue
+
+            # On vérifie la taille du fichier (limite à 100MB)
+            file.file.seek(0, 2)  # Aller à la fin du fichier
+            file_size = file.file.tell()
+            file.file.seek(0)  # Retourner au début
+            
+            if file_size > 100 * 1024 * 1024:  # 100MB
+                failed_files.append(f"{file.filename}: File too large (max 100MB)")
+                continue
+
+            file_path = target_dir / file.filename
+            if file_path.exists():
+                failed_files.append(f"{file.filename}: File already exists")
+                continue
+
+            # Écriture du fichier
+            try:
+                with open(file_path, "wb") as buffer:
+                    # Lire le fichier par chunks (pour éviter les problèmes de mémoire)
+                    while chunk := file.file.read(8192):  # 8KB chunks
+                        buffer.write(chunk)
+                
+                saved_files.append(str(file_path))
+                
+            except IOError as io_error:
+                failed_files.append(f"{file.filename}: Failed to write file - {str(io_error)}")
+                if file_path.exists():
+                    file_path.unlink()
+                continue
+                
+        except Exception as e:
+            failed_files.append(f"{file.filename}: Unexpected error - {str(e)}")
             continue
 
-        file_path = target_dir / file.filename
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-        saved_files.append(str(file_path))
-
-    return {"message": "Files uploaded successfully", "saved": saved_files}
+    # Construction de la réponse
+    response = {
+        "message": f"Upload completed: {len(saved_files)} successful, {len(failed_files)} failed",
+        "saved": saved_files
+    }
+    
+    if failed_files:
+        response["failed"] = failed_files
+        if not saved_files:  # Si aucun fichier n'a été sauvegardé
+            raise HTTPException(status_code=400, detail=response)
+    
+    return response
 
 
 @router.post("/admin/create-dir")
