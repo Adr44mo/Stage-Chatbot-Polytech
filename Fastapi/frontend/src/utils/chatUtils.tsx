@@ -19,10 +19,11 @@ export function renderSources(sources: string[]): React.ReactNode {
           );
         } else if (src.endsWith(".pdf")) {
           const fileUrl = `/files${encodeURIComponent(src)}`;
+          const fileName = src.split("/").pop();
           return (
             <div key={i}>
               <a href={fileUrl} target="_blank" rel="noopener noreferrer">
-                {src}
+                {fileName}
               </a>
             </div>
           );
