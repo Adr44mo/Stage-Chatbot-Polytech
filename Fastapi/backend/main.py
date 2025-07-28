@@ -33,7 +33,7 @@ from .app.database.models import ChatRequest, ChatResponse
 from .app.auth.dependencies import get_current_admin_from_cookie
 #from .app.intelligent_rag.api import router as intelligent_rag_router
 from .app.database.db_routes import router as db_router
-from .app.database.automated_tasks import AutomatedMaintenanceService
+from .app.database.automated_tasks import maintenance_service
 from .app.database.db_update_stat import update_rag_conversation
 from .app.database.stats_routes import router as stats_router
 from .app.database.maintenance_routes import router as maintenance_router
@@ -96,7 +96,21 @@ def session_id_key(request: Request):
 # Configuration CORS (Cross-Origin Resource Sharing)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://134.157.105.72", "http://localhost:5173", "http://localhost:3000", "polybot"],  # Domaines spécifiques
+    allow_origins=[
+        "https://134.157.105.72",          # ✅ Ton serveur principal
+        "https://polybot", 
+        "https://localhost", 
+        "http://134.157.105.72", 
+        "http://localhost:5173", 
+        "http://localhost:3000", 
+        "http://localhost:8080", 
+        "https://127.0.0.1:8080",          # ✅ CRUCIAL - Accès tunnel SSH
+        "http://127.0.0.1:8080",           # ✅ CRUCIAL - Accès tunnel SSH HTTP
+        "https://localhost:8080",          # ✅ CRUCIAL - Accès tunnel SSH via localhost
+        "http://localhost:8080",           # ✅ CRUCIAL - Accès tunnel SSH HTTP via localhost
+        "http://134.157.105.56", 
+        "https://134.157.105.56"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -113,24 +127,20 @@ app.include_router(db_router, dependencies=[Depends(get_current_admin_from_cooki
 app.include_router(stats_router, dependencies=[Depends(get_current_admin_from_cookie)])  # Routes pour les statistiques
 app.include_router(maintenance_router, dependencies=[Depends(get_current_admin_from_cookie)])  # Routes pour la maintenance
 
-
-# Initialisation de la base de données au démarrage
-maintenance_service = AutomatedMaintenanceService()
-
 @app.on_event("startup")
 def on_startup():
     create_db_and_tables()
     cp.print_success("[Startup] Base de données initialisée")
 
     # Démarrer le service de maintenance automatique
-    # maintenance_service.start_background_service()
-    # cp.print_success("[Startup] Service de maintenance automatique démarré")
+    maintenance_service.start_background_service()
+    cp.print_success("[Startup] Service de maintenance automatique démarré")
 
 # Nettoyage à l'arrêt de l'application
 @app.on_event("shutdown")
-def on_shutdown():
-    # maintenance_service.stop_background_service()
-    # cp.print_info("[Shutdown] Service de maintenance arrêté")
+def on_shutdown(): 
+    maintenance_service.stop_background_service()
+    cp.print_info("[Shutdown] Service de maintenance arrêté")
     pass
 
 # Initialisation de la chaîne RAG
@@ -141,22 +151,31 @@ rag_chain = initialize_the_rag_chain()
 # ====================================
 
 @app.get("/init-session")
-def init_session(response: Response, polybot_session_id: str = Cookie(None)):
+def init_session(response: Response, request: Request, polybot_session_id: str = Cookie(None)):
+    # Debug des cookies reçus
+    cookies_debug = request.headers.get("cookie", "Aucun cookie")
+    cp.print_debug(f"[init-session] Cookies reçus: {cookies_debug}")
+    cp.print_debug(f"[init-session] polybot_session_id extrait: {polybot_session_id}")
+    
     if polybot_session_id:
+        cp.print_debug(f"[init-session] Session existante: {polybot_session_id}")
         return {"ok": True, "session_id": polybot_session_id}
+    
     session_id = str(uuid.uuid4())
     expire_date = datetime.utcnow() + timedelta(days=180)
+    
+    cp.print_debug(f"[init-session] Création nouvelle session: {session_id}")
+    
     response.set_cookie(
         key="polybot_session_id",
         value=session_id,
         httponly=True,
-        max_age=60*60*24*180,  # 6 mois
-        expires=expire_date.strftime("%a, %d-%b-%Y %H:%M:%S GMT"),
-        samesite="lax",
-        secure=False,  # TODO: Passer à True si HTTPS
-        path="/",      # Important pour les iframes
-        domain=None    # Utilise le domaine actuel
+        samesite="None",  # pour HTTPS
+        secure=True,    # HTTPS requis
+        max_age=180 * 24 * 3600,  # 180 jours
+        path="/"
     )
+    cp.print_debug(f"[init-session] Cookie défini pour nouvelle session: {session_id}")
     return {"ok": True, "session_id": session_id}
 
 # ==========================
@@ -172,6 +191,11 @@ async def chat(request: Request, request_body: ChatRequest, polybot_session_id: 
     Endpoint principal pour le chatbot RAG : gestion des messages et historique de conversation.
     """
     try:
+        # Debug des cookies reçus
+        cookies_debug = request.headers.get("cookie", "Aucun cookie")
+        cp.print_debug(f"[chat] Cookies reçus: {cookies_debug}")
+        cp.print_debug(f"[chat] polybot_session_id extrait: {polybot_session_id}")
+        
         # Vérification reCAPTCHA
         recaptcha_validated = request.headers.get("X-Recaptcha-Validated")
         if not request_body.recaptcha_token:

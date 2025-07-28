@@ -38,7 +38,8 @@ embeddings = OpenAIEmbeddings()  # Create an instance of the OpenAIEmbeddings cl
 
 
 persistent_client = chromadb.PersistentClient(
-                        path=str(persist_directory)
+                        path=str(persist_directory),
+                        settings=Settings(allow_reset=True)  # Create a PersistentClient instance from the chromadb module, specifying the path where the data will be persisted and allowing future resets
                     )  # Create a PersistentClient instance from the chromadb module, specifying the path where the data will be persisted
 
 LANGCHAIN_DEFAULT_COLLECTION_NAME = 'langchain'  # Define the default collection name for the Chroma vector database

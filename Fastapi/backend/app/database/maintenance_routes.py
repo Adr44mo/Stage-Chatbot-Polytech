@@ -5,19 +5,17 @@ Routes API pour la gestion des tâches automatiques et du nettoyage
 from fastapi import APIRouter, HTTPException, Query
 from typing import Dict, Any, List
 from datetime import datetime
-from .automated_tasks import AutomatedMaintenanceService
+from .automated_tasks import maintenance_service
 from color_utils import ColorPrint
 
 cp = ColorPrint()
 
 router = APIRouter(prefix="/intelligent-rag/maintenance", tags=["Maintenance"])
 
-# Instance globale du service de maintenance
-maintenance_service = AutomatedMaintenanceService()
-
 @router.get("/status")
 def get_maintenance_status():
     """Obtenir le statut du service de maintenance automatique"""
+    cp.print_debug(f"[API] get_maintenance_status: running={maintenance_service.running}")
     return {
         "service_running": maintenance_service.running,
         "next_scheduled_tasks": maintenance_service.get_next_scheduled_tasks(),

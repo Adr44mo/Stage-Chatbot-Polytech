@@ -15,6 +15,7 @@ from .models import RAGConversation, RAGDailyStats, RAGMonthlyStats, RAGYearlySt
 from .models import Conversation, Message, RAGTokenOperation, RAGContextDocument
 from .stats_manager import StatsManager
 from color_utils import ColorPrint
+import pytz
 
 cp = ColorPrint()
 
@@ -115,6 +116,38 @@ class AutomatedMaintenanceService:
                 
         except Exception as e:
             cp.print_error(f"[Maintenance] Erreur mise à jour stats annuelles: {e}")
+
+    async def update_missing_daily_stats_last_x_days(self, days: int = 7):
+        """Vérifie les X derniers jours et met à jour les stats journalières manquantes"""
+        today = datetime.now().date()
+        missing_dates = []
+        updated_dates = []
+        errors = []
+        try:
+            with Session(engine) as session:
+                for i in range(1, days+1):
+                    day = today - timedelta(days=i)
+                    existing = session.exec(
+                        select(RAGDailyStats).where(RAGDailyStats.date == day)
+                    ).first()
+                    if not existing:
+                        try:
+                            daily_stats = await self.stats_manager.calculate_daily_stats(day, session)
+                            new_stats = RAGDailyStats(date=day, **daily_stats)
+                            session.add(new_stats)
+                            updated_dates.append(str(day))
+                        except Exception as e:
+                            errors.append((str(day), str(e)))
+                    else:
+                        missing_dates.append(str(day))
+                session.commit()
+            cp.print_success(f"[Maintenance] Stats journalières mises à jour pour: {updated_dates}")
+            if errors:
+                cp.print_error(f"[Maintenance] Erreurs lors de la mise à jour de certains jours: {errors}")
+            return {"updated": updated_dates, "already_exists": missing_dates, "errors": errors}
+        except Exception as e:
+            cp.print_error(f"[Maintenance] Erreur update_missing_daily_stats_last_x_days: {e}")
+            return {"error": str(e)}
     
     # ========================================
     # NETTOYAGE DES DONNÉES
@@ -253,7 +286,11 @@ class AutomatedMaintenanceService:
         
         cleanup_result = await self.cleanup_old_data(days_to_keep=90)
         stats_cleanup = await self.cleanup_old_stats(days_to_keep=365)
-        
+
+        await self.update_missing_daily_stats_last_x_days(days=7)
+        await self.update_monthly_stats()
+        await self.update_yearly_stats()
+
         cp.print_success("[Maintenance] Maintenance hebdomadaire terminée")
         return {
             "data_cleanup": cleanup_result,
@@ -293,17 +330,34 @@ class AutomatedMaintenanceService:
     
     def _schedule_tasks(self):
         """Planifier toutes les tâches automatiques"""
-        schedule.every().day.at("02:00").do(self._run_daily_maintenance)
-        schedule.every().sunday.at("03:00").do(self._run_weekly_cleanup)
-        schedule.every().day.at("04:00").do(self._run_monthly_cleanup_check)
+        # Définir le fuseau horaire français
+        paris_tz = pytz.timezone("Europe/Paris")
+        
+        # Planifier les tâches à l'heure française (convertie en UTC)
+        # Convertir l'heure de Paris ("02:00") en UTC pour le planificateur
+        now_paris = datetime.now(paris_tz)
+        heure_paris_day = now_paris.replace(hour=2, minute=0, second=0, microsecond=0)
+        heure_paris_week = now_paris.replace(hour=3, minute=0, second=0, microsecond=0)
+        heure_paris_month = now_paris.replace(hour=4, minute=0, second=0, microsecond=0)
+        heure_utc_day = heure_paris_day.astimezone(pytz.utc).strftime("%H:%M")
+        heure_utc_week = heure_paris_week.astimezone(pytz.utc).strftime("%H:%M")
+        heure_utc_month = heure_paris_month.astimezone(pytz.utc).strftime("%H:%M")
+        schedule.every().day.at(heure_utc_day).do(self._run_daily_maintenance)
+        schedule.every().sunday.at(heure_utc_week).do(self._run_weekly_cleanup)
+        schedule.every().day.at(heure_utc_month).do(self._run_monthly_cleanup_check)
+
+        #schedule.every().day.at("09:00").do(self._run_daily_maintenance)
+        #schedule.every().sunday.at("03:00").do(self._run_weekly_cleanup)
+        #schedule.every().day.at("04:00").do(self._run_monthly_cleanup_check)
         
         cp.print_info("[Maintenance] Tâches planifiées:")
-        cp.print_info("  - Maintenance quotidienne: tous les jours à 02:00")
-        cp.print_info("  - Nettoyage hebdomadaire: tous les dimanches à 03:00")
-        cp.print_info("  - Nettoyage mensuel: le 1er de chaque mois à 04:00")
-    
+        cp.print_info(f"  - Maintenance quotidienne: tous les jours à {heure_utc_day} UTC (02:00 heure FR)")
+        cp.print_info(f"  - Nettoyage hebdomadaire: tous les jours à {heure_utc_week} UTC (03:00 heure FR)")
+        cp.print_info(f"  - Nettoyage mensuel: le 1er de chaque mois à {heure_utc_month} UTC (04:00 heure FR)")
+
     def _run_scheduler(self):
         """Boucle principale du planificateur"""
+        cp.print_debug("[Maintenance] _run_scheduler thread started")
         while self.running:
             try:
                 schedule.run_pending()

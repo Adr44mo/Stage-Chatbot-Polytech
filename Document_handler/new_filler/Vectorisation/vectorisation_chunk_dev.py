@@ -5,6 +5,8 @@ import logging
 import threading
 from pathlib import Path
 from datetime import datetime
+import shutil
+
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
@@ -56,6 +58,12 @@ CHUNK_OVERLAP = 150
 BATCH_SIZE = 100  # nombre de Documents par lot lors de l'insertion Chroma
 
 # ---------------------------------------------------------------------------
+# Nb de vectorestore conserver
+# ---------------------------------------------------------------------------
+
+MAX_BACKUPS = 10  # nombre de backups à conserver
+
+# ---------------------------------------------------------------------------
 # Outils utilitaires ---------------------------------------------------------
 # ---------------------------------------------------------------------------
 
@@ -85,6 +93,18 @@ def _backup_existing_vectorstore():
     backup_path = _BACKUP_DIR / f"vectorstore_backup_{timestamp}"
     VECTORSTORE_DIR.rename(backup_path)
     logging.info("🗂️  Ancien vectorstore sauvegardé ⟶ %s", backup_path)
+
+    # Conserver seulement les 10 moins anciens backups
+    backups = sorted(_BACKUP_DIR.glob("vectorstore_backup_*"), key=lambda p: p.stat().st_mtime, reverse=True)
+    for old_backup in backups[MAX_BACKUPS:]:
+        try:
+            if old_backup.is_dir():
+                shutil.rmtree(old_backup)
+            else:
+                old_backup.unlink()
+            logging.info("🗑️  Ancien backup supprimé : %s", old_backup)
+        except Exception as exc:
+            logging.warning("Erreur lors de la suppression du backup %s: %s", old_backup, exc)
 
 
 # ---------------------------------------------------------------------------
@@ -189,6 +209,10 @@ def build_vectorstore() -> dict:
     save_progress(0, 1, "2/2 - Initialisation vectorisation")
 
     try:
+
+        # on donne un nom unique au dossier de construction
+        _BUILD_DIR = VECTORSTORE_DIR.parent / f"vectorstore_Syllabus_Construct_{uuid.uuid4().hex}"
+        logging.info("🔨 Construction du vectorstore dans %s", _BUILD_DIR)
         _ensure_dir(_BUILD_DIR)
         _check_write_permissions(_BUILD_DIR)
 
