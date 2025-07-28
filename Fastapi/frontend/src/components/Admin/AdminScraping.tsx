@@ -3,7 +3,7 @@
 // Permet aux administrateurs de gérer le scraping de sites
 // ========================================================
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import AdminScrapingSelect from "./AdminScrapingSites";
 import AdminScrapingSettings from "./AdminScrapingSettings";
 import type { SiteInfo, ProgressInfo } from "../../api/scrapingApi";
@@ -33,6 +33,7 @@ export default function AdminScraping() {
 	const [progress, setProgress] = useState<ProgressState>({});
 	const [vectorizationProgress, setVectorizationProgress] = useState<ProgressInfo>();
 	const [showAdvanced, setShowAdvanced] = useState(false);
+	const vectorizationCompleteRef = useRef(false);
 
 	const allSelected = selectedSites.length === sites.length && sites.length > 0;
 
@@ -104,7 +105,9 @@ export default function AdminScraping() {
 				const prog = await fetchVectorizationProgress();
 				setVectorizationProgress(prog);
 
-				if (isVectorizing && prog.current === prog.total && prog.status.includes("terminée") && prog.current === 100) {
+				// Vérifier si la vectorisation est terminée et qu'on n'a pas encore affiché l'alerte
+				if (isVectorizing && prog.current === prog.total && prog.status.includes("terminée") && prog.current === 100 && !vectorizationCompleteRef.current) {
+					vectorizationCompleteRef.current = true; // Marquer comme terminé
 					setIsVectorizing(false);
 					alert("Vectorisation terminée !");
 				}
@@ -178,6 +181,7 @@ export default function AdminScraping() {
 	const handleVectorization = useCallback(async () => {
 		try {
 			await resetVectorizationProgress();
+			vectorizationCompleteRef.current = false; // Réinitialise le flag avant de commencer
 			setIsVectorizing(true);
 			await runProcessingAndVectorization();
 		} catch (err: any) {
@@ -250,7 +254,7 @@ export default function AdminScraping() {
 		<div className="admin-scraping-section">
 			<h2 className="admin-page-subtitle">Lancer un scraping</h2>
 			<div className="admin-scraping-container">
-				<p>Sélectionnez les sites à scraper :</p>
+				<h3 className="admin-scraping-title">Sélectionnez les sites à scraper :</h3>
 
 				{loadingSites ? (
 					<div style={{ textAlign: "center", padding: "2rem" }}>

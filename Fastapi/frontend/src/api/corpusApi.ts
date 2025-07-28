@@ -2,7 +2,8 @@
 // Gestionnaire des appels API pour le corpus PDF
 // ==============================================
 
-import { runProcessingAndVectorization } from "./scrapingApi";
+import { runProcessingAndVectorization, fetchVectorizationProgress, resetVectorizationProgress } from "./scrapingApi";
+import type { ProgressInfo } from "./scrapingApi";
 
 /**
  * Types pour la gestion des fichiers et dossiers
@@ -494,5 +495,8 @@ export const getEditStatus = async (): Promise<any> => {
  * @returns Promise qui se résout quand la vectorisation est terminée
  */
 export const runCorpusVectorization = runProcessingAndVectorization;
+export const fetchCorpusVectorizationProgress = fetchVectorizationProgress;
+export const resetCorpusVectorizationProgress = resetVectorizationProgress;
+export interface ProgressVectorizationInfo extends ProgressInfo {}
 
 //TODO: rajouter les autres fonctions pour la barre de progression ou les importer direct

@@ -3,7 +3,7 @@
 // Coordinateur principal de la gestion du corpus PDF
 // ===================================================
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import AdminCorpusFileTree from "./AdminCorpusFileTree";
 import type { AdminCorpusFileTreeRef } from "./AdminCorpusFileTree";
 import {
@@ -12,7 +12,10 @@ import {
   cancelChanges,
   getEditStatus,
   runCorpusVectorization,
+  fetchCorpusVectorizationProgress,
+  resetCorpusVectorizationProgress,
 } from "../../api/corpusApi";
+import type { ProgressVectorizationInfo } from "../../api/corpusApi";
 
 export default function AdminCorpus() {
   const fileTreeRef = useRef<AdminCorpusFileTreeRef>(null);
@@ -20,6 +23,8 @@ export default function AdminCorpus() {
   const [snapshotId, setSnapshotId] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [isVectorizing, setIsVectorizing] = useState(false);
+  const [vectorizationProgress, setVectorizationProgress] = useState<ProgressVectorizationInfo>();
+  const vectorizationCompleteRef = useRef(false);
 
   // On vérifie le statut du mode édition au montage du composant
   useEffect(() => {
@@ -140,22 +145,48 @@ export default function AdminCorpus() {
     }
   };
 
+  // Polling de progression de vectorisation
+    const pollCorpusVectorizationProgress = useCallback(() => {
+      if (!isVectorizing) return;
+  
+      const interval = setInterval(async () => {
+        try {
+          const prog = await fetchCorpusVectorizationProgress();
+          setVectorizationProgress(prog);
+  
+          // Vérifier si la vectorisation est terminée et qu'on n'a pas encore affiché l'alerte
+          if (isVectorizing && prog.current === prog.total && prog.status.includes("terminée") && prog.current === 100 && !vectorizationCompleteRef.current) {
+            vectorizationCompleteRef.current = true; // Marquer comme terminé
+            setIsVectorizing(false);
+            alert("Vectorisation terminée !");
+          }
+        } catch (err) {
+          console.error("Erreur récupération progression vectorisation :", err);
+          setIsVectorizing(false); // On arrête le polling en cas d'erreur
+        }
+      }, 1000);
+  
+      return () => clearInterval(interval);
+    }, [isVectorizing]);
+
+  useEffect(() => {
+		return pollCorpusVectorizationProgress();
+	}, [pollCorpusVectorizationProgress]);
+
   /**
    * Lance la vectorisation du corpus (pipeline + vectorisation)
    */
-  const handleVectorization = async () => {
-    setIsVectorizing(true);
+  const handleVectorization = useCallback(async () => {
     try {
-      const result = await runCorpusVectorization();
-      console.log("[✅ Vectorisation terminée] :", result);
-      alert("Vectorisation terminée avec succès !");
+      await resetCorpusVectorizationProgress();
+      vectorizationCompleteRef.current = false; // Réinitialiser le flag de complétion
+      setIsVectorizing(true);
+      await runCorpusVectorization();
     } catch (err: any) {
-      console.error("Erreur vectorisation :", err?.message || err);
-      alert("Erreur pendant la vectorisation : " + (err?.message || err));
-    } finally {
-      setIsVectorizing(false);
+      console.error("Erreur vectorisation corpus :", err.message);
+      alert("Erreur pendant la vectorisation corpus : " + err.message);
     }
-  };
+  }, []);
 
   // ===============
   // RENDU PRINCIPAL
@@ -233,7 +264,8 @@ export default function AdminCorpus() {
           <div
             style={{
               display: "flex",
-              justifyContent: "flex-start",
+              alignItems: "center",
+              gap: "1rem",
               marginTop: "1rem",
             }}
           >
@@ -247,8 +279,16 @@ export default function AdminCorpus() {
                 : "Lancer la vectorisation"}
             </button>
 
-            {/* TODO: Cassandra je te laisse gérer pour la barre de progression :) */}
-            
+            {isVectorizing && vectorizationProgress && (
+              <>
+                <progress
+                  value={vectorizationProgress.current}
+                  max={vectorizationProgress.total}
+                  className="admin-vectorization-progress"
+                />
+                <span>{vectorizationProgress.status}</span>
+              </>
+            )}            
           </div>
         )}
       </div>
