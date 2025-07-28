@@ -50,8 +50,8 @@ async def login(
         key="admin_token",
         value=access_token,
         httponly=True,
-        secure=False,  #TODO: mettre True en prod avec HTTPS
-        samesite="lax",
+        secure=True,
+        samesite="none",
         max_age=3600,
         path="/"
     )
