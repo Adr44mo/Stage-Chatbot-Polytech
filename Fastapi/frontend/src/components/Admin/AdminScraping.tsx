@@ -9,7 +9,7 @@ import AdminScrapingSettings from "./AdminScrapingSettings";
 import type { SiteInfo, ProgressInfo } from "../../api/scrapingApi";
 import { 
 	fetchSiteInfos, fetchSiteNewDocs,
-	addSite as apiAddSite, suppSite as apiSuppSite,
+	addSite, suppSite,
 	runScraping, resetScrapingProgress, fetchScrapingProgress, fetchLastScrapingSummary,
 	runProcessingAndVectorization, resetVectorizationProgress, fetchVectorizationProgress 
 } from "../../api/scrapingApi";
@@ -104,7 +104,7 @@ export default function AdminScraping() {
 				const prog = await fetchVectorizationProgress();
 				setVectorizationProgress(prog);
 
-				if (prog.current === prog.total && prog.status.includes("terminée") && prog.current === 100) {
+				if (isVectorizing && prog.current === prog.total && prog.status.includes("terminée") && prog.current === 100) {
 					setIsVectorizing(false);
 					alert("Vectorisation terminée !");
 				}
@@ -123,7 +123,7 @@ export default function AdminScraping() {
 			const summary = await fetchLastScrapingSummary();
 			const message = `Scraping terminé avec succès !\n\n` +
 				`Résumé :\n` +
-				`- Sites scrappés : ${summary.sitesScraped.join(", ")}\n` +
+				`- Site(s) scrappé(s) : ${summary.sitesScraped.join(", ")}\n` +
 				`- Total nouveaux documents : ${summary.totalNewDocuments}\n\n` +
 				`Détails par site :\n` +
 				Object.entries(summary.detailsBySite)
@@ -188,7 +188,7 @@ export default function AdminScraping() {
 
 	const handleAddSite = useCallback(async (name: string, url: string) => {
 		try {
-			await apiAddSite(name, url);
+			await addSite(name, url);
 			await loadSites(); // Recharge les sites après ajout
 		} catch (err) {
 			console.error("Erreur lors de l'ajout du site :", err);
@@ -201,7 +201,7 @@ export default function AdminScraping() {
 
 		if (window.confirm(`Supprimer le site "${siteToDelete.name}" ?`)) {
 			try {
-				await apiSuppSite(siteToDelete.name);
+				await suppSite(siteToDelete.name);
 
 				// Recharge les sites après déletion
 				setSites(prevSites => {
