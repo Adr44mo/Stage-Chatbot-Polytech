@@ -1,9 +1,5 @@
 # Document Handler - Pipeline de Préparation RAG
 
-**Version**: 1.0  
-**Date**: Juillet 2025  
-**Statut**: Production Ready
-
 ## Vue d'ensemble
 
 Le module `Document_handler` constitue la **première partie fondamentale** du projet de chatbot Polytech. Il implémente un pipeline complet de préparation de données RAG (Retrieval-Augmented Generation) qui transforme des sources documentaires hétérogènes en une base de données vectorielle optimisée pour la recherche sémantique.
@@ -85,48 +81,34 @@ Document_handler/
 
 ## Flux de Données Détaillé
 
-### Phase 1: Collecte
-```
-Sites Web → Scraping → JSON bruts
-PDFs      → Extraction → JSON normalisés
-```
-
-### Phase 2: Enrichissement IA
-```
-JSON bruts → Classification IA → Métadonnées enrichies
-           → Validation schéma → Documents validés
-```
-
-### Phase 3: Vectorisation RAG
-```
-Documents validés → Chunking → Embeddings → ChromaDB
-```
-
-## Configuration et Déploiement
-
-### Prérequis
-```bash
-# Python 3.12+
-python --version
-
-# Variables d'environnement
-export OPENAI_API_KEY="your_openai_key"
-
-# Dépendances principales
-pip install fastapi langchain langgraph openai chromadb
-```
-
-### Démarrage Rapide
-```bash
-# 1. Démarrer l'API FastAPI
-cd /srv/partage/Stage-Chatbot-Polytech/Document_handler
-python -m uvicorn The_handler:router --reload
-
-# 2. Lancer le pipeline complet
-python -m new_filler.main
-
-# 3. Vectorisation finale
-python -m new_filler.Vectorisation.vectorisation_chunk
+```mermaid
+graph TD
+    subgraph "Phase 1: Collecte"
+        A[Sites Web] --> B[Scraping]
+        C[PDFs] --> D[Extraction]
+        B --> E[JSON bruts]
+        D --> F[JSON normalisés]
+    end
+    
+    subgraph "Phase 2: Enrichissement IA"
+        E --> G[Classification IA]
+        F --> G
+        G --> H[Métadonnées enrichies]
+        H --> I[Validation schéma]
+        I --> J[Documents validés]
+    end
+    
+    subgraph "Phase 3: Vectorisation RAG"
+        J --> K[Chunking]
+        K --> L[Embeddings]
+        L --> M[ChromaDB]
+    end
+    
+    style A fill:#e1f5fe
+    style C fill:#e1f5fe
+    style M fill:#c8e6c9
+    style G fill:#fff3e0
+    style I fill:#fff3e0
 ```
 
 ## API FastAPI - Points d'Entrée
@@ -189,43 +171,26 @@ run_scraping_from_configs(['polytech_sorbonne.yaml'])
 - **Stockage ChromaDB** optimisé avec collections séparées
 - **Déduplication** basée sur le contenu et les métadonnées
 
-## Métriques de Performance
-
-### Capacité de Traitement
-- **Documents/heure** : ~500-800 selon la complexité
-- **Précision IA** : >85% pour la classification automatique
-- **Taux de validation** : ~90% des documents passent la validation
-- **Temps de vectorisation** : ~2-5s par document
-
-### Optimisations Implémentées
-- **Traitement parallèle** avec ThreadPoolExecutor
-- **Cache des hashs** pour éviter les retraitements
-- **Détection incrémentale** des changements
-- **Déduplication ChromaDB** automatique
-- **LangGraph** pour orchestration optimisée
-
-## Qualité et Maintenance
-
-### Points Forts
-- **Architecture modulaire** et extensible
-- **Gestion d'erreurs** complète avec logging
-- **Documentation** détaillée par module
-- **Schéma de validation** rigoureux
-- **Orchestration LangGraph** pour robustesse
-
-### Améliorations Futures
-- **Tests unitaires** complets
-- **Dashboard de monitoring** en temps réel
-- **API REST** plus complète
-- **Configuration centralisée** avancée
-- **Métriques** de performance détaillées
-
 ## Modules Connexes
 
 ### Pipeline RAG Complet
-```
-Document_handler → [Base ChromaDB] → Fastapi/backend → Chatbot
-    ↑ Partie 1              ↑ Stockage        ↑ Partie 2
+```mermaid
+graph LR
+    A[Document_handler] --> B[Base ChromaDB]
+    B --> C[FastAPI/Backend]
+    C --> D[Chatbot]
+    
+    A -.-> E[Partie 1]
+    B -.-> F[Stockage]
+    C -.-> G[Partie 2]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style D fill:#c8e6c9
+    style E fill:#ffebee
+    style F fill:#ffebee
+    style G fill:#ffebee
 ```
 
 ### Documentation des Modules
@@ -240,20 +205,6 @@ Document_handler → [Base ChromaDB] → Fastapi/backend → Chatbot
 - [Schema](new_filler/schema/) - Schémas de validation JSON
 - [Prompts](new_filler/prompts/) - Templates pour IA
 - [Utils](new_filler/utils/) - Utilitaires communs
-
-## Résumé Exécutif
-
-Le module `Document_handler` représente une **solution complète et robuste** pour la préparation de données RAG. Il transforme efficacement des sources documentaires hétérogènes en une base vectorielle optimisée, prête pour l'intégration avec un système de chatbot intelligent.
-
-**Points clés** :
-- **Pipeline automatisé** de bout en bout orchestré par LangGraph
-- **Enrichissement IA** pour améliorer la qualité des données
-- **Optimisation RAG** avec chunking intelligent et métadonnées
-- **Monitoring** et métriques complètes
-- **Extensible** et maintenable avec architecture modulaire
-- **Robustesse** avec gestion d'erreurs et fallbacks
-
-**Prêt pour la production** avec surveillance recommandée des métriques de performance.
 
 ---
 *Module Document Handler intégré au chatbot Polytech (juillet 2025).*
