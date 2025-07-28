@@ -3,6 +3,7 @@
 // ==================================
 
 import { useState, useEffect } from "react";
+import { DateTime } from "luxon";
 
 // Types pour les APIs de maintenance
 interface MaintenanceStatus {
@@ -284,7 +285,7 @@ export default function AdminMaintenance() {
                     {status.service_running ? "Service Actif" : "Service Arrêté"}
                   </div>
                   <div style={{ fontSize: "0.9rem", color: "#6c757d" }}>
-                    Dernière vérification: {new Date(status.timestamp).toLocaleString('fr-FR')}
+                    Dernière vérification: {DateTime.fromISO(status.timestamp, { zone: 'utc' }).setZone('Europe/Paris').toFormat('dd/MM/yyyy HH:mm:ss')}
                   </div>
                 </div>
 
