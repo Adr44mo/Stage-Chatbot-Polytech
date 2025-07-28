@@ -18,18 +18,26 @@ function App() {
     initSession();
   }, []);
 
+  // On détecte si on est dans une iframe
+  const isIframe = typeof window !== "undefined" && window.self !== window.top;
+
   return (
     // On fournit le contexte d'authentification admin à toute l'application
     <AdminAuthProvider>
       <Router>
-        <div className="app-nav-buttons">
-          <Link to="/admin">
-            <button className="app-nav-btn app-nav-btn-admin">Admin</button>
-          </Link>
-          <Link to="/chatbot" className="app-nav-link-chatbot">
-            <button className="app-nav-btn app-nav-btn-chatbot">Chatbot</button>
-          </Link>
-        </div>
+        {/* On affiche les boutons de navigation seulement si on est pas dans une iframe */}
+        {!isIframe && (
+          <div className="app-nav-buttons">
+            <Link to="/admin">
+              <button className="app-nav-btn app-nav-btn-admin">Admin</button>
+            </Link>
+            <Link to="/chatbot" className="app-nav-link-chatbot">
+              <button className="app-nav-btn app-nav-btn-chatbot">
+                Chatbot
+              </button>
+            </Link>
+          </div>
+        )}
         {/* Définition des routes principales de l'application */}
         <Routes>
           <Route path="/login" element={<LoginPage />} />
