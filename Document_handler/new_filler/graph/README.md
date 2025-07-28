@@ -1,45 +1,45 @@
-# 🕸️ Graph Module - Pipeline LangGraph
+# Module Graph - Pipeline LangGraph
 
-## 🎯 Objectif
+## Objectif
 
-Ce module implémente l'orchestration du pipeline de traitement via **LangGraph**, permettant un flux de données robuste et configurable entre les différentes étapes de traitement.
+Ce module implémente l'orchestration du pipeline de traitement via LangGraph, permettant un flux de données robuste et configurable entre les différentes étapes de traitement.
 
-## 📁 Structure
+## Structure
 
 ```
 graph/
-├── nodes.py          # 🔧 Nœuds de traitement
-├── branches.py       # 🔀 Logique de branchement conditionnel
-└── build_graph.py    # 🏗️ Construction et compilation du graphe
+├── nodes.py          # Nœuds de traitement
+├── branches.py       # Logique de branchement conditionnel
+└── build_graph.py    # Construction et compilation du graphe
 ```
 
-## 🔧 Nœuds Disponibles
+## Nœuds disponibles
 
-### 📥 Nœuds d'Entrée
+### Nœuds d'entrée
 - **`check_type_of_input_node`** : Détermine le type de source (web, PDF, syllabus)
 - **`load_json_node`** : Charge un fichier JSON
 - **`normalize_json_file_node`** : Normalise les JSONs web scrapés
 
-### 📄 Nœuds de Traitement PDF
+### Nœuds de traitement PDF
 - **`load_pdf_to_data_manual_node`** : Traite les PDFs ajoutés manuellement
 - **`load_pdf_to_data_scraped_node`** : Traite les PDFs scrapés
 - **`syllabus_extract_node`** : Extraction spécialisée pour syllabus
 
-### 🤖 Nœuds d'Enrichissement IA
+### Nœuds d'enrichissement IA
 - **`detect_type_node`** : Classification automatique du type de document
 - **`fill_metadata_manual_node`** : Enrichit métadonnées pour PDFs manuels
 - **`fill_metadata_scraped_node`** : Enrichit métadonnées pour PDFs scrapés
 - **`fill_tags_node`** : Génère des tags automatiquement
 - **`fill_type_specific_node`** : Enrichit selon le type détecté
 
-### ✅ Nœuds de Validation et Sauvegarde
+### Nœuds de validation et sauvegarde
 - **`validate_node`** : Valide selon le schéma JSON
 - **`save_node`** : Sauvegarde dans le dossier validé
 - **`save_to_error_node`** : Sauvegarde les erreurs
 
-## 🔀 Flux de Données
+## Flux de données
 
-### Structure d'État (FillerState)
+### Structure d'état (FillerState)
 ```python
 class FillerState(TypedDict):
     file_path: str      # Chemin du fichier source
@@ -80,9 +80,9 @@ graph TD
     M -->|❌ Erreur| O[save_to_error_node]
 ```
 
-## 🛠️ Utilisation
+## Utilisation
 
-### Construction du Graphe
+### Construction du graphe
 ```python
 from graph.build_graph import build_graph
 
@@ -94,7 +94,7 @@ state = {"file_path": "/path/to/document.pdf"}
 result = graph.invoke(state)
 ```
 
-### Ajout d'un Nouveau Nœud
+### Ajout d'un nouveau nœud
 ```python
 # 1. Définir la fonction du nœud dans nodes.py
 def my_custom_node(state):
@@ -107,16 +107,16 @@ graph.add_node("my_custom", my_custom_node)
 graph.add_edge("previous_node", "my_custom")
 ```
 
-## 🔍 Debugging
+## Debugging
 
-### Logs de Traçage
+### Logs de traçage
 Chaque nœud utilise `log_callback` pour tracer l'exécution :
 ```python
 def log_callback(state, msg):
     print(f"[{msg}] {state.get('file_path', '')}")
 ```
 
-### Gestion d'Erreurs
+### Gestion d'erreurs
 ```python
 try:
     # Traitement du nœud
@@ -128,10 +128,13 @@ except Exception as e:
     raise
 ```
 
-## 🚀 Avantages de LangGraph
+## Avantages de LangGraph
 
-1. **🔄 Flux Conditionnels** : Branchement intelligent selon le contexte
-2. **🛡️ Robustesse** : Gestion d'erreurs intégrée
-3. **📊 Observabilité** : Traçage automatique des exécutions
-4. **🔧 Extensibilité** : Ajout facile de nouveaux nœuds
-5. **⚡ Performance** : Exécution optimisée des dépendances
+1. **Flux conditionnels** : Branchement intelligent selon le contexte
+2. **Robustesse** : Gestion d'erreurs intégrée
+3. **Observabilité** : Traçage automatique des exécutions
+4. **Extensibilité** : Ajout facile de nouveaux nœuds
+5. **Performance** : Exécution optimisée des dépendances
+
+---
+*Module d'orchestration LangGraph intégré au pipeline New Filler (juillet 2025).*

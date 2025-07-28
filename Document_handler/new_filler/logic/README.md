@@ -1,28 +1,28 @@
-# 🧠 Logic Module - Logique Métier
+# Module Logic - Logique Métier
 
-## 🎯 Objectif
+## Objectif
 
-Ce module contient toute la **logique métier** du pipeline de traitement :
-- 🤖 Classification automatique de documents
-- 📝 Enrichissement de métadonnées via IA
-- 🔍 Extraction et normalisation de données
-- ✅ Validation par schéma
+Ce module contient toute la logique métier du pipeline de traitement :
+- Classification automatique de documents
+- Enrichissement de métadonnées via IA
+- Extraction et normalisation de données
+- Validation par schéma
 
-## 📁 Structure
+## Structure
 
 ```
 logic/
-├── fill_logic.py      # 🚀 Enrichissement automatique
-├── detect_type.py     # 🔍 Classification de documents
-├── webjson.py         # 🌐 Normalisation JSON web
-├── load_pdf.py        # 📄 Extraction de contenu PDF
-├── syllabus.py        # 🎓 Traitement spécialisé syllabus
-└── chunck_syll.py     # ✂️ Découpage intelligent pour RAG
+├── fill_logic.py      # Enrichissement automatique
+├── detect_type.py     # Classification de documents
+├── webjson.py         # Normalisation JSON web
+├── load_pdf.py        # Extraction de contenu PDF
+├── syllabus.py        # Traitement spécialisé syllabus
+└── chunck_syll.py     # Découpage intelligent pour RAG
 ```
 
-## 🚀 fill_logic.py - Enrichissement Automatique
+## fill_logic.py - Enrichissement Automatique
 
-### Fonctions Principales
+### Fonctions principales
 
 #### `fill_missing_fields(data, fields, prompt_file)`
 Enrichit automatiquement les champs manquants via IA.
@@ -66,9 +66,9 @@ graph LR
     F --> G[Document Enrichi]
 ```
 
-## 🔍 detect_type.py - Classification
+## detect_type.py - Classification
 
-### Classification Automatique
+### Classification automatique
 Identifie automatiquement le type de document parmi :
 - **cours** : Matériel pédagogique
 - **projet** : Documents de projet
@@ -88,9 +88,9 @@ doc_type = detect_document_type(content)
 3. **Validation** du type retourné
 4. **Fallback** en cas d'erreur
 
-## 🌐 webjson.py - Normalisation Web
+## webjson.py - Normalisation Web
 
-### Normalisation d'Entrées Web
+### Normalisation d'entrées web
 Convertit les données scrapées en format Polytech uniforme.
 
 ```python
@@ -158,9 +158,9 @@ chunks = chunk_syllabus_for_rag(syllabus_data)
 3. **Préservation du contexte** 
 4. **Métadonnées enrichies** par chunk
 
-## 🛠️ Utilisation
+## Utilisation
 
-### Pipeline Complet
+### Pipeline complet
 ```python
 from logic.fill_logic import route_document
 from logic.detect_type import detect_document_type
@@ -175,7 +175,7 @@ enriched_doc = route_document(raw_data)
 is_valid = validate_with_schema(enriched_doc)
 ```
 
-### Enrichissement Ciblé
+### Enrichissement ciblé
 ```python
 from logic.fill_logic import fill_missing_fields
 
@@ -187,9 +187,12 @@ tags = fill_missing_fields(
 )
 ```
 
-## 🎯 Bonnes Pratiques
+## Bonnes pratiques
 
-1. **🚀 Performance** : Cache les réponses IA pour éviter les appels redondants
-2. **🛡️ Robustesse** : Toujours valider les réponses IA avant usage
-3. **📊 Monitoring** : Logger les temps de réponse et taux de succès
-4. **🔧 Extensibilité** : Utiliser des prompts externalisés pour faciliter les ajustements
+1. **Performance** : Cache les réponses IA pour éviter les appels redondants
+2. **Robustesse** : Toujours valider les réponses IA avant usage
+3. **Monitoring** : Logger les temps de réponse et taux de succès
+4. **Extensibilité** : Utiliser des prompts externalisés pour faciliter les ajustements
+
+---
+*Module de logique métier intégré au pipeline New Filler (juillet 2025).*

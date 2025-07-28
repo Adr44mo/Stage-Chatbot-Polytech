@@ -145,8 +145,35 @@ def reset_scraping_progress(site_name: str):
 @router.post("/add_site")
 def add_site(data: AddSiteInput):
     try:
+        # Vérification que l'URL commence par "https://"
+        if not data.url.startswith("https://"):
+            raise HTTPException(status_code=400, detail="L'URL doit commencer par 'https://'")
+        
+        # Récupération de tous les sites existants pour vérifier l'unicité
+        existing_sites = []
+        for f in CONFIG_DIR.glob("*.yaml"):
+            with open(f, "r", encoding="utf-8") as file:
+                site_data = yaml.safe_load(file)
+                existing_sites.append({
+                    "name": site_data.get("NAME"),
+                    "url": site_data.get("BASE_URL")
+                })
+        
+        # Vérification que le nom du site n'existe pas déjà
+        existing_names = [site["name"] for site in existing_sites if site["name"]]
+        if data.siteName in existing_names:
+            raise HTTPException(status_code=400, detail=f"Un site avec le nom '{data.siteName}' existe déjà")
+        
+        # Vérification que l'URL n'existe pas déjà
+        existing_urls = [site["url"] for site in existing_sites if site["url"]]
+        if data.url in existing_urls:
+            raise HTTPException(status_code=400, detail=f"Un site avec l'URL '{data.url}' existe déjà")
+        
         generate_config(data.siteName, data.url)
         return {"status": "success", "message": f"Site {data.siteName} ajouté avec succès."}
+    except HTTPException:
+        # Re-raise les HTTPException pour qu'elles soient renvoyées avec le bon status code
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur lors de l'ajout du site : {e}")
     
@@ -201,11 +228,6 @@ def run_processing_and_vectorizing(background_tasks: BackgroundTasks):
             cp.print_success("Vectorisation terminée !")
         except Exception as e:
             cp.print_error(f"Erreur dans le pipeline : {e}")
-        finally:
-            import os
-            # On met a jour la base chromadb avec les nouveaux fichiers
-            cp.print_info("Redémarrage automatique du backend...")
-            #os._exit(0)
 
     background_tasks.add_task(run_full_pipeline)
     return {

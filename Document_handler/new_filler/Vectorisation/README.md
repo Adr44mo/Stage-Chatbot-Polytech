@@ -1,168 +1,84 @@
-# 🔍 Vectorisation Module - Préparation RAG
+# Module de Vectorisation RAG - Documentation
 
-## 🎯 Objectif
+## Objectif
+Préparer et indexer des documents st## Bonnes pratiques et recommandations
+- Traiter par batchs de 100 documents (BATCH_SIZE)
+- Toujours valider la qualité des chunks générés
+- Tracker les métriques de chunking et d'indexation
+- Implémenter la déduplication avant la mise en production
+- Utiliser le cache d'embeddings si possible
+- Vérifier les permissions d'écriture sur les dossiers
+- Sauvegarde automatique des anciens vectorstores (max 10) pour la recherche RAG (Retrieval Augmented Generation) :
+- Découpage intelligent en chunks (1500c, overlap 150)
+- Aplatissement et enrichissement des métadonnées
+- Stockage vectoriel dans ChromaDB
+- Déduplication, sauvegarde, monitoring, backup automatiqueisation RAG - Documentation
 
-Ce module prépare les documents normalisés pour la **recherche RAG** en :
-- ✂️ **Découpant** intelligemment les documents
-- 🔗 **Enrichissant** les métadonnées pour la recherche
-- 🗃️ **Stockant** dans ChromaDB pour l'indexation vectorielle
-- 🚫 **Déduplicant** pour éviter la pollution de la base
-
-## 📁 Structure
-
+## Structure du module
 ```
 Vectorisation/
-├── vectorisation_chunk.py    # 🚀 Pipeline principal de vectorisation
-└── vectorstore_Syllabus/     # 🗃️ Base ChromaDB (générée)
-    ├── chroma.sqlite3
-    └── ... (métadonnées ChromaDB)
+├── vectorisation_chunk_dev.py     # Pipeline principal (dev)
+├── vectorstore_Syllabus/          # Base ChromaDB générée
+│   ├── chroma.sqlite3
+│   └── ...
+├── vectorstore_backup/            # Backups automatiques
+└── ...
 ```
 
-## 🚀 vectorisation_chunk.py - Pipeline Principal
-
-### Fonctions Principales
-
-#### `load_normalized_docs()`
-Charge tous les documents JSON normalisés depuis le dossier validé.
-
-```python
-docs = load_normalized_docs()
-# Retourne : List[Dict] - Documents JSON normalisés
-```
-
-#### `load_syllabus_docs()`
-Charge spécifiquement les documents syllabus (pattern `syllabus*.json`).
-
-```python
-syllabus_docs = load_syllabus_docs()
-# Retourne : List[Dict] - Documents syllabus uniquement
-```
-
-#### `convert_to_documents(raw_docs)`
-Convertit les documents JSON en objets LangChain Document avec chunking.
-
-```python
-langchain_docs = convert_to_documents(normalized_docs)
-# Retourne : List[Document] - Prêts pour ChromaDB
-```
-
-#### `ensure_polytech_structure(doc)`
-Normalise la structure pour respecter le schéma Polytech.
-
-```python
-normalized = ensure_polytech_structure(raw_doc)
-# Garantit : document_type, metadata, source, content, tags
-```
-
-### Pipeline de Transformation
+## Pipeline de transformation
 
 ```mermaid
 graph TD
-    A[Documents JSON Normalisés] --> B[Vérification Structure]
-    B --> C[Aplatissement Métadonnées]
-    C --> D[Chunking Intelligent]
-    D --> E[Enrichissement Métadonnées]
-    E --> F[ChromaDB Storage]
+    A[Chargement JSON normalisés] --> B[Vérification/normalisation (_ensure_polytech_structure)]
+    B --> C[Aplatissement métadonnées (_flatten_metadata)]
+    C --> D[Chunking intelligent (RecursiveCharacterTextSplitter)]
+    D --> E[Enrichissement des chunks]
+    E --> F[Déduplication (hash contenu)]
+    F --> G[Batching & insertion ChromaDB]
+    G --> H[Backup & permissions]
+    H --> I[Activation dans llmm]
     
-    G[Documents Syllabus] --> H[Chunking Spécialisé]
-    H --> I[Métadonnées Pédagogiques]
-    I --> F
+    S[Chargement syllabus] --> T[Chunking spécialisé syllabus]
+    T --> E
+```
+## Fonctions principales
+- `_load_json_docs()` : charge tous les JSON normalisés (hors syllabus)
+- `_load_syllabus_json_docs()` : charge les syllabus
+- `_ensure_polytech_structure(doc)` : normalise le schéma Polytech
+- `_flatten_metadata(md)` : aplatit les métadonnées imbriquées
+- `_chunk_raw_docs(raw_docs)` : découpe en chunks (text splitter)
+- `_syllabus_to_lc_docs(syllabus_raw)` : chunking spécialisé syllabus
+- `_split_list(data, size)` : batching pour Chroma
+- `_backup_existing_vectorstore()` : backup auto, rotation
+- `build_vectorstore()` : pipeline complet (voir ci-dessous)
+
+## Exemple d'utilisation (pipeline complet)
+```python
+from Vectorisation.vectorisation_chunk_dev import build_vectorstore
+
+res = build_vectorstore()
+if res["status"] == "success":
+    print(res["message"])
+else:
+    print(f"❌ {res['message']}")
 ```
 
-## ✂️ Stratégie de Chunking
-
-### Configuration par Défaut
+## Recherche et filtres
 ```python
-splitter = RecursiveCharacterTextSplitter(
-    chunk_size=500,        # Taille optimale pour embeddings
-    chunk_overlap=50       # Préservation du contexte
-)
-```
+from langchain_chroma import Chroma
+from langchain_openai import OpenAIEmbeddings
+from pathlib import Path
 
-### Chunking Intelligent
-1. **Respect du contenu** : Évite de couper au milieu des phrases
-2. **Taille optimisée** : 500 caractères = ~100 tokens (optimal pour embeddings)
-3. **Chevauchement** : 50 caractères pour maintenir le contexte
-4. **Filtrage** : Ignore les chunks vides ou trop courts
-
-## 🏷️ Enrichissement des Métadonnées
-
-### Aplatissement Automatique
-Les métadonnées complexes sont aplaties pour ChromaDB :
-
-```python
-# Structure originale
-{
-  "metadata": {"title": "Cours IA"},
-  "source": {"site": "polytech", "url": "..."}
-}
-
-# Structure aplatie
-{
-  "metadata.title": "Cours IA",
-  "source.site": "polytech",
-  "source.url": "..."
-}
-```
-
-### Métadonnées Enrichies par Chunk
-Chaque chunk hérite de :
-- **Métadonnées du document parent**
-- **Informations de source** (chemin, site, catégorie)
-- **Tags automatiques** (générés par IA)
-- **Type de document** (cours, administratif, etc.)
-- **Métadonnées spécialisées** (niveau, spécialité, etc.)
-
-## 🗃️ Stockage ChromaDB
-
-### Configuration
-```python
 VECTORSTORE_DIR = Path(__file__).parent / "vectorstore_Syllabus"
 embeddings = OpenAIEmbeddings()
 db = Chroma(persist_directory=str(VECTORSTORE_DIR), embedding_function=embeddings)
-```
 
-### Structure de la Base
-- **Documents** : Chunks de contenu
-- **Métadonnées** : Informations structurées pour filtrage
-- **Embeddings** : Vecteurs OpenAI pour recherche sémantique
-- **IDs** : Identifiants uniques par chunk
+# Recherche sémantique simple
+results = db.similarity_search("table des matières", k=5)
+for doc in results:
+    print(doc.page_content, doc.metadata)
 
-## 🚫 Gestion des Doublons
-
-### Problème Identifié
-Le système peut créer des doublons lors de :
-- Retraitement du même document
-- Sources multiples pour le même contenu
-- Erreurs de pipeline
-
-### Solution Recommandée
-```python
-def deduplicate_chunks(chunks):
-    """Déduplication par hash de contenu"""
-    seen = set()
-    unique_chunks = []
-    
-    for chunk in chunks:
-        content_hash = hashlib.md5(chunk.page_content.encode()).hexdigest()
-        if content_hash not in seen:
-            seen.add(content_hash)
-            unique_chunks.append(chunk)
-    
-    return unique_chunks
-```
-
-## 🔍 Recherche et Filtrage
-
-### Exemple de Recherche
-```python
-# Recherche sémantique
-results = db.similarity_search(
-    "table des matières semestre 6",
-    k=5
-)
-
-# Recherche avec filtre
+# Recherche avec filtres
 results = db.similarity_search(
     "cours mathematiques",
     k=10,
@@ -170,62 +86,28 @@ results = db.similarity_search(
 )
 ```
 
-### Filtres Disponibles
-- **document_type** : cours, administratif, vie_etudiante, etc.
-- **metadata.niveau** : Semestre 5, Semestre 6, etc.
-- **metadata.specialite** : MAIN, GI, etc.
-- **source.site** : MAIN, polytech_sorbonne, etc.
-- **tags** : mots-clés automatiques
+### Filtres disponibles
+- `document_type` : cours, administratif, vie_etudiante, etc.
+- `metadata.niveau` : Semestre 5, Semestre 6, etc.
+- `metadata.specialite` : MAIN, GI, etc.
+- `source.site` : polytech_sorbonne, etc.
+- `tags` : mots-clés automatiques
 
-## 📊 Métriques de Performance
+## Bonnes pratiques & recommandations
+- Traiter par batchs de 100 documents (BATCH_SIZE)
+- Toujours valider la qualité des chunks générés
+- Tracker les métriques de chunking et d’indexation
+- Implémenter la déduplication avant la mise en production
+- Utiliser le cache d’embeddings si possible
+- Vérifier les permissions d’écriture sur les dossiers
+- Sauvegarde automatique des anciens vectorstores (max 10)
 
-### Statistiques Typiques
-- **Documents traités** : ~300-500 par batch
-- **Chunks générés** : ~3-5 par document
-- **Taille moyenne chunk** : 350-450 caractères
-- **Temps de traitement** : ~2-3s par document
+## Optimisations possibles
+1. Cache des embeddings pour éviter les recalculs
+2. Traitement par batchs et indexation parallèle
+3. Compression des métadonnées
+4. Monitoring de la progression (progress.json)
+5. Nettoyage automatique des backups anciens
 
-### Optimisations Possibles
-1. **Cache des embeddings** pour éviter recalcul
-2. **Batch processing** pour réduire les appels API
-3. **Indexation parallèle** pour gros volumes
-4. **Compression des métadonnées** pour optimiser l'espace
-
-## 🛠️ Utilisation
-
-### Pipeline Complet
-```python
-from Vectorisation.vectorisation_chunk import (
-    load_normalized_docs, 
-    convert_to_documents
-)
-
-# 1. Charger les documents
-docs = load_normalized_docs()
-
-# 2. Convertir en chunks LangChain
-chunks = convert_to_documents(docs)
-
-# 3. Stocker dans ChromaDB
-db = Chroma.from_documents(
-    chunks, 
-    embeddings, 
-    persist_directory=str(VECTORSTORE_DIR)
-)
-```
-
-### Recherche Simple
-```python
-# Rechercher des TOCs
-results = db.similarity_search("table des matières", k=5)
-for doc in results:
-    print(f"Contenu: {doc.page_content}")
-    print(f"Source: {doc.metadata.get('source.site')}")
-```
-
-## 🎯 Recommandations
-
-1. **🚀 Performance** : Traiter par batch de 50-100 documents
-2. **🔍 Qualité** : Valider que les chunks préservent le sens
-3. **📊 Monitoring** : Tracker les métriques de chunking
-4. **🚫 Déduplication** : Implémenter avant mise en production
+---
+*Documentation alignée sur vectorisation_chunk_dev.py (juillet 2025).*

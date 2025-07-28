@@ -1,34 +1,30 @@
- # 🔄 New Filler - Pipeline de Traitement de Documents
+ # Module New Filler - Pipeline de Traitement de Documents
 
-**Statut**: ✅ **Projet terminé**  
-**Version**: 1.0  
-**Date**: Juillet 2025
+## Vue d'ensemble
 
-## 🎯 Vue d'ensemble
+Le module `new_filler` fait partie intégrante du système RAG Polytech et constitue l'étape de traitement intermédiaire qui :
+- Traite des PDFs et JSONs de différentes sources (scraping, upload manuel)
+- Enrichit automatiquement les métadonnées via IA (OpenAI/Ollama)
+- Valide selon un schéma uniforme pour le système RAG
+- Normalise la structure des données avant vectorisation
+- Prépare les documents pour l'indexation dans ChromaDB
 
-Le module `new_filler` est un pipeline de traitement de documents intelligent qui :
-- 📄 **Traite** des PDFs et JSONs de différentes sources
-- 🤖 **Enrichit** automatiquement les métadonnées via IA
-- ✅ **Valide** selon un schéma uniforme
-- 🗂️ **Normalise** la structure des données
-- 🔗 **Prépare** pour la vectorisation RAG
-
-## 🏗️ Architecture
+## Architecture du module
 
 ```
 new_filler/
 │
-├── 📊 QUALITY_REPORT.md    # Rapport de qualimétrie détaillé
-├── 🎯 main.py             # Point d'entrée principal
-├── ⚙️ config.py           # Configuration centralisée
-├── 🔧 draw_graph.py       # Visualisation du pipeline
+├── QUALITY_REPORT.md      # Rapport de qualimétrie détaillé
+├── main.py               # Point d'entrée principal
+├── config.py             # Configuration centralisée
+├── draw_graph.py         # Visualisation du pipeline
 │
-├── graph/                 # 🕸️ Pipeline LangGraph
+├── graph/                # Pipeline LangGraph
 │   ├── nodes.py          # Nœuds de traitement
 │   ├── branches.py       # Logique de branchement
 │   └── build_graph.py    # Construction du graphe
 │
-├── logic/                # 🧠 Logique métier
+├── logic/                # Logique métier
 │   ├── fill_logic.py     # Enrichissement automatique
 │   ├── detect_type.py    # Classification de documents
 │   ├── webjson.py        # Normalisation JSON web
@@ -36,22 +32,22 @@ new_filler/
 │   ├── syllabus.py       # Traitement syllabus
 │   └── chunck_syll.py    # Chunking intelligent
 │
-├── utils/                # 🛠️ Utilitaires
+├── utils/                # Utilitaires
 │   └── ollama_wrapper.py # Interface IA (OpenAI/Ollama)
 │
-├── preprocessing/        # 📋 Gestion des fichiers
+├── preprocessing/        # Gestion des fichiers
 │   ├── build_map.py      # Cartographie des sources
 │   └── update_map.py     # Mise à jour des mappings
 │
-├── Vectorisation/        # 🔍 Préparation RAG
+├── Vectorisation/        # Préparation RAG
 │   └── vectorisation_chunk.py  # Chunking et vectorisation
 │
-├── prompts/             # 💬 Templates IA
-├── schema/              # 📝 Schémas de validation
-└── README_*.md          # 📚 Documentation détaillée
+├── prompts/             # Templates IA
+├── schema/              # Schémas de validation
+└── README_*.md          # Documentation détaillée
 ```
 
-## 🚀 Utilisation
+## Utilisation
 
 ### Exécution complète
 ```bash
@@ -65,7 +61,7 @@ python -m new_filler.draw_graph
 # Génère: rag_graph.png
 ```
 
-## 📊 Pipeline de Traitement
+## Pipeline de traitement
 
 ```mermaid
 graph TD
@@ -84,11 +80,11 @@ graph TD
     J --> H
     H --> I
     I --> K{Valide?}
-    K -->|Oui| L[Sauvegarder ✅]
-    K -->|Non| M[Sauvegarder Erreur ❌]
+    K -->|Oui| L[Sauvegarder dans validated/]
+    K -->|Non| M[Sauvegarder dans error/]
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 ### Variables d'environnement
 ```env
@@ -104,20 +100,23 @@ INPUT_DIR = CORPUS_DIR / "test"
 VALID_DIR = CORPUS_DIR / "json_normalized" / "validated"
 ```
 
-## 📈 Métriques de Qualité
+## Métriques de qualité
 
 - **Architecture**: 9/10 - Modulaire et extensible
 - **Robustesse**: 8/10 - Gestion d'erreurs complète
 - **Performance**: 7/10 - Parallélisation efficace
 - **Documentation**: 5/10 - En cours d'amélioration
 
-**Score Global**: 7.1/10 🟡
+**Score Global**: 7.1/10
 
-➡️ **Voir le rapport détaillé**: [QUALITY_REPORT.md](QUALITY_REPORT.md)
+Voir le rapport détaillé: [QUALITY_REPORT.md](QUALITY_REPORT.md)
 
-## 🔗 Liens Utiles
+## Liens utiles
 
 - [Documentation Graph](graph/README.md)
 - [Documentation Logic](logic/README.md)
 - [Documentation Vectorisation](Vectorisation/README.md)
 - [Guide de Contribution](CONTRIBUTING.md)
+
+---
+*Module intégré au système RAG Polytech - Pipeline de traitement intermédiaire (juillet 2025).*

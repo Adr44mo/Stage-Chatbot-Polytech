@@ -63,9 +63,9 @@ def process_manual_pdf_file(pdf_path):
     pdf_path = Path(pdf_path)
     # On suppose que la spécialité est le sous-dossier juste sous pdf_man
     try:
-        specialty = pdf_path.relative_to(pdf_path.parents[2]).parts[0]
+        speciality = pdf_path.relative_to(pdf_path.parents[2]).parts[0]
     except Exception:
-        specialty = "NA"
+        speciality = "NA"
     result = _process_pdf_common(pdf_path)
     if not result:
         return None
@@ -75,7 +75,7 @@ def process_manual_pdf_file(pdf_path):
         "source": "pdf_manual",
         "file_name": file_name,
         "pdf_path": str(pdf_path),
-        "specialty": specialty,
+        "speciality": speciality,
         "content": clean_text(full_text),
         "metadata": {
             "title": guess_title(lines),
@@ -97,9 +97,9 @@ def process_scraped_pdf_file(pdf_path):
         site_name = "unknown_site"
     # On suppose que la spécialité est le sous-dossier juste sous pdf_scrapes
     try:
-        specialty = pdf_path.relative_to(pdf_path.parents[1]).parts[0]
+        speciality = pdf_path.relative_to(pdf_path.parents[1]).parts[0]
     except Exception:
-        specialty = "NA"
+        speciality = "NA"
     # Cherche un éventuel pdf_map.json dans le dossier parent de pdf_scrapes
     pdf_metadata_map = {}
     map_path = pdf_path.parents[1].parent / "pdf_map.json"
@@ -119,7 +119,7 @@ def process_scraped_pdf_file(pdf_path):
         "source": site_name,
         "file_name": file_name,
         "pdf_path": str(pdf_path),
-        "specialty": specialty,
+        "speciality": speciality,
         "content": clean_text(full_text),
         "metadata": {
             "title": guess_title(lines),

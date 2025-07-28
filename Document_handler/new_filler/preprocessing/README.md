@@ -1,25 +1,25 @@
-# 📋 Preprocessing Module - Gestion des Fichiers
+# Preprocessing Module - Gestion des Fichiers
 
-## 🎯 Objectif
+## Objectif
 
 Ce module gère la **découverte et le mapping des fichiers** à traiter :
-- 🗂️ **Indexation** des fichiers source
-- 🔍 **Détection des changements** (nouveaux, modifiés, supprimés)
-- 📊 **Tracking du progress** et évitement des retraitements
-- 🗺️ **Mapping** entre fichiers d'entrée et de sortie
+- **Indexation** des fichiers source
+- **Détection des changements** (nouveaux, modifiés, supprimés)
+- **Tracking du progress** et évitement des retraitements
+- **Mapping** entre fichiers d'entrée et de sortie
 
-## 📁 Structure
+## Structure
 
 ```
 preprocessing/
-├── build_map.py          # 🏗️ Construction des mappings initiaux
-├── update_map.py         # 🔄 Mise à jour et détection des changements
-├── input_maps/           # 📥 Maps des fichiers d'entrée (générés)
-├── vect_maps/           # 🔍 Maps pour vectorisation (générés)
-└── output_maps/         # 📤 Maps des fichiers de sortie (générés)
+├── build_map.py          # Construction des mappings initiaux
+├── update_map.py         # Mise à jour et détection des changements
+├── input_maps/           # Maps des fichiers d'entrée (générés)
+├── vect_maps/           # Maps pour vectorisation (générés)
+└── output_maps/         # Maps des fichiers de sortie (générés)
 ```
 
-## 🏗️ build_map.py - Construction Initiale
+## build_map.py - Construction Initiale
 
 ### Fonctions Principales
 
@@ -82,7 +82,7 @@ graph TD
 }
 ```
 
-## 🔄 update_map.py - Détection des Changements
+## update_map.py - Détection des Changements
 
 ### Algorithme de Détection
 
@@ -127,29 +127,29 @@ def detect_changes(current_files, existing_map):
 
 ### Types de Changements
 
-#### 📝 Nouveaux Fichiers
+#### Nouveaux Fichiers
 - Fichiers jamais vus auparavant
 - Ajout automatique au mapping
 - Marquage pour traitement
 
-#### 🔄 Fichiers Modifiés
+#### Fichiers Modifiés
 - Hash différent depuis dernière fois
 - Mise à jour du mapping
 - Retraitement nécessaire
 
-#### ❌ Fichiers Supprimés
+#### Fichiers Supprimés
 - Présents dans le mapping mais absents du disque
 - Nettoyage du mapping
 - Suppression des outputs correspondants
 
-#### ✅ Fichiers Inchangés
+#### Fichiers Inchangés
 - Hash identique
 - Pas de retraitement nécessaire
 - Skip pour optimiser performance
 
-## 🗺️ Système de Mapping
+## Système de Mapping
 
-### 📥 Input Maps
+### Input Maps
 Indexent les fichiers sources par type :
 
 ```
@@ -159,7 +159,7 @@ input_maps/
 └── scraped_pdfs_map.json   # PDFs scrapés
 ```
 
-### 🔍 Vect Maps
+### Vect Maps
 Fichiers sélectionnés pour vectorisation :
 
 ```
@@ -168,7 +168,7 @@ vect_maps/
 └── vectorization_status.json  # Statut de vectorisation
 ```
 
-### 📤 Output Maps
+### Output Maps
 Mapping entrée → sortie :
 
 ```
@@ -177,7 +177,7 @@ output_maps/
 └── validation_status.json     # Statut de validation
 ```
 
-## 🚀 Workflow Complet
+## Workflow Complet
 
 ### 1. Construction Initiale
 ```bash
@@ -212,7 +212,7 @@ for file_path in files_to_process:
     process_file(file_path)
 ```
 
-## 📊 Optimisations
+## Optimisations
 
 ### 1. Cache des Hashs
 ```python
@@ -263,7 +263,7 @@ def incremental_update(last_scan_time):
     save_last_scan_time(current_time)
 ```
 
-## 🛠️ Utilisation
+## Utilisation
 
 ### Workflow Standard
 ```python
@@ -300,7 +300,7 @@ def main():
     process_files(files_to_process)
 ```
 
-## 📊 Métriques et Monitoring
+## Métriques et Monitoring
 
 ### Statistiques Utiles
 ```python
@@ -322,17 +322,17 @@ def print_dashboard():
     """Affiche un dashboard des mappings"""
     stats = generate_stats()
     
-    print("📊 Preprocessing Dashboard")
+    print("Preprocessing Dashboard")
     print(f"Total Files: {stats['total_files']}")
     print(f"PDFs Manual: {stats['by_type']['pdf_manual']}")
     print(f"JSONs Scraped: {stats['by_type']['json_scraped']}")
     print(f"Last Update: {stats['last_update']}")
 ```
 
-## 🎯 Bonnes Pratiques
+## Bonnes Pratiques
 
-1. **🔄 Incremental** : Toujours privilégier les mises à jour incrémentales
-2. **🛡️ Robustesse** : Gérer les erreurs de lecture/écriture de fichiers
-3. **📊 Monitoring** : Logger les changements détectés
-4. **⚡ Performance** : Utiliser le parallélisme pour gros volumes
-5. **🧹 Cleanup** : Nettoyer régulièrement les mappings obsolètes
+1. **Incremental** : Toujours privilégier les mises à jour incrémentales
+2. **Robustesse** : Gérer les erreurs de lecture/écriture de fichiers
+3. **Monitoring** : Logger les changements détectés
+4. **Performance** : Utiliser le parallélisme pour gros volumes
+5. **Cleanup** : Nettoyer régulièrement les mappings obsolètes

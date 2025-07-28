@@ -25,11 +25,11 @@ class FillerState(TypedDict):
 def build_graph():
     graph = StateGraph(FillerState)
     # Define nodes
-    graph.add_node("detect_type", detect_type_node)
+    #graph.add_node("detect_type", detect_type_node)
     graph.add_node("fill_metadata_manual", fill_metadata_manual_node)
     graph.add_node("fill_metadata_scraped", fill_metadata_scraped_node)
     graph.add_node("fill_tags", fill_tags_node)
-    graph.add_node("fill_type_specific", fill_type_specific_node)
+    #graph.add_node("fill_type_specific", fill_type_specific_node)
     graph.add_node("validate", validate_node)
     graph.add_node("save", save_node)
     # Add dummy nodes before each main node if needed
