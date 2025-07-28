@@ -71,13 +71,13 @@
     "hash": "e96785f56d9df7353d596f4cc6a93fd903e6f63b69babda7be3cf9a93122b4ef",
     "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/Associations_clubs.pdf"
   },
-  "étudiants_référents.pdf": {
-    "hash": "57b27a50c16056dd85e0fa50187234c9aa6e0863d0472c29ad8ae8dcc0e0704c",
-    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/étudiants_référents.pdf"
-  },
   "reponses.pdf": {
     "hash": "77417ecf84ff6fc6ce2e7767f648f941c5686cbfbcc1344a863ea2a9c8033dbf",
     "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/reponses.pdf"
+  },
+  "étudiants_référents2.pdf": {
+    "hash": "fa4e3898cf7081aac36c9bb97904b4748112bdab720a70fe4c50a2e4976e788c",
+    "path": "/srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/pdf_man/autre/étudiants_référents2.pdf"
   },
   "syllabus_EI_FISA.pdf": {
     "hash": "919d45ea915fd6f176997f7ba15ce4564720aaec7baf15731a6bd06f01671d3e",

@@ -18,6 +18,12 @@ Document_handler/scraping/logs/
 Document_handler/scraping/scraping_tool/progress/
 Document_handler/scraping/scraping_tool/config_sites/
 
+Document_handler/new_filler/preprocessing/input_maps/
+Document_handler/new_filler/preprocessing/output_maps/
+Document_handler/new_filler/preprocessing/vect_maps/
+
+Document_handler/new_filler/progress/
+
 Document_handler/new_filler/Vectorisation/vectorstore/
 Document_handler/new_filler/Vectorisation/vectorstore_Syllabus/
 Document_handler/new_filler/Vectorisation/vectorstore_Syllabus_Construct/
