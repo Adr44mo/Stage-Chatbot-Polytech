@@ -7,7 +7,7 @@ from sqlmodel import Session, select
 from typing import List, Dict, Any, Optional
 from datetime import datetime, date
 from .database import get_session
-from .models import RAGDailyStats, RAGMonthlyStats, RAGYearlyStats
+from .models import RAGDailyStats, RAGMonthlyStats, RAGYearlyStats, RAGConversation
 from .stats_manager import StatsManager
 from .automated_tasks import AutomatedMaintenanceService
 from pydantic import BaseModel

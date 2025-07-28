@@ -6,7 +6,6 @@
 import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import ChatbotPage from "./pages/ChatbotPage";
-import ChatIframePage from "./pages/ChatIframePage";
 import LoginPage from "./pages/LoginPage";
 import AdminPage from "./pages/AdminPage";
 import ProtectedRoute from "./auth/ProtectedRoute";
@@ -43,7 +42,6 @@ function App() {
             }
           />
           <Route path="/chatbot" element={<ChatbotPage />} />
-          <Route path="/iframe" element={<ChatIframePage />} />
           <Route path="/" element={<ChatbotPage />} />
         </Routes>
       </Router>
