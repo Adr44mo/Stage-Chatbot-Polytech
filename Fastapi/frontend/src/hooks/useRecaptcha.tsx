@@ -11,7 +11,27 @@ const CAPTCHA_VALID_DURATION = 60 * 60 * 1000; // 1 heure en ms
 const useRecaptcha = () => {
   const [isValid, setIsValid] = useState<boolean>(false);
   const [token, setToken] = useState<string>("");
+  const [recaptchaReady, setRecaptchaReady] = useState<boolean>(false);
   const recaptchaRef = useRef<ReCAPTCHA | null>(null);
+  useEffect(() => {
+    if (typeof window !== "undefined" && !(window as any).grecaptcha) {
+      const scriptId = "recaptcha-script";
+      if (!document.getElementById(scriptId)) {
+        const script = document.createElement("script");
+        script.id = scriptId;
+        script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
+        script.async = true;
+        script.defer = true;
+        script.onload = () => setRecaptchaReady(true);
+        script.onerror = () => setRecaptchaReady(false);
+        document.head.appendChild(script);
+      } else {
+        setRecaptchaReady(true);
+      }
+    } else {
+      setRecaptchaReady(true);
+    }
+  }, []);
 
   // Vérifier au démarrage s'il y a une validation récente
   useEffect(() => {
@@ -67,15 +87,16 @@ const useRecaptcha = () => {
     localStorage.removeItem(CAPTCHA_VALID_KEY);
   }, []);
 
-  // On affiche le widget reCAPTCHA seulement si pas de token
-  const RecaptchaComponent = !isValid ? (
-    <ReCAPTCHA
-      ref={recaptchaRef}
-      sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
-      onChange={handleCaptchaChange}
-      onExpired={() => handleCaptchaChange(null)}
-    />
-  ) : null;
+  // On affiche le widget reCAPTCHA si pas de token déjà présent et si le script est prêt
+  const RecaptchaComponent =
+    !isValid && recaptchaReady ? (
+      <ReCAPTCHA
+        ref={recaptchaRef}
+        sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+        onChange={handleCaptchaChange}
+        onExpired={() => handleCaptchaChange(null)}
+      />
+    ) : null;
 
   return {
     isValid,
