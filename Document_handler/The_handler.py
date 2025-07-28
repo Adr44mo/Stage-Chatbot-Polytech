@@ -160,8 +160,8 @@ def add_site(data: AddSiteInput):
                 })
         
         # Vérification que le nom du site n'existe pas déjà
-        existing_names = [site["name"] for site in existing_sites if site["name"]]
-        if data.siteName in existing_names:
+        existing_names = [site["name"].lower() for site in existing_sites if site["name"]]
+        if data.siteName.lower() in existing_names:
             raise HTTPException(status_code=400, detail=f"Un site avec le nom '{data.siteName}' existe déjà")
         
         # Vérification que l'URL n'existe pas déjà
