@@ -1,0 +1,2 @@
+export PYTHONPATH=$(pwd)
+pdoc Document_handler -o docs_test/
