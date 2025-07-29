@@ -1,20 +1,20 @@
-# 🛠️ Utils Module - Utilitaires
+# Utils Module - Utilitaires
 
-## 🎯 Objectif
+## Objectif
 
 Ce module fournit les **utilitaires transversaux** utilisés par l'ensemble du pipeline :
-- 🤖 **Interface IA unifiée** (OpenAI/Ollama)
-- 🔧 **Helpers techniques** réutilisables
-- ⚙️ **Abstractions** pour simplifier le code métier
+- **Interface IA unifiée** (OpenAI/Ollama)
+- **Helpers techniques** réutilisables
+- **Abstractions** pour simplifier le code métier
 
-## 📁 Structure
+## Structure
 
 ```
 utils/
-└── ollama_wrapper.py    # 🤖 Interface IA unifiée
+└── ollama_wrapper.py    # Interface IA unifiée
 ```
 
-## 🤖 ollama_wrapper.py - Interface IA
+## ollama_wrapper.py - Interface IA
 
 ### Fonctions Principales
 
@@ -60,10 +60,10 @@ def ask_openai(prompt: str) -> str:
 ```
 
 **Avantages** :
-- ✅ Haute qualité des réponses
-- ✅ Stabilité du service
-- ✅ Support multilingue excellent
-- ❌ Coût par token
+- Haute qualité des réponses
+- Stabilité du service
+- Support multilingue excellent
+- Coût par token
 
 #### Ollama (Alternative Locale)
 ```python
@@ -80,24 +80,24 @@ def ask_ollama(prompt: str) -> str:
 ```
 
 **Avantages** :
-- ✅ Gratuit et privé
-- ✅ Pas de limite de tokens
-- ✅ Fonctionne hors ligne
-- ❌ Qualité variable selon le modèle
-- ❌ Plus lent
+- Gratuit et privé
+- Pas de limite de tokens
+- Fonctionne hors ligne
+- Qualité variable selon le modèle
+- Plus lent
 
 ### Gestion d'Erreurs
 
 #### Erreurs Communes
 ```python
 # Clé API manquante
-RuntimeError("🔐 Clé API OpenAI manquante")
+RuntimeError("Clé API OpenAI manquante")
 
 # Timeout Ollama
-RuntimeError("⏱️ Timeout pendant l'appel à Ollama")
+RuntimeError("Timeout pendant l'appel à Ollama")
 
 # Erreur réseau OpenAI
-RuntimeError("💥 Erreur OpenAI: Rate limit exceeded")
+RuntimeError("Erreur OpenAI: Rate limit exceeded")
 ```
 
 #### Stratégie de Fallback
@@ -148,7 +148,7 @@ def ask_model_with_retry(prompt: str) -> str:
     return ask_model(prompt)
 ```
 
-## 🔧 Extensions Possibles
+## Extensions Possibles
 
 ### Nouveaux Utilitaires
 
@@ -191,7 +191,7 @@ def validate_file_type(path: str, allowed_types: List[str]) -> bool:
     """Validation de type de fichier"""
 ```
 
-## 🛠️ Utilisation
+## Utilisation
 
 ### Import Standard
 ```python
@@ -223,7 +223,7 @@ def fill_missing_fields(data: dict, fields: list, prompt_file: str):
     return parse_response(response)
 ```
 
-## 📊 Monitoring et Métriques
+## Monitoring et Métriques
 
 ### Métriques Recommandées
 ```python
@@ -278,10 +278,10 @@ def ask_model_logged(prompt: str, engine: str = "openai") -> str:
         raise
 ```
 
-## 🎯 Bonnes Pratiques
+## Bonnes Pratiques
 
-1. **🔐 Sécurité** : Ne jamais logger les clés API
-2. **⚡ Performance** : Utiliser le cache pour les prompts répétitifs
-3. **🛡️ Robustesse** : Toujours avoir un fallback en cas d'erreur
-4. **📊 Monitoring** : Tracker les métriques d'usage et performance
-5. **💰 Coût** : Optimiser les prompts pour réduire les tokens
+1. **Sécurité** : Ne jamais logger les clés API
+2. **Performance** : Utiliser le cache pour les prompts répétitifs
+3. **Robustesse** : Toujours avoir un fallback en cas d'erreur
+4. **Monitoring** : Tracker les métriques d'usage et performance
+5. **Coût** : Optimiser les prompts pour réduire les tokens

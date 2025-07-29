@@ -29,12 +29,12 @@ Vectorisation/
 
 ```mermaid
 graph TD
-    A[Chargement JSON normalisés] --> B[Vérification/normalisation (_ensure_polytech_structure)]
-    B --> C[Aplatissement métadonnées (_flatten_metadata)]
-    C --> D[Chunking intelligent (RecursiveCharacterTextSplitter)]
+    A[Chargement JSON normalisés] --> B[Vérification/normalisation |_ensure_polytech_structure|]
+    B --> C[Aplatissement métadonnées |_flatten_metadata|]
+    C --> D[Chunking intelligent |_chunk_raw_docs|]
     D --> E[Enrichissement des chunks]
-    E --> F[Déduplication (hash contenu)]
-    F --> G[Batching & insertion ChromaDB]
+    E --> F[Déduplication |_deduplicate_chunks|]
+    F --> G[Batching & insertion ChromaDB |_split_list|]
     G --> H[Backup & permissions]
     H --> I[Activation dans llmm]
     
