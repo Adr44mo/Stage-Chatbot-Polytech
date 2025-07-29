@@ -100,23 +100,10 @@ INPUT_DIR = CORPUS_DIR / "test"
 VALID_DIR = CORPUS_DIR / "json_normalized" / "validated"
 ```
 
-## Métriques de qualité
-
-- **Architecture**: 9/10 - Modulaire et extensible
-- **Robustesse**: 8/10 - Gestion d'erreurs complète
-- **Performance**: 7/10 - Parallélisation efficace
-- **Documentation**: 5/10 - En cours d'amélioration
-
-**Score Global**: 7.1/10
-
-Voir le rapport détaillé: [QUALITY_REPORT.md](QUALITY_REPORT.md)
-
 ## Liens utiles
 
 - [Documentation Graph](graph/README.md)
 - [Documentation Logic](logic/README.md)
 - [Documentation Vectorisation](Vectorisation/README.md)
-- [Guide de Contribution](CONTRIBUTING.md)
-
 ---
 *Module intégré au système RAG Polytech - Pipeline de traitement intermédiaire (juillet 2025).*

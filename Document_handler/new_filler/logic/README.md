@@ -107,7 +107,7 @@ normalized = normalize_entry(
 - **Normalisation des URLs**
 - **Classification automatique**
 
-## 📄 load_pdf.py - Extraction PDF
+## load_pdf.py - Extraction PDF
 
 ### Types de PDFs Supportés
 
@@ -142,7 +142,7 @@ syllabus_data = extract_syllabus_structure(pdf_path)
 # Structure complète du syllabus
 ```
 
-## ✂️ chunck_syll.py - Découpage RAG
+## chunck_syll.py - Découpage RAG
 
 ### Chunking Intelligent
 Découpe les syllabus de manière optimale pour la recherche RAG :

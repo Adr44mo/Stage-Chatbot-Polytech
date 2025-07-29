@@ -3,7 +3,7 @@ import hashlib
 
 from ..config import DATA_SITES_DIR, PDF_MAN_DIR, INPUT_MAPS, OUTPUT_MAPS
 
-EXCLUDED_SITES = {'archives', 'polytech_réseau', 'geipi_polytech'}
+EXCLUDED_SITES = {'archives'}
 
 
 # --------------------------------------------------------------------------------------------
