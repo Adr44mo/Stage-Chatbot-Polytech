@@ -25,7 +25,6 @@ INPUT_MAPS.mkdir(parents=True, exist_ok=True)
 OUTPUT_MAPS.mkdir(parents=True, exist_ok=True)
 VECT_MAPS.mkdir(parents=True, exist_ok=True)
 
-INPUT_DIR = CORPUS_DIR / "test"
 VALID_DIR = CORPUS_DIR / "json_normalized" / "validated"
 REJECTED_DIR = CORPUS_DIR / "json_normalized" / "rejected"
 PROCESSED_DIR = CORPUS_DIR / "json_normalized" / "processed"

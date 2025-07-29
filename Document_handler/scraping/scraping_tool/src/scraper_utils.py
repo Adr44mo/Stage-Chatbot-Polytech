@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from color_utils import cp
 
 # Répertoire des fichiers de progression
 PROGRESS_DIR = Path(__file__).resolve().parent.parent / "progress"
@@ -20,7 +21,7 @@ PROGRESS_DIR.mkdir(exist_ok=True)
 # User-agent pour les requêtes HTTP
 # ---------------------------------
 HEADERS = {
-    "User-Agent": "PolytechScraper/0.3 (+https://github.com/Adr44mo/Stage-Chatbot-Polytech)"
+    "User-Agent": "PolytechScraper/0.7 (+https://github.com/Adr44mo/Stage-Chatbot-Polytech)"
 }
 
 # --------------------------------------
@@ -126,8 +127,8 @@ def extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date):
                 urls.append((loc, derniere_modif))
 
     except Exception as e:
-        print(f"[ERREUR] Impossible de lire le sitemap : {sitemap_url} ({e})")
-        return []
+        cp.print_warning(f"Impossible de lire le sitemap : {sitemap_url} ({e})")
+        raise e
 
     # Si aucune URL n'a été extraite, on retourne une liste vide
     if not urls:
@@ -144,8 +145,6 @@ def extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date):
 
 def count_modified_pages(config):
 
-    start_time = time.time()
-
     sitemap_url = config.get("SITEMAP_URL", [])
     base_url = config.get("BASE_URL", "")
     exclusions = config.get("EXCLUDE_URL_KEYWORDS", [])
@@ -159,13 +158,14 @@ def count_modified_pages(config):
     except Exception:
         limit_date = None
 
-    urls = extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date)
-
-    end_time = time.time()
-    duration = end_time - start_time
-    print(f"📊 {config.get('NAME')} — {len(urls)} pages modifiées (durée : {duration:.2f}s)")
-
-    return len(urls)
+    try:
+        urls = extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date)
+        return len(urls)
+    
+    # Valeur spéciale pour indiquer que le sitemap n'est pas accessible
+    except Exception as e:
+        cp.print_warning(f"{config.get('NAME')} — Sitemap inaccessible : {e}")
+        return -1
 
 
 ######################################################################
@@ -185,8 +185,6 @@ def has_valid_extension(url):
         '.avi', '.mp3', '.csv'
     ]
     return not any(url.lower().endswith(ext) for ext in excluded_extensions)
-
-
 
 # ------------------------------------------------
 # Extraction d'URLs à partir de la page d'accueil

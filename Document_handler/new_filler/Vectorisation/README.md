@@ -29,18 +29,19 @@ Vectorisation/
 
 ```mermaid
 graph TD
-    A[Chargement JSON normalisés] --> B[Vérification/normalisation |_ensure_polytech_structure|]
-    B --> C[Aplatissement métadonnées |_flatten_metadata|]
-    C --> D[Chunking intelligent |_chunk_raw_docs|]
+    A[Chargement JSON normalisés] --> B[Vérification / normalisation _ensure_polytech_structure]
+    B --> C[Aplatissement métadonnées _flatten_metadata]
+    C --> D[Chunking intelligent _chunk_raw_docs]
     D --> E[Enrichissement des chunks]
-    E --> F[Déduplication |_deduplicate_chunks|]
-    F --> G[Batching & insertion ChromaDB |_split_list|]
-    G --> H[Backup & permissions]
+    E --> F[Déduplication _deduplicate_chunks]
+    F --> G[Batching et insertion ChromaDB _split_list]
+    G --> H[Backup et permissions]
     H --> I[Activation dans llmm]
-    
+
     S[Chargement syllabus] --> T[Chunking spécialisé syllabus]
     T --> E
 ```
+
 ## Fonctions principales
 - `_load_json_docs()` : charge tous les JSON normalisés (hors syllabus)
 - `_load_syllabus_json_docs()` : charge les syllabus

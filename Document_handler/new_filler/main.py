@@ -4,7 +4,7 @@ import json
 import os
 import threading
 
-from .config import INPUT_DIR, VECT_MAPS, VALID_DIR, PROCESSED_DIR, INPUT_MAPS, cp, PROGRESS_DIR
+from .config import VECT_MAPS, VALID_DIR, PROCESSED_DIR, INPUT_MAPS, cp, PROGRESS_DIR
 from .graph.build_graph import build_graph
 from .preprocessing import build_map, update_map
 

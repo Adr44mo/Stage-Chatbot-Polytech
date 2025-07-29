@@ -96,7 +96,6 @@ OPENAI_API_KEY=your_openai_key
 # config.py
 OLLAMA_MODEL = "mistral"
 OPENAI_MODEL = "gpt-4o-mini"
-INPUT_DIR = CORPUS_DIR / "test"
 VALID_DIR = CORPUS_DIR / "json_normalized" / "validated"
 ```
 

@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🤖 Polytech Sorbonne - Chatbot RAG Intelligent
+# Polytech Sorbonne - Chatbot RAG Intelligent
 
 > **Un système de chatbot intelligent pour les étudiants de Polytech Sorbonne, propulsé par l'IA et la récupération de documents (RAG)**
 
@@ -11,25 +11,25 @@
 [![ChromaDB](https://img.shields.io/badge/ChromaDB-Latest-purple.svg)](https://chromadb.com)
 [![SQLite](https://img.shields.io/badge/SQLite-3-blue.svg)](https://sqlite.org)
 
-![Polytech Chatbot Demo](docs/chat.png)
+![Polytech Chatbot Demo](docs_info/chat.png)
 
 </div>
 
 ---
 
-## 🚀 Aperçu
+## Aperçu
 
 **Chatbot RAG intelligent** utilisant l'IA pour fournir des réponses précises à toute personne souhaitant obtenir des informations sur Polytech Sorbonne : futurs étudiants (lycéens), parents, élèves actuels ou toute personne intéressée. Le système analyse automatiquement l'intention des questions et oriente les requêtes vers les meilleures stratégies de récupération.
 
-## ✨ Fonctionnalités Clés
+## Fonctionnalités Clés
 
-- 🧠 **Analyse d'intention intelligente** - Classification automatique des questions
-- 🔀 **Routage adaptatif** - Stratégies de récupération optimisées
-- 📊 **Monitoring avancé** - Tracking des coûts et performances
-- 🔐 **Sécurité intégrée** - Rate limiting et authentification
-- ⚡ **Réponses temps réel** - Interface chat moderne
+- **Analyse d'intention intelligente** - Classification automatique des questions
+- **Routage adaptatif** - Stratégies de récupération optimisées
+- **Monitoring avancé** - Tracking des coûts et performances
+- **Sécurité intégrée** - Rate limiting et authentification
+- **Réponses temps réel** - Interface chat moderne
 
-## ⚡ Installation Rapide
+## Installation Rapide
 
 ```bash
 # TODO: tester l'instalation

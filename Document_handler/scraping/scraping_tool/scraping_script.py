@@ -32,7 +32,6 @@ ruamel_yaml.indent(mapping=2, sequence=4, offset=2)
 # -------------------------
 
 def load_yaml(path):
-
     with open(path, "r", encoding="utf-8") as f:
         return ruamel_yaml.load(f)
 
@@ -43,7 +42,6 @@ def load_yaml(path):
 def update_date_config(config_path):
 
     try:
-
         # Lecture du fichier YAML original
         config_data = load_yaml(config_path)
 

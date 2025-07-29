@@ -83,7 +83,7 @@ def get_site_new_docs():
                 data = yaml.safe_load(file)
                 name = data.get("NAME")
                 url = data.get("BASE_URL")
-                newDocs = count_modified_pages(data)  # cette fonction qui prend du temps
+                newDocs = count_modified_pages(data)
                 counts.append({"name": name, "url": url, "newDocs": newDocs})
         return counts
     except Exception as e:

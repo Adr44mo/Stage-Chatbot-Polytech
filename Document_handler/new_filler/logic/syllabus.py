@@ -2,7 +2,6 @@ import fitz  # PyMuPDF
 import re
 import json
 import os
-from ..config import INPUT_DIR
 
 def extract_text_from_pdf(pdf_path):
     doc = fitz.open(pdf_path)
@@ -132,24 +131,3 @@ def extract_syllabus_structure(pdf_path):
         "courses": courses
     }
 
-# 🎯 Test interactif
-if __name__ == "__main__":
-    pdf_path = INPUT_DIR / "pdf_man" / "MAIN" / "syllabus_MAIN.pdf"  # Mets le chemin local ici
-    # /srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/test/pdf_man/MAIN/syllabus_MAIN.pdf
-    # /srv/partage/Stage-Chatbot-Polytech/Document_handler/Corpus/test/pdf_man/MAIN/syllabus_Main.pdf
-    print("Extraction du syllabus à partir de :", pdf_path)
-    result = extract_syllabus_structure(pdf_path)
-
-    print("\n📘 Table des matières détectée :")
-    for toc_entry in result["toc"]:
-        print(f"- {toc_entry['code']} : {toc_entry['title']}" + 
-              (f" (p. {toc_entry['page']})" if toc_entry['page'] > 0 else ""))
-
-    print("\n📚 Cours extraits :")
-    for course in result["courses"]:
-        print(f"- {course['code']} : {course['title']}")
-
-    # Optionnel : dump JSON
-    json_path = os.path.splitext(pdf_path)[0] + ".json"
-    with open(json_path, "w", encoding="utf-8") as f:
-        json.dump(result, f, ensure_ascii=False, indent=2)
