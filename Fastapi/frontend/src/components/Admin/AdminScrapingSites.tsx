@@ -38,6 +38,13 @@ const NewDocsStatus = memo(({ newDocs }: { newDocs?: number }) => {
       </span>
     );
   }
+  if (newDocs === -1) {
+    return (
+      <span className="admin-scraping-newdocs unknown" style={{ fontWeight: 500, fontSize: "0.9rem", fontStyle: "italic" }}>
+        Inconnu
+      </span>
+    );
+  }
 
   return (
     <span 
