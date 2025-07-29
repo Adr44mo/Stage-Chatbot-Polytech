@@ -47,6 +47,27 @@ Le script va :
 ### 4. Démarrage
 
 **Pour PRODUCTION (optimisé, redémarrage automatique) :**
+Ouvrez le fichier `start-production.sh` pour modifier le chemin du dossier du projet :
+
+```bash
+nano start-production.sh
+```
+
+Dans ce fichier, repérez la ligne contenant :
+
+```bash
+PROJECT_ROOT="/srv/partage/Stage-Chatbot-Polytech"
+```
+
+Remplacez le chemin par l'emplacement réel de votre dossier de projet. Par exemple, si votre projet est dans `/home/votre-utilisateur/mon-projet`, modifiez la ligne ainsi :
+
+```bash
+PROJECT_ROOT="/home/votre-utilisateur/Stage-Chatbot-Polytech"
+```
+
+Enregistrez le fichier et quittez l'éditeur.  
+Cette modification est nécessaire pour que le script fonctionne correctement lors du lancement en production.
+
 ```bash
 ./start-production.sh
 ```
