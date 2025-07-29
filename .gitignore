@@ -5,7 +5,7 @@ faiss_index/
 infio
 test/
 **/__pycache__/
-Questions_qualité
+Question_qualité
 
 
 # On ignore les fichiers de configuration spécifiques à l'environnement

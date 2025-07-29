@@ -76,6 +76,77 @@ export default function AdminScraping() {
 		}
 	}, [transformSiteInfo]);
 
+	// Fonction pour vérifier si un scraping est en cours
+	const checkIfScrapingInProgress = useCallback(async () => {
+        try {
+            const allSites = sites.map(site => site.name);
+            let hasActiveProgress = false;
+            const currentProgress: ProgressState = {};
+
+            for (const siteName of allSites) {
+                try {
+                    const prog = await fetchScrapingProgress(siteName);
+                    
+                    // Seulement si on a vraiment des données de progression
+                    if (prog.current > 0 || prog.total > 1) {
+                        currentProgress[siteName] = prog;
+                        
+                        // Si le scraping n'est pas terminé
+                        if (prog.current < prog.total && !prog.status.toLowerCase().includes('terminé')) {
+                            hasActiveProgress = true;
+                        }
+                    }
+                } catch (err) {
+                    // Ignore les erreurs 404 (pas de fichier de progression)
+					if (typeof err === "object" && err !== null && "message" in err && typeof (err as any).message === "string" && !(err as any).message.includes('404')) {
+						console.error(`Erreur progression ${siteName}:`, err);
+					}
+                }
+            }
+
+            if (hasActiveProgress) {
+                setIsScraping(true);
+                setProgress(currentProgress);
+                // Récupérer les sites qui étaient en cours de scraping
+                const sitesInProgress = Object.keys(currentProgress).filter(
+                    siteName => {
+                        const prog = currentProgress[siteName];
+                        return prog.current < prog.total && !prog.status.toLowerCase().includes('terminé');
+                    }
+                );
+                const siteIds = sites
+                    .filter(site => sitesInProgress.includes(site.name))
+                    .map(site => site.id);
+                setSelectedSites(siteIds);
+            }
+        } catch (err) {
+            console.error("Erreur lors de la vérification du scraping en cours :", err);
+        }
+    }, [sites]);
+
+    // Fonction pour vérifier si une vectorisation est en cours
+    const checkIfVectorizationInProgress = useCallback(async () => {
+        try {
+            const prog = await fetchVectorizationProgress();
+            
+            // Vérifier si la vectorisation est vraiment en cours
+            if (prog.current > 0 || prog.total > 1 || prog.status !== "") {
+                setVectorizationProgress(prog);
+                
+                // Si la vectorisation n'est pas terminée
+                if (prog.current < prog.total && !prog.status.toLowerCase().includes('terminée')) {
+                    setIsVectorizing(true);
+                    vectorizationCompleteRef.current = false;
+                }
+            }
+        } catch (err) {
+            // Ignore les erreurs 404 (pas de fichier de progression)
+			if (typeof err === "object" && err !== null && "message" in err && typeof (err as any).message === "string" && !(err as any).message.includes('404')) {
+				console.error("Erreur lors de la vérification de la vectorisation en cours :", err);
+			}
+        }
+    }, []);
+
 	//Polling de progression du scraping
 	const pollScrapingProgress = useCallback(() => {
 		if (!isScraping) return;
@@ -196,6 +267,7 @@ export default function AdminScraping() {
 			await loadSites(); // Recharge les sites après ajout
 		} catch (err) {
 			console.error("Erreur lors de l'ajout du site :", err);
+			throw err; // Propage l'erreur vers le composant enfant
 		}
 	}, [loadSites]);
 
@@ -240,6 +312,14 @@ export default function AdminScraping() {
 	useEffect(() => {
 		updateSitesWithNewDocs();
 	}, [updateSitesWithNewDocs]);
+
+	// Vérifier les processus en cours au chargement du composant
+	useEffect(() => {
+		if (sites.length > 0) {
+			checkIfScrapingInProgress();
+			checkIfVectorizationInProgress();
+		}
+	}, [sites.length, checkIfScrapingInProgress, checkIfVectorizationInProgress]);
 
 	useEffect(() => {
 		return pollScrapingProgress();

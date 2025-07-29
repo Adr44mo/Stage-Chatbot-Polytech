@@ -408,8 +408,13 @@ body,
   padding: 8px;
   font-size: 1rem;
   border-radius: 4px;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   box-sizing: border-box;
+}
+.login-input:focus {
+  border: 2px solid #007bff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 .login-error-message {
   color: var(--color-error-red);
@@ -506,9 +511,22 @@ body,
   margin-bottom: 24px;
   color: #234;
 }
+.admin-scraping-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
 .admin-scraping-btn {
   margin-top: 8px;
   font-size: 1.08rem;
+}
+.admin-scraping-actions .admin-scraping-launch-btn {
+  flex: 1;
+  text-align: center;
+  min-width: 180px;
+  max-width: 300px;
 }
 .admin-scraping-launch-btn {
   width: auto;
@@ -537,6 +555,32 @@ body,
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
 }
+.admin-vectorization-progress {
+  margin-left: 20px;
+  margin-right: 12px;
+  height: 10px;
+  min-width: 100px;
+  max-width: 400px;
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  border-color: #c0c0c0;
+  border-radius: 8px;
+  background-color: #e0e6ed;
+  overflow: hidden;
+}
+.admin-vectorization-progress::-webkit-progress-bar {
+  background-color: #e0e6ed;
+  border-radius: 8px;
+}
+.admin-vectorization-progress::-webkit-progress-value {
+  background-color: #007bff;
+  border-radius: 8px;
+}
+.admin-vectorization-progress::-moz-progress-bar {
+  background-color: #007bff;
+  border-radius: 8px;
+}
 .admin-scraping-advanced-toggle-wrapper {
   display: flex;
   justify-content: flex-end;
@@ -559,6 +603,18 @@ body,
 .admin-scraping-selectall {
   margin-bottom: 8px;
 }
+.admin-scraping-checkbox-label {
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+.admin-scraping-checkbox {
+  margin-right: 6px;
+  accent-color: #3b82f6;
+  cursor: pointer;
+}
 .admin-scraping-sites-list {
   list-style: none;
   padding: 0;
@@ -575,30 +631,14 @@ body,
 .admin-scraping-site-item:last-child {
   border-bottom: none;
 }
-.admin-scraping-checkbox-label {
-  cursor: pointer;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  flex: 1;
-}
 .admin-scraping-site-label {
   flex: 1;
-}
-.admin-scraping-checkbox {
-  margin-right: 6px;
-  accent-color: #3b82f6;
-  cursor: pointer;
 }
 .admin-scraping-site-date {
   color: #888;
   font-size: 13px;
   margin-left: 8px;
 }
-.admin-scraping-newdocs.no-new {
-  color: #999;
-}
-/* Style général de la barre */
 .admin-scraping-progress {
   margin-left: 20px;
   margin-right: 15px;
@@ -614,51 +654,20 @@ body,
   background-color: #e0e6ed; /* important pour webkit */
   overflow: hidden;
 }
-/* Pour Chrome, Edge, Safari */
 .admin-scraping-progress::-webkit-progress-bar {
   background-color: #e0e6ed;
   border-radius: 8px;
 }
-/* Barre de progression (valeur) */
 .admin-scraping-progress::-webkit-progress-value {
   background-color: #007bff;
   border-radius: 8px;
 }
-/* Pour Firefox */
 .admin-scraping-progress::-moz-progress-bar {
   background-color: #007bff;
   border-radius: 8px;
 }
-
-/* Style général de la barre */
-.admin-vectorization-progress {
-  margin-left: 20px;
-  margin-right: 12px;
-  height: 10px;
-  min-width: 100px;
-  max-width: 400px;
-  width: 100%;
-  appearance: none;
-  -webkit-appearance: none;
-  border-color: #c0c0c0;
-  border-radius: 8px;
-  background-color: #e0e6ed; /* important pour webkit */
-  overflow: hidden;
-}
-/* Pour Chrome, Edge, Safari */
-.admin-vectorization-progress::-webkit-progress-bar {
-  background-color: #e0e6ed;
-  border-radius: 8px;
-}
-/* Barre de progression (valeur) */
-.admin-vectorization-progress::-webkit-progress-value {
-  background-color: #007bff;
-  border-radius: 8px;
-}
-/* Pour Firefox */
-.admin-vectorization-progress::-moz-progress-bar {
-  background-color: #007bff;
-  border-radius: 8px;
+.admin-scraping-newdocs.no-new {
+  color: #999;
 }
 
 /* ====================================================================
@@ -676,6 +685,72 @@ body,
   font-weight: 600;
   margin-bottom: 10px;
   color: #234;
+}
+.admin-scraping-add-form {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  margin-top: 12px;
+  background: #f1f7ff;
+  padding: 12px;
+  border-radius: 8px;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1.05rem;
+  align-items: center;
+}
+.admin-scraping-add-input {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 10px 14px;
+  border: 1.2px solid #b0b0b0;
+  border-radius: 5px;
+  font-size: 1.05rem;
+  height: 38px;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.admin-scraping-add-input:focus {
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+.admin-scraping-add-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.admin-scraping-add-btn:hover:not(:disabled) {
+  background: #2563eb;
+}
+.admin-scraping-add-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+.admin-scraping-error {
+  color: var(--color-error-red);
+  background-color: #ffeaea;
+  border: 1px solid var(--color-error-red);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 12px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(200, 102, 112, 0.1);
 }
 .admin-scraping-advanced-sites-list {
   list-style: none;
@@ -711,36 +786,6 @@ body,
 .admin-scraping-delete-btn:hover {
   background: #ffeaea;
 }
-.admin-scraping-add-form {
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  margin-top: 12px;
-  background: #f1f7ff;
-  padding: 12px;
-  border-radius: 8px;
-  max-width: 100%;
-  width: 100%;
-  box-sizing: border-box;
-  font-size: 1.05rem;
-  align-items: center;
-}
-.admin-scraping-add-input {
-  flex: 1 1 0;
-  min-width: 0;
-  padding: 10px 14px;
-  border: 1.2px solid #b0b0b0;
-  border-radius: 5px;
-  font-size: 1.05rem;
-  height: 38px;
-  background: #fff;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.admin-scraping-add-input:focus {
-  border: 2px solid #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-}
 .admin-scraping-btn[type="submit"] {
   height: 38px;
   padding: 0 18px;
@@ -760,19 +805,6 @@ body,
 }
 .admin-scraping-btn[type="submit"]:hover {
   background: #0056b3;
-}
-.admin-scraping-actions {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 16px;
-  margin-top: 24px;
-}
-.admin-scraping-actions .admin-scraping-launch-btn {
-  flex: 1;
-  text-align: center;
-  min-width: 180px;
-  max-width: 300px;
 }
 
 /* ==================================================

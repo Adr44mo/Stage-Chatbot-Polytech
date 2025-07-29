@@ -14,7 +14,7 @@ interface Site {
 
 interface AdminScrapingSettingsProps {
   sites: Site[];
-  onAddSite: (name: string, url: string) => void;
+  onAddSite: (name: string, url: string) => Promise<void>;
   onDeleteSite: (id: number) => void;
 }
 
@@ -27,22 +27,29 @@ export default function AdminScrapingSettings({
   const [newSiteUrl, setNewSiteUrl] = useState("");
   const [addError, setAddError] = useState("");
 
-  const handleAddSite = (e: React.FormEvent) => {
+  const handleAddSite = async (e: React.FormEvent) => {
     e.preventDefault();
     setAddError("");
+    
     if (!newSiteName.trim() || !newSiteUrl.trim()) {
       setAddError("Nom et URL obligatoires");
       return;
     }
+    
     try {
       new URL(newSiteUrl);
     } catch {
       setAddError("URL invalide");
       return;
     }
-    onAddSite(newSiteName, newSiteUrl);
-    setNewSiteName("");
-    setNewSiteUrl("");
+    
+    try {
+      await onAddSite(newSiteName, newSiteUrl);
+      setNewSiteName("");
+      setNewSiteUrl("");
+    } catch (error: any) {
+      setAddError(error.message || "Erreur lors de l'ajout du site");
+    }
   };
 
   return (
@@ -65,11 +72,11 @@ export default function AdminScrapingSettings({
           onChange={(e) => setNewSiteUrl(e.target.value)}
           required
         />
-        <button className="admin-corpus-add-btn" type="submit">
+        <button className="admin-scraping-add-btn" type="submit">
           Ajouter
         </button>
-        {addError && <div className="admin-scraping-error">{addError}</div>}
       </form>
+      {addError && <div className="admin-scraping-error">{addError}</div>}
       <h3 className="admin-scraping-advanced-title">Supprimer un site</h3>
       <ul className="admin-scraping-advanced-sites-list">
         {sites.map((site) => (
