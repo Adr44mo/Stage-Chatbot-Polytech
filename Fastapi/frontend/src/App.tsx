@@ -24,8 +24,8 @@ function App() {
 
   return (
     // On fournit le contexte d'authentification admin à toute l'application
-    <AdminAuthProvider>
-      <ScrapingProvider>
+    <ScrapingProvider>
+      <AdminAuthProvider>
         <Router>
           {/* On affiche les boutons de navigation seulement si on est pas dans une iframe */}
           {!isIframe && (
@@ -55,8 +55,8 @@ function App() {
             <Route path="/" element={<ChatbotPage />} />
           </Routes>
         </Router>
-      </ScrapingProvider>
-    </AdminAuthProvider>
+      </AdminAuthProvider>
+    </ScrapingProvider>
   );
 }
 
