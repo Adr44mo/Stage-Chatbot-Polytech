@@ -2,10 +2,13 @@
 // Gestionnaire des appels API pour l'authentification administrateur
 // ==================================================================
 
+/* URL de l'API backend */
+const API_URL = import.meta.env.VITE_BACKEND_URL || "/api";
+
 // Vérifie si l'utilisateur admin est authentifié (cookie JWT)
 export async function checkAdminAuth(): Promise<boolean> {
   try {
-    const res = await fetch("/auth/me", { credentials: "include" });
+    const res = await fetch(`${API_URL}/auth/me`, { credentials: "include" });
     return res.ok;
   } catch {
     return false;
@@ -14,7 +17,7 @@ export async function checkAdminAuth(): Promise<boolean> {
 
 // Déconnecte l'utilisateur admin (supprime le cookie JWT)
 export async function logoutAdmin() {
-  await fetch("/auth/logout", {
+  await fetch(`${API_URL}/auth/logout`, {
     method: "POST",
     credentials: "include",
   });
@@ -36,7 +39,7 @@ export async function loginAdmin(
       headers["X-Recaptcha-Validated"] = "true";
     }
 
-    const res = await fetch("/auth/login", {
+    const res = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
       headers,
       credentials: "include",

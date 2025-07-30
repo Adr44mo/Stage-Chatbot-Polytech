@@ -4,6 +4,9 @@
 
 import { siteNameToFileName } from "../utils/scrapingUtils";
 
+/* URL de l'API backend */
+const API_URL = import.meta.env.VITE_BACKEND_URL || "/api";
+
 // Types et interfaces
 export interface SiteInfo {
     name: string;
@@ -75,19 +78,19 @@ const handleApiResponse = async (response: Response) => {
 // ========================================================
 
 export const fetchSiteInfos = async (): Promise<SiteInfo[]> => {
-    const response = await fetch("/scraping/site_infos");
+    const response = await fetch(`${API_URL}/scraping/site_infos`);
     await handleApiResponse(response);
     return response.json();
 };
 
 export const fetchSiteNewDocs = async (): Promise<SiteNewDocs[]> => {
-    const response = await fetch("/scraping/site_new_docs");
+    const response = await fetch(`${API_URL}/scraping/site_new_docs`);
     await handleApiResponse(response);
     return response.json();
 };
 
 export const addSite = async (name: string, url: string): Promise<ApiResponse> => {
-    const response = await fetch("/scraping/add_site", {
+    const response = await fetch(`${API_URL}/scraping/add_site`, {
         method: "POST",
         headers: { "Content-Type": "application/json"},
         body: JSON.stringify({ siteName: name, url}),
@@ -97,7 +100,7 @@ export const addSite = async (name: string, url: string): Promise<ApiResponse> =
 };
 
 export const suppSite = async (name: string): Promise<ApiResponse> => {
-    const response = await fetch("/scraping/supp_site", {
+    const response = await fetch(`${API_URL}/scraping/supp_site`, {
         method: "POST",
         headers: { "Content-Type": "application/json"},
         body: JSON.stringify({ siteName: name }),
@@ -112,7 +115,7 @@ export const suppSite = async (name: string): Promise<ApiResponse> => {
 // ========================================================
 
 export const runScraping = async (siteNames: string[]): Promise<ApiResponse> => {
-    const response = await fetch("/scraping/scraping", {
+    const response = await fetch(`${API_URL}/scraping/scraping`, {
         method: "POST",
         headers: { "Content-Type": "application/json"},
         body: JSON.stringify(siteNames),
@@ -123,7 +126,7 @@ export const runScraping = async (siteNames: string[]): Promise<ApiResponse> => 
 
 export const fetchScrapingProgress = async (siteName: string): Promise<ProgressInfo> => {
     const fileName = siteNameToFileName(siteName);
-    const response = await fetch(`/scraping/progress/${encodeURIComponent(fileName)}`);
+    const response = await fetch(`${API_URL}/scraping/progress/${encodeURIComponent(fileName)}`);
 
     if (response.status === 404) {
         // Fichier de progression absent : scraping pas commencé ou déjà fini
@@ -138,7 +141,7 @@ export const resetScrapingProgress = async (siteNames: string[]): Promise<void> 
     const fileNames = siteNames.map(siteNameToFileName);
 
     const resetPromises = fileNames.map(async (fileName) => {
-        const response = await fetch(`/scraping/reset_progress/${encodeURIComponent(fileName)}`, {
+        const response = await fetch(`${API_URL}/scraping/reset_progress/${encodeURIComponent(fileName)}`, {
             method: "POST",
         });
         await handleApiResponse(response);
@@ -148,7 +151,7 @@ export const resetScrapingProgress = async (siteNames: string[]): Promise<void> 
 };
 
 export const fetchLastScrapingSummary = async (): Promise<ScrapingSummary> => {
-    const response = await fetch("/scraping/scraping_session_summary");
+    const response = await fetch(`${API_URL}/scraping/scraping_session_summary`);
 
     if (response.status === 404) {
         throw new Error("Aucun résumé de scraping disponible");
@@ -164,7 +167,7 @@ export const fetchLastScrapingSummary = async (): Promise<ScrapingSummary> => {
 // ========================================================
 
 export const runProcessing = async (): Promise<ApiResponse> => {
-    const response = await fetch("/scraping/files_normalization", {
+    const response = await fetch(`${API_URL}/scraping/files_normalization`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
     });
@@ -173,7 +176,7 @@ export const runProcessing = async (): Promise<ApiResponse> => {
 };
 
 export const runVectorization = async (): Promise<ApiResponse> => {
-    const response = await fetch("/scraping/vectorization", {
+    const response = await fetch(`${API_URL}/scraping/vectorization`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
     });
@@ -182,7 +185,7 @@ export const runVectorization = async (): Promise<ApiResponse> => {
 };
 
 export const runProcessingAndVectorization = async (): Promise<ApiResponse> => {
-    const response = await fetch("/scraping/process_and_vectorize", {
+    const response = await fetch(`${API_URL}/scraping/process_and_vectorize`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
     });
@@ -191,13 +194,13 @@ export const runProcessingAndVectorization = async (): Promise<ApiResponse> => {
 };
 
 export const fetchVectorizationProgress = async (): Promise<ProgressInfo> => {
-    const response = await fetch(`/scraping/vectorization_progress`);
+    const response = await fetch(`${API_URL}/scraping/vectorization_progress`);
     await handleApiResponse(response);
     return response.json();
 };
 
 export const resetVectorizationProgress = async (): Promise<void> => {
-    const response = await fetch('/scraping/vectorization_reset_progress', {
+    const response = await fetch(`${API_URL}/scraping/vectorization_reset_progress`, {
         method: "POST",
     });
     await handleApiResponse(response);
