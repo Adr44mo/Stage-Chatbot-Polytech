@@ -47,3 +47,10 @@ ruamel.yaml
 beautifulsoup4
 lxml
 PyPDF2
+
+
+# Scheduling tasks
+schedule
+
+# Timezone support
+pytz
