@@ -286,7 +286,7 @@ def scrape_page(site_config):
         # Extraction des pdfs et ajout à l'ensemble des pages visitées
         visited_pages.add(url)
         print(f"[{i+1}/{len(urls_pages)}] {url}")
-        save_progress(site_name, i+1, total_pages, "1/2 - Récupération des PDFs")
+        save_progress(site_name, i+1, total_pages, "1/2 - Récupération des PDFs ({}/{})".format(i+1, total_pages))
         pdfs = extract_pdf(url)
 
         # Téléchargement des PDF extraits

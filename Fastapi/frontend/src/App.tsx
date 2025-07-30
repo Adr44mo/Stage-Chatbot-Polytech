@@ -11,6 +11,7 @@ import AdminPage from "./pages/AdminPage";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import { AdminAuthProvider } from "./auth/AdminAuthContext";
 import { initSession } from "./api/chatApi";
+import { ScrapingProvider } from "./contexts/ScrapingContext";
 
 function App() {
   // On initialise la session utilisateur au montage de l'app
@@ -24,35 +25,37 @@ function App() {
   return (
     // On fournit le contexte d'authentification admin à toute l'application
     <AdminAuthProvider>
-      <Router>
-        {/* On affiche les boutons de navigation seulement si on est pas dans une iframe */}
-        {!isIframe && (
-          <div className="app-nav-buttons">
-            <Link to="/admin">
-              <button className="app-nav-btn app-nav-btn-admin">Admin</button>
-            </Link>
-            <Link to="/chatbot" className="app-nav-link-chatbot">
-              <button className="app-nav-btn app-nav-btn-chatbot">
-                Chatbot
-              </button>
-            </Link>
-          </div>
-        )}
-        {/* Définition des routes principales de l'application */}
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <AdminPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/chatbot" element={<ChatbotPage />} />
-          <Route path="/" element={<ChatbotPage />} />
-        </Routes>
-      </Router>
+      <ScrapingProvider>
+        <Router>
+          {/* On affiche les boutons de navigation seulement si on est pas dans une iframe */}
+          {!isIframe && (
+            <div className="app-nav-buttons">
+              <Link to="/admin">
+                <button className="app-nav-btn app-nav-btn-admin">Admin</button>
+              </Link>
+              <Link to="/chatbot" className="app-nav-link-chatbot">
+                <button className="app-nav-btn app-nav-btn-chatbot">
+                  Chatbot
+                </button>
+              </Link>
+            </div>
+          )}
+          {/* Définition des routes principales de l'application */}
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/chatbot" element={<ChatbotPage />} />
+            <Route path="/" element={<ChatbotPage />} />
+          </Routes>
+        </Router>
+      </ScrapingProvider>
     </AdminAuthProvider>
   );
 }

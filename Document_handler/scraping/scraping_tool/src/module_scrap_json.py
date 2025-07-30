@@ -363,7 +363,7 @@ def crawl(site_config):
         visited_pages.add(url)
         print(f"[{i+1}/{len(urls_pages)}] {url}")
 
-        save_progress(site_name, i + 1, total_pages, "2/2 - Récupération des pages web")
+        save_progress(site_name, i + 1, total_pages, f"2/2 - Récupération des pages web ({i+1}/{total_pages})")
 
         # Requête HTTP pour récupérer le contenu de la page
         try:
@@ -447,7 +447,10 @@ def crawl(site_config):
     if all_urls:
         archive_old_jsons(download_dir, archive_dir, all_urls)
     else:
-        print("[INFO] Archivage désactivé : aucune URL récupérée sur le site (site inaccessible ?)")       
+        print("[INFO] Archivage désactivé : aucune URL récupérée sur le site (site inaccessible ?)")    
+
+    save_progress(site_name, total_pages, total_pages, "2/2 - Scraping terminé")
+   
 
 def crawl_test(url_test):
 
