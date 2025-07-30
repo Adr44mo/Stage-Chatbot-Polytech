@@ -9,9 +9,12 @@ import type {
   YearlyStatsResponse 
 } from "../../api/statsApi";
 
+/* URL de l'API backend */
+const API_URL = import.meta.env.VITE_BACKEND_URL || "/api";
+
 // Fonctions API utilisant les routes existantes
 const fetchDailyStats = async (limit: number = 30): Promise<DailyStatsResponse[]> => {
-  const response = await fetch(`/intelligent-rag/stats/daily?limit=${limit}`, {
+  const response = await fetch(`${API_URL}/intelligent-rag/stats/daily?limit=${limit}`, {
     credentials: "include"
   });
   
@@ -49,7 +52,7 @@ const fetchDailyStats = async (limit: number = 30): Promise<DailyStatsResponse[]
 };
 
 const fetchMonthlyStats = async (limit: number = 12): Promise<MonthlyStatsResponse[]> => {
-  const response = await fetch(`/intelligent-rag/stats/monthly?limit=${limit}`, {
+  const response = await fetch(`${API_URL}/intelligent-rag/stats/monthly?limit=${limit}`, {
     credentials: "include"
   });
   
@@ -85,7 +88,7 @@ const fetchMonthlyStats = async (limit: number = 12): Promise<MonthlyStatsRespon
 };
 
 const fetchYearlyStats = async (limit: number = 5): Promise<YearlyStatsResponse[]> => {
-  const response = await fetch(`/intelligent-rag/stats/yearly?limit=${limit}`, {
+  const response = await fetch(`${API_URL}/intelligent-rag/stats/yearly?limit=${limit}`, {
     credentials: "include"
   });
   

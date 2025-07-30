@@ -5,6 +5,9 @@
 import { useState, useEffect } from "react";
 import { DateTime } from "luxon";
 
+/* URL de l'API backend */
+const API_URL = import.meta.env.VITE_BACKEND_URL || "/api";
+
 // Types pour les APIs de maintenance
 interface MaintenanceStatus {
   service_running: boolean;
@@ -37,7 +40,7 @@ interface CleanupResult {
 
 // Fonctions API pour la maintenance
 const fetchMaintenanceStatus = async (): Promise<MaintenanceStatus> => {
-  const response = await fetch('/intelligent-rag/maintenance/status', {
+  const response = await fetch(`${API_URL}/intelligent-rag/maintenance/status`, {
     credentials: "include"
   });
   
@@ -49,7 +52,7 @@ const fetchMaintenanceStatus = async (): Promise<MaintenanceStatus> => {
 };
 
 const fetchMaintenanceSchedule = async (): Promise<MaintenanceSchedule> => {
-  const response = await fetch('/intelligent-rag/maintenance/schedule', {
+  const response = await fetch(`${API_URL}/intelligent-rag/maintenance/schedule`, {
     credentials: "include"
   });
   
@@ -61,7 +64,7 @@ const fetchMaintenanceSchedule = async (): Promise<MaintenanceSchedule> => {
 };
 
 const startMaintenanceService = async (): Promise<any> => {
-  const response = await fetch('/intelligent-rag/maintenance/service/start', {
+  const response = await fetch(`${API_URL}/intelligent-rag/maintenance/service/start`, {
     method: 'POST',
     credentials: "include"
   });
@@ -74,7 +77,7 @@ const startMaintenanceService = async (): Promise<any> => {
 };
 
 const stopMaintenanceService = async (): Promise<any> => {
-  const response = await fetch('/intelligent-rag/maintenance/service/stop', {
+  const response = await fetch(`${API_URL}/intelligent-rag/maintenance/service/stop`, {
     method: 'POST',
     credentials: "include"
   });
@@ -87,7 +90,7 @@ const stopMaintenanceService = async (): Promise<any> => {
 };
 
 const runManualCleanup = async (daysToKeep: number): Promise<CleanupResult> => {
-  const response = await fetch(`/intelligent-rag/maintenance/cleanup/manual?days_to_keep=${daysToKeep}`, {
+  const response = await fetch(`${API_URL}/intelligent-rag/maintenance/cleanup/manual?days_to_keep=${daysToKeep}`, {
     method: 'POST',
     credentials: "include"
   });

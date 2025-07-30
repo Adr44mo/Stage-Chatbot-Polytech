@@ -5,6 +5,9 @@
 import { runProcessingAndVectorization, fetchVectorizationProgress, resetVectorizationProgress } from "./scrapingApi";
 import type { ProgressInfo } from "./scrapingApi";
 
+/* URL de l'API backend */
+const API_URL = import.meta.env.VITE_BACKEND_URL || "/api";
+
 /**
  * Types pour la gestion des fichiers et dossiers
  */
@@ -39,7 +42,7 @@ interface DirectoryItem {
  */
 export const fetchCorpusTree = async (): Promise<FileNode> => {
   try {
-    const response = await fetch("/pdf_manual/admin/tree");
+    const response = await fetch(`${API_URL}/pdf_manual/admin/tree`);
     if (!response.ok) {
       throw new Error(
         `Erreur lors de la récupération du corpus: ${response.status}`
@@ -91,7 +94,7 @@ export const fetchCorpusTree = async (): Promise<FileNode> => {
  */
 export const getFilePreviewUrl = async (fileId: string): Promise<string> => {
   try {
-    const configResponse = await fetch("/pdf_manual/admin/config");
+    const configResponse = await fetch(`${API_URL}/pdf_manual/admin/config`);
     if (!configResponse.ok) {
       throw new Error("Erreur lors de la récupération de la configuration");
     }
@@ -133,7 +136,7 @@ export const uploadFile = async (
     formData.append("dir", dirPath);
 
     // On appelle l'API pour uploader le fichier
-    const response = await fetch("/pdf_manual/admin/upload-files", {
+    const response = await fetch(`${API_URL}/pdf_manual/admin/upload-files`, {
       method: "POST",
       body: formData,
     });
@@ -167,7 +170,7 @@ export const uploadFile = async (
 export const deleteFile = async (fileId: string): Promise<void> => {
   try {
     const response = await fetch(
-      `/pdf_manual/admin/delete-file?file_path=${encodeURIComponent(fileId)}`,
+      `${API_URL}/pdf_manual/admin/delete-file?file_path=${encodeURIComponent(fileId)}`,
       {
         method: "DELETE",
       }
@@ -199,7 +202,7 @@ export const moveFile = async (
     formData.append("source_path", fileId);
     formData.append("target_path", targetFolderId);
 
-    const response = await fetch("/pdf_manual/admin/move-file", {
+    const response = await fetch(`${API_URL}/pdf_manual/admin/move-file`, {
       method: "POST",
       body: formData,
     });
@@ -225,7 +228,7 @@ export const createDirectory = async (dirPath: string): Promise<void> => {
     const formData = new FormData();
     formData.append("dir_path", dirPath);
 
-    const response = await fetch("/pdf_manual/admin/create-dir", {
+    const response = await fetch(`${API_URL}/pdf_manual/admin/create-dir`, {
       method: "POST",
       body: formData,
     });
@@ -253,7 +256,7 @@ export const deleteDirectory = async (
 ): Promise<void> => {
   try {
     const response = await fetch(
-      `/pdf_manual/admin/delete-dir?dir_path=${encodeURIComponent(
+      `${API_URL}/pdf_manual/admin/delete-dir?dir_path=${encodeURIComponent(
         dirPath
       )}&force=${force}`,
       {
@@ -287,7 +290,7 @@ export const renameFile = async (
     formData.append("file_path", filePath);
     formData.append("new_name", newName);
 
-    const response = await fetch("/pdf_manual/admin/rename-file", {
+    const response = await fetch(`${API_URL}/pdf_manual/admin/rename-file`, {
       method: "POST",
       body: formData,
     });
@@ -318,7 +321,7 @@ export const renameDirectory = async (
     formData.append("dir_path", dirPath);
     formData.append("new_name", newName);
 
-    const response = await fetch("/pdf_manual/admin/rename-dir", {
+    const response = await fetch(`${API_URL}/pdf_manual/admin/rename-dir`, {
       method: "POST",
       body: formData,
     });
@@ -349,7 +352,7 @@ export const moveDirectory = async (
     formData.append("source_path", sourcePath);
     formData.append("target_path", targetPath);
 
-    const response = await fetch("/pdf_manual/admin/move-dir", {
+    const response = await fetch(`${API_URL}/pdf_manual/admin/move-dir`, {
       method: "POST",
       body: formData,
     });
@@ -373,7 +376,7 @@ export const moveDirectory = async (
 export const getDirectoryInfo = async (dirPath: string = ""): Promise<any> => {
   try {
     const response = await fetch(
-      `/pdf_manual/admin/dir-info?dir_path=${encodeURIComponent(dirPath)}`
+      `${API_URL}/pdf_manual/admin/dir-info?dir_path=${encodeURIComponent(dirPath)}`
     );
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -398,7 +401,7 @@ export const getDirectoryInfo = async (dirPath: string = ""): Promise<any> => {
  */
 export const enableEditMode = async (): Promise<string> => {
   try {
-    const response = await fetch("/pdf_manual/admin/enable-edit-mode", {
+    const response = await fetch(`${API_URL}/pdf_manual/admin/enable-edit-mode`, {
       method: "POST",
     });
     if (!response.ok) {
@@ -426,7 +429,7 @@ export const saveChanges = async (snapshotId: string): Promise<void> => {
     const formData = new FormData();
     formData.append("snapshot_id", snapshotId);
 
-    const response = await fetch("/pdf_manual/admin/save-changes", {
+    const response = await fetch(`${API_URL}/pdf_manual/admin/save-changes`, {
       method: "POST",
       body: formData,
     });
@@ -452,7 +455,7 @@ export const cancelChanges = async (snapshotId: string): Promise<void> => {
     const formData = new FormData();
     formData.append("snapshot_id", snapshotId);
 
-    const response = await fetch("/pdf_manual/admin/cancel-changes", {
+    const response = await fetch(`${API_URL}/pdf_manual/admin/cancel-changes`, {
       method: "POST",
       body: formData,
     });
@@ -474,7 +477,7 @@ export const cancelChanges = async (snapshotId: string): Promise<void> => {
  */
 export const getEditStatus = async (): Promise<any> => {
   try {
-    const response = await fetch("/pdf_manual/admin/edit-status");
+    const response = await fetch(`${API_URL}/pdf_manual/admin/edit-status`);
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
