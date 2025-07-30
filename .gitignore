@@ -10,7 +10,9 @@ Question_qualité
 
 # On ignore les fichiers de configuration spécifiques à l'environnement
 # On ignore les fichiers de type documentation ainsi que tout ce qui est généré par l'application
-Document_handler/Corpus/*/*
+Document_handler/Corpus/data_sites/*
+Document_handler/Corpus/json_normalized/*
+Document_handler/Corpus/test/
 
 node_modules
 
@@ -37,3 +39,6 @@ Fastapi/backend/app/intelligent_rag/logs/
 database.db
 
 .devdbrc
+
+ssl/polybot.crt
+ssl/polybot.key
