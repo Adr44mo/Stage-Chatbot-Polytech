@@ -38,7 +38,7 @@ log_error() {
 # CONFIGURATION PRODUCTION
 # =============================================================================
 
-PROJECT_ROOT="/srv/partage/Stage-Chatbot-Polytech"
+PROJECT_ROOT="$(pwd)"
 CONFIG_FILE="$PROJECT_ROOT/config.env"
 
 # Vérification et chargement de la configuration
@@ -133,26 +133,39 @@ setup_logs() {
 start_nginx() {
     log_info "🌐 Configuration Nginx HTTPS (production)..."
     
-    # Tester la configuration
-    if ! sudo nginx -t -c "$PROJECT_ROOT/Fastapi/nginx/nginx-https.conf"; then
+    # Déterminer le fichier de configuration à utiliser
+    NGINX_CONFIG_FILE="$PROJECT_ROOT/Fastapi/nginx/nginx-production-configured.conf"
+    
+    # Vérifier que le fichier de configuration existe (créé par init.sh)
+    if [[ ! -f "$NGINX_CONFIG_FILE" ]]; then
+        log_error "Configuration Nginx production manquante: $NGINX_CONFIG_FILE"
+        log_error "Lancez d'abord: ./init.sh avec DEPLOYMENT_MODE=production"
+        exit 1
+    fi
+    
+    # Tester la configuration et afficher le warning ssl_stapling si présent
+    NGINX_OUTPUT=$(sudo nginx -t -c "$NGINX_CONFIG_FILE" 2>&1)
+    echo "$NGINX_OUTPUT" | grep -q 'ssl_stapling' && {
+        log_warning "Nginx : warning ssl_stapling ignoré (certificat auto-signé ou intermédiaire manquant)"
+        log_info "Ce warning est normal avec un certificat auto-signé et n'affecte pas le fonctionnement HTTPS."
+    }
+    if echo "$NGINX_OUTPUT" | grep -q 'syntax is ok' && echo "$NGINX_OUTPUT" | grep -q 'test is successful'; then
+        # Stopper nginx existant
+        sudo systemctl stop nginx 2>/dev/null || true
+        sudo pkill -f nginx 2>/dev/null || true
+        sleep 1
+        # Démarrer nginx avec config PRODUCTION
+        sudo nginx -c "$NGINX_CONFIG_FILE"
+        if ! pgrep nginx >/dev/null; then
+            log_error "Échec du démarrage de Nginx"
+            exit 1
+        fi
+        log_success "Nginx PRODUCTION démarré (fichiers statiques + port 443 exposé)"
+    else
         log_error "Configuration Nginx invalide"
+        echo "$NGINX_OUTPUT"
         exit 1
     fi
-    
-    # Stopper nginx existant
-    sudo systemctl stop nginx 2>/dev/null || true
-    sudo pkill -f nginx 2>/dev/null || true
-    sleep 1
-    
-    # Démarrer nginx avec config HTTPS
-    sudo nginx -c "$PROJECT_ROOT/Fastapi/nginx/nginx-https.conf"
-    
-    if ! pgrep nginx >/dev/null; then
-        log_error "Échec du démarrage de Nginx"
-        exit 1
-    fi
-    
-    log_success "Nginx HTTPS démarré (port 443 exposé)"
 }
 
 # =============================================================================
@@ -175,14 +188,14 @@ start_backend_with_restart() {
         
         cd "$PROJECT_ROOT"
         
-        # Démarrage uvicorn en mode production
+        # Démarrage uvicorn en mode production (redirection des logs)
         uvicorn Fastapi.backend.main:app \
             --host 0.0.0.0 \
             --port $BACKEND_PORT \
             --workers $WORKERS \
             --log-level $LOG_LEVEL \
             --access-log \
-            --log-file "$LOG_DIR/backend.log" &
+            >> "$LOG_DIR/backend.log" 2>&1 &
         
         BACKEND_PID=$!
         echo $BACKEND_PID > "$PID_FILE"

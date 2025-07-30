@@ -60,6 +60,21 @@ check_config() {
     # Charger la configuration
     source config.env
     
+    # Définir SERVER_IP si non défini (déduire de SERVER_DOMAIN)
+    if [[ -z "$SERVER_IP" ]]; then
+        if [[ "$SERVER_DOMAIN" == "localhost" ]]; then
+            SERVER_IP="127.0.0.1"
+        else
+            # Essayer de résoudre le domaine en IP
+            SERVER_IP=$(dig +short "$SERVER_DOMAIN" 2>/dev/null | head -n1)
+            if [[ -z "$SERVER_IP" ]]; then
+                SERVER_IP="127.0.0.1"
+                log_warning "Impossible de résoudre $SERVER_DOMAIN, utilisation de 127.0.0.1"
+            fi
+        fi
+        log_info "SERVER_IP automatiquement défini à: $SERVER_IP"
+    fi
+    
     # Vérifier les variables critiques
     if [[ -z "$OPENAI_API_KEY" || "$OPENAI_API_KEY" == "your_openai_api_key_here" ]]; then
         log_error "OPENAI_API_KEY doit être configurée dans config.env"
@@ -88,13 +103,26 @@ check_system() {
         fi
     fi
     
-    # Vérifier sudo
-    if ! sudo -n true 2>/dev/null; then
-        log_error "sudo est requis. Configurez sudo pour votre utilisateur."
-        exit 1
+    # Vérifier sudo (optionnel)
+    if sudo -n true 2>/dev/null; then
+        HAS_SUDO=true
+        log_success "Privilèges sudo détectés - installation système complète possible"
+    else
+        HAS_SUDO=false
+        log_warning "sudo non disponible - déploiement en mode utilisateur"
+        log_info "Fonctionnalités limitées :"
+        log_info "  - Pas d'installation automatique des paquets système"
+        log_info "  - Nginx doit être configuré manuellement par l'administrateur"
+        log_info "  - Utilisation des ports > 1024 uniquement"
+        echo
+        read -p "Continuer sans sudo ? (y/N): " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            exit 1
+        fi
     fi
     
-    log_success "Système vérifié"
+    log_success "Système vérifié (sudo: ${HAS_SUDO:-false})"
 }
 
 # =============================================================================
@@ -102,34 +130,61 @@ check_system() {
 # =============================================================================
 
 install_system_deps() {
-    log_info "Installation des dépendances système..."
-    
-    sudo apt update
-    sudo apt install -y \
-        python3.12 \
-        python3.12-venv \
-        python3.12-dev \
-        python3-pip \
-        nodejs \
-        npm \
-        nginx \
-        curl \
-        wget \
-        git \
-        build-essential \
-        pkg-config \
-        libssl-dev \
-        libffi-dev \
-        lsof \
-        psmisc
-    
-    # Vérifier les versions
-    python3.12 --version
-    node --version
-    npm --version
-    nginx -v
-    
-    log_success "Dépendances système installées"
+    if [[ "$HAS_SUDO" == "true" ]]; then
+        log_info "Installation des dépendances système avec sudo..."
+        sudo apt update
+        sudo apt install -y \
+            python3.12 \
+            python3.12-venv \
+            python3.12-dev \
+            python3-pip \
+            nodejs \
+            npm \
+            nginx \
+            curl \
+            wget \
+            git \
+            build-essential \
+            pkg-config \
+            libssl-dev \
+            libffi-dev \
+            lsof \
+            psmisc
+        # Vérifier les versions
+        python3.12 --version || python3 --version
+        node --version
+        npm --version
+        nginx -v
+        log_success "Dépendances système installées"
+    else
+        log_warning "Installation système ignorée - pas de sudo"
+        log_info "Vérification des dépendances disponibles..."
+        # Vérifier que les outils nécessaires sont installés
+        missing_deps=()
+        if ! command -v python3.12 >/dev/null 2>&1 && ! command -v python3 >/dev/null 2>&1; then
+            missing_deps+=("python3.12 ou python3")
+        fi
+        if ! command -v node >/dev/null 2>&1; then
+            missing_deps+=("nodejs")
+        fi
+        if ! command -v npm >/dev/null 2>&1; then
+            missing_deps+=("npm")
+        fi
+        if ! command -v git >/dev/null 2>&1; then
+            missing_deps+=("git")
+        fi
+        if [[ ${#missing_deps[@]} -gt 0 ]]; then
+            log_error "Dépendances manquantes: ${missing_deps[*]}"
+            log_error "Demandez à l'administrateur d'installer :"
+            log_error "  sudo apt update && sudo apt install -y python3.12 python3.12-venv nodejs npm git build-essential"
+            exit 1
+        fi
+        # Afficher les versions disponibles
+        python3.12 --version 2>/dev/null || python3 --version
+        node --version
+        npm --version
+        log_success "Dépendances vérifiées (installées par l'administrateur)"
+    fi
 }
 
 # =============================================================================
@@ -190,12 +245,12 @@ generate_ssl_certs() {
     log_info "Génération des certificats SSL..."
     
     mkdir -p ssl
-    
     if [[ -z "$SSL_CERT_PATH" ]] || [[ -z "$SSL_KEY_PATH" ]]; then
         log_info "Génération de certificats auto-signés..."
         
         # Créer le fichier de config OpenSSL
         cat > ssl/openssl.conf << EOF
+    
 [req]
 distinguished_name = req_distinguished_name
 req_extensions = v3_req
@@ -233,6 +288,9 @@ EOF
         SSL_KEY_PATH="$(pwd)/ssl/polybot.key"
         
         log_success "Certificats SSL générés"
+        # Mettre à jour config.env avec les chemins générés
+        sed -i "s|^SSL_CERT_PATH=.*$|SSL_CERT_PATH=$(pwd)/ssl/polybot.crt|" config.env
+        sed -i "s|^SSL_KEY_PATH=.*$|SSL_KEY_PATH=$(pwd)/ssl/polybot.key|" config.env
     else
         log_info "Utilisation des certificats SSL existants"
     fi
@@ -285,38 +343,94 @@ EOF
 
 setup_nginx() {
     log_info "Configuration de Nginx..."
-    
-    # Créer les répertoires de logs
-    sudo mkdir -p /var/log/nginx/stage-chatbot
-    
-    # Vérifier si les fichiers de config nginx existent et les configurer
-    if [[ -f "Fastapi/nginx/nginx-https.conf" ]]; then
-        # Configuration HTTPS (seul port exposé à l'extérieur : 443)
-        # Remplacer les placeholders dans la config HTTPS
-        sed -i "s|SERVER_DOMAIN|${SERVER_DOMAIN}|g" Fastapi/nginx/nginx-https.conf
-        sed -i "s|BACKEND_PORT|${BACKEND_PORT}|g" Fastapi/nginx/nginx-https.conf
-        sed -i "s|FRONTEND_PORT|${FRONTEND_PORT}|g" Fastapi/nginx/nginx-https.conf
-        sed -i "s|SSL_CERT_PATH|${SSL_CERT_PATH}|g" Fastapi/nginx/nginx-https.conf
-        sed -i "s|SSL_KEY_PATH|${SSL_KEY_PATH}|g" Fastapi/nginx/nginx-https.conf
-        
-        # Tester la configuration HTTPS
-        sudo nginx -t -c "$(pwd)/Fastapi/nginx/nginx-https.conf"
-        
-        log_success "Configuration Nginx HTTPS prête (port 443 exposé, /api -> backend:${BACKEND_PORT})"
+    # Créer les répertoires de logs (si sudo disponible)
+    if [[ "$HAS_SUDO" == "true" ]]; then
+        sudo mkdir -p /var/log/nginx/stage-chatbot
+        log_info "Répertoires de logs nginx créés"
     else
-        log_warning "Fichier nginx-https.conf introuvable"
+        log_warning "Logs nginx: utilisera les logs par défaut (pas de sudo)"
     fi
-    
-    # Configuration HTTP de base (pour développement)
+    # Variables pour la configuration
+    PROJECT_PATH="$(pwd)"
+    FRONTEND_DIST_PATH="$PROJECT_PATH/Fastapi/frontend/dist"
+    # Configuration PRODUCTION : Copier et configurer le template de production
+    if [[ "$DEPLOYMENT_MODE" == "production" ]] && [[ -f "Fastapi/nginx/nginx-production.conf" ]]; then
+        log_info "Configuration Nginx pour PRODUCTION..."
+        # Copier le template pour éviter de modifier l'original
+        cp "Fastapi/nginx/nginx-production.conf" "Fastapi/nginx/nginx-production-configured.conf"
+        # Ajuster la configuration selon les privilèges
+        if [[ "$HAS_SUDO" != "true" ]]; then
+            # Modifier les ports pour éviter les privilèges root (80/443 -> 8080/8443)
+            sed -i 's/listen 80;/listen 8080;/' Fastapi/nginx/nginx-production-configured.conf
+            sed -i 's/listen 443 ssl/listen 8443 ssl/' Fastapi/nginx/nginx-production-configured.conf
+            # Utiliser logs locaux au lieu de /var/log
+            sed -i "s|/var/log/nginx/|${PROJECT_PATH}/logs/nginx-|g" Fastapi/nginx/nginx-production-configured.conf
+            log_warning "Configuration adaptée sans sudo: ports 8080/8443 au lieu de 80/443"
+        fi
+        # Remplacer toutes les variables par les valeurs réelles
+        sed -i "s|PROJECT_PATH|${PROJECT_PATH}|g" Fastapi/nginx/nginx-production-configured.conf
+        sed -i "s|SERVER_DOMAIN|${SERVER_DOMAIN}|g" Fastapi/nginx/nginx-production-configured.conf
+        sed -i "s|SERVER_IP|${SERVER_IP}|g" Fastapi/nginx/nginx-production-configured.conf
+        sed -i "s|BACKEND_PORT|${BACKEND_PORT}|g" Fastapi/nginx/nginx-production-configured.conf
+        sed -i "s|SSL_CERT_PATH|${SSL_CERT_PATH}|g" Fastapi/nginx/nginx-production-configured.conf
+        sed -i "s|SSL_KEY_PATH|${SSL_KEY_PATH}|g" Fastapi/nginx/nginx-production-configured.conf
+        # Tester la configuration (avec ou sans sudo)
+        nginx_test_cmd="nginx -t -c $(pwd)/Fastapi/nginx/nginx-production-configured.conf"
+        if [[ "$HAS_SUDO" == "true" ]]; then
+            nginx_test_cmd="sudo $nginx_test_cmd"
+        fi
+        if $nginx_test_cmd 2>/dev/null; then
+            if [[ "$HAS_SUDO" == "true" ]]; then
+                log_success "Configuration Nginx PRODUCTION prête (frontend buildé + backend:${BACKEND_PORT})"
+            else
+                log_success "Configuration Nginx PRODUCTION prête (ports 8080/8443, backend:${BACKEND_PORT})"
+            fi
+        else
+            log_error "Configuration Nginx PRODUCTION invalide"
+            return 1
+        fi
+    # Configuration DÉVELOPPEMENT : Utiliser le fichier HTTPS existant  
+    elif [[ -f "Fastapi/nginx/nginx-https.conf" ]]; then
+        log_info "Configuration Nginx pour DÉVELOPPEMENT..."
+        # Copier le template pour éviter de modifier l'original
+        cp "Fastapi/nginx/nginx-https.conf" "Fastapi/nginx/nginx-https-configured.conf"
+        # Remplacer les chemins et adresses en dur
+        sed -i "s|/srv/partage/Stage-Chatbot-Polytech|${PROJECT_PATH}|g" Fastapi/nginx/nginx-https-configured.conf
+        sed -i "s|134\.157\.105\.72|${SERVER_IP}|g" Fastapi/nginx/nginx-https-configured.conf
+        sed -i "s|polybot|${SERVER_DOMAIN}|g" Fastapi/nginx/nginx-https-configured.conf
+        sed -i "s|SERVER_DOMAIN|${SERVER_DOMAIN}|g" Fastapi/nginx/nginx-https-configured.conf
+        sed -i "s|BACKEND_PORT|${BACKEND_PORT}|g" Fastapi/nginx/nginx-https-configured.conf
+        sed -i "s|FRONTEND_PORT|${FRONTEND_PORT}|g" Fastapi/nginx/nginx-https-configured.conf
+        sed -i "s|SSL_CERT_PATH|${SSL_CERT_PATH}|g" Fastapi/nginx/nginx-https-configured.conf
+        sed -i "s|SSL_KEY_PATH|${SSL_KEY_PATH}|g" Fastapi/nginx/nginx-https-configured.conf
+        # Tester la configuration HTTPS
+        nginx_test_cmd="nginx -t -c $(pwd)/Fastapi/nginx/nginx-https-configured.conf"
+        if [[ "$HAS_SUDO" == "true" ]]; then
+            nginx_test_cmd="sudo $nginx_test_cmd"
+        fi
+        if $nginx_test_cmd 2>/dev/null; then
+            log_success "Configuration Nginx DÉVELOPPEMENT prête (port 443 exposé, /api -> backend:${BACKEND_PORT})"
+        else
+            log_error "Configuration Nginx DÉVELOPPEMENT invalide"
+            return 1
+        fi
+    else
+        log_error "Aucun fichier de configuration Nginx trouvé"
+        return 1
+    fi
+    # Configuration HTTP de base (pour développement local - optionnel)
     if [[ -f "Fastapi/nginx/nginx.conf" ]]; then
-        sed -i "s|SERVER_DOMAIN|${SERVER_DOMAIN}|g" Fastapi/nginx/nginx.conf
-        sed -i "s|BACKEND_PORT|${BACKEND_PORT}|g" Fastapi/nginx/nginx.conf
-        sed -i "s|FRONTEND_PORT|${FRONTEND_PORT}|g" Fastapi/nginx/nginx.conf
-        
-        log_success "Configuration Nginx HTTP prête (développement)"
+        log_info "Configuration Nginx HTTP (développement local)..."
+        # Copier et configurer
+        cp "Fastapi/nginx/nginx.conf" "Fastapi/nginx/nginx-configured.conf"
+        sed -i "s|134\.157\.105\.72|${SERVER_IP}|g" Fastapi/nginx/nginx-configured.conf
+        sed -i "s|polybot|${SERVER_DOMAIN}|g" Fastapi/nginx/nginx-configured.conf
+        sed -i "s|SERVER_DOMAIN|${SERVER_DOMAIN}|g" Fastapi/nginx/nginx-configured.conf
+        sed -i "s|BACKEND_PORT|${BACKEND_PORT}|g" Fastapi/nginx/nginx-configured.conf
+        sed -i "s|FRONTEND_PORT|${FRONTEND_PORT}|g" Fastapi/nginx/nginx-configured.conf
+        log_success "Configuration Nginx HTTP prête (développement local)"
     fi
-    
-    log_success "Nginx configuré"
+    log_success "Nginx configuré selon DEPLOYMENT_MODE=${DEPLOYMENT_MODE}"
 }
 
 # =============================================================================
@@ -417,7 +531,7 @@ main() {
     generate_ssl_certs
     generate_env_files
     setup_directories
-    setup_nginx
+    # La configuration Nginx est maintenant dans nginx-setup.sh (à lancer avec sudo si besoin)
     create_systemd_services
     
     # Tests
