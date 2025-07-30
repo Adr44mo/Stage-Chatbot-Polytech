@@ -51,6 +51,16 @@ fi
 # Charger la configuration
 source "$CONFIG_FILE"
 
+# Validation des variables critiques
+if [[ -z "$OPENAI_API_KEY" ]]; then
+    log_warning "OPENAI_API_KEY non définie dans $CONFIG_FILE"
+fi
+
+if [[ -z "$SERVER_DOMAIN" ]]; then
+    log_warning "SERVER_DOMAIN non définie, utilisation de 'localhost'"
+    SERVER_DOMAIN="localhost"
+fi
+
 # Variables dérivées de la configuration
 VENV_PATH="$PROJECT_ROOT/.venv/bin/activate"
 LOG_DIR="$PROJECT_ROOT/logs"
@@ -61,6 +71,7 @@ RESTART_INTERVAL=${RESTART_INTERVAL:-3600}  # Par défaut 1 heure
 WORKERS=${WORKERS:-2}                        # Par défaut 2 workers
 BACKEND_PORT=${BACKEND_PORT:-8000}           # Par défaut port 8000
 SERVER_DOMAIN=${SERVER_DOMAIN:-localhost}   # Par défaut localhost
+LOG_LEVEL=${LOG_LEVEL:-info}                 # Par défaut info
 
 # =============================================================================
 # NETTOYAGE ET PRÉPARATION
@@ -169,7 +180,7 @@ start_backend_with_restart() {
             --host 0.0.0.0 \
             --port $BACKEND_PORT \
             --workers $WORKERS \
-            --log-level info \
+            --log-level $LOG_LEVEL \
             --access-log \
             --log-file "$LOG_DIR/backend.log" &
         
