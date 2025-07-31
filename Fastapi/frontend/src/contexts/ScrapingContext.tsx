@@ -227,13 +227,17 @@ export const ScrapingProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             try {
                 const prog = await fetchVectorizationProgress();
                 setVectorizationProgress(prog);
+                errorCountRef.current = 0; // Reset errors on success
 
                 if (prog.current === prog.total && prog.status.toLowerCase().includes("terminée")) {
                     stopVectorization();
                 }
             } catch (err: any) {
                 if (!err.message?.includes('404')) {
+                    errorCountRef.current += 1;
+                   if (errorCountRef.current >= 5) {
                     stopVectorization();
+                    }
                 }
             }
         }, 1000);
