@@ -301,7 +301,7 @@ def extract_main_content(soup):
 
 def crawl(site_config):
 
-    site_name = site_config["NAME"].replace(" ", "_").lower()
+    site_name = site_config["NAME"].replace(" ", "_").replace("é", "e").replace("è", "e").replace("à", "a").lower()
     clear_progress(site_name, "2/2 - Récupération des pages web")
 
     # Pages visitées et compteur de nouveaux JSON
