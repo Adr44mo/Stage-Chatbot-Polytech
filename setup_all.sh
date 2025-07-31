@@ -27,6 +27,3 @@ else
     echo "Accès : https://$SERVER_DOMAIN:443 (Nginx, hot reload, dev server)"
     echo "==> Vous pouvez lancer le développement (avec ./start-development.sh)"
 fi
-
-echo "==> Création de l'utilisateur admin (base de données)"
-python -m Fastapi.backend.app.database.create_admin
