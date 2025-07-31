@@ -156,39 +156,6 @@ def create_session_summary(scraped_sites):
 def menu(config_files):
 
     # Affichage du menu 
-    print("Sélectionnez le site à scraper : \n")
-    print("0. Tous les sites")
-    for i, file in enumerate(config_files, start=1):
-        config_path = CONFIG_DIR / file
-        site_name = file.replace(".yaml", "").replace("_", " ").title()
-        try:
-            config = load_yaml(config_path)
-            update_count = count_modified_pages(config)
-        except Exception as e:
-            print(f"[AVERTISSEMENT] Erreur lors du traitement de {file} : {e}")
-            update_count = "?"
-
-        print(f"{i}. {site_name} (pages modifiées : {update_count})")
-
-    # Saisie de l'utilisateur
-    while True:
-        try:
-            choice = int(input("\nEntrez un numéro du site : "))
-            if 0 <= choice <= len(config_files):
-                return choice
-            else:
-                print("Veuillez entrer un numéro valide.")
-        
-        except ValueError:
-            print("Entrée invalide, veuillez entrer un numéro.")
-
-# -------------------------------------------------
-# Affichage du menu pour le choix du site à scraper
-# -------------------------------------------------
-
-def menu_nom(config_files):
-
-    # Affichage du menu 
     print("Sélectionnez le(s) site(s) à scraper (séparés par des virgules): \n")
     site_name_map = {}
     for file in config_files:
@@ -280,7 +247,6 @@ def scrap(site, config_path):
 
     save_scraping_summary(site_name, pdf_pages, pdf_count, json_pages, json_count)
 
-
     # Enregistrement du log dans le dossier parent
     print("\n✅ log_scraping.txt enregistré avec succès dans le dossier parent ! \n")
 
@@ -288,6 +254,7 @@ def scrap(site, config_path):
     update_date_config(config_path)
 
     print("\n============== SCRAPING DU SITE WEB TERMINÉ ==============\n")
+
 
 #-------------------------------------------------------------------
 # Définition de la fonction principale main() : on effectue le scrap
@@ -305,7 +272,7 @@ def main():
         return
     
     # Affichage du menu et détermination des fichiers de configuration à utiliser
-    selected_configs = menu_nom(config_files)
+    selected_configs = menu(config_files)
     
     # Chargement de la configuration du scraping pour chaque site
     for config_file in selected_configs:
@@ -316,6 +283,9 @@ def main():
         scrap(site, config_path)   
 
 
+# -----------------------------------------------------------------------
+# Fonction pour lancer le scraping à partir des fichiers de configuration
+# -----------------------------------------------------------------------
 
 def run_scraping_from_configs(config_files: list[str]):
     scraped_sites = []

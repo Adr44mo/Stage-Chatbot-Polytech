@@ -6,25 +6,32 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import AdminCorpusFileTree from "./AdminCorpusFileTree";
 import type { AdminCorpusFileTreeRef } from "./AdminCorpusFileTree";
+import { useScrapingContext } from "../../contexts/ScrapingContext";
 import {
   enableEditMode,
   saveChanges,
   cancelChanges,
   getEditStatus,
   runCorpusVectorization,
-  fetchCorpusVectorizationProgress,
   resetCorpusVectorizationProgress,
 } from "../../api/corpusApi";
-import type { ProgressVectorizationInfo } from "../../api/corpusApi";
 
 export default function AdminCorpus() {
   const fileTreeRef = useRef<AdminCorpusFileTreeRef>(null);
   const [editMode, setEditMode] = useState(false);
   const [snapshotId, setSnapshotId] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const [isVectorizing, setIsVectorizing] = useState(false);
-  const [vectorizationProgress, setVectorizationProgress] = useState<ProgressVectorizationInfo>();
-  const vectorizationCompleteRef = useRef(false);
+
+  // États globaux du contexte
+	const {
+		isScraping,
+		isVectorizing,
+    isCorpusVectorizing,
+    corpusVectorizationProgress,
+    startCorpusVectorization,
+    stopCorpusVectorization
+	} = useScrapingContext();
+  const vectorizationCorpusCompleteRef = useRef(false);
 
   // On vérifie le statut du mode édition au montage du composant
   useEffect(() => {
@@ -145,48 +152,23 @@ export default function AdminCorpus() {
     }
   };
 
-  // Polling de progression de vectorisation
-    const pollCorpusVectorizationProgress = useCallback(() => {
-      if (!isVectorizing) return;
-  
-      const interval = setInterval(async () => {
-        try {
-          const prog = await fetchCorpusVectorizationProgress();
-          setVectorizationProgress(prog);
-  
-          // Vérifier si la vectorisation est terminée et qu'on n'a pas encore affiché l'alerte
-          if (isVectorizing && prog.current === prog.total && prog.status.includes("terminée") && prog.current === 100 && !vectorizationCompleteRef.current) {
-            vectorizationCompleteRef.current = true; // Marquer comme terminé
-            setIsVectorizing(false);
-            alert("Vectorisation terminée !");
-          }
-        } catch (err) {
-          console.error("Erreur récupération progression vectorisation :", err);
-          setIsVectorizing(false); // On arrête le polling en cas d'erreur
-        }
-      }, 1000);
-  
-      return () => clearInterval(interval);
-    }, [isVectorizing]);
-
-  useEffect(() => {
-		return pollCorpusVectorizationProgress();
-	}, [pollCorpusVectorizationProgress]);
-
   /**
    * Lance la vectorisation du corpus (pipeline + vectorisation)
    */
   const handleVectorization = useCallback(async () => {
     try {
       await resetCorpusVectorizationProgress();
-      vectorizationCompleteRef.current = false; // Réinitialiser le flag de complétion
-      setIsVectorizing(true);
+      vectorizationCorpusCompleteRef.current = false; // Réinitialiser le flag de complétion
+
+      startCorpusVectorization();
       await runCorpusVectorization();
+
     } catch (err: any) {
       console.error("Erreur vectorisation corpus :", err.message);
       alert("Erreur pendant la vectorisation corpus : " + err.message);
+      stopCorpusVectorization();
     }
-  }, []);
+  }, [startCorpusVectorization, stopCorpusVectorization]);
 
   // ===============
   // RENDU PRINCIPAL
@@ -272,21 +254,21 @@ export default function AdminCorpus() {
             <button
               className="admin-corpus-edit-btn"
               onClick={handleVectorization}
-              disabled={isVectorizing}
+              disabled={isVectorizing || isScraping || isCorpusVectorizing}
             >
               {isVectorizing
                 ? "Vectorisation en cours..."
                 : "Lancer la vectorisation"}
             </button>
 
-            {isVectorizing && vectorizationProgress && (
+            {isCorpusVectorizing && corpusVectorizationProgress && (
               <>
                 <progress
-                  value={vectorizationProgress.current}
-                  max={vectorizationProgress.total}
+                  value={corpusVectorizationProgress.current}
+                  max={corpusVectorizationProgress.total}
                   className="admin-vectorization-progress"
                 />
-                <span>{vectorizationProgress.status}</span>
+                <span>{corpusVectorizationProgress.status}</span>
               </>
             )}            
           </div>

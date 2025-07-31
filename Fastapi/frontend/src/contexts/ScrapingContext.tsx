@@ -10,6 +10,7 @@ import {
     resetScrapingProgress,
     fetchLastScrapingSummary 
 } from '../api/scrapingApi';
+import { fetchCorpusVectorizationProgress } from '../api/corpusApi';
 import type { ProgressInfo } from '../api/scrapingApi';
 
 interface ProgressState {
@@ -20,15 +21,19 @@ interface ScrapingContextType {
     // États du scraping
     isScraping: boolean;
     isVectorizing: boolean;
+    isCorpusVectorizing: boolean;
     progress: ProgressState;
     vectorizationProgress?: ProgressInfo;
+    corpusVectorizationProgress?: ProgressInfo;
     selectedSites: number[];
     
     // Actions
     setIsScraping: (value: boolean) => void;
     setIsVectorizing: (value: boolean) => void;
+    setIsCorpusVectorizing: (value: boolean) => void;
     setProgress: (value: ProgressState | ((prev: ProgressState) => ProgressState)) => void;
     setVectorizationProgress: (value?: ProgressInfo) => void;
+    setCorpusVectorizationProgress: (value?: ProgressInfo) => void;
     setSelectedSites: (value: number[]) => void;
     
     // Fonctions utilitaires
@@ -36,6 +41,8 @@ interface ScrapingContextType {
     stopScraping: () => void;
     startVectorization: () => void;
     stopVectorization: () => void;
+    startCorpusVectorization: () => void;
+    stopCorpusVectorization: () => void;
 }
 
 const ScrapingContext = createContext<ScrapingContextType | undefined>(undefined);
@@ -52,12 +59,15 @@ export const ScrapingProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     // États globaux
     const [isScraping, setIsScraping] = useState(false);
     const [isVectorizing, setIsVectorizing] = useState(false);
+    const [isCorpusVectorizing, setIsCorpusVectorizing] = useState(false);
     const [progress, setProgress] = useState<ProgressState>({});
     const [vectorizationProgress, setVectorizationProgress] = useState<ProgressInfo>();
+    const [corpusVectorizationProgress, setCorpusVectorizationProgress] = useState<ProgressInfo>();
     const [selectedSites, setSelectedSites] = useState<number[]>([]);
     
     // Refs pour éviter les alertes en double
     const vectorizationCompleteRef = useRef(false);
+    const corpusVectorizationCompleteRef = useRef(false);
     const scrapingCompleteRef = useRef(false);
 
     // Fonction pour démarrer le scraping
@@ -123,6 +133,28 @@ export const ScrapingProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         if (!vectorizationCompleteRef.current) {
             vectorizationCompleteRef.current = true;
             alert("Vectorisation terminée !");
+        }
+    }, []);
+
+    // Fonction pour démarrer la vectorisation corpus
+    const startCorpusVectorization = useCallback(() => {
+        setIsCorpusVectorizing(true);
+        setCorpusVectorizationProgress(undefined);
+        corpusVectorizationCompleteRef.current = false;
+
+        localStorage.setItem('corpusVectorizationActive', 'true');
+    }, []);
+
+    // Fonction pour arrêter la vectorisation corpus
+    const stopCorpusVectorization = useCallback(() => {
+        setIsCorpusVectorizing(false);
+        setCorpusVectorizationProgress(undefined);
+
+        localStorage.removeItem('corpusVectorizationActive');
+
+        if (!corpusVectorizationCompleteRef.current) {
+            corpusVectorizationCompleteRef.current = true;
+            alert("Vectorisation du corpus terminée !");
         }
     }, []);
 
@@ -197,6 +229,28 @@ export const ScrapingProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         return () => clearInterval(interval);
     }, [isVectorizing, stopVectorization]);
 
+    // Polling pour la vectorisation corpus
+    useEffect(() => {
+        if (!isCorpusVectorizing) return;
+
+        const interval = setInterval(async () => {
+            try {
+                const prog = await fetchCorpusVectorizationProgress();
+                setCorpusVectorizationProgress(prog);
+
+                if (prog.current >= prog.total && prog.status.toLowerCase().includes("terminée")) {
+                    stopCorpusVectorization();
+                }
+            } catch (err: any) {
+                if (!err.message?.includes('404')) {
+                    stopCorpusVectorization();
+                }
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [isCorpusVectorizing, stopCorpusVectorization]);
+
     // Restaurer l'état au chargement de l'app
     useEffect(() => {
         // Restaurer le scraping
@@ -217,21 +271,31 @@ export const ScrapingProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             setIsVectorizing(true);
             vectorizationCompleteRef.current = false;
         }
+
+        // Restaurer la vectorisation corpus
+        if (localStorage.getItem('corpusVectorizationActive') === 'true') {
+            setIsCorpusVectorizing(true);
+            corpusVectorizationCompleteRef.current = false;
+        }
     }, []);
 
     const value: ScrapingContextType = {
         // États
         isScraping,
         isVectorizing,
+        isCorpusVectorizing,
         progress,
         vectorizationProgress,
+        corpusVectorizationProgress,
         selectedSites,
         
         // Actions
         setIsScraping,
         setIsVectorizing,
+        setIsCorpusVectorizing,
         setProgress,
         setVectorizationProgress,
+        setCorpusVectorizationProgress,
         setSelectedSites,
         
         // Fonctions utilitaires
@@ -239,6 +303,8 @@ export const ScrapingProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         stopScraping,
         startVectorization,
         stopVectorization,
+        startCorpusVectorization,
+        stopCorpusVectorization
     };
 
     return (

@@ -4,14 +4,13 @@
 
 import os
 import requests
-import time
 import json
+import time
 from pathlib import Path
 from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from color_utils import cp
 
 # Répertoire des fichiers de progression
 PROGRESS_DIR = Path(__file__).resolve().parent.parent / "progress"
@@ -21,7 +20,7 @@ PROGRESS_DIR.mkdir(exist_ok=True)
 # User-agent pour les requêtes HTTP
 # ---------------------------------
 HEADERS = {
-    "User-Agent": "PolytechScraper/0.7 (+https://github.com/Adr44mo/Stage-Chatbot-Polytech)"
+    "User-Agent": "PolytechScraper/0.8 (+https://github.com/Adr44mo/Stage-Chatbot-Polytech)"
 }
 
 # --------------------------------------
@@ -29,7 +28,6 @@ HEADERS = {
 # --------------------------------------
 
 def is_excluded(url, exclusions):
-
     return any(keyword in url for keyword in exclusions)
 
 # ---------------------------------------
@@ -127,7 +125,7 @@ def extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date):
                 urls.append((loc, derniere_modif))
 
     except Exception as e:
-        cp.print_warning(f"Impossible de lire le sitemap : {sitemap_url} ({e})")
+        #cp.print_warning(f"Impossible de lire le sitemap : {sitemap_url} ({e})")
         raise e
 
     # Si aucune URL n'a été extraite, on retourne une liste vide
@@ -164,7 +162,7 @@ def count_modified_pages(config):
     
     # Valeur spéciale pour indiquer que le sitemap n'est pas accessible
     except Exception as e:
-        cp.print_warning(f"{config.get('NAME')} — Sitemap inaccessible : {e}")
+        #cp.print_warning(f"{config.get('NAME')} — Sitemap inaccessible : {e}")
         return -1
 
 
@@ -190,11 +188,26 @@ def has_valid_extension(url):
 # Extraction d'URLs à partir de la page d'accueil
 # ------------------------------------------------
 
-def crawl_site(base_url, exclusions, max_urls=100):
+def crawl_site(base_url, exclusions, max_urls, verify_links=False, verbose=False):
 
     visited = set()
     urls_to_visit = [base_url]
     collected_urls = []
+    all_found_urls = set()  # Pour éviter les doublons dans urls_to_visit
+    failed_urls = set()  # Cache des URLs qui ont échoué pour éviter de les retester
+    
+    # Extraire le domaine de base pour filtrer les URLs malformées
+    from urllib.parse import urlparse
+    parsed_base = urlparse(base_url)
+    domain_base = f"{parsed_base.scheme}://{parsed_base.netloc}"
+    
+    # Pre-compiler les patterns d'exclusion pour plus d'efficacité
+    import re
+    exclusion_patterns = [re.compile(re.escape(excl)) for excl in exclusions]
+    
+    if verbose:
+        print(f"[INFO] Début du crawling de {base_url} (max {max_urls} URLs)")
+        print(f"[INFO] Vérification des liens: {'Activée' if verify_links else 'Désactivée'}")
 
     try:
         while urls_to_visit and len(collected_urls) < max_urls:
@@ -202,55 +215,142 @@ def crawl_site(base_url, exclusions, max_urls=100):
 
             if current_url in visited:
                 continue
+
+            if verbose:
+                print(f"[INFO] Exploration de: {current_url} ({len(collected_urls)}/{max_urls} URLs collectées)")
             visited.add(current_url)
 
             try:
-                response = requests.get(current_url, timeout=10, headers=HEADERS)
+                # Optimisation : timeout plus court et pas de retry
+                response = requests.get(current_url, timeout=5, headers=HEADERS)
                 response.raise_for_status()
             except Exception as e:
-                print(f"[ERREUR] Échec de la requête vers {current_url} ({e})")
+                if verbose:
+                    print(f"[ERREUR] Échec de la requête vers {current_url} ({e})")
                 continue
 
-            soup = BeautifulSoup(response.text, 'html.parser')
+            # Ajouter l'URL actuelle aux résultats
+            collected_urls.append((current_url, None))
 
-            for link in soup.find_all('a', href=True):
-                href = link['href']
+            # Optimisation : parsing HTML plus efficace
+            soup = BeautifulSoup(response.text, 'html.parser')
+            links_found_on_page = 0
+
+            # Récupérer tous les liens d'un coup
+            links = soup.find_all('a', href=True)
+            
+            for link in links:
+                href = link['href'].strip()
+                
+                # Ignorer les liens vides
+                if not href:
+                    continue
+                
+                # Filtrage rapide des URLs malformées
+                if ('.' in href and not href.startswith(('/', 'http', '#', 'mailto:', 'tel:', 'javascript:')) and '/' not in href[:10]):
+                    continue
                 
                 # Normaliser l'URL
                 if href.startswith('/'):
-                    full_url = base_url.rstrip('/') + href
+                    full_url = domain_base + href
                 elif href.startswith('http'):
+                    # Vérifier que c'est bien le même domaine
+                    if not href.startswith(domain_base):
+                        continue
                     full_url = href
+                elif href.startswith('#'):
+                    continue  # Ignorer les ancres
+                elif href.startswith(('mailto:', 'tel:', 'javascript:')):
+                    continue  # Ignorer les liens non-web
                 else:
-                    continue  # on ignore les ancres, javascript:, mailto:
+                    # URLs relatives sans slash initial
+                    if '/' in current_url[len(domain_base):]:
+                        # On est dans un sous-répertoire
+                        current_path = '/'.join(current_url.split('/')[:-1])
+                        full_url = current_path + '/' + href
+                    else:
+                        full_url = domain_base + '/' + href
 
-                # Filtrage
-                if is_excluded(full_url, exclusions) or not has_valid_extension(full_url):
+                # Nettoyer l'URL
+                if '#' in full_url:
+                    full_url = full_url.split('#')[0]
+                
+                if '?' in full_url and not any(param in full_url for param in ['page=', 'id=', 'search=']):
+                    full_url = full_url.split('?')[0]
+
+                # Filtrage rapide par exclusions (pre-compiled regex)
+                excluded = False
+                for pattern in exclusion_patterns:
+                    if pattern.search(full_url):
+                        excluded = True
+                        break
+                
+                if excluded or not has_valid_extension(full_url):
                     continue
+                    
+                # Éviter les doublons et les URLs qui ont déjà échoué
+                if full_url in all_found_urls or full_url in failed_urls:
+                    continue
+                    
+                all_found_urls.add(full_url)
 
-                # Filtrage par domaine et duplication
-                if full_url.startswith(base_url) and full_url not in visited and full_url not in urls_to_visit:
-                    try:
-                        # Vérification : est-ce que l'URL retourne 200 ?
-                        res = requests.head(full_url, headers=HEADERS, timeout=5, allow_redirects=True)
-                        if res.status_code == 200:
-                            collected_urls.append((full_url, None))
-                            urls_to_visit.append(full_url)
-                        else:
-                            print(f"[INFO] Ignorée : {full_url} (status {res.status_code})")
-                    except Exception as e:
-                        print(f"[ERREUR] HEAD request échouée pour {full_url} ({e})")
+                # Ajouter l'URL à la liste de visite
+                if full_url not in visited:
+                    if verify_links:
+                        try:
+                            res = requests.head(full_url, headers=HEADERS, timeout=2, allow_redirects=True)
+                            if res.status_code == 200:
+                                urls_to_visit.append(full_url)
+                                links_found_on_page += 1
+                            else:
+                                failed_urls.add(full_url)
+                        except Exception:
+                            failed_urls.add(full_url)
+                    else:
+                        # Mode rapide : ajouter sans vérifier
+                        urls_to_visit.append(full_url)
+                        links_found_on_page += 1
 
+                # Arrêter si on a atteint la limite
                 if len(collected_urls) >= max_urls:
                     break
+            
+            if verbose and links_found_on_page > 0:
+                print(f"[INFO] {links_found_on_page} nouveaux liens trouvés sur cette page")
 
     except Exception as e:
-        print(f"[ERREUR] Impossible d'extraire les URLs depuis la page HTML ({e})")
+        print(f"[ERREUR] Erreur générale lors du crawling: {e}")
 
-    for url in collected_urls:
-        print(url)
+    if verbose:
+        print(f"\n[RÉSULTAT] Crawling terminé: {len(collected_urls)} URLs collectées")
+        if verify_links:
+            print(f"[INFO] {len(failed_urls)} URLs ignorées pour erreurs HTTP")
+        print("=" * 60)
+        
+        # Afficher toutes les URLs trouvées
+        for i, (url, _) in enumerate(collected_urls, 1):
+            print(f"{i:3d}. {url}")
+    else:
+        print(f"[RÉSULTAT] {len(collected_urls)} URLs collectées")
 
     return collected_urls
+
+
+def crawl_site_fast(base_url, exclusions=None, max_urls=500):
+
+    if exclusions is None:
+        exclusions = []
+        
+    print(f"🚀 Crawling rapide de {base_url} (max {max_urls} URLs)")
+    start_time = time.time()
+    
+    # Utiliser la fonction optimisée en mode rapide et silencieux
+    urls = crawl_site(base_url, exclusions, max_urls, verify_links=False, verbose=False)
+    
+    elapsed = time.time() - start_time
+    print(f"✅ Terminé en {elapsed:.2f}s - {len(urls)} URLs trouvées ({len(urls)/elapsed:.1f} URLs/sec)")
+    
+    return urls
 
 
 def save_progress(site_name: str, current: int, total: int, status: str):

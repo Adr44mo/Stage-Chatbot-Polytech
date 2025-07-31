@@ -30,6 +30,7 @@ export default function AdminScraping() {
 	const {
 		isScraping,
 		isVectorizing,
+		isCorpusVectorizing,
 		progress,
 		vectorizationProgress,
 		selectedSites,
@@ -95,28 +96,44 @@ export default function AdminScraping() {
 	}, [allSelected, sites, setSelectedSites]);
 
 	const handleScrape = useCallback(async () => {
-		// Filtrer les sites sélectionnés qui ont des nouveaux documents (newDocs > 0)
+		// Filtrer les sites sélectionnés qui ont des nouveaux documents OU un statut inconnu
 		const sitesToScrape = sites
 			.filter(site => selectedSites.includes(site.id))
-			.filter(site => site.newDocs && site.newDocs > 0);
+			.filter(site => {
+				// Scraper si :
+				// - newDocs > 0 (nouveaux documents détectés)
+				// - newDocs === -1 (sitemap inaccessible, mais fallback crawler possible)
+				// - newDocs === undefined (statut inconnu, tentative de scraping)
+				return site.newDocs === undefined || site.newDocs === -1 || (site.newDocs && site.newDocs > 0);
+			});
 
 		const selectedSiteNames = sitesToScrape.map(site => site.name);
 		const selectedSiteIds = sitesToScrape.map(site => site.id);
 
 		// Vérifier s'il y a des sites à scraper
 		if (selectedSiteNames.length === 0) {
-			alert("Aucun site sélectionné n'a de nouveaux documents à scraper.");
+			alert("Aucun site sélectionné n'est disponible pour le scraping.\n\nNB: Les sites avec 0 nouveaux documents sont ignorés pour éviter un scraping inutile.");
 			return;
 		}
 
-		// Informer l'utilisateur des sites qui seront ignorés
+		// Informer l'utilisateur des sites qui seront ignorés (seulement ceux avec 0 nouveaux documents)
 		const sitesWithoutNewDocs = sites
 			.filter(site => selectedSites.includes(site.id))
-			.filter(site => !site.newDocs || site.newDocs === 0);
+			.filter(site => site.newDocs === 0);
 
 		if (sitesWithoutNewDocs.length > 0) {
 			const ignoredSiteNames = sitesWithoutNewDocs.map(site => site.name).join(', ');
 			console.log(`[ℹ️ Sites ignorés] (0 nouveaux documents) : ${ignoredSiteNames}`);
+		}
+
+		// Informer l'utilisateur des sites avec statut inconnu qui seront tentés
+		const sitesWithUnknownStatus = sitesToScrape.filter(site => 
+			site.newDocs === undefined || site.newDocs === -1
+		);
+		
+		if (sitesWithUnknownStatus.length > 0) {
+			const unknownSiteNames = sitesWithUnknownStatus.map(site => site.name).join(', ');
+			console.log(`[🕷️ Sites avec crawler automatique] : ${unknownSiteNames}`);
 		}
 
 		try {
@@ -240,7 +257,7 @@ export default function AdminScraping() {
 					<button
 						className="admin-scraping-btn admin-scraping-launch-btn"
 						onClick={handleVectorization}
-						disabled={isVectorizing || isScraping}
+						disabled={isVectorizing || isScraping || isCorpusVectorizing}
 					>
 						{isVectorizing ? "Vectorisation en cours..." : "Lancer la vectorisation"}
 					</button>

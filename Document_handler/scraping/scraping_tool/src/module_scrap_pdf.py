@@ -14,7 +14,7 @@ from urllib.parse import urljoin, urlparse, unquote
 from PyPDF2 import PdfReader
 from PyPDF2.generic import IndirectObject
 
-from .scraper_utils import PROGRESS_DIR, HEADERS, extract_urls_sitemap, save_progress, clear_progress
+from .scraper_utils import PROGRESS_DIR, HEADERS, extract_urls_sitemap, crawl_site_fast, save_progress, clear_progress
 
 # ------------------------------------
 # Initialisation de variables globales
@@ -265,10 +265,21 @@ def scrape_page(site_config):
     archive_dir = directory_pdfs / "_archives"
     archive_dir.mkdir(parents=True, exist_ok=True)
 
-    # Extraction des URLs du sitemap et filtrage
-    urls_and_dates = extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date)
-    urls_pages = [u for u, _ in urls_and_dates]
-    urls_lastmod = {u: d for u, d in urls_and_dates}
+    # Extraction des URLs du sitemap et filtrage avec fallback vers le crawler
+    try:
+        print("🗺️  Tentative d'extraction depuis le sitemap...")
+        urls_and_dates = extract_urls_sitemap(sitemap_url, base_url, exclusions, limit_date)
+        urls_pages = [u for u, _ in urls_and_dates]
+        urls_lastmod = {u: d for u, d in urls_and_dates}
+        print(f"✅ Sitemap accessible : {len(urls_pages)} URLs extraites")
+    except Exception as e:
+        print(f"⚠️  Sitemap inaccessible ({e})")
+        print("Fallback : utilisation du crawler automatique...")
+        crawled_urls = crawl_site_fast(base_url, exclusions)
+        urls_pages = [u for u, _ in crawled_urls]
+        urls_lastmod = {u: None for u in urls_pages}  # Pas de date de modification disponible
+        print(f"✅ Crawler terminé : {len(urls_pages)} URLs découvertes")
+    
     total_pages = len(urls_pages)
     print(f"🔗 {total_pages} pages HTML à analyser")
 
