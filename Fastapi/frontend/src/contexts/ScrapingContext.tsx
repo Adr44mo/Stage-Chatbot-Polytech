@@ -197,6 +197,18 @@ export const ScrapingProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             if (!hasActiveProgress && foundFiles > 0) {
                 try {
                     await resetScrapingProgress(scrapingSites);
+                    try {
+                        await fetchLastScrapingSummary();
+                        stopScraping();
+                    } catch (err: any) {
+                        if (err.message?.includes('404')) {
+                            // Ne rien faire, on attend le prochain polling
+                            return;
+                        } else {
+                            // Autre erreur, on arrête le scraping
+                            stopScraping();
+                        }
+                    }
                 } catch (err) {
                     console.error("Erreur nettoyage progression:", err);
                 }
@@ -216,7 +228,7 @@ export const ScrapingProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 const prog = await fetchVectorizationProgress();
                 setVectorizationProgress(prog);
 
-                if (prog.current >= prog.total && prog.status.toLowerCase().includes("terminée")) {
+                if (prog.current === prog.total && prog.status.toLowerCase().includes("terminée")) {
                     stopVectorization();
                 }
             } catch (err: any) {
