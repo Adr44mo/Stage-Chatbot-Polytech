@@ -1,6 +1,8 @@
 import json
 import traceback
 from pathlib import Path
+import threading
+from collections import defaultdict
 
 
 from ..config import VALID_DIR, REJECTED_DIR, cp
@@ -10,6 +12,49 @@ from ..logic.webjson import normalize_entry
 from ..logic.load_pdf import process_scraped_pdf_file, process_manual_pdf_file
 from ..logic.syllabus import extract_syllabus_structure
 from ..preprocessing.update_map import update_output_maps_entry, clean_output_maps, clean_map_files
+
+# Global pour collecter les updates de mapping
+_pending_map_updates = defaultdict(list)
+_map_update_lock = threading.Lock()
+
+def _atomic_write_json(path, data):
+    """Écriture atomique d'un fichier JSON pour éviter les corruptions"""
+    import tempfile
+    import os
+    
+    # S'assurer que le dossier parent existe
+    path.parent.mkdir(parents=True, exist_ok=True)
+    
+    # Écriture dans un fichier temporaire puis renommage atomique
+    with tempfile.NamedTemporaryFile(
+        mode='w', 
+        encoding='utf-8', 
+        dir=path.parent, 
+        prefix=f".{path.name}.", 
+        suffix='.tmp',
+        delete=False
+    ) as temp_file:
+        try:
+            json.dump(data, temp_file, ensure_ascii=False, indent=2)
+            temp_file.flush()
+            os.fsync(temp_file.fileno())
+            temp_path = temp_file.name
+        except Exception as e:
+            temp_file.close()
+            if os.path.exists(temp_file.name):
+                os.unlink(temp_file.name)
+            raise e
+    
+    # Renommage atomique
+    try:
+        if os.name == 'nt':  # Windows
+            if path.exists():
+                path.unlink()
+        os.rename(temp_path, path)
+    except Exception as e:
+        if os.path.exists(temp_path):
+            os.unlink(temp_path)
+        raise e
 
 def log_callback(state, msg, color="white", step_number=None):
     """
@@ -230,8 +275,14 @@ def save_node(state):
         out_name = file_path.name
 
     out_path = out_dir / out_name
-    with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(state["output_data"], f, ensure_ascii=False, indent=2)
+    
+    # Utilisation de l'écriture atomique pour éviter les corruptions
+    try:
+        _atomic_write_json(out_path, state["output_data"])
+    except Exception as e:
+        cp.print_error(f"❌ Erreur lors de la sauvegarde - {file_path.name}: {e}")
+        raise
+    
     state["out_path"] = str(out_path)
     
     status = "validé" if state.get("is_valid") else "rejeté"
@@ -243,8 +294,15 @@ def save_to_error_node(state):
     file_path = Path(state["file_path"])
     out_name = file_path.with_suffix(".error.json").name
     out_path = REJECTED_DIR / out_name
-    with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(state, f, ensure_ascii=False, indent=2)
+    
+    try:
+        _atomic_write_json(out_path, state)
+    except Exception as e:
+        cp.print_error(f"❌ Erreur lors de la sauvegarde d'erreur - {file_path.name}: {e}")
+        # Fallback vers l'écriture normale en cas d'erreur
+        with open(out_path, "w", encoding="utf-8") as f:
+            json.dump(state, f, ensure_ascii=False, indent=2)
+    
     state["out_path"] = str(out_path)
     log_callback(state, f"SAVE TO ERROR: {out_path}", color="red")
     return state
@@ -358,13 +416,15 @@ def end_node(state):
     if state.get("is_valid"):
         hash_val = state.get("hash", "")
         input_path = Path(state["file_path"])
-        update_output_maps_entry(hash_val, input_path)
-        clean_output_maps()
-        clean_map_files()
+        
+        # Collecte l'update au lieu de l'écrire immédiatement
+        # Cela évite la contention sur les fichiers de mapping
+        with _map_update_lock:
+            _pending_map_updates[hash_val].append(str(input_path))
         
         # Log processing summary
         stats = {
-            "Statut": "✅ Validé et sauvegardé",
+            "Statut": "✅ Validé et sauvegardé (map en attente)",
             "Fichier de sortie": state.get("out_path", "N/A"),
             "Type de document": state.get("output_data", {}).get("document_type", "N/A")
         }
@@ -380,3 +440,53 @@ def end_node(state):
     cp.print_result(f"🏁 Traitement terminé pour {file_name}")
     cp.print_separator()
     return state
+
+def flush_pending_map_updates():
+    """Écrit toutes les updates en attente de manière sécurisée"""
+    global _pending_map_updates
+    
+    with _map_update_lock:
+        updates_to_process = dict(_pending_map_updates)
+        _pending_map_updates.clear()
+    
+    if not updates_to_process:
+        cp.print_info("📝 Aucune mise à jour de map en attente")
+        return
+    
+    cp.print_info(f"📝 Mise à jour des maps pour {len(updates_to_process)} fichiers...")
+    
+    # Traite les updates une par une avec protection FileLock
+    success_count = 0
+    error_count = 0
+    
+    for hash_val, paths in updates_to_process.items():
+        for path in paths:
+            try:
+                update_output_maps_entry(hash_val, path)
+                success_count += 1
+            except Exception as e:
+                cp.print_error(f"❌ Erreur mise à jour map pour {path}: {e}")
+                error_count += 1
+    
+    # Nettoyage final avec protection
+    try:
+        clean_output_maps()
+        clean_map_files()
+        if error_count == 0:
+            cp.print_success(f"✅ Maps mises à jour avec succès: {success_count} fichiers traités")
+        else:
+            cp.print_warning(f"⚠️  Maps mises à jour: {success_count} succès, {error_count} erreurs")
+    except Exception as e:
+        cp.print_error(f"❌ Erreur lors du nettoyage des maps: {e}")
+
+def get_pending_updates_count():
+    """Retourne le nombre d'updates en attente"""
+    with _map_update_lock:
+        return sum(len(paths) for paths in _pending_map_updates.values())
+
+def clear_pending_updates():
+    """Vide les updates en attente (pour les cas d'erreur)"""
+    global _pending_map_updates
+    with _map_update_lock:
+        _pending_map_updates.clear()
+    cp.print_info("🧹 Updates de mapping en attente supprimées")

@@ -2,6 +2,7 @@ import json
 import hashlib
 
 from ..config import DATA_SITES_DIR, PDF_MAN_DIR, INPUT_MAPS, OUTPUT_MAPS
+from .update_map import save_map  # Utilise la fonction sécurisée
 
 EXCLUDED_SITES = {'archives'}
 
@@ -65,8 +66,7 @@ def build_pdf_man_input_map():
 
     # Sauvegarde le fichier dans la map
     input_map = INPUT_MAPS / "pdf_man_map.json"
-    with open(input_map, "w", encoding="utf-8") as f:
-        json.dump(pdf_man_map, f, indent=2, ensure_ascii=False)
+    save_map(input_map, pdf_man_map)
 
 
 def build_pdf_man_output_map():
@@ -75,8 +75,7 @@ def build_pdf_man_output_map():
 
     output_map = OUTPUT_MAPS / "pdf_man_map.json"
     if not output_map.exists():
-        with open(output_map, "w", encoding="utf-8") as f:
-            json.dump({}, f, indent=2, ensure_ascii=False)
+        save_map(output_map, {})
 
 
 def build_input_maps():
@@ -107,8 +106,7 @@ def build_input_maps():
             
                 # Sauvegarde
                 input_pdf_map = INPUT_MAPS / f"{site_name}_pdf_map.json"
-                with open(input_pdf_map, "w", encoding="utf-8") as out_f:
-                    json.dump(hash_only_map, out_f, indent=2, ensure_ascii=False)
+                save_map(input_pdf_map, hash_only_map)
 
             except (json.JSONDecodeError, OSError) as e:
                 print(f"[ERREUR] Fichier {pdf_map_path} illisible : {e}")
@@ -131,8 +129,7 @@ def build_input_maps():
                     print(f"[ERREUR] Fichier JSON {map_file} illisible : {e}")
             # Sauvegarde
             input_json_map = INPUT_MAPS / f"{site_name}_json_map.json"
-            with open(input_json_map, "w", encoding="utf-8") as out_f:
-                json.dump(json_map, out_f, indent=2, ensure_ascii=False)
+            save_map(input_json_map, json_map)
 
         
 def build_output_maps():
@@ -150,16 +147,14 @@ def build_output_maps():
         if pdf_map_path.exists():
             output_pdf_map = OUTPUT_MAPS / f"{site_name}_pdf_map.json"
             if not output_pdf_map.exists():
-                with open(output_pdf_map, "w", encoding="utf-8") as out_f:
-                    json.dump({}, out_f, indent=2, ensure_ascii=False)
+                save_map(output_pdf_map, {})
 
         # --- JSON MAP ---
         json_dir = site_dir / "json_scrapes"
         if json_dir.exists():
             output_json_map = OUTPUT_MAPS / f"{site_name}_json_map.json"
             if not output_json_map.exists():
-                with open(output_json_map, "w", encoding="utf-8") as out_f:
-                    json.dump({}, out_f, indent=2, ensure_ascii=False)
+                save_map(output_json_map, {})
 
 
 def input_maps():

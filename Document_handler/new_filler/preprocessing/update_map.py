@@ -1,5 +1,15 @@
 import json
 from pathlib import Path
+import tempfile
+import os
+
+try:
+    from filelock import FileLock
+    FILELOCK_AVAILABLE = True
+except ImportError:
+    FILELOCK_AVAILABLE = False
+    import warnings
+    warnings.warn("filelock n'est pas installé. Fonctionnement sans protection contre la concurrence.")
 
 from ..config import INPUT_MAPS, OUTPUT_MAPS, VECT_MAPS
 
@@ -12,16 +22,73 @@ from ..config import INPUT_MAPS, OUTPUT_MAPS, VECT_MAPS
 
 
 def load_map(path):
-    """ Charge un fichier JSON """
-    if path.exists():
-        with open (path, 'r', encoding="utf-8") as f:
-            return json.load(f)
-    return {}
+    """Charge un fichier JSON avec protection contre les accès concurrents"""
+    if not FILELOCK_AVAILABLE:
+        # Fallback sans filelock
+        if path.exists():
+            try:
+                with open(path, 'r', encoding="utf-8") as f:
+                    return json.load(f)
+            except (json.JSONDecodeError, FileNotFoundError):
+                return {}
+        return {}
+    
+    lock_path = f"{path}.lock"
+    with FileLock(lock_path, timeout=30):
+        if path.exists():
+            try:
+                with open(path, 'r', encoding="utf-8") as f:
+                    return json.load(f)
+            except (json.JSONDecodeError, FileNotFoundError):
+                return {}
+        return {}
 
 def save_map(path, data):
-    """ Sauvegarde un dictionnaire data dans un fichier JSON """
-    with open (path, 'w', encoding="utf-8") as f:
-        return json.dump(data, f, indent=2, ensure_ascii=False)
+    """Sauvegarde un dictionnaire avec écriture atomique et protection concurrence"""
+    if not FILELOCK_AVAILABLE:
+        # Fallback sans filelock - écriture atomique seulement
+        _atomic_write(path, data)
+        return
+    
+    lock_path = f"{path}.lock"
+    with FileLock(lock_path, timeout=30):
+        _atomic_write(path, data)
+
+def _atomic_write(path, data):
+    """Écriture atomique d'un fichier JSON"""
+    # S'assurer que le dossier parent existe
+    path.parent.mkdir(parents=True, exist_ok=True)
+    
+    # Écriture dans un fichier temporaire puis renommage atomique
+    with tempfile.NamedTemporaryFile(
+        mode='w', 
+        encoding='utf-8', 
+        dir=path.parent, 
+        prefix=f".{path.name}.", 
+        suffix='.tmp',
+        delete=False
+    ) as temp_file:
+        try:
+            json.dump(data, temp_file, indent=2, ensure_ascii=False)
+            temp_file.flush()
+            os.fsync(temp_file.fileno())
+            temp_path = temp_file.name
+        except Exception as e:
+            temp_file.close()
+            if os.path.exists(temp_file.name):
+                os.unlink(temp_file.name)
+            raise e
+    
+    # Renommage atomique
+    try:
+        if os.name == 'nt':  # Windows
+            if path.exists():
+                path.unlink()
+        os.rename(temp_path, path)
+    except Exception as e:
+        if os.path.exists(temp_path):
+            os.unlink(temp_path)
+        raise e
         
 
 def update_input_maps():

@@ -54,3 +54,6 @@ schedule
 
 # Timezone support
 pytz
+
+# File locking
+filelock

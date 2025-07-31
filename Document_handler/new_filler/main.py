@@ -7,6 +7,7 @@ import threading
 from .config import VECT_MAPS, VALID_DIR, PROCESSED_DIR, INPUT_MAPS, cp, PROGRESS_DIR
 from .graph.build_graph import build_graph
 from .preprocessing import build_map, update_map
+from .graph.nodes import flush_pending_map_updates, get_pending_updates_count
 
 progress_lock = threading.Lock()
 
@@ -236,6 +237,14 @@ def main():
             done += 1
             save_progress(done, total, "1/2 - Traitement des fichiers")
             cp.print_info(f"[⏳] Progression : {done}/{total} fichiers traités")
+
+    # Traitement de toutes les mises à jour de mapping en attente
+    pending_count = get_pending_updates_count()
+    if pending_count > 0:
+        cp.print_info(f"📝 Finalisation: {pending_count} mises à jour de mapping en attente...")
+        flush_pending_map_updates()
+    else:
+        cp.print_info("📝 Aucune mise à jour de mapping en attente")
 
     clear_progress("2/2 - Vectorisation des fichiers")
 
