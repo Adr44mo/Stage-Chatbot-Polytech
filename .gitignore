@@ -42,3 +42,11 @@ database.db
 
 ssl/polybot.crt
 ssl/polybot.key
+
+config.env
+Fastapi/nginx/nginx-https-configured.conf
+Fastapi/nginx/nginx-configured.conf
+monitor.sh
+monitor-dev.sh
+
+logs/
