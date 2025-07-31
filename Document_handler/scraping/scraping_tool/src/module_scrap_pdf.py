@@ -235,7 +235,7 @@ def archive_old_pdfs(outdated_filenames, src_dir: Path, archive_dir: Path, pdf_m
 
 def scrape_page(site_config):
 
-    site_name = site_config["NAME"].replace(" ", "_").lower()
+    site_name = site_config["NAME"].replace(" ", "_").replace("é", "e").replace("è", "e").replace("à", "a").lower()
     clear_progress(site_name, "1/2 - Récupération des PDFs")
 
     # Pages visitées et compteur de nouveaux téléchargements
