@@ -9,13 +9,19 @@ Guide de déploiement sur serveur vierge.
 git clone https://github.com/your-repo/Stage-Chatbot-Polytech.git
 cd Stage-Chatbot-Polytech
 ```
+Problème d'accès au dossier ? Assurez-vous d'avoir les permissions nécessaires.
+```bash
+# Assurez-vous d'avoir les permissions nécessaires
+sudo chown -R $(whoami):$(whoami) .
+chmod -R u+rwX .
+```
 
 ### 2. Configuration
 ```bash
 # Copier le template de configuration
 cp config.template.env config.env
 
-# Éditer avec vos valeurs
+# Éditer avec vos valeurs (exemple avec nano)
 nano config.env
 ```
 
@@ -23,6 +29,7 @@ nano config.env
 - `OPENAI_API_KEY` : Votre clé API OpenAI
 - `RECAPTCHA_SECRET_KEY` et `RECAPTCHA_SITE_KEY` : Clés reCAPTCHA (recommandé)
 - `SERVER_DOMAIN` : Domaine ou IP de votre serveur
+- `SERVER_IP` : Adresse IP du serveur
 
 **Variables optionnelles (production) :**
 - `WORKERS` : Nombre de workers uvicorn (défaut: 2)
@@ -31,10 +38,10 @@ nano config.env
 ### 3. Initialisation
 ```bash
 # Rendre le script exécutable
-chmod +x init.sh
+chmod +x setup_all.sh
 
 # Lancer l'initialisation (sans sudo)
-./init.sh
+./setup_all.sh
 ```
 
 Le script va :
@@ -42,44 +49,14 @@ Le script va :
 - Configurer Python et Node.js
 - Générer les certificats SSL
 - Créer les fichiers .env
-- Configurer Nginx
+- Configurer Nginx pour HTTPS
 
 ### 4. Démarrage
 
-**Pour PRODUCTION (optimisé, redémarrage automatique) :**
-Ouvrez le fichier `start-production.sh` pour modifier le chemin du dossier du projet :
-
-```bash
-nano start-production.sh
-```
-
-Dans ce fichier, repérez la ligne contenant :
-
-```bash
-PROJECT_ROOT="/srv/partage/Stage-Chatbot-Polytech"
-```
-
-Remplacez le chemin par l'emplacement réel de votre dossier de projet. Par exemple, si votre projet est dans `/home/votre-utilisateur/mon-projet`, modifiez la ligne ainsi :
-
-```bash
-PROJECT_ROOT="/home/votre-utilisateur/Stage-Chatbot-Polytech"
-```
-
-Enregistrez le fichier et quittez l'éditeur.  
-Cette modification est nécessaire pour que le script fonctionne correctement lors du lancement en production.
+**Pour PRODUCTION :**
 
 ```bash
 ./start-production.sh
-```
-
-**Pour DÉVELOPPEMENT (HTTPS) :**
-```bash
-./start-https.sh
-```
-
-**Pour DÉVELOPPEMENT (HTTP local) :**
-```bash
-./start.sh
 ```
 
 ## Scripts de démarrage

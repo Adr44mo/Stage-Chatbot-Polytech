@@ -320,8 +320,8 @@ echo
 # Logs récents
 echo "📝 LOGS RÉCENTS:"
 if [[ -f "\$LOG_DIR/backend.log" ]]; then
-    echo "Backend (dernières 5 lignes):"
-    tail -5 "\$LOG_DIR/backend.log" | sed 's/^/  /'
+    echo "Backend (dernières 15 lignes):"
+    tail -15 "\$LOG_DIR/backend.log" | sed 's/^/  /'
 else
     echo "  Pas de logs backend"
 fi
