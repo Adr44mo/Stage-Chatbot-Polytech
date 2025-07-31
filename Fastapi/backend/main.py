@@ -26,7 +26,6 @@ from .app.recaptcha import verify_recaptcha_token
 from .app.server_file import router as server_router
 from Document_handler.The_handler import router as router_scrapping
 from .app.PDF_manual.pdf_manual import router as pdf_manual_router
-# from .app.filters import handle_if_uninformative
 from .app.auth.router import router as auth_router
 from .app.database.database import create_db_and_tables, get_session
 from .app.database.models import ChatRequest, ChatResponse
