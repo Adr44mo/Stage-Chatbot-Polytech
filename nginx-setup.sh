@@ -40,6 +40,15 @@ setup_nginx() {
     log_info "Configuration de Nginx..."
     sudo mkdir -p /var/log/nginx/stage-chatbot
     log_info "Répertoires de logs nginx créés"
+    
+    # Générer les directives allow pour les IP autorisées
+    ALLOW_DIRECTIVES=""
+    if [[ -n "$ALLOWED_IPS" ]]; then
+        for ip in $ALLOWED_IPS; do
+            ALLOW_DIRECTIVES+="allow $ip;\n            "
+        done
+    fi
+    
     if [[ "$DEPLOYMENT_MODE" == "production" ]] && [[ -f "Fastapi/nginx/nginx-production.conf" ]]; then
         log_info "Configuration Nginx pour PRODUCTION..."
         cp "Fastapi/nginx/nginx-production.conf" "Fastapi/nginx/nginx-production-configured.conf"
@@ -49,6 +58,19 @@ setup_nginx() {
         sed -i "s|BACKEND_PORT|${BACKEND_PORT}|g" Fastapi/nginx/nginx-production-configured.conf
         sed -i "s|SSL_CERT_PATH|${SSL_CERT_PATH}|g" Fastapi/nginx/nginx-production-configured.conf
         sed -i "s|SSL_KEY_PATH|${SSL_KEY_PATH}|g" Fastapi/nginx/nginx-production-configured.conf
+        # Remplacer les directives allow avec celles générées
+        if [[ -n "$ALLOW_DIRECTIVES" ]]; then
+            sed -i "/location \/login {/,/deny all;/{
+                /allow /d
+                /deny all;/i\\
+            ${ALLOW_DIRECTIVES}
+            }" Fastapi/nginx/nginx-production-configured.conf
+            sed -i "/location \/admin {/,/deny all;/{
+                /allow /d
+                /deny all;/i\\
+            ${ALLOW_DIRECTIVES}
+            }" Fastapi/nginx/nginx-production-configured.conf
+        fi
         NGINX_OUTPUT=$(sudo nginx -t -c "$(pwd)/Fastapi/nginx/nginx-production-configured.conf" 2>&1)
         echo "$NGINX_OUTPUT" | grep -q 'ssl_stapling' && {
             log_warning "Nginx : warning ssl_stapling ignoré (certificat auto-signé ou intermédiaire manquant)"
@@ -72,6 +94,19 @@ setup_nginx() {
         sed -i "s|FRONTEND_PORT|${FRONTEND_PORT}|g" Fastapi/nginx/nginx-https-configured.conf
         sed -i "s|SSL_CERT_PATH|${SSL_CERT_PATH}|g" Fastapi/nginx/nginx-https-configured.conf
         sed -i "s|SSL_KEY_PATH|${SSL_KEY_PATH}|g" Fastapi/nginx/nginx-https-configured.conf
+        # Remplacer les directives allow avec celles générées
+        if [[ -n "$ALLOW_DIRECTIVES" ]]; then
+            sed -i "/location \/login {/,/deny all;/{
+                /allow /d
+                /deny all;/i\\
+            ${ALLOW_DIRECTIVES}
+            }" Fastapi/nginx/nginx-https-configured.conf
+            sed -i "/location \/admin {/,/deny all;/{
+                /allow /d
+                /deny all;/i\\
+            ${ALLOW_DIRECTIVES}
+            }" Fastapi/nginx/nginx-https-configured.conf
+        fi
         if sudo nginx -t -c "$(pwd)/Fastapi/nginx/nginx-https-configured.conf"; then
             log_success "Configuration Nginx DÉVELOPPEMENT prête (port 443 exposé, /api -> backend:${BACKEND_PORT})"
         else

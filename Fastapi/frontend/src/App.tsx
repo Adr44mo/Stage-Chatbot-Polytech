@@ -28,7 +28,7 @@ function App() {
       <AdminAuthProvider>
         <Router>
           {/* On affiche les boutons de navigation seulement si on est pas dans une iframe */}
-          {!isIframe && (
+          {/* {!isIframe && (
             <div className="app-nav-buttons">
               <Link to="/admin">
                 <button className="app-nav-btn app-nav-btn-admin">Admin</button>
@@ -39,7 +39,7 @@ function App() {
                 </button>
               </Link>
             </div>
-          )}
+          )} */}
           {/* Définition des routes principales de l'application */}
           <Routes>
             <Route path="/login" element={<LoginPage />} />

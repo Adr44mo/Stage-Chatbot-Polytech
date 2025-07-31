@@ -6,14 +6,15 @@ set -e
 
 echo "==> Mise en exécution des scripts"
 chmod +x init.sh
-chmod +x Fastapi/nginx/nginx-setup.sh
+chmod +x nginx-setup.sh
 chmod +x start-production.sh
+chmod +x stop-production.sh
 
 echo "==> Initialisation de l'application (sans sudo)"
 ./init.sh
 
 echo "==> Configuration de Nginx (avec sudo)"
-sudo Fastapi/nginx/nginx-setup.sh
+sudo nginx-setup.sh
 
 echo "==> Fin de l'installation"
 
