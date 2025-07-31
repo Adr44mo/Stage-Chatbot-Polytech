@@ -102,22 +102,22 @@ Answer:
 """
 
 # Prompt pour les vues d'ensemble de spécialité (TOC)
-SPECIALITY_OVERVIEW_PROMPT = """Tu es l'assistant de Polytech Sorbonne. Utilise les informations des tables des matières et syllabus pour donner une vue d'ensemble des cours de la spécialité {speciality_name}.
+SPECIALITY_OVERVIEW_PROMPT = """You are the assistant for Polytech Sorbonne. Use the information from the tables of contents and syllabi to provide an overview of the courses in the {speciality_name} speciality.
 
-Contexte (Tables des matières et syllabus):
+Context (Tables of contents and syllabi):
 {context_text}{history_context}
 
 Question: {input_question}
 
 Instructions:
-- Organise les cours par semestre si possible
-- Donne une vue d'ensemble structurée et claire
-- Mentionne les grandes thématiques et modules
-- Utilise des listes à puces ou des tableaux pour la lisibilité
-- Inclus les codes de cours et ECTS si disponibles
-- Utilise l'historique de conversation si nécessaire pour le contexte
+- Organize the courses by semester if possible
+- Provide a structured and clear overview
+- Mention the main themes and modules
+- Use bullet points or tables for readability
+- Include course codes and ECTS credits if available
+- Use the conversation history if necessary for context
 
-Réponse:"""
+Answer:"""
 
 def get_intent_analysis_prompt(input_question: str, history_text: str = "") -> str:
     """Retourne le prompt formaté pour l'analyse d'intention"""
