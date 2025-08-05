@@ -30,27 +30,6 @@
 
 ## 📊 Architecture
 
-### 🏗️ Vue d'ensemble du Projet
-
-<div align="center">
-  <img src="docs/project_architecture.png" alt="Architecture complète du projet" width="900">
-  <p><em>Architecture complète : Sources, Backend, Frontend</em></p>
-</div>
-
-### 🔧 Architecture Simplifiée
-
-<div align="center">
-  <img src="docs/architecture_simple.png" alt="Architecture simplifiée" width="800">
-  <p><em>Vue simplifiée des trois composants principaux</em></p>
-</div>
-
-### 🔄 Workflow LangGraph
-
-<div align="center">
-  <img src="docs/langgraph_architecture.png" alt="LangGraph Workflow" width="700">
-  <p><em>Processus de traitement des documents avec LangGraph</em></p>
-</div>
-
 ```mermaid
 flowchart TD
     %% Utilisateur
