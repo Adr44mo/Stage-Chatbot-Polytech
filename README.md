@@ -28,7 +28,11 @@
 - **Monitoring avancé** - Tracking des coûts et performances
 - **Sécurité intégrée** - Rate limiting et authentification
 
-## 📊 Architecture
+## Installation
+
+Pour l’installation et le déploiement détaillé, voir le guide : [DEPLOYMENT.md](./DEPLOYMENT.md)
+
+## Architecture
 
 ```mermaid
 flowchart TD
@@ -127,23 +131,23 @@ flowchart TD
     class STORAGE,CHROMADB,SQLITE,FILES storage
 ```
 
-## 🛠️ Stack Technique
+## Stack Technique
 
 **Backend** : FastAPI • LangChain • ChromaDB • SQLite • OpenAI • Redis  
 **Frontend** : React 19 • TypeScript • Vite  
-**Infrastructure** : Docker • Nginx • Python 3.12
+**Infrastructure** : Nginx • Python 3.12
 
-## 📚 Documentation Complète
+## Documentation Complète
 
 ### 📖 Guide Principal
 - **[📚 Wiki du Projet](https://github.com/Adr44mo/Stage-Chatbot-Polytech/wiki)** - Documentation complète
 - **[🚀 Guide d'Installation](https://github.com/Adr44mo/Stage-Chatbot-Polytech/wiki/Installation)** - Setup détaillé
 - **[🔧 Configuration](https://github.com/Adr44mo/Stage-Chatbot-Polytech/wiki/Configuration)** - Paramètres avancés
 
-### 🔧 Développement
+### Développement
 - **[🏗️ Architecture](https://github.com/Adr44mo/Stage-Chatbot-Polytech/wiki/Architecture)** - Structure technique
 
-### 📊 Utilisation
+### Utilisation
 - **[👤 Guide Utilisateur](https://github.com/Adr44mo/Stage-Chatbot-Polytech/wiki/Guide-Utilisateur)** - Manuel utilisateur
 - **[🌐 API Reference](https://github.com/Adr44mo/Stage-Chatbot-Polytech/wiki/API-Reference)** - Documentation API
 
