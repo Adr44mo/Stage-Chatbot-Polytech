@@ -70,16 +70,11 @@ Le script va :
 - **Arrêt propre** avec Ctrl+C
 - **Port 443 uniquement** exposé à l'extérieur
 
-### Mode Développement HTTPS (`./start-https.sh`)
+### Mode Développement HTTPS (`./start-development.sh`)
 - **HTTPS avec certificats auto-signés**
 - **Frontend en mode dev** avec hot-reload
 - **Backend avec --reload** pour développement
 - **Port 443 exposé** pour tests HTTPS
-
-### Mode Développement HTTP (`./start.sh`)
-- **HTTP simple** pour développement local
-- **Tous les ports exposés** (80, 8000, 5173)
-- **Hot-reload** frontend et backend
 
 ## Architecture de déploiement
 
