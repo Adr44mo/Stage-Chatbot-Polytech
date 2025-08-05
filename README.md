@@ -27,28 +27,6 @@
 - **Routage adaptatif** - Stratégies de récupération optimisées
 - **Monitoring avancé** - Tracking des coûts et performances
 - **Sécurité intégrée** - Rate limiting et authentification
-- **Réponses temps réel** - Interface chat moderne
-
-## Installation Rapide
-
-```bash
-# TODO: tester l'instalation
-# 1. Cloner le projet
-git clone https://github.com/Adr44mo/Stage-Chatbot-Polytech.git
-cd Stage-Chatbot-Polytech
-
-# 2. Configuration
-cp .env.example .env
-# Ajouter votre clé OpenAI dans .env
-
-# 3. Installation des dépendances
-pip install -r Fastapi/backend/requirements.txt
-cd Fastapi/frontend && npm install
-
-# 4. Démarrage automatique
-chmod +x start.sh
-./start.sh
-```
 
 ## 📊 Architecture
 
@@ -176,8 +154,6 @@ flowchart TD
 **Frontend** : React 19 • TypeScript • Vite  
 **Infrastructure** : Docker • Nginx • Python 3.12
 
-**Accès** : http://localhost:5173
-
 ## 📚 Documentation Complète
 
 ### 📖 Guide Principal
@@ -191,34 +167,6 @@ flowchart TD
 ### 📊 Utilisation
 - **[👤 Guide Utilisateur](https://github.com/Adr44mo/Stage-Chatbot-Polytech/wiki/Guide-Utilisateur)** - Manuel utilisateur
 - **[🌐 API Reference](https://github.com/Adr44mo/Stage-Chatbot-Polytech/wiki/API-Reference)** - Documentation API
-
-## 🎯 Utilisation Rapide
-
-### Types de Questions Supportées
-
-| Type | Exemple |
-|------|---------|
-| **Cours** | *"Objectifs du cours d'Algorithmique ?"* |
-| **Spécialité** | *"Tous les cours de robotique"* |
-| **Général** | *"Témoignages d'étudiants"* |
-| **Vie étudiante** | *"Activités disponibles"* |
-
-### API Endpoints
-
-```bash
-# Chat standard
-curl -X POST "http://localhost:8000/chat" \
-  -H "Content-Type: application/json" \
-  -d '{"prompt": "Cours de robotique ?", "chat_history": []}'
-
-# Statistiques
-curl "http://localhost:8000/intelligent-rag/database/statistics"
-```
-
-## 📈 Performance
-
-- **Temps de réponse** : 5-15 secondes
-- **Coût/question** : ~$0.002-0.005
 
 
 ## 📄 Licence
