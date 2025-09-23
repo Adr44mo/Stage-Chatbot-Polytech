@@ -158,7 +158,7 @@ Ce projet est sous licence **MIT**. Voir [LICENSE](LICENSE) pour plus de détail
 
 ## 👥 Équipe
 
-- **Développeur** : [Adr44mo](https://github.com/Adr44mo) 
+- **Développeur** : [ilonaged](https://github.com/ilonaged) [CassandraMartin03](https://github.com/CassandraMartin03) [Adr44mo](https://github.com/Adr44mo)
 - **Institution** : [Polytech Sorbonne](https://www.polytech.sorbonne-universite.fr/), [LIMICS](https://www.limics.fr/)
 ---
 
