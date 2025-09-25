@@ -1,16 +1,16 @@
-# 🧠 Intelligent RAG System for Polytech Sorbonne
+# Intelligent RAG System for Polytech Sorbonne
 
-## 📋 Description
+## Description
 
 Système RAG (Retrieval-Augmented Generation) intelligent pour le chatbot de Polytech Sorbonne. Ce système utilise un graphe LangGraph pour analyser l'intention des utilisateurs et router intelligemment vers différents types de traitement avec suivi complet des coûts et performances.
 
-## 🏗️ Architecture
+## Architecture
 
 ### Composants principaux
 
 1. **State Management** (`state.py`)
    - Définition des états du graphe
-   - Types d'intentions supportées (4 types)
+   - Types d'intentions supportées (3 types)
    - Structures de données avec support historique
 
 2. **Graph Nodes** (`nodes.py`)
@@ -48,7 +48,7 @@ Système RAG (Retrieval-Augmented Generation) intelligent pour le chatbot de Pol
    - Génération de graphiques de performance
    - Statistiques visuelles
 
-## 🎯 Types d'intentions
+## Types d'intentions
 
 ### DIRECT_ANSWER
 - Salutations, remerciements
@@ -59,11 +59,6 @@ Système RAG (Retrieval-Augmented Generation) intelligent pour le chatbot de Pol
 - Questions factuelles sur Polytech
 - Informations administratives, témoignages
 - Recherche documentaire standard (documents généraux)
-
-### SYLLABUS_SPECIFIC_COURSE
-- Questions sur un cours spécifique
-- Objectifs pédagogiques, programme détaillé
-- Recherche ciblée dans les syllabus
 
 ### SYLLABUS_SPECIALITY_OVERVIEW
 - Vue d'ensemble des cours d'une spécialité
@@ -81,7 +76,7 @@ Système RAG (Retrieval-Augmented Generation) intelligent pour le chatbot de Pol
 - **ROB**: Robotique
 - **ST**: Sciences de la Terre
 
-## 🚀 Utilisation
+## Utilisation
 
 ### Dans le code
 
@@ -172,11 +167,11 @@ python -m Fastapi.backend.app.intelligent_rag.cli --mode batch --questions "Bonj
 python -m Fastapi.backend.app.intelligent_rag.cli --mode test
 ```
 
-## 💰 Suivi des Coûts et Performances
+## Suivi des Coûts et Performances
 
 ### Token Tracking
 - **Coût par opération** : Analyse d'intention, génération de réponse
-- **Modèle auto-détecté** : gpt-4o-mini (prix actualisés)
+- **Modèle** : gpt-4o-mini
 - **Tokens détaillés** : Input/Output pour chaque appel OpenAI
 - **Coût total** : Calcul automatique par conversation
 
@@ -213,14 +208,6 @@ python -m Fastapi.backend.app.intelligent_rag.cli --mode test
 - **Monitoring** : Performances, erreurs, coûts par jour
 - **Visualisations** : Graphiques automatiques (`visualizer.py`)
 
-## 🔧 Fonctionnalités avancées
-
-### Analyse d'intention intelligente
-- **Classification automatique** avec confiance > 95%
-- **Détection de spécialité** et nom de cours
-- **Gestion de l'historique** : Détermine si le contexte est nécessaire
-- **Fallback robuste** en cas d'erreur
-
 ### Récupération de documents spécialisée
 
 #### Pour les cours spécifiques
@@ -247,11 +234,11 @@ metadata_filter = {
 
 ### Gestion intelligente de l'historique
 - **Détection automatique** : `needs_history` dans l'analyse d'intention
-- **Contexte sélectif** : Utilise seulement les 3 derniers échanges
+- **Contexte sélectif** : Utilise seulement les x derniers échanges
 - **Continuité** : Références aux messages précédents
 
 
-## 🔗 Intégration
+## Intégration
 
 ### Avec l'API existante
 ```python
@@ -277,7 +264,7 @@ def chat_endpoint(question, history):
     }
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 ### Variables d'environnement
 ```bash
@@ -299,7 +286,7 @@ USE_LANGGRAPH = True         # LangGraph RAG system
 - **Workflow** : Étendre `graph.py` pour de nouveaux nœuds
 - **Coûts** : Ajuster les prix dans `token_tracker.py`
 
-## 📊 Monitoring et Statistiques
+## Monitoring et Statistiques
 
 ### Métriques disponibles
 - **Temps de traitement** par nœud et opération
@@ -370,37 +357,14 @@ GET /intelligent-rag/statistics
 ## 📈 Performance
 
 ### Métriques clés
-- **Temps de réponse** : ~2-3 secondes
-- **Précision d'intention** : >95%
+- **Temps de réponse** : ~3-8 secondes
 - **Coût par question** : ~$0.002-0.005
 - **Documents récupérés** : 8-12 par requête
 
 ### Optimisations implémentées
-- **Batch processing** pour la vectorisation
 - **Filtrage par métadonnées** pour les spécialités
 - **Recherche directe** pour les documents TOC
 - **Cache des sessions** pour le tracking des coûts
-
-## 🚀 Évolutions futures
-
-### 🔄 Prochaines améliorations
-- **Cache intelligent** des résultats fréquents
-- **Apprentissage des préférences** utilisateur
-- **Métriques de satisfaction** avec feedback
-- **Optimisation des coûts** avec modèles moins chers pour certaines tâches
-
-### 🎯 Fonctionnalités possibles
-- **Support multi-langues** (anglais, français)
-- **Intégration avec d'autres modèles** (Mistral, Claude)
-- **Interface web dédiée** pour les statistiques
-- **API GraphQL** pour les requêtes complexes
-- **Système de recommandations** basé sur l'historique
-
-### 📊 Métriques avancées
-- **A/B testing** entre différents prompts
-- **Analyse de sentiment** des réponses
-- **Détection de questions similaires** pour optimisation
-- **Prédiction de l'intention** sans appel LLM
 
 ---
 
